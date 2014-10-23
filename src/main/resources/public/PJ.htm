@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]>
+<html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]>
+<html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]>
+<html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>PJ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <link href="css/site.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+<div class="container-fluid">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Curves</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">PJ</a></li>
+          <li><a href="CA.htm">CA</a></li>
+          <li><a href="Trands.htm">Trands</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="active"><a href="#" id="userid"></a></li>
+          <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  <div class="row" style="padding:0 19px">
+    <label for="datetimepicker" class="control-label">Month: </label>
+    <input type="text" id="datetimepicker" data-date-format="yyyy-MM">
+    <button id="save" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
+    <!--<div class="col-md-2">-->
+    <!--</div>-->
+    <!--<div class="form-group col-md-10">-->
+      <!--<label for="picker" class="control-label">Month Picking</label>-->
+      <!--<div id="picker" class="input-group date" data-date="" data-date-format="yyyy-MM" data-link-field="dtp_input2" data-link-format="yyyy-MM">-->
+        <!--<input id="dtp_input" class="form-control" size="16" type="text" value="" readonly>-->
+        <!--<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>-->
+      <!--</div>-->
+    <!--</div>-->
+  </div>
+  <div class="row" style="padding:0 19px">
+    <div class="table-responsive">
+      <table id="tbl" class="table table-bordered table-condensed" style="width: 2500px">
+        <thead>
+          <tr>
+            <th style="color: red">加盟店編號</th>
+            <th style="color: red">年份</th>
+            <th style="color: red">月份</th>
+            <th style="color: red"></th>
+            <th style="color: red">新銷售</th>
+            <th style="color: red">退會</th>
+            <th style="color: red">移入</th>
+            <th style="color: red">移出</th>
+            <th style="color: red">純增</th>
+            <th colspan="25"></th>
+          </tr>
+          <tr>
+            <th id="clubId"></th>
+            <th id="year"></th>
+            <th id="month"></th>
+            <th></th>
+            <th id="newSales"></th>
+            <th id="exits"></th>
+            <th id="shiftIn"></th>
+            <th id="shiftOut"></th>
+            <th id="increment"></th>
+            <th colspan="25"></th>
+          </tr>
+          <tr>
+            <th style="color: red">本月總營收</th>
+            <th style="color: red">在籍會員</th>
+            <th style="color: red">請假人數</th>
+            <th style="color: red">有效會員</th>
+            <th style="color: red">銷售率</th>
+            <th style="color: red">退會率</th>
+            <th style="color: red">請假率</th>
+            <th colspan="2"></th>
+            <th colspan="4">詢問/APO</th>
+            <th colspan="16">有來FA的人的來源</th>
+            <th>FA總數</th>
+            <th colspan="3">入會數</th>
+            <th>退會數</th>
+          </tr>
+          <tr>
+          <tr>
+            <th id="revenue"></th>
+            <th id="enrolled"></th>
+            <th id="leave"></th>
+            <th id="valid"></th>
+            <th id="salesRatio"></th>
+            <th id="exitRatio"></th>
+            <th id="leaveRatio"></th>
+            <th colspan="2"></th>
+            <th colspan="4"></th>
+            <th colspan="2">BRs</th>
+            <th colspan="6">Branded</th>
+            <th colspan="4">AGP：Incoming Calls</th>
+            <th colspan="4">AGP：Outgoing Calls</th>
+            <th></th>
+            <th colspan="3"></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>日期<br>Day</th>
+            <th>星期<br>Day</th>
+            <th>順序</th>
+            <th>營業日<br>Work Day of month</th>
+            <th>WO數<br>Daily Work outs</th>
+            <th>新銷售營收<br>New Sales</th>
+            <th>月費收入<br>Dues & Drafts</th>
+            <th>商品<br>Product</th>
+            <th>租櫃等<br>其他收入<br>Others</th>
+            <th>來電與來店<br>Incoming Calls</th>
+            <th>APO</th>
+            <th>打出去的電話<br>outgoing calls</th>
+            <th>APO</th>
+            <th>會員介紹<br>（本店）</th>
+            <th>會員介紹<br>（他店）</th>
+            <th>平面媒體</th>
+            <th>電視</th>
+            <th>網路<br>（官網留言）</th>
+            <th>招牌</th>
+            <th>策略夥伴</th>
+            <th>其他</th>
+            <th>直效信函<br>（買名單）</th>
+            <th>信箱傳單</th>
+            <th>手發傳單</th>
+            <th>CP</th>
+            <th>發招待券<br>（店外要電話）</th>
+            <th>發招待券<br>（店內要電話）</th>
+            <th>部落格問劵<br>(含自店臉書)</th>
+            <th>詢問箱</th>
+            <th>Total Orig-Guests</th>
+            <th>ACH 或 信用卡</th>
+            <th>月繳或季繳<br>Monthly Member</th>
+            <th>年繳<br>All Prepays</th>
+            <th>退會數<br>Member Cansels</th>
+          </tr>
+        </thead>
+        <tbody id="tbd">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script src="js/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script>
+<script src="js/PJ.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]>
+<html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]>
+<html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]>
+<html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Trands</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="css/site.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+<div class="container-fluid" style="overflow: auto">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Curves</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="PJ.htm">PJ</a></li>
+          <li><a href="CA.htm">CA</a></li>
+          <li class="active"><a href="#">Trands</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="active"><a href="#" id="userid"></a></li>
+          <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  <div class="row" align="center">
+    <div class="col-md-6">
+      <canvas id="totalRevenue" width="400" height="400"></canvas>
+      <h4>Total Revenue</h4>
+      <span class="text-muted"></span>
+    </div>
+    <div class="col-md-6">
+      <canvas id="newSales" width="400" height="400"></canvas>
+      <h4>New Sales</h4>
+      <span class="text-muted"></span>
+    </div>
+  </div>
+  <div class="row">&nbsp;</div>
+  <div class="row" align="center">
+    <div class="col-md-6">
+      <canvas id="activeMember" width="400" height="400"></canvas>
+      <h4>Active Member</h4>
+      <span class="text-muted"></span>
+    </div>
+    <div class="col-md-6">
+      <canvas id="buddyReferral" width="400" height="400"></canvas>
+      <h4>Buddy Referral</h4>
+      <span class="text-muted"></span>
+    </div>
+  </div>
+  <div class="row">&nbsp;</div>
+  <div class="row" align="center">
+    <div class="col-md-6">
+      <canvas id="workouts" width="400" height="400"></canvas>
+      <h4>Highest Workout number</h4>
+      <span class="text-muted"></span>
+    </div>
+  </div>
+</div>
+
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/Chart.min.js"></script>
+<script>
+$(document).ready(function() {
+
+var lineData = {
+    labels: ["2014-4", "2014-5", "2014-6", "2014-7", "2014-8", "2014-9"],
+    datasets: [
+        {
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [65, 59, 80, 81, 65, 70]
+        }
+    ]
+};
+var barData = {
+    labels: ["2014-4", "2014-5", "2014-6", "2014-7", "2014-8", "2014-9"],
+    datasets: [
+        {
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [65, 59, 80, 81, 65, 70]
+        }
+    ]
+};
+
+var ctxTotalRevenue = $("#totalRevenue").get(0).getContext("2d");
+var chartTotalRevenue = new Chart(ctxTotalRevenue).Line(lineData);
+
+var ctxNewSales = $("#newSales").get(0).getContext("2d");
+var chartNewSales = new Chart(ctxNewSales).Bar(barData);
+
+var ctxActiveMember = $("#activeMember").get(0).getContext("2d");
+var chartActiveMember = new Chart(ctxActiveMember).Bar(barData);
+
+var ctxBuddyReferral = $("#buddyReferral").get(0).getContext("2d");
+var chartBuddyReferral = new Chart(ctxBuddyReferral).Line(lineData);
+
+var ctxWorkouts = $("#workouts").get(0).getContext("2d");
+var chartWorkouts = new Chart(ctxWorkouts).Line(lineData);
+
+});
+</script>
+</body>
+</html>

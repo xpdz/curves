@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]>
+<html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]>
+<html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]>
+<html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="css/signin.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+<div id="login-page" class="container">
+  <form class="form-signin" role="form" action="/login" method="post">
+    <h2 class="form-signin-heading">Please Sign In</h2>
+    <input name="username" type="text" class="form-control" placeholder="User ID" required autofocus>
+    <input name="password" type="password" class="form-control" placeholder="Password" required>
+    <div class="checkbox">
+      <label>
+        <input name="rememberme" type="checkbox"> Remember me
+      </label>
+    </div>
+    <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+</div>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
