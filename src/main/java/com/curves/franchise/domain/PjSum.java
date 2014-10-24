@@ -32,6 +32,7 @@ public class PjSum implements Serializable {
     private int revenue;
     private int enrolled;
     private int leave;
+    private int valid;
     private String salesRatio;
     private String exitRatio;
     private String leaveRatio;
@@ -67,6 +68,14 @@ public class PjSum implements Serializable {
     private int enrollMonthly;
     private int enrollAllPrepay;
     private int exits;
+
+    public void setValid(int valid) {
+        this.valid = valid;
+    }
+
+    public int getValid() {
+        return valid;
+    }
 
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;

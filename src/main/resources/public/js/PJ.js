@@ -157,7 +157,7 @@ function getPJ(y, m) {
         $('#revenue').text(pjSum.revenue);
         $('#enrolled').text(pjSum.regMember);
         $('#leave').text(pjSum.leave);
-        $('#valid').text(pjSum.validMember);
+        $('#valid').text(pjSum.valid);
         $('#salesRatio').text(pjSum.salesRatio);
         $('#exitRatio').text(pjSum.exitRatio);
         $('#leaveRatio').text(pjSum.leaveRatio);
