@@ -4,6 +4,7 @@ import com.curves.franchise.domain.PjSum;
 import com.curves.franchise.repository.PjSumRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -19,14 +20,20 @@ public class PjSumController {
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.GET)
     public PjSum findByUserAndYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month,
                                            @AuthenticationPrincipal UserDetails user) {
-        logger.info("=== user: " + user.getUsername() + " get PJ - " + year + "." + month);
-        return pjSumRepo.findByClubIdAndYearAndMonth(Integer.parseInt(user.getUsername()), year, month);
+        logger.info("=== user: " + user.getUsername() + " get PJ - " + year + "." + (month+1));
+        PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(Integer.parseInt(user.getUsername()), year, month);
+        return pjSum;
     }
 
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.POST, consumes = "application/json")
-    public @ResponseBody String savePJ(@RequestBody PjSum pjSum) {
-        logger.info("---save---clubId: "+pjSum.getClubId()+", year-month: "+pjSum.getYear()+"-"+pjSum.getMonth());
-        PjSum x = pjSumRepo.save(pjSum);
+    @ResponseBody
+    public String savePJ(@RequestBody PjSum pjSum) {
+        logger.info("--SavePJ--ID:"+pjSum.getId()+", club: "+pjSum.getClubId()+"@"+pjSum.getYear()+"-"+(pjSum.getMonth()+1));
+        PjSum x = pjSumRepo.findById(pjSum.getId());
+        logger.info("==----before copy:"+x.getId());
+        BeanUtils.copyProperties(pjSum, x);
+        logger.info("==----after copy:"+x.getId()+",leaves:"+x.getLeaves());
+        pjSumRepo.save(x);
         return "" + x.getId();
     }
 }

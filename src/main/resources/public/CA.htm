@@ -32,10 +32,9 @@
             <ul class="nav navbar-nav">
               <li><a href="PJ.htm">PJ</a></li>
               <li class="active"><a href="#">CA</a></li>
-              <li><a href="Trands.htm">Trands</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#" id="userid"></a></li>
+              <li class="active"><a href="#" id="userId"></a></li>
               <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
             </ul>
           </div>
@@ -43,28 +42,24 @@
         </div>
         <!-- /.container-fluid -->
       </nav>
-      <div class="row" style="padding:0 19px">
-        <div class="col-md-4">
-          <label for="datetimepicker" class="control-label">Month: </label>
-          <input type="text" id="datetimepicker" data-date-format="yyyy-MM">
-          <button id="save" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
+      <div class="row well" style="padding:0 19px">
+        <div class="col-md-2">
+          <h4>Club：<span class="label label-default" id="clubName"></span></h4>
         </div>
-
-        <div class="col-md-4">
-          <div>
-            <h5>Club：<span class="label label-default" id="clubName"></span></h5>
-          </div>
-          <div>
-            <h5>Owner：<span class="label label-default" id="owner"></span></h5>
+        <div class="col-md-2">
+          <h4>Owner：<span class="label label-default" id="owner"></span></h4>
+        </div>
+        <div class="col-md-2">
+          <h4>店長：<span class="label label-default" id="mgr"></span></h4>
+        </div>
+        <div class="col-md-2">
+          <div class="row">
+            <label for="caDate" class="control-label">Month: </label>
+            <input type="text" id="caDate" data-date-format="yyyy-mm">
           </div>
         </div>
-        <div class="col-md-4">
-          <div>
-            <h5>Date：<span class="label label-default" id="date"></span></h5>
-          </div>
-          <div>
-            <h5>店長：<span class="label label-default" id="mgr"></span></h5>
-          </div>
+        <div class="col-md-2">
+          <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
         </div>
       </div>
       <div style="padding:0 19px">
@@ -101,28 +96,28 @@
                     <td rowspan="8"></td>
                     <td>本月在籍會員數目標</td>
                     <td colspan="6">請填入本月在籍會員目標數   →</td>
-                    <td contenteditable id="goalsThisEnrolled"></td>
+                    <td contenteditable id="goalsTm"></td>
                   </tr>
                   <tr>
                     <td>上月在籍會員數</td>
                     <td rowspan="5" colspan="6" style="background-color: #FFFF99">請將上月的成績輸入右方黃色空格</td>
-                    <td contenteditable id="goalsLastEnrolled" style="background-color: #FFFF99"></td>
+                    <td contenteditable id="goalsLastTm" style="background-color: #FFFF99"></td>
                   </tr>
                   <tr>
                     <td>上月有效會員數</td>
-                    <td contenteditable id="goalsLastValid" style="background-color: #FFFF99"></td>
+                    <td contenteditable id="goalsLastActive" style="background-color: #FFFF99"></td>
                   </tr>
                   <tr>
                     <td>上月來店率 %</td>
-                    <td contenteditable id="goalsLastShowRate" style="background-color: #FFFF99"></td>
+                    <td contenteditable id="goalsLastShowRatio" style="background-color: #FFFF99"></td>
                   </tr>
                   <tr>
                     <td>上月結案率 %</td>
-                    <td contenteditable id="goalsLastSalesRate" style="background-color: #FFFF99"></td>
+                    <td contenteditable id="goalsLastSalesRatio" style="background-color: #FFFF99"></td>
                   </tr>
                   <tr>
                     <td>預估本月退會率 %</td>
-                    <td contenteditable id="goalsExitsRate" style="background-color: #FFFF99"></td>
+                    <td contenteditable id="goalsExitsRatio" style="background-color: #FFFF99"></td>
                   </tr>
                   <tr>
                     <td>用上月成績預測本月所需新銷售數</td>
@@ -152,244 +147,256 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr id="serviceEnrolled">
+                  <tr id="serviceTm">
                     <td></td>
                     <td>在籍會員數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td contenteditable id="serviceTm-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td contenteditable id="serviceTm-1"></td>
+                    <td contenteditable id="serviceTm-2"></td>
+                    <td contenteditable id="serviceTm-3"></td>
+                    <td contenteditable id="serviceTm-4"></td>
+                    <td contenteditable id="serviceTm-5"></td>
+                    <td contenteditable id="serviceTm-6"></td>
                   </tr>
                   <tr id="serviceShift">
                     <td></td>
-                    <td>請假會員數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td>移籍(移出為負，移入為正)</td>
+                    <td contenteditable id="serviceShift-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td contenteditable id="serviceShift-1"></td>
+                    <td contenteditable id="serviceShift-2"></td>
+                    <td contenteditable id="serviceShift-3"></td>
+                    <td contenteditable id="serviceShift-4"></td>
+                    <td contenteditable id="serviceShift-5"></td>
+                    <td contenteditable id="serviceShift-6"></td>
                   </tr>
-                  <tr id="serviceLeaveRate">
-                    <td>&lt;12%</td>
-                    <td>會員請假率</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
+                  <tr id="serviceHold">
+                    <td></td>
+                    <td>請假會員數</td>
+                    <td contenteditable id="serviceHold-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td contenteditable id="serviceHold-1"></td>
+                    <td contenteditable id="serviceHold-2"></td>
+                    <td contenteditable id="serviceHold-3"></td>
+                    <td contenteditable id="serviceHold-4"></td>
+                    <td contenteditable id="serviceHold-5"></td>
+                    <td contenteditable id="serviceHold-6"></td>
+                  </tr>
+                  <tr id="serviceActive">
+                    <td></td>
+                    <td>有效會員數(在籍扣除請假)</td>
+                    <td contenteditable id="serviceActiveHold-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td contenteditable id="serviceActive-1"></td>
+                    <td contenteditable id="serviceActive-2"></td>
+                    <td contenteditable id="serviceActive-3"></td>
+                    <td contenteditable id="serviceActive-4"></td>
+                    <td contenteditable id="serviceActive-5"></td>
+                    <td contenteditable id="serviceActive-6"></td>
+                  </tr>
+                  <tr style="background-color: lightGray">
+                    <td style="background-color: white">&lt;12%</td>
+                    <td style="background-color: white">會員請假率</td>
+                    <td style="background-color: white" id="serviceHoldRatio-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceHoldRatio-1"></td>
+                    <td id="serviceHoldRatio-2"></td>
+                    <td id="serviceHoldRatio-3"></td>
+                    <td id="serviceHoldRatio-4"></td>
+                    <td id="serviceHoldRatio-5"></td>
+                    <td id="serviceHoldRatio-6"></td>
                   </tr>
                   <tr>
                     <td>&gt;8 x TAM</td>
                     <td>總WO次數</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td></td>
+                    <td id="serviceTotalWo-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceTotalWo-1" contenteditable></td>
+                    <td id="serviceTotalWo-2" contenteditable></td>
+                    <td id="serviceTotalWo-3" contenteditable></td>
+                    <td id="serviceTotalWo-4" contenteditable></td>
+                    <td id="serviceTotalWo-5" contenteditable></td>
+                    <td id="serviceTotalWo-6" style="background-color: lightGray"></td>
                   </tr>
-                  <tr>
-                    <td>&gt;2.0</td>
-                    <td>每人每週WO數</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
+                  <tr style="background-color: lightGray">
+                    <td style="background-color: white">&gt;2.0</td>
+                    <td style="background-color: white">每人每週WO數</td>
+                    <td style="background-color: white" id="serviceAvgWo-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceAvgWo-1"></td>
+                    <td id="serviceAvgWo-2"></td>
+                    <td id="serviceAvgWoWo-3"></td>
+                    <td id="serviceAvgWo-4"></td>
+                    <td id="serviceAvgWo-5"></td>
+                    <td id="serviceAvgWo-6"></td>
                   </tr>
                   <tr>
                     <td>&gt;33%TAM</td>
                     <td>每週最高WO日的人數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td></td>
+                    <td id="serviceMaxWo-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceMaxWo-1" contenteditable></td>
+                    <td id="serviceMaxWo-2" contenteditable></td>
+                    <td id="serviceMaxWo-3" contenteditable></td>
+                    <td id="serviceMaxWo-4" contenteditable></td>
+                    <td id="serviceMaxWo-5" contenteditable></td>
+                    <td id="serviceMaxWo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>退會</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td></td>
+                    <td id="serviceExits-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceExits-1" contenteditable></td>
+                    <td id="serviceExits-2" contenteditable></td>
+                    <td id="serviceExits-3" contenteditable></td>
+                    <td id="serviceExits-4" contenteditable></td>
+                    <td id="serviceExits-5" contenteditable></td>
+                    <td id="serviceExits-6" style="background-color: lightGray"></td>
                   </tr>
-                  <tr>
-                    <td>&lt;4%</td>
-                    <td>退會率 (退會數/在籍會員數)</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
+                  <tr style="background-color: lightGray">
+                    <td style="background-color: white">&lt;4%</td>
+                    <td style="background-color: white">退會率 (退會數/在籍會員數)</td>
+                    <td style="background-color: white" id="serviceExitsRatio-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceExitsRatio-1"></td>
+                    <td id="serviceExitsRatio-2"></td>
+                    <td id="serviceExitsRatio-3"></td>
+                    <td id="serviceExitsRatio-4"></td>
+                    <td id="serviceExitsRatio-5"></td>
+                    <td id="serviceExitsRatio-6"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>量身數 (含新入會者的量身)</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td></td>
+                    <td id="serviceMeasure-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceMeasure-1" contenteditable></td>
+                    <td id="serviceMeasure-2" contenteditable></td>
+                    <td id="serviceMeasure-3" contenteditable></td>
+                    <td id="serviceMeasure-4" contenteditable></td>
+                    <td id="serviceMeasure-5" contenteditable></td>
+                    <td id="serviceMeasure-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>&lt;4%</td>
                     <td>量身率</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceMeasureRatio-1" style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-2" style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-3" style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-4" style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-5" style="background-color: lightGray"></td>
+                    <td id="serviceMeasureRatio-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>30%</td>
                     <td>A.每月來12次以上的有效會員數</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td id="service12-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td colspan="3"></td>
                     <td>A</td>
-                    <td contenteditable></td>
-                    <td style="background-color: LightGray"></td>
+                    <td id="service12-5" contenteditable></td>
+                    <td id="service12-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
                     <td>25%</td>
                     <td>B.每月來8-11次的有效會員數</td>
-                    <td><span class="glyphicon glyphicon-star"></span></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td id="service8to11-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td colspan="3"></td>
                     <td>B</td>
-                    <td contenteditable></td>
-                    <td style="background-color: LightGray"></td>
+                    <td id="service8to11-5" contenteditable></td>
+                    <td id="service8to11-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
                     <td>25%</td>
                     <td>C.每月來4-7次的有效會員數</td>
-                    <td></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td id="service4to7-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td colspan="3"></td>
                     <td>C</td>
-                    <td contenteditable></td>
-                    <td style="background-color: LightGray"></td>
+                    <td id="service4to7-5" contenteditable></td>
+                    <td id="service4to7-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
                     <td>10%</td>
                     <td>D.每月來3-1次的有效會員數</td>
-                    <td></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td id="service1to3-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td colspan="3"></td>
                     <td>D</td>
-                    <td contenteditable></td>
-                    <td style="background-color: LightGray"></td>
+                    <td id="service1to3-5" contenteditable></td>
+                    <td id="service1to3-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
                     <td>10%</td>
                     <td>E.每月來0次的有效會員數</td>
-                    <td></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
+                    <td id="service0-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td colspan="3"></td>
                     <td>E</td>
-                    <td contenteditable></td>
-                    <td style="background-color: LightGray"></td>
+                    <td id="service0-5" contenteditable></td>
+                    <td id="service0-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td rowspan="8">Reminders</td>
                     <td>簡訊或電話連繫有來店的會員WO要達3次以上</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="service3More-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="service3More-1"><input type="checkbox"></td>
+                    <td id="service3More-2"><input type="checkbox"></td>
+                    <td id="service3More-3"><input type="checkbox"></td>
+                    <td id="service3More-4"><input type="checkbox"></td>
+                    <td id="service3More-5"><input type="checkbox"></td>
                     <td rowspan="8"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>連繫最近兩週或一月沒來的會員</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceInactive-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceInactive-1"><input type="checkbox"></td>
+                    <td id="serviceInactive-2"><input type="checkbox"></td>
+                    <td id="serviceInactive-3"><input type="checkbox"></td>
+                    <td id="serviceInactive-4"><input type="checkbox"></td>
+                    <td id="serviceInactive-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>回顧會員FWO問券</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceFwoReview-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceFwoReview-1"><input type="checkbox"></td>
+                    <td id="serviceFwoReview-2"><input type="checkbox"></td>
+                    <td id="serviceFwoReview-3"><input type="checkbox"></td>
+                    <td id="serviceFwoReview-4"><input type="checkbox"></td>
+                    <td id="serviceFwoReview-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>對新會員進行2週面談</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceInterview-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceInterview-1"><input type="checkbox"></td>
+                    <td id="serviceInterview-2"><input type="checkbox"></td>
+                    <td id="serviceInterview-3"><input type="checkbox"></td>
+                    <td id="serviceInterview-4"><input type="checkbox"></td>
+                    <td id="serviceInterview-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>每週5張謝謝您小卡與每位會員生日卡</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceThanks-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceThanks-1"><input type="checkbox"></td>
+                    <td id="serviceThanks-2"><input type="checkbox"></td>
+                    <td id="serviceThanks-3"><input type="checkbox"></td>
+                    <td id="serviceThanks-4"><input type="checkbox"></td>
+                    <td id="serviceThanks-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>在CC時對會員用３C（糾正,激勵,慶祝)</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="service3C-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="service3C-1"><input type="checkbox"></td>
+                    <td id="service3C-2"><input type="checkbox"></td>
+                    <td id="service3C-3"><input type="checkbox"></td>
+                    <td id="service3C-4"><input type="checkbox"></td>
+                    <td id="service3C-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>使用Curves商品獎勵會員參與店內活動</td>
-                    <td contenteditable></td>
-                    <td contenteditable><span class="glyphicon glyphicon-star"></span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceReward-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceReward-1"><input type="checkbox"></td>
+                    <td id="serviceReward-2"><input type="checkbox"></td>
+                    <td id="serviceReward-3"><input type="checkbox"></td>
+                    <td id="serviceReward-4"><input type="checkbox"></td>
+                    <td id="serviceReward-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>使用忠誠方案獎勵會員(例如WO 100 T)</td>
-                    <td contenteditable><span class="glyphicon glyphicon-star"></span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="serviceLoyal-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="serviceLoyal-1"><input type="checkbox"></td>
+                    <td id="serviceLoyal-2"><input type="checkbox"></td>
+                    <td id="serviceLoyal-3"><input type="checkbox"></td>
+                    <td id="serviceLoyal-4"><input type="checkbox"></td>
+                    <td id="serviceLoyal-5"><input type="checkbox"></td>
                   </tr>
                 </tbody>
               </table>
@@ -413,101 +420,101 @@
                   <tr>
                     <td>&gt;5000/mnth</td>
                     <td>信箱傳單投遞張數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadMailFlyer-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadMailFlyer-1" contenteditable></td>
+                    <td id="cmLeadMailFlyer-2" contenteditable></td>
+                    <td id="cmLeadMailFlyer-3" contenteditable></td>
+                    <td id="cmLeadMailFlyer-4" contenteditable></td>
+                    <td id="cmLeadMailFlyer-5" contenteditable></td>
+                    <td id="cmLeadMailFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>員工手發傳單的張數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadHandFlyer-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadHandFlyer-1" contenteditable></td>
+                    <td id="cmLeadHandFlyer-2" contenteditable></td>
+                    <td id="cmLeadHandFlyer-3" contenteditable></td>
+                    <td id="cmLeadHandFlyer-4" contenteditable></td>
+                    <td id="cmLeadHandFlyer-5" contenteditable></td>
+                    <td id="cmLeadHandFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>店外GP的時數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadOut-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadOut-1" contenteditable></td>
+                    <td id="cmLeadOut-2" contenteditable></td>
+                    <td id="cmLeadOut-3" contenteditable></td>
+                    <td id="cmLeadOut-4" contenteditable></td>
+                    <td id="cmLeadOut-5" contenteditable></td>
+                    <td id="cmLeadOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>&gt;10/mnth</td>
                     <td>CP拜訪、檢查Lead Box的次數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadCp-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadCp-1" contenteditable></td>
+                    <td id="cmLeadCp-2" contenteditable></td>
+                    <td id="cmLeadCp-3" contenteditable></td>
+                    <td id="cmLeadCp-4" contenteditable></td>
+                    <td id="cmLeadCp-5" contenteditable></td>
+                    <td id="cmLeadCp-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店外得到的人名與電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadOutGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadOutGot-1" contenteditable></td>
+                    <td id="cmLeadOutGot-2" contenteditable></td>
+                    <td id="cmLeadOutGot-3" contenteditable></td>
+                    <td id="cmLeadOutGot-4" contenteditable></td>
+                    <td id="cmLeadOutGot-5" contenteditable></td>
+                    <td id="cmLeadOutGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店內得到的人名與電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadInGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadInGot-1" contenteditable></td>
+                    <td id="cmLeadInGot-2" contenteditable></td>
+                    <td id="cmLeadInGot-3" contenteditable></td>
+                    <td id="cmLeadInGot-4" contenteditable></td>
+                    <td id="cmLeadInGot-5" contenteditable></td>
+                    <td id="cmLeadInGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>Blog or FB得到的人名與電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadBlogGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadBlogGot-1" contenteditable></td>
+                    <td id="cmLeadBlogGot-2" contenteditable></td>
+                    <td id="cmLeadBlogGot-3" contenteditable></td>
+                    <td id="cmLeadBlogGot-4" contenteditable></td>
+                    <td id="cmLeadBlogGot-5" contenteditable></td>
+                    <td id="cmLeadBlogGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從詢問箱得到的人名與電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadBagGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmLeadBagGot-1" contenteditable></td>
+                    <td id="cmLeadBagGot-2" contenteditable></td>
+                    <td id="cmLeadBagGot-3" contenteditable></td>
+                    <td id="cmLeadBagGot-4" contenteditable></td>
+                    <td id="cmLeadBagGot-5" contenteditable></td>
+                    <td id="cmLeadBagGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td style="background-color: #FF99CC"></td>
                     <td style="background-color: #FF99CC">得到電話與人名的總數</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-0" style="background-color: #FF99CC"></td>
+                    <td id="cmLeadTotal-1" style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-2" style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-3" style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-4" style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-5" style="background-color: lightGray"></td>
+                    <td id="cmLeadTotal-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td colspan="9" style="background-color: yellow">Calls</td>
@@ -515,57 +522,57 @@
                   <tr>
                     <td></td>
                     <td>所有來電及來店詢問</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmCallsTotal-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmCallsTotal-1" contenteditable></td>
+                    <td id="cmCallsTotal-2" contenteditable></td>
+                    <td id="cmCallsTotal-3" contenteditable></td>
+                    <td id="cmCallsTotal-4" contenteditable></td>
+                    <td id="cmCallsTotal-5" contenteditable></td>
+                    <td id="cmCallsTotal-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店外拿到人名打通的電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmCallsOutGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmCallsOutGot-1" contenteditable></td>
+                    <td id="cmCallsOutGot-2" contenteditable></td>
+                    <td id="cmCallsOutGot-3" contenteditable></td>
+                    <td id="cmCallsOutGot-4" contenteditable></td>
+                    <td id="cmCallsOutGot-5" contenteditable></td>
+                    <td id="cmCallsOutGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店內拿到人名打通的電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmCallsInGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmCallsInGot-1" contenteditable></td>
+                    <td id="cmCallsInGot-2" contenteditable></td>
+                    <td id="cmCallsInGot-3" contenteditable></td>
+                    <td id="cmCallsInGot-4" contenteditable></td>
+                    <td id="cmCallsInGot-5" contenteditable></td>
+                    <td id="cmCallsInGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從自店Blog or FB拿到人名打通的電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmCallsBlogGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmCallsBlogGot-1" contenteditable></td>
+                    <td id="cmCallsBlogGot-2" contenteditable></td>
+                    <td id="cmCallsBlogGot-3" contenteditable></td>
+                    <td id="cmCallsBlogGot-4" contenteditable></td>
+                    <td id="cmCallsBlogGot-5" contenteditable></td>
+                    <td id="cmCallsBlogGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從詢問箱拿到人名打通的電話</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmCallsBagGot-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmCallsBagGot-1" contenteditable></td>
+                    <td id="cmCallsBagGot-2" contenteditable></td>
+                    <td id="cmCallsBagGot-3" contenteditable></td>
+                    <td id="cmCallsBagGot-4" contenteditable></td>
+                    <td id="cmCallsBagGot-5" contenteditable></td>
+                    <td id="cmCallsBagGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: yellow">
                     <td colspan="9">Appointments 預約來源與預約數</td>
@@ -573,279 +580,277 @@
                   <tr>
                     <td rowspan="2">SERVICE</td>
                     <td>會員介紹 (本店)</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmOwnRefs-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmOwnRefs-1" contenteditable></td>
+                    <td id="cmOwnRefs-2" contenteditable></td>
+                    <td id="cmOwnRefs-3" contenteditable></td>
+                    <td id="cmOwnRefs-4" contenteditable></td>
+                    <td id="cmOwnRefs-5" contenteditable></td>
+                    <td id="cmOwnRefs-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>會員介紹 (他店)</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmOtherRefs-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmOtherRefs-1" contenteditable></td>
+                    <td id="cmOtherRefs-2" contenteditable></td>
+                    <td id="cmOtherRefs-3" contenteditable></td>
+                    <td id="cmOtherRefs-4" contenteditable></td>
+                    <td id="cmOtherRefs-5" contenteditable></td>
+                    <td id="cmOtherRefs-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td rowspan="6">BRANDED</td>
                     <td>平面媒體</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmNewspaper-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmNewspaper-1" contenteditable></td>
+                    <td id="cmNewspaper-2" contenteditable></td>
+                    <td id="cmNewspaper-3" contenteditable></td>
+                    <td id="cmNewspaper-4" contenteditable></td>
+                    <td id="cmNewspaper-5" contenteditable></td>
+                    <td id="cmNewspaper-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>電視</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmTv-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmTv-1" contenteditable></td>
+                    <td id="cmTv-2" contenteditable></td>
+                    <td id="cmTv-3" contenteditable></td>
+                    <td id="cmTv-4" contenteditable></td>
+                    <td id="cmTv-5" contenteditable></td>
+                    <td id="cmTv-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>網路 (含官網留言)</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmInternet-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmInternet-1" contenteditable></td>
+                    <td id="cmInternet-2" contenteditable></td>
+                    <td id="cmInternet-3" contenteditable></td>
+                    <td id="cmInternet-4" contenteditable></td>
+                    <td id="cmInternet-5" contenteditable></td>
+                    <td id="cmInternet-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>招牌</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmSign-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmSign-1" contenteditable></td>
+                    <td id="cmSign-2" contenteditable></td>
+                    <td id="cmSign-3" contenteditable></td>
+                    <td id="cmSign-4" contenteditable></td>
+                    <td id="cmSign-5" contenteditable></td>
+                    <td id="cmSign-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>策略夥伴</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmMate-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmMate-1" contenteditable></td>
+                    <td id="cmMate-2" contenteditable></td>
+                    <td id="cmMate-3" contenteditable></td>
+                    <td id="cmMate-4" contenteditable></td>
+                    <td id="cmMate-5" contenteditable></td>
+                    <td id="cmMate-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>其它</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmOthers-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmOthers-1" contenteditable></td>
+                    <td id="cmOthers-2" contenteditable></td>
+                    <td id="cmOthers-3" contenteditable></td>
+                    <td id="cmOthers-4" contenteditable></td>
+                    <td id="cmOthers-5" contenteditable></td>
+                    <td id="cmOthers-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td rowspan="4">AGP<br>Incoming<br>Calls</td>
                     <td>直效信函 (買名單)</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpInDirectMail-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpInDirectMail-1" contenteditable></td>
+                    <td id="cmAgpInDirectMail-2" contenteditable></td>
+                    <td id="cmAgpInDirectMail-3" contenteditable></td>
+                    <td id="cmAgpInDirectMail-4" contenteditable></td>
+                    <td id="cmAgpInDirectMail-5" contenteditable></td>
+                    <td id="cmAgpInDirectMail-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>信箱傳單</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpInMailFlyer-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpInMailFlyer-1" contenteditable></td>
+                    <td id="cmAgpInMailFlyer-2" contenteditable></td>
+                    <td id="cmAgpInMailFlyer-3" contenteditable></td>
+                    <td id="cmAgpInMailFlyer-4" contenteditable></td>
+                    <td id="cmAgpInMailFlyer-5" contenteditable></td>
+                    <td id="cmAgpInMailFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>手發傳單</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpInHandFlyer-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpInHandFlyer-1" contenteditable></td>
+                    <td id="cmAgpInHandFlyer-2" contenteditable></td>
+                    <td id="cmAgpInHandFlyer-3" contenteditable></td>
+                    <td id="cmAgpInHandFlyer-4" contenteditable></td>
+                    <td id="cmAgpInHandFlyer-5" contenteditable></td>
+                    <td id="cmAgpInHandFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>CP介紹</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpInCp-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpInCp-1" contenteditable></td>
+                    <td id="cmAgpInCp-2" contenteditable></td>
+                    <td id="cmAgpInCp-3" contenteditable></td>
+                    <td id="cmAgpInCp-4" contenteditable></td>
+                    <td id="cmAgpInCp-5" contenteditable></td>
+                    <td id="cmAgpInCp-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td rowspan="4">AGP<br>Outgoing<br>Calls</td>
                     <td>從店外得到的人名的APO數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpOutApoOut-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpOutApoOut-1" contenteditable></td>
+                    <td id="cmAgpOutApoOut-2" contenteditable></td>
+                    <td id="cmAgpOutApoOut-3" contenteditable></td>
+                    <td id="cmAgpOutApoOut-4" contenteditable></td>
+                    <td id="cmAgpOutApoOut-5" contenteditable></td>
+                    <td id="cmAgpOutApoOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從店內得到的人名的APO數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpOutApoIn-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpOutApoIn-1" contenteditable></td>
+                    <td id="cmAgpOutApoIn-2" contenteditable></td>
+                    <td id="cmAgpOutApoIn-3" contenteditable></td>
+                    <td id="cmAgpOutApoIn-4" contenteditable></td>
+                    <td id="cmAgpOutApoIn-5" contenteditable></td>
+                    <td id="cmAgpOutApoIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從Blog or FB得到的人名的APO數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpOutApoBlog-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpOutApoBlog-1" contenteditable></td>
+                    <td id="cmAgpOutApoBlog-2" contenteditable></td>
+                    <td id="cmAgpOutApoBlog-3" contenteditable></td>
+                    <td id="cmAgpOutApoBlog-4" contenteditable></td>
+                    <td id="cmAgpOutApoBlog-5" contenteditable></td>
+                    <td id="cmAgpOutApoBlog-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從詢問箱得到的人名的APO</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmAgpOutAgpBag-0" ><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmAgpOutAgpBag-1" contenteditable></td>
+                    <td id="cmAgpOutAgpBag-2" contenteditable></td>
+                    <td id="cmAgpOutAgpBag-3" contenteditable></td>
+                    <td id="cmAgpOutAgpBag-4" contenteditable></td>
+                    <td id="cmAgpOutAgpBag-5" contenteditable></td>
+                    <td id="cmAgpOutAgpBag-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: #FF99CC"></td>
                     <td style="background-color: #FF99CC">APO總數</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="cmApoTotal-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmApoTotal-1"></td>
+                    <td id="cmApoTotal-2"></td>
+                    <td id="cmApoTotal-3"></td>
+                    <td id="cmApoTotal-4"></td>
+                    <td id="cmApoTotal-5"></td>
+                    <td id="cmApoTotal-6"></td>
                   </tr>
-                  <tr style="background-color: lightGray">
+                  <tr>
                     <td style="background-color: #FF99CC">100%</td>
                     <td style="background-color: #FF99CC">來電或來店 Apo率</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="cmInApoRatio-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmInApoRatio-1"></td>
+                    <td id="cmInApoRatio-2"></td>
+                    <td id="cmInApoRatio-3"></td>
+                    <td id="cmInApoRatio-4"></td>
+                    <td id="cmInApoRatio-5"></td>
+                    <td id="cmInApoRatio-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: white">&gt;50%</td>
                     <td style="background-color: white">打出去的電話 APO率</td>
-                    <td style="background-color: white"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="cmOutApoRatio-0" style="background-color: white"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmOutApoRatio-1"></td>
+                    <td id="cmOutApoRatio-2"></td>
+                    <td id="cmOutApoRatio-3"></td>
+                    <td id="cmOutApoRatio-4"></td>
+                    <td id="cmOutApoRatio-5"></td>
+                    <td id="cmOutApoRatio-6"></td>
                   </tr>
                   <tr>
                     <td rowspan="4">Analysis</td>
                     <td>投信箱傳單幾張可獲得一個APO</td>
-                    <td></td>
+                    <td id="cmMailPerApo-0"><span class="glyphicon glyphicon-star-empty"></span></td>
                     <td colspan="5" rowspan="3"></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmMailPerApo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>手發傳單幾小時可獲得一個APO</td>
-                    <td></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmHandPerApo-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmHandPerApo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>在店外要名單幾小時可獲得一個APO</td>
-                    <td></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmOutPerApo-0"></td>
+                    <td id="cmOutPerApo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: white">BR + AGP佔所有預約比率</td>
-                    <td style="background-color: white"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="cmBrAgpRatio-0" style="background-color: white"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmBrAgpRatio-1"></td>
+                    <td id="cmBrAgpRatio-2"></td>
+                    <td id="cmBrAgpRatio-3"></td>
+                    <td id="cmBrAgpRatio-4"></td>
+                    <td id="cmBrAgpRatio-5"></td>
+                    <td id="cmBrAgpRatio-6"></td>
                   </tr>
                   <tr>
                     <td style="background-color: #FF99CC"></td>
                     <td style="background-color: #FF99CC">TOG人數(全部做FA人次)</td>
-                    <td contenteditable style="background-color: #FF99CC"></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="cmFaSum-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmFaSum-1" contenteditable></td>
+                    <td id="cmFaSum-2" contenteditable></td>
+                    <td id="cmFaSum-3" contenteditable></td>
+                    <td id="cmFaSum-4" contenteditable></td>
+                    <td id="cmFaSum-5" contenteditable></td>
+                    <td id="cmFaSum-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: #FF99CC">&gt;80%</td>
                     <td style="background-color: #FF99CC">來店率</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="cmShowRatio-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmShowRatio-1"></td>
+                    <td id="cmShowRatio-2"></td>
+                    <td id="cmShowRatio-3"></td>
+                    <td id="cmShowRatio-4"></td>
+                    <td id="cmShowRatio-5"></td>
+                    <td id="cmShowRatio-6"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td rowspan="3">Reminders</td>
                     <td>Staff電話話術教育訓練</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td></td>
+                    <td id="cmTraining-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmTraining-1"><input type="checkbox"></td>
+                    <td id="cmTraining-2"><input type="checkbox"></td>
+                    <td id="cmTraining-3"><input type="checkbox"></td>
+                    <td id="cmTraining-4"><input type="checkbox"></td>
+                    <td id="cmTraining-5"><input type="checkbox"></td>
+                    <td rowspan="3"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>使用會員手冊及禮物以索取3個人名</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td></td>
+                    <td id="cmGot3-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmGot3-1"><input type="checkbox"></td>
+                    <td id="cmGot3-2"><input type="checkbox"></td>
+                    <td id="cmGot3-3"><input type="checkbox"></td>
+                    <td id="cmGot3-4"><input type="checkbox"></td>
+                    <td id="cmGot3-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>練習發招待卡以及追蹤發卡後續</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td></td>
+                    <td id="cmInvitation-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="cmInvitation-1"><input type="checkbox"></td>
+                    <td id="cmInvitation-2"><input type="checkbox"></td>
+                    <td id="cmInvitation-3"><input type="checkbox"></td>
+                    <td id="cmInvitation-4"><input type="checkbox"></td>
+                    <td id="cmInvitation-5"><input type="checkbox"></td>
                   </tr>
                 </tbody>
               </table>
@@ -857,124 +862,124 @@
                   <tr>
                     <td></td>
                     <td>扣款入會數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="salesAch-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesAch-1" contenteditable></td>
+                    <td id="salesAch-2" contenteditable></td>
+                    <td id="salesAch-3" contenteditable></td>
+                    <td id="salesAch-4" contenteditable></td>
+                    <td id="salesAch-5" contenteditable></td>
+                    <td id="salesAch-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>月繳或季繳入會數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="salesMonthly-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesMonthly-1" contenteditable></td>
+                    <td id="salesMonthly-2" contenteditable></td>
+                    <td id="salesMonthly-3" contenteditable></td>
+                    <td id="salesMonthly-4" contenteditable></td>
+                    <td id="salesMonthly-5" contenteditable></td>
+                    <td id="salesMonthly-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>年繳入會數</td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td contenteditable></td>
-                    <td style="background-color: lightGray"></td>
+                    <td id="salesAllPrepay-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesAllPrepay-1" contenteditable></td>
+                    <td id="salesAllPrepay-2" contenteditable></td>
+                    <td id="salesAllPrepay-3" contenteditable></td>
+                    <td id="salesAllPrepay-4" contenteditable></td>
+                    <td id="salesAllPrepay-5" contenteditable></td>
+                    <td id="salesAllPrepay-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: #FF99CC"></td>
                     <td style="background-color: #FF99CC">入會數</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="salesTotal-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesTotal-1"></td>
+                    <td id="salesTotal-2"></td>
+                    <td id="salesTotal-3"></td>
+                    <td id="salesTotal-4"></td>
+                    <td id="salesTotal-5"></td>
+                    <td id="salesTotal-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: #FF99CC">&gt;>85%</td>
                     <td style="background-color: #FF99CC">結案率</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="salesRatio-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesRatio-1"></td>
+                    <td id="salesRatio-2"></td>
+                    <td id="salesRatio-3"></td>
+                    <td id="salesRatio-4"></td>
+                    <td id="salesRatio-5"></td>
+                    <td id="salesRatio-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td style="background-color: #FF99CC">&gt;>90%</td>
                     <td style="background-color: #FF99CC">扣款+年繳比率</td>
-                    <td style="background-color: #FF99CC"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="salesAchAppRatio-0" style="background-color: #FF99CC"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesAchAppRatio-1"></td>
+                    <td id="salesAchAppRatio-2"></td>
+                    <td id="salesAchAppRatio-3"></td>
+                    <td id="salesAchAppRatio-4"></td>
+                    <td id="salesAchAppRatio-5"></td>
+                    <td id="salesAchAppRatio-6"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td rowspan="6">Reminders</td>
                     <td>FA回顧</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesFaReview-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesFaReview-1"><input type="checkbox"></td>
+                    <td id="salesFaReview-2"><input type="checkbox"></td>
+                    <td id="salesFaReview-3"><input type="checkbox"></td>
+                    <td id="salesFaReview-4"><input type="checkbox"></td>
+                    <td id="salesFaReview-5"><input type="checkbox"></td>
                     <td rowspan="6"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>  價格說明回顧 (促銷銜接前要Role Play)</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesPriceReview-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesPriceReview-1"><input type="checkbox"></td>
+                    <td id="salesPriceReview-2"><input type="checkbox"></td>
+                    <td id="salesPriceReview-3"><input type="checkbox"></td>
+                    <td id="salesPriceReview-4"><input type="checkbox"></td>
+                    <td id="salesPriceReview-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>  確認明確需求</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesAck-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesAck-1"><input type="checkbox"></td>
+                    <td id="salesAck-2"><input type="checkbox"></td>
+                    <td id="salesAck-3"><input type="checkbox"></td>
+                    <td id="salesAck-4"><input type="checkbox"></td>
+                    <td id="salesAck-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>  體重,量身,體脂率與目標設定</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesTarget-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesTarget-1"><input type="checkbox"></td>
+                    <td id="salesTarget-2"><input type="checkbox"></td>
+                    <td id="salesTarget-3"><input type="checkbox"></td>
+                    <td id="salesTarget-4"><input type="checkbox"></td>
+                    <td id="salesTarget-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>  動機-不可只寫看起來比較漂亮/感到比較好</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesMotivation-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesMotivation-1"><input type="checkbox"></td>
+                    <td id="salesMotivation-2"><input type="checkbox"></td>
+                    <td id="salesMotivation-3"><input type="checkbox"></td>
+                    <td id="salesMotivation-4"><input type="checkbox"></td>
+                    <td id="salesMotivation-5"><input type="checkbox"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
                     <td>  克服障礙：時間, 老公, 錢, 回去想一想</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="salesObstacle-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="salesObstacle-1"><input type="checkbox"></td>
+                    <td id="salesObstacle-2"><input type="checkbox"></td>
+                    <td id="salesObstacle-3"><input type="checkbox"></td>
+                    <td id="salesObstacle-4"><input type="checkbox"></td>
+                    <td id="salesObstacle-5"><input type="checkbox"></td>
                   </tr>
                 </tbody>
               </table>
@@ -986,155 +991,155 @@
                   <tr>
                     <td>每週</td>
                     <td>每週一開會以及上週檢討</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtMeeting-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtMeeting-1"><input type="checkbox"></td>
+                    <td id="mgmtMeeting-2"><input type="checkbox"></td>
+                    <td id="mgmtMeeting-3"><input type="checkbox"></td>
+                    <td id="mgmtMeeting-4"><input type="checkbox"></td>
+                    <td id="mgmtMeeting-5"><input type="checkbox"></td>
                     <td rowspan="4"></td>
                   </tr>
                   <tr>
                     <td>Weekly</td>
                     <td>每週CA報告完成</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtCa-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtCa-1"><input type="checkbox"></td>
+                    <td id="mgmtCa-2"><input type="checkbox"></td>
+                    <td id="mgmtCa-3"><input type="checkbox"></td>
+                    <td id="mgmtCa-4"><input type="checkbox"></td>
+                    <td id="mgmtCa-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>每週固定時間做GP與不同主題的會議</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtGp-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtGp-1"><input type="checkbox"></td>
+                    <td id="mgmtGp-2"><input type="checkbox"></td>
+                    <td id="mgmtGp-3"><input type="checkbox"></td>
+                    <td id="mgmtGp-4"><input type="checkbox"></td>
+                    <td id="mgmtGp-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>持續舉辦店鋪內部研習</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtLearn-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtLearn-1"><input type="checkbox"></td>
+                    <td id="mgmtLearn-2"><input type="checkbox"></td>
+                    <td id="mgmtLearn-3"><input type="checkbox"></td>
+                    <td id="mgmtLearn-4"><input type="checkbox"></td>
+                    <td id="mgmtLearn-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td>每日</td>
                     <td>Projection Sheet完成(內含失敗的FA)</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtSheet-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtSheet-1"><input type="checkbox"></td>
+                    <td id="mgmtSheet-2"><input type="checkbox"></td>
+                    <td id="mgmtSheet-3"><input type="checkbox"></td>
+                    <td id="mgmtSheet-4"><input type="checkbox"></td>
+                    <td id="mgmtSheet-5"><input type="checkbox"></td>
                     <td rowspan="6"></td>
                   </tr>
                   <tr>
                     <td>Daily</td>
                     <td>遵循跨店/轉籍及退會的政策</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtPolicy-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtPolicy-1"><input type="checkbox"></td>
+                    <td id="mgmtPolicy-2"><input type="checkbox"></td>
+                    <td id="mgmtPolicy-3"><input type="checkbox"></td>
+                    <td id="mgmtPolicy-4"><input type="checkbox"></td>
+                    <td id="mgmtPolicy-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>不可加入未經認可的課程及器材</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtCompiantSales-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtCompiantSales-1"><input type="checkbox"></td>
+                    <td id="mgmtCompiantSales-2"><input type="checkbox"></td>
+                    <td id="mgmtCompiantSales-3"><input type="checkbox"></td>
+                    <td id="mgmtCompiantSales-4"><input type="checkbox"></td>
+                    <td id="mgmtCompiantSales-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>不可教未經認可的運動方式</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtCompiantMethod-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtCompiantMethod-1"><input type="checkbox"></td>
+                    <td id="mgmtCompiantMethod-2"><input type="checkbox"></td>
+                    <td id="mgmtCompiantMethod-3"><input type="checkbox"></td>
+                    <td id="mgmtCompiantMethod-4"><input type="checkbox"></td>
+                    <td id="mgmtCompiantMethod-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>不可賣未經總部授權的產品</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtCompiantProduct-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtCompiantProduct-1"><input type="checkbox"></td>
+                    <td id="mgmtCompiantProduct-2"><input type="checkbox"></td>
+                    <td id="mgmtCompiantProduct-3"><input type="checkbox"></td>
+                    <td id="mgmtCompiantProduct-4"><input type="checkbox"></td>
+                    <td id="mgmtCompiantProduct-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>不可刊登未經授權的廣告或logo使用</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtCompiantAd-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtCompiantAd-1"><input type="checkbox"></td>
+                    <td id="mgmtCompiantAd-2"><input type="checkbox"></td>
+                    <td id="mgmtCompiantAd-3"><input type="checkbox"></td>
+                    <td id="mgmtCompiantAd-4"><input type="checkbox"></td>
+                    <td id="mgmtCompiantAd-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td>每月</td>
                     <td>老闆、經理、Staff 參加訓練</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtTraining-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtTraining-1"><input type="checkbox"></td>
+                    <td id="mgmtTraining-2"><input type="checkbox"></td>
+                    <td id="mgmtTraining-3"><input type="checkbox"></td>
+                    <td id="mgmtTraining-4"><input type="checkbox"></td>
+                    <td id="mgmtTraining-5"><input type="checkbox"></td>
                     <td rowspan="5"></td>
                   </tr>
                   <tr>
                     <td>Monthly</td>
                     <td>每月3號準時繳交報表,準時繳交權利金</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtReport-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtReport-1"><input type="checkbox"></td>
+                    <td id="mgmtReport-2"><input type="checkbox"></td>
+                    <td id="mgmtReport-3"><input type="checkbox"></td>
+                    <td id="mgmtReport-4"><input type="checkbox"></td>
+                    <td id="mgmtReport-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>每月完成行動計劃與會員行事曆</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtPlan-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtPlan-1"><input type="checkbox"></td>
+                    <td id="mgmtPlan-2"><input type="checkbox"></td>
+                    <td id="mgmtPlan-3"><input type="checkbox"></td>
+                    <td id="mgmtPlan-4"><input type="checkbox"></td>
+                    <td id="mgmtPlan-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>Culb清潔、器材維護等</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtMaintain-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtMaintain-1"><input type="checkbox"></td>
+                    <td id="mgmtMaintain-2"><input type="checkbox"></td>
+                    <td id="mgmtMaintain-3"><input type="checkbox"></td>
+                    <td id="mgmtMaintain-4"><input type="checkbox"></td>
+                    <td id="mgmtMaintain-5"><input type="checkbox"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>每季員工面談</td>
-                    <td contenteditable></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
+                    <td id="mgmtFace2Face-0"><span class="glyphicon glyphicon-star-empty"></span></td>
+                    <td id="mgmtFace2Face-1"><input type="checkbox"></td>
+                    <td id="mgmtFace2Face-2"><input type="checkbox"></td>
+                    <td id="mgmtFace2Face-3"><input type="checkbox"></td>
+                    <td id="mgmtFace2Face-4"><input type="checkbox"></td>
+                    <td id="mgmtFace2Face-5"><input type="checkbox"></td>
                   </tr>
                 </tbody>
               </table>
@@ -1154,52 +1159,358 @@
                     <td rowspan="5">Club total<br>全店加總</td>
                     <td>結案率</td>
                     <td>ACH</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="clubAch-1"></td>
+                    <td id="clubAch-2"></td>
+                    <td id="clubAch-3"></td>
+                    <td id="clubAch-4"></td>
+                    <td id="clubAch-5"></td>
+                    <td id="clubAch-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
-                    <td></td>
+                    <td id="clubSalesRatio"></td>
                     <td>MM</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="clubMm-1"></td>
+                    <td id="clubMm-2"></td>
+                    <td id="clubMm-3"></td>
+                    <td id="clubMm-4"></td>
+                    <td id="clubMm-5"></td>
+                    <td id="clubMm-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td>扣款或年繳比率</td>
                     <td>APP</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="clubApp-1"></td>
+                    <td id="clubApp-2"></td>
+                    <td id="clubApp-3"></td>
+                    <td id="clubApp-4"></td>
+                    <td id="clubApp-5"></td>
+                    <td id="clubApp-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
-                    <td></td>
+                    <td id="clubAchAppRatio"></td>
                     <td>NS</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td id="clubNs-1"></td>
+                    <td id="clubNs-2"></td>
+                    <td id="clubNs-3"></td>
+                    <td id="clubNs-4"></td>
+                    <td id="clubNs-5"></td>
+                    <td id="clubNs-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
                     <td></td>
                     <td>L</td>
+                    <td id="clubLx-1"></td>
+                    <td id="clubLx-2"></td>
+                    <td id="clubLx-3"></td>
+                    <td id="clubLx-4"></td>
+                    <td id="clubLx-5"></td>
+                    <td id="clubLx-6"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff1" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff1Ach-1" contenteditable></td>
+                    <td id="staff1Ach-2" contenteditable></td>
+                    <td id="staff1Ach-3" contenteditable></td>
+                    <td id="staff1Ach-4" contenteditable></td>
+                    <td id="staff1Ach-5" contenteditable></td>
+                    <td id="staff1Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff1SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff1Mm-1" contenteditable></td>
+                    <td id="staff1Mm-2" contenteditable></td>
+                    <td id="staff1Mm-3" contenteditable></td>
+                    <td id="staff1Mm-4" contenteditable></td>
+                    <td id="staff1Mm-5" contenteditable></td>
+                    <td id="staff1Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff1App-1" contenteditable></td>
+                    <td id="staff1App-2" contenteditable></td>
+                    <td id="staff1App-3" contenteditable></td>
+                    <td id="staff1App-4" contenteditable></td>
+                    <td id="staff1App-5" contenteditable></td>
+                    <td id="staff1App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff1AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff1Ns-1" contenteditable></td>
+                    <td id="staff1Ns-2" contenteditable></td>
+                    <td id="staff1Ns-3" contenteditable></td>
+                    <td id="staff1Ns-4" contenteditable></td>
+                    <td id="staff1Ns-5" contenteditable></td>
+                    <td id="staff1Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
                     <td></td>
+                    <td>L</td>
+                    <td id="staff1Lx-1" contenteditable></td>
+                    <td id="staff1Lx-2" contenteditable></td>
+                    <td id="staff1Lx-3" contenteditable></td>
+                    <td id="staff1Lx-4" contenteditable></td>
+                    <td id="staff1Lx-5" contenteditable></td>
+                    <td id="staff1Lx-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td if="staff2" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff2Ach-1" contenteditable></td>
+                    <td id="staff2Ach-2" contenteditable></td>
+                    <td id="staff2Ach-3" contenteditable></td>
+                    <td id="staff2Ach-4" contenteditable></td>
+                    <td id="staff2Ach-5" contenteditable></td>
+                    <td id="staff2Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff2SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff2Mm-1" contenteditable></td>
+                    <td id="staff2Mm-2" contenteditable></td>
+                    <td id="staff2Mm-3" contenteditable></td>
+                    <td id="staff2Mm-4" contenteditable></td>
+                    <td id="staff2Mm-5" contenteditable></td>
+                    <td id="staff2Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff2App-1" contenteditable></td>
+                    <td id="staff2App-2" contenteditable></td>
+                    <td id="staff2App-3" contenteditable></td>
+                    <td id="staff2App-4" contenteditable></td>
+                    <td id="staff2App-5" contenteditable></td>
+                    <td id="staff2App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff2AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff2Ns-1" contenteditable></td>
+                    <td id="staff2Ns-2" contenteditable></td>
+                    <td id="staff2Ns-3" contenteditable></td>
+                    <td id="staff2Ns-4" contenteditable></td>
+                    <td id="staff2Ns-5" contenteditable></td>
+                    <td id="staff2Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
                     <td></td>
+                    <td>L</td>
+                    <td id="staff2Lx-1" contenteditable></td>
+                    <td id="staff2Lx-2" contenteditable></td>
+                    <td id="staff2Lx-3" contenteditable></td>
+                    <td id="staff2Lx-4" contenteditable></td>
+                    <td id="staff2Lx-5" contenteditable></td>
+                    <td id="staff2Lx-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff3" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff3Ach-1" contenteditable></td>
+                    <td id="staff3Ach-2" contenteditable></td>
+                    <td id="staff3Ach-3" contenteditable></td>
+                    <td id="staff3Ach-4" contenteditable></td>
+                    <td id="staff3Ach-5" contenteditable></td>
+                    <td id="staff3Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff3SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff3Mm-1" contenteditable></td>
+                    <td id="staff3Mm-2" contenteditable></td>
+                    <td id="staff3Mm-3" contenteditable></td>
+                    <td id="staff3Mm-4" contenteditable></td>
+                    <td id="staff3Mm-5" contenteditable></td>
+                    <td id="staff3Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff3App-1" contenteditable></td>
+                    <td id="staff3App-2" contenteditable></td>
+                    <td id="staff3App-3" contenteditable></td>
+                    <td id="staff3App-4" contenteditable></td>
+                    <td id="staff3App-5" contenteditable></td>
+                    <td id="staff3App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff3AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff3Ns-1" contenteditable></td>
+                    <td id="staff3Ns-2" contenteditable></td>
+                    <td id="staff3Ns-3" contenteditable></td>
+                    <td id="staff3Ns-4" contenteditable></td>
+                    <td id="staff3Ns-5" contenteditable></td>
+                    <td id="staff3Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
                     <td></td>
+                    <td>L</td>
+                    <td id="staff3Lx-1" contenteditable></td>
+                    <td id="staff3Lx-2" contenteditable></td>
+                    <td id="staff3Lx-3" contenteditable></td>
+                    <td id="staff3Lx-4" contenteditable></td>
+                    <td id="staff3Lx-5" contenteditable></td>
+                    <td id="staff3Lx-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff4" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff4Ach-1" contenteditable></td>
+                    <td id="staff4Ach-2" contenteditable></td>
+                    <td id="staff4Ach-3" contenteditable></td>
+                    <td id="staff4Ach-4" contenteditable></td>
+                    <td id="staff4Ach-5" contenteditable></td>
+                    <td id="staff4Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff4SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff4Mm-1" contenteditable></td>
+                    <td id="staff4Mm-2" contenteditable></td>
+                    <td id="staff4Mm-3" contenteditable></td>
+                    <td id="staff4Mm-4" contenteditable></td>
+                    <td id="staff4Mm-5" contenteditable></td>
+                    <td id="staff4Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff4App-1" contenteditable></td>
+                    <td id="staff4App-2" contenteditable></td>
+                    <td id="staff4App-3" contenteditable></td>
+                    <td id="staff4App-4" contenteditable></td>
+                    <td id="staff4App-5" contenteditable></td>
+                    <td id="staff4App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff4AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff4Ns-1" contenteditable></td>
+                    <td id="staff4Ns-2" contenteditable></td>
+                    <td id="staff4Ns-3" contenteditable></td>
+                    <td id="staff4Ns-4" contenteditable></td>
+                    <td id="staff4Ns-5" contenteditable></td>
+                    <td id="staff4Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
                     <td></td>
+                    <td>L</td>
+                    <td id="staff4Lx-1" contenteditable></td>
+                    <td id="staff4Lx-2" contenteditable></td>
+                    <td id="staff4Lx-3" contenteditable></td>
+                    <td id="staff4Lx-4" contenteditable></td>
+                    <td id="staff4Lx-5" contenteditable></td>
+                    <td id="staff4Lx-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff5" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff5Ach-1" contenteditable></td>
+                    <td id="staff5Ach-2" contenteditable></td>
+                    <td id="staff5Ach-3" contenteditable></td>
+                    <td id="staff5Ach-4" contenteditable></td>
+                    <td id="staff5Ach-5" contenteditable></td>
+                    <td id="staff5Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff5SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff5Mm-1" contenteditable></td>
+                    <td id="staff5Mm-2" contenteditable></td>
+                    <td id="staff5Mm-3" contenteditable></td>
+                    <td id="staff5Mm-4" contenteditable></td>
+                    <td id="staff5Mm-5" contenteditable></td>
+                    <td id="staff5Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff5App-1" contenteditable></td>
+                    <td id="staff5App-2" contenteditable></td>
+                    <td id="staff5App-3" contenteditable></td>
+                    <td id="staff5App-4" contenteditable></td>
+                    <td id="staff5App-5" contenteditable></td>
+                    <td id="staff5App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
+                    <td id="staff5AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff5Ns-1" contenteditable></td>
+                    <td id="staff5Ns-2" contenteditable></td>
+                    <td id="staff5Ns-3" contenteditable></td>
+                    <td id="staff5Ns-4" contenteditable></td>
+                    <td id="staff5Ns-5" contenteditable></td>
+                    <td id="staff5Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr>
                     <td></td>
+                    <td>L</td>
+                    <td id="staff5Lx-1" contenteditable></td>
+                    <td id="staff5Lx-2" contenteditable></td>
+                    <td id="staff5Lx-3" contenteditable></td>
+                    <td id="staff5Lx-4" contenteditable></td>
+                    <td id="staff5Lx-5" contenteditable></td>
+                    <td id="staff5Lx-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff6" rowspan="5" contenteditable></td>
+                    <td>結案率</td>
+                    <td>ACH</td>
+                    <td id="staff6Ach-1" contenteditable></td>
+                    <td id="staff6Ach-2" contenteditable></td>
+                    <td id="staff6Ach-3" contenteditable></td>
+                    <td id="staff6Ach-4" contenteditable></td>
+                    <td id="staff6Ach-5" contenteditable></td>
+                    <td id="staff6Ach-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff6SalesRatio"></td>
+                    <td>MM</td>
+                    <td id="staff6Mm-1" contenteditable></td>
+                    <td id="staff6Mm-2" contenteditable></td>
+                    <td id="staff6Mm-3" contenteditable></td>
+                    <td id="staff6Mm-4" contenteditable></td>
+                    <td id="staff6Mm-5" contenteditable></td>
+                    <td id="staff6Mm-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td>扣款或年繳比率</td>
+                    <td>APP</td>
+                    <td id="staff6App-1" contenteditable></td>
+                    <td id="staff6App-2" contenteditable></td>
+                    <td id="staff6App-3" contenteditable></td>
+                    <td id="staff6App-4" contenteditable></td>
+                    <td id="staff6App-5" contenteditable></td>
+                    <td id="staff6App-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
+                    <td id="staff6AchAppRatio"></td>
+                    <td>NS</td>
+                    <td id="staff6Ns-1" contenteditable></td>
+                    <td id="staff6Ns-2" contenteditable></td>
+                    <td id="staff6Ns-3" contenteditable></td>
+                    <td id="staff6Ns-4" contenteditable></td>
+                    <td id="staff6Ns-5" contenteditable></td>
+                    <td id="staff6Ns-6" style="background-color: lightGray"></td>
+                  </tr>
+                  <tr style="background-color: #CCFFFF">
                     <td></td>
+                    <td>L</td>
+                    <td id="staff6Lx-1" contenteditable></td>
+                    <td id="staff6Lx-2" contenteditable></td>
+                    <td id="staff6Lx-3" contenteditable></td>
+                    <td id="staff6Lx-4" contenteditable></td>
+                    <td id="staff6Lx-5" contenteditable></td>
+                    <td id="staff6Lx-6" style="background-color: lightGray"></td>
                   </tr>
                 </tbody>
               </table>
@@ -1226,5 +1537,6 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
     <script src="js/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script>
+    <script src="js/CA.js"></script>
   </body>
 </html>

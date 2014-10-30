@@ -1,5 +1,7 @@
 package com.curves.franchise.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -11,13 +13,10 @@ public class Pj implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    @JsonIgnore
     private Date lastModified;
 
-    @ManyToOne
-    @JoinColumn(name = "pj_sum_id")
-    private PjSum pjSum;
-
-    private Date date;
+    private Date pjDate;
 
     private float workingDays;
     private int workOuts;
@@ -51,12 +50,15 @@ public class Pj implements Serializable {
     private int enrollAllPrepay;
     private int exits;
 
+    protected Pj() {
+    }
+
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPjDate(Date pjDate) {
+        this.pjDate = pjDate;
     }
 
     public void setWorkingDays(float workingDays) {
@@ -195,8 +197,8 @@ public class Pj implements Serializable {
         return lastModified;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getPjDate() {
+        return pjDate;
     }
 
     public float getWorkingDays() {

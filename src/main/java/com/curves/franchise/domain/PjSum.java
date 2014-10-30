@@ -1,11 +1,13 @@
 package com.curves.franchise.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class PjSum implements Serializable {
@@ -13,17 +15,18 @@ public class PjSum implements Serializable {
 
     @Id
     @GeneratedValue
-    @JsonIgnore
     private Long id;
     @JsonIgnore
     private Date lastModified;
 
-    @OneToMany(fetch= FetchType.EAGER, cascade = {CascadeType.ALL}, mappedBy="pjSum")
-    private Set<Pj> pjSet;
+    @OneToMany(fetch= FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "pj_sum_id", referencedColumnName="id")
+    @RestResource(exported = false)
+    private List<Pj> pjSet = new ArrayList<Pj>(35);
 
     private int clubId;
-    private int year;
-    private int month;
+    private int year; // 2014, 2013, ...
+    private int month; // Jan=0, Feb=1, ..., Dec=11
 
     private int newSales;
     private int shiftIn;
@@ -31,11 +34,11 @@ public class PjSum implements Serializable {
     private int increment;
     private int revenue;
     private int enrolled;
-    private int leave;
-    private int valid;
-    private String salesRatio;
-    private String exitRatio;
-    private String leaveRatio;
+    private int leaves;
+    private int valids;
+    private String salesRatio = "";
+    private String exitRatio = "";
+    private String leaveRatio = "";
 
     private float workingDays;
     private int maxWorkOuts;
@@ -69,19 +72,22 @@ public class PjSum implements Serializable {
     private int enrollAllPrepay;
     private int exits;
 
-    public void setValid(int valid) {
-        this.valid = valid;
+    protected PjSum() {
     }
 
-    public int getValid() {
-        return valid;
+    public void setValids(int valid) {
+        this.valids = valids;
+    }
+
+    public int getValids() {
+        return valids;
     }
 
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }
 
-    public void setPjSet(Set<Pj> pjSet) {
+    public void setPjSet(List<Pj> pjSet) {
         this.pjSet = pjSet;
     }
 
@@ -121,8 +127,8 @@ public class PjSum implements Serializable {
         this.enrolled = enrolled;
     }
 
-    public void setLeave(int leave) {
-        this.leave = leave;
+    public void setLeaves(int leave) {
+        this.leaves = leave;
     }
 
     public void setSalesRatio(String salesRatio) {
@@ -273,7 +279,7 @@ public class PjSum implements Serializable {
         return lastModified;
     }
 
-    public Set<Pj> getPjSet() {
+    public List<Pj> getPjSet() {
         return pjSet;
     }
 
@@ -313,8 +319,8 @@ public class PjSum implements Serializable {
         return enrolled;
     }
 
-    public int getLeave() {
-        return leave;
+    public int getLeaves() {
+        return leaves;
     }
 
     public String getSalesRatio() {

@@ -37,10 +37,9 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">PJ</a></li>
           <li><a href="CA.htm">CA</a></li>
-          <li><a href="Trands.htm">Trands</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#" id="userid"></a></li>
+          <li class="active"><a href="#" id="userId"></a></li>
           <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
         </ul>
       </div>
@@ -50,8 +49,8 @@
   </nav>
   <div class="row" style="padding:0 19px">
     <label for="datetimepicker" class="control-label">Month: </label>
-    <input type="text" id="datetimepicker" data-date-format="yyyy-MM">
-    <button id="save" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
+    <input type="text" id="datetimepicker" data-date-format="yyyy-mm">
+    <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
     <!--<div class="col-md-2">-->
     <!--</div>-->
     <!--<div class="form-group col-md-10">-->
@@ -85,8 +84,8 @@
             <th></th>
             <th id="newSales"></th>
             <th id="exits"></th>
-            <th id="shiftIn"></th>
-            <th id="shiftOut"></th>
+            <th contenteditable id="shiftIn"></th>
+            <th contenteditable id="shiftOut"></th>
             <th id="increment"></th>
             <th colspan="25"></th>
           </tr>
@@ -108,9 +107,9 @@
           <tr>
           <tr>
             <th id="revenue"></th>
-            <th id="enrolled"></th>
-            <th id="leave"></th>
-            <th id="valid"></th>
+            <th contenteditable id="enrolled"></th>
+            <th contenteditable id="leaves"></th>
+            <th contenteditable id="valids"></th>
             <th id="salesRatio"></th>
             <th id="exitRatio"></th>
             <th id="leaveRatio"></th>
