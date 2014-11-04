@@ -64,3 +64,4 @@ h1 {padding-bottom:0.2em;}
 
 td { text-align:center; font-size: 75%; }
 th { text-align:center; font-size: 75%; }
+[contenteditable='true'] {border: 1px dashed green !important;}

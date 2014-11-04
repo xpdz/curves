@@ -4,7 +4,6 @@ import com.curves.franchise.domain.PjSum;
 import com.curves.franchise.repository.PjSumRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -29,11 +28,7 @@ public class PjSumController {
     @ResponseBody
     public String savePJ(@RequestBody PjSum pjSum) {
         logger.info("--SavePJ--ID:"+pjSum.getId()+", club: "+pjSum.getClubId()+"@"+pjSum.getYear()+"-"+(pjSum.getMonth()+1));
-        PjSum x = pjSumRepo.findById(pjSum.getId());
-        logger.info("==----before copy:"+x.getId());
-        BeanUtils.copyProperties(pjSum, x);
-        logger.info("==----after copy:"+x.getId()+",leaves:"+x.getLeaves());
-        pjSumRepo.save(x);
-        return "" + x.getId();
+        pjSumRepo.save(pjSum);
+        return "" + pjSum.getId();
     }
 }

@@ -2,10 +2,6 @@ $(document).ready(function() {
 
 $('#userId').text('000000');
 
-$('#btnLoad').click(function() {
-    var clubId = +$('#clubId').text();
-});
-
 var lineData = {
     labels: ["2014-4", "2014-5", "2014-6", "2014-7", "2014-8", "2014-9"],
     datasets: [

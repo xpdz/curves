@@ -75,6 +75,10 @@ public class PjSum implements Serializable {
     protected PjSum() {
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setValids(int valid) {
         this.valids = valids;
     }

@@ -53,6 +53,10 @@ public class Pj implements Serializable {
     protected Pj() {
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
     }

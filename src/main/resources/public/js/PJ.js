@@ -2,8 +2,8 @@ $(document).ready(function() {
 
 var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var $tbd = $("#tbd");
-var pjSumId = -1;
-var pjIds = [];
+window.pjSumId = -1;
+window.pjIds = [];
 
 var today = new Date();
 var thisYear = today.getFullYear();
@@ -54,14 +54,18 @@ function getPJ(y, m) {
     });
 
     if (y == thisYear && m == thisMonth) {
-        $("#btnSave").attr("disabled", false);
+        $('#btnSave').attr("disabled", false);
+        $('td[contenteditable="false"]').attr('contenteditable', 'true');
+        $('td[contenteditable="false"]').css('border', '1px dashed green !important');
     } else {
-        $("#btnSave").attr("disabled", true);
+        $('#btnSave').attr("disabled", true);
+        $('td[contenteditable="true"]').attr('contenteditable', 'false');
+        $('td[contenteditable="false"]').css('border', '1px solid #ddd !important');
     }
 }
 
 function fillSheet(y, m, pjSum) {
-    pjSumId = pjSum.id;
+    window.pjSumId = pjSum.id;
     $('#newSales').text(pjSum.newSales);
     $('#exits').text(pjSum.exits);
     $('#shiftIn').text(pjSum.shiftIn);
@@ -76,7 +80,9 @@ function fillSheet(y, m, pjSum) {
     $('#leaveRatio').text(pjSum.leaveRatio);
     for (var idx = 1; idx <= pjSum.pjSet.length; idx++) {
         var pj = pjSum.pjSet[idx-1];
-        pjIds[idx] = pj.id;
+        if (window.pjSumId != -1) {
+            window.pjIds[idx] = pj.id;
+        }
         var d = new Date(pj.pjDate);
         $tbd.append(
           $('<tr/>').append(
@@ -247,10 +253,9 @@ $("#btnSave").click(function() {
     runFormula(lastDayOfMonth);
 
     var pjSum = {};
-    if (pjSumId != -1) {
-        pjSum.id = pjSumId;
+    if (window.pjSumId != -1) {
+        pjSum.id = window.pjSumId;
     }
-
     pjSum.clubId = +$('#clubId').text();
     pjSum.year = +$('#year').text();
     pjSum.month = +$('#month').text() - 1;
@@ -302,9 +307,7 @@ $("#btnSave").click(function() {
     pjSum.pjSet = [];
     for (var idx = 1; idx <= lastDayOfMonth; idx++) {
         var pj = {};
-        if (pjSumId != -1) {
-            pj.id = pjIds[idx];
-        }
+        pj.id = window.pjIds[idx];
         pj.pjDate = new Date(thisYear, thisMonth, idx);
         pj.workingDays = +$('#workingDays-' + idx).text();
         pj.workOuts = +$('#workOuts-' + idx).text();
