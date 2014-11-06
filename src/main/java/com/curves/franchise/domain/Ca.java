@@ -45,7 +45,7 @@ public class Ca implements Serializable {
     private boolean svcTotalWo0;
     private int svcTotalWo1, svcTotalWo2, svcTotalWo3, svcTotalWo4, svcTotalWo5, svcTotalWo6;
     private boolean svcAvgWo0;
-    private int svcAvgWo1, svcAvgWo2, svcAvgWo3, svcAvgWo4, svcAvgWo5, svcAvgWo6;
+    private float svcAvgWo1, svcAvgWo2, svcAvgWo3, svcAvgWo4, svcAvgWo5, svcAvgWo6;
     private boolean svcMaxWo0;
     private int svcMaxWo1, svcMaxWo2, svcMaxWo3, svcMaxWo4, svcMaxWo5, svcMaxWo6;
     private boolean svcExits0;
@@ -57,15 +57,20 @@ public class Ca implements Serializable {
     private boolean svcMeasureRatio0;
     private float svcMeasureRatio1, svcMeasureRatio2, svcMeasureRatio3, svcMeasureRatio4, svcMeasureRatio5, svcMeasureRatio6;
     private boolean svc12_0;
-    private int svc12_5, svc12_6;
+    private int svc12_5;
+    private float svc12_6;
     private boolean svc8to11_0;
-    private int svc8to11_5, svc8to11_6;
+    private int svc8to11_5;
+    private float svc8to11_6;
     private boolean svc4to7_0;
-    private int svc4to7_5, svc4to7_6;
+    private int svc4to7_5;
+    private float svc4to7_6;
     private boolean svc1to3_0;
-    private int svc1to3_5, svc1to3_6;
+    private int svc1to3_5;
+    private float svc1to3_6;
     private boolean svc0_0;
-    private int svc0_5, svc0_6;
+    private int svc0_5;
+    private float svc0_6;
     private boolean svc3More0, svc3More1, svc3More2, svc3More3, svc3More4, svc3More5;
     private boolean svcInactive0, svcInactive1, svcInactive2, svcInactive3, svcInactive4, svcInactive5;
     private boolean svcFwoReview0, svcFwoReview1, svcFwoReview2, svcFwoReview3, svcFwoReview4, svcFwoReview5;
@@ -146,7 +151,7 @@ public class Ca implements Serializable {
     private boolean cmHandPerApo0;
     private int cmHandPerApo6;
     private boolean cmOutPerApo0;
-    private int cmOutPerApo6;
+    private float cmOutPerApo6;
     private boolean cmBrAgpRatio0;
     private float cmBrAgpRatio1, cmBrAgpRatio2, cmBrAgpRatio3, cmBrAgpRatio4, cmBrAgpRatio5, cmBrAgpRatio6;
     private boolean cmFaSum0;
@@ -482,27 +487,27 @@ public class Ca implements Serializable {
         this.svcAvgWo0 = svcAvgWo0;
     }
 
-    public void setSvcAvgWo1(int svcAvgWo1) {
+    public void setSvcAvgWo1(float svcAvgWo1) {
         this.svcAvgWo1 = svcAvgWo1;
     }
 
-    public void setSvcAvgWo2(int svcAvgWo2) {
+    public void setSvcAvgWo2(float svcAvgWo2) {
         this.svcAvgWo2 = svcAvgWo2;
     }
 
-    public void setSvcAvgWo3(int svcAvgWo3) {
+    public void setSvcAvgWo3(float svcAvgWo3) {
         this.svcAvgWo3 = svcAvgWo3;
     }
 
-    public void setSvcAvgWo4(int svcAvgWo4) {
+    public void setSvcAvgWo4(float svcAvgWo4) {
         this.svcAvgWo4 = svcAvgWo4;
     }
 
-    public void setSvcAvgWo5(int svcAvgWo5) {
+    public void setSvcAvgWo5(float svcAvgWo5) {
         this.svcAvgWo5 = svcAvgWo5;
     }
 
-    public void setSvcAvgWo6(int svcAvgWo6) {
+    public void setSvcAvgWo6(float svcAvgWo6) {
         this.svcAvgWo6 = svcAvgWo6;
     }
 
@@ -654,7 +659,7 @@ public class Ca implements Serializable {
         this.svc12_5 = svc12_5;
     }
 
-    public void setSvc12_6(int svc12_6) {
+    public void setSvc12_6(float svc12_6) {
         this.svc12_6 = svc12_6;
     }
 
@@ -666,7 +671,7 @@ public class Ca implements Serializable {
         this.svc8to11_5 = svc8to11_5;
     }
 
-    public void setSvc8to11_6(int svc8to11_6) {
+    public void setSvc8to11_6(float svc8to11_6) {
         this.svc8to11_6 = svc8to11_6;
     }
 
@@ -678,7 +683,7 @@ public class Ca implements Serializable {
         this.svc4to7_5 = svc4to7_5;
     }
 
-    public void setSvc4to7_6(int svc4to7_6) {
+    public void setSvc4to7_6(float svc4to7_6) {
         this.svc4to7_6 = svc4to7_6;
     }
 
@@ -690,7 +695,7 @@ public class Ca implements Serializable {
         this.svc1to3_5 = svc1to3_5;
     }
 
-    public void setSvc1to3_6(int svc1to3_6) {
+    public void setSvc1to3_6(float svc1to3_6) {
         this.svc1to3_6 = svc1to3_6;
     }
 
@@ -702,7 +707,7 @@ public class Ca implements Serializable {
         this.svc0_5 = svc0_5;
     }
 
-    public void setSvc0_6(int svc0_6) {
+    public void setSvc0_6(float svc0_6) {
         this.svc0_6 = svc0_6;
     }
 
@@ -1842,7 +1847,7 @@ public class Ca implements Serializable {
         this.cmOutPerApo0 = cmOutPerApo0;
     }
 
-    public void setCmOutPerApo6(int cmOutPerApo6) {
+    public void setCmOutPerApo6(float cmOutPerApo6) {
         this.cmOutPerApo6 = cmOutPerApo6;
     }
 
@@ -3798,27 +3803,27 @@ public class Ca implements Serializable {
         return svcAvgWo0;
     }
 
-    public int getSvcAvgWo1() {
+    public float getSvcAvgWo1() {
         return svcAvgWo1;
     }
 
-    public int getSvcAvgWo2() {
+    public float getSvcAvgWo2() {
         return svcAvgWo2;
     }
 
-    public int getSvcAvgWo3() {
+    public float getSvcAvgWo3() {
         return svcAvgWo3;
     }
 
-    public int getSvcAvgWo4() {
+    public float getSvcAvgWo4() {
         return svcAvgWo4;
     }
 
-    public int getSvcAvgWo5() {
+    public float getSvcAvgWo5() {
         return svcAvgWo5;
     }
 
-    public int getSvcAvgWo6() {
+    public float getSvcAvgWo6() {
         return svcAvgWo6;
     }
 
@@ -3970,7 +3975,7 @@ public class Ca implements Serializable {
         return svc12_5;
     }
 
-    public int getSvc12_6() {
+    public float getSvc12_6() {
         return svc12_6;
     }
 
@@ -3982,7 +3987,7 @@ public class Ca implements Serializable {
         return svc8to11_5;
     }
 
-    public int getSvc8to11_6() {
+    public float getSvc8to11_6() {
         return svc8to11_6;
     }
 
@@ -3994,7 +3999,7 @@ public class Ca implements Serializable {
         return svc4to7_5;
     }
 
-    public int getSvc4to7_6() {
+    public float getSvc4to7_6() {
         return svc4to7_6;
     }
 
@@ -4006,7 +4011,7 @@ public class Ca implements Serializable {
         return svc1to3_5;
     }
 
-    public int getSvc1to3_6() {
+    public float getSvc1to3_6() {
         return svc1to3_6;
     }
 
@@ -4018,7 +4023,7 @@ public class Ca implements Serializable {
         return svc0_5;
     }
 
-    public int getSvc0_6() {
+    public float getSvc0_6() {
         return svc0_6;
     }
 
@@ -5158,7 +5163,7 @@ public class Ca implements Serializable {
         return cmOutPerApo0;
     }
 
-    public int getCmOutPerApo6() {
+    public float getCmOutPerApo6() {
         return cmOutPerApo6;
     }
 

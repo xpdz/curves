@@ -17,7 +17,7 @@ public class CaController {
     CaRepository caRepo;
 
     @RequestMapping(value = "/rest/CA", method = RequestMethod.GET)
-    public Ca findByUserAndYearAndMonth(@RequestParam("year") int caYear, @RequestParam("month") int caMonth,
+    public Ca findByUserAndCaYearAndCaMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
                                            @AuthenticationPrincipal UserDetails user) {
         logger.info("=== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);

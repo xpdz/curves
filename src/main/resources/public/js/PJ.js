@@ -18,7 +18,7 @@ $.getJSON("/rest/whoami", function(club) {
 });
 
 // init date picker
-$('#datetimepicker').value = thisYear + '-' + thisMonth;
+$('#datetimepicker').val = thisYear + '-' + (thisMonth+1);
 $('#datetimepicker').datetimepicker({
     language:  'zh-TW',
     weekStart: 1,
@@ -62,6 +62,12 @@ function getPJ(y, m) {
         $('td[contenteditable="true"]').attr('contenteditable', 'false');
         $('td[contenteditable="false"]').css('border', '1px solid #ddd !important');
     }
+
+    $('td').each(function() {
+        if (0 == +$(this).text()) {
+            $(this).text('');
+        }
+    });
 }
 
 function fillSheet(y, m, pjSum) {
@@ -357,6 +363,12 @@ $("#btnSave").click(function() {
         alert("Save successfully.");
     }).fail(function() {
         alert("oops! Save failed, please try again.");
+    });
+
+    $('td').each(function() {
+        if (0 == +$(this).text()) {
+            $(this).text('');
+        }
     });
 });
 

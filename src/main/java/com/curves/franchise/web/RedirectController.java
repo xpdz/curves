@@ -49,11 +49,4 @@ public class RedirectController {
         logger.info("----YJY----error");
         return "error";
     }
-
-//    @RequestMapping("/error")
-//    public Map<String, String> loginError() {
-//        Map<String, String> map = new HashMap<String, String>(1);
-//        map.put("error", "error");
-//        return map;
-//    }
 }

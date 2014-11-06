@@ -20,7 +20,6 @@ $.getJSON("/rest/whoami", function(club) {
 $('#caDate').val(thisYear+"-"+(thisMonth+1));
 $('#caDate').datetimepicker({
     language:  'zh-TW',
-    format: 'yyyy-mm',
     weekStart: 1,
     todayBtn:  1,
     autoclose: 1,
@@ -34,12 +33,21 @@ $('#caDate').datetimepicker().on('changeDate', function(ev) {
     var selMonth = ev.date.getMonth();
     getCA(selYear, selMonth);
 });
+$('#btnLoad').click(function(ev) {
+    var dt = new Date($('#caDate').val());
+    console.log($('#caDate').val());
+    console.log(dt);
+    var selYear = dt.getFullYear();
+    var selMonth = dt.getMonth();
+    console.log("---"+selYear+"-"+selMonth);
+    getCA(selYear, selMonth);
+});
 
 // init CA page
 getCA(thisYear, thisMonth);
 
 function getCA(y, m) {
-    $.getJSON("/rest/CA", {year: y, month: m}, function(ca) {
+    $.getJSON("/rest/CA", {caYear: y, caMonth: m}, function(ca) {
         fillSheet(ca);
     }).fail(function() {
 //        alert('oops! I cannot find the data of ' + y + '-' + m);
@@ -1186,6 +1194,12 @@ function fillSheet(ca) {
 
     $('#thisPlanL').text(ca.thisPlan);
     $('#nextPlanL').text(ca.nextPlan);
+
+    $('td').each(function() {
+        if (0 == +$(this).text()) {
+            $(this).text('');
+        }
+    });
 }
 
 // save CA
@@ -1254,12 +1268,12 @@ $("#btnSave").click(function() {
     ca.svcTotalWo5 = +$('#svcTotalWo-5').text();
     ca.svcTotalWo6 = +$('#svcTotalWo-6').text();
     ca.svcAvgWo0 = $('#svcAvgWo-0').hasClass('glyphicon-star');
-    ca.svcAvgWo1 = +$('#svcAvgWo-1').text();
-    ca.svcAvgWo2 = +$('#svcAvgWo-2').text();
-    ca.svcAvgWo3 = +$('#svcAvgWo-3').text();
-    ca.svcAvgWo4 = +$('#svcAvgWo-4').text();
-    ca.svcAvgWo5 = +$('#svcAvgWo-5').text();
-    ca.svcAvgWo6 = +$('#svcAvgWo-6').text();
+    ca.svcAvgWo1 = parseFloat($('#svcAvgWo-1').text());
+    ca.svcAvgWo2 = parseFloat($('#svcAvgWo-2').text());
+    ca.svcAvgWo3 = parseFloat($('#svcAvgWo-3').text());
+    ca.svcAvgWo4 = parseFloat($('#svcAvgWo-4').text());
+    ca.svcAvgWo5 = parseFloat($('#svcAvgWo-5').text());
+    ca.svcAvgWo6 = parseFloat($('#svcAvgWo-6').text());
     ca.svcMaxWo0 = $('#svcMaxWo-0').hasClass('glyphicon-star');
     ca.svcMaxWo1 = +$('#svcMaxWo-1').text();
     ca.svcMaxWo2 = +$('#svcMaxWo-2').text();
@@ -1595,7 +1609,7 @@ $("#btnSave").click(function() {
     ca.cmHandPerApo0 = $('#cmHandPerApo-0').hasClass('glyphicon-star');
     ca.cmHandPerApo6 = +$('#cmHandPerApo-6').text();
     ca.cmOutPerApo0 = $('#cmOutPerApo-0').hasClass('glyphicon-star');
-    ca.cmOutPerApo6 = +$('#cmOutPerApo-6').text();
+    ca.cmOutPerApo6 = parseFloat($('#cmOutPerApo-6').text());
     ca.cmBrAgpRatio0 = $('#cmBrAgpRatio-0').hasClass('glyphicon-star');
     ca.cmBrAgpRatio1 = parseFloat($('#cmBrAgpRatio-1').text());
     ca.cmBrAgpRatio2 = parseFloat($('#cmBrAgpRatio-2').text());
@@ -2037,8 +2051,8 @@ $("#btnSave").click(function() {
     ca.staff6Lx5 = +$('#staff6Lx-5').text();
     ca.staff6Lx6 = +$('#staff6Lx-6').text();
 
-    ca.thisPlan = $('#thisPlanL').text();
-    ca.nextPlan = $('#nextPlanL').text();
+    ca.thisPlan = $('#thisPlan').text();
+    ca.nextPlan = $('#nextPlan').text();
 
     $.ajax({
         headers: {
@@ -2053,6 +2067,12 @@ $("#btnSave").click(function() {
         alert("Save successfully.");
     }).fail(function() {
         alert("oops! Save failed, please try again.");
+    });
+
+    $('td').each(function() {
+        if (0 == +$(this).text()) {
+            $(this).text('');
+        }
     });
 
     $('#btnSave').prop("disabled", false);
@@ -2081,32 +2101,32 @@ function runFormula() {
     var svcTm1 = (+$('#svcTm-1').text());
     if (svcTm1 != 0) {
         var svcHold1 = (+$('#svcHold-1').text());
-        $('svcHoldRatio-1').text(Math.round(svcHold1 / svcTm1) + '%');
+        $('svcHoldRatio-1').text(Math.round(svcHold1*100 / svcTm1) + '%');
     }
     var svcTm2 = (+$('#svcTm-2').text());
     if (svcTm2 != 0) {
         var svcHold2 = (+$('#svcHold-2').text());
-        $('svcHoldRatio-2').text(Math.round(svcHold2 / svcTm2) + '%');
+        $('svcHoldRatio-2').text(Math.round(svcHold2*100 / svcTm2) + '%');
     }
     var svcTm3 = (+$('#svcTm-3').text());
     if (svcTm3 != 0) {
         var svcHold3 = (+$('#svcHold-3').text());
-        $('svcHoldRatio-3').text(Math.round(svcHold3 / svcTm3) + '%');
+        $('svcHoldRatio-3').text(Math.round(svcHold3*100 / svcTm3) + '%');
     }
     var svcTm4 = (+$('#svcTm-4').text());
     if (svcTm4 != 0) {
         var svcHold4 = (+$('#svcHold-4').text());
-        $('svcHoldRatio-4').text(Math.round(svcHold4 / svcTm4) + '%');
+        $('svcHoldRatio-4').text(Math.round(svcHold4*100 / svcTm4) + '%');
     }
     var svcTm5 = (+$('#svcTm-5').text());
     if (svcTm5 != 0) {
         var svcHold5 = (+$('#svcHold-5').text());
-        $('svcHoldRatio-5').text(Math.round(svcHold5 / svcTm5) + '%');
+        $('svcHoldRatio-5').text(Math.round(svcHold5*100 / svcTm5) + '%');
     }
     var svcTm6 = (+$('#svcTm-1').text());
     if (svcTm6 != 0) {
         var svcHold6 = (+$('#svcHold-6').text());
-        $('svcHoldRatio-6').text(Math.round(svcHold6 / svcTm6) + '%');
+        $('svcHoldRatio-6').text(Math.round(svcHold6*100 / svcTm6) + '%');
     }
 
     var svcTotalWo1 = (+$('#svcTotalWo-1').text());
@@ -2118,27 +2138,27 @@ function runFormula() {
 
     var svcActive1 = (+$('#svcTotalWo-1').text());
     if (svcActive1 != 0) {
-        $('#svcAvgWo-1').text(Math.round(svcTotalWo1/svcActive1));
+        $('#svcAvgWo-1').text((svcTotalWo1/svcActive1).toFixed(1));
     }
     var svcActive2 = (+$('#svcTotalWo-2').text());
     if (svcActive2 != 0) {
-        $('#svcAvgWo-2').text(Math.round(svcTotalWo2/svcActive2));
+        $('#svcAvgWo-2').text((svcTotalWo2/svcActive2).toFixed(1));
     }
     var svcActive3 = (+$('#svcTotalWo-3').text());
     if (svcActive3 != 0) {
-        $('#svcAvgWo-3').text(Math.round(svcTotalWo3/svcActive3));
+        $('#svcAvgWo-3').text((svcTotalWo3/svcActive3).toFixed(1));
     }
     var svcActive4 = (+$('#svcTotalWo-4').text());
     if (svcActive4 != 0) {
-        $('#svcAvgWo-4').text(Math.round(svcTotalWo4/svcActive4));
+        $('#svcAvgWo-4').text((svcTotalWo4/svcActive4).toFixed(1));
     }
     var svcActive5 = (+$('#svcTotalWo-5').text());
     if (svcActive5 != 0) {
-        $('#svcAvgWo-5').text(Math.round(svcTotalWo5/svcActive5));
+        $('#svcAvgWo-5').text((svcTotalWo5/svcActive5).toFixed(1));
     }
     var svcActive6 = (+$('#svcTotalWo-6').text());
     if (svcActive6 != 0) {
-        $('#svcAvgWo-6').text(Math.round(svcTotalWo6/svcActive6/4));
+        $('#svcAvgWo-6').text((svcTotalWo6/svcActive6/4).toFixed(1));
         $('#svcMaxWo-6').text(Math.round(Math.max(svcMaxWo1, svcMaxWo2, svcMaxWo3, svcMaxWo4, svcMaxWo5)/svcActive6));
     }
 
@@ -2149,22 +2169,22 @@ function runFormula() {
     var svcExits5 = (+$('#svcExits-5').text());
     $('#svcExits-6').text(svcExits1+svcExits2+svcExits3+svcExits4+svcExits5);
     if (svcTm1 != 0) {
-        $('#svcExitsRatio-1').text(Math.round(svcExits1 / svcTm1) + '%');
+        $('#svcExitsRatio-1').text((svcExits1*100 / svcTm1).toFixed(1) + '%');
     }
     if (svcTm2 != 0) {
-        $('#svcExitsRatio-2').text(Math.round(svcExits2 / svcTm2) + '%');
+        $('#svcExitsRatio-2').text((svcExits2*100 / svcTm2).toFixed(1) + '%');
     }
     if (svcTm3 != 0) {
-        $('#svcExitsRatio-3').text(Math.round(svcExits3 / svcTm3) + '%');
+        $('#svcExitsRatio-3').text((svcExits3*100 / svcTm3).toFixed(1) + '%');
     }
     if (svcTm4 != 0) {
-        $('#svcExitsRatio-4').text(Math.round(svcExits4 / svcTm4) + '%');
+        $('#svcExitsRatio-4').text((svcExits4*100 / svcTm4).toFixed(1) + '%');
     }
     if (svcTm5 != 0) {
-        $('#svcExitsRatio-5').text(Math.round(svcExits5 / svcTm5) + '%');
+        $('#svcExitsRatio-5').text((svcExits5*100 / svcTm5).toFixed(1) + '%');
     }
     if (svcTm6 != 0) {
-        $('#svcExitsRatio-6').text(Math.round(svcExits6 / svcTm6) + '%');
+        $('#svcExitsRatio-6').text((svcExits6*100 / svcTm6).toFixed(1) + '%');
     }
 
     var svcMeasure1 = (+$('#svcMeasure-1').text());
@@ -2174,22 +2194,22 @@ function runFormula() {
     var svcMeasure5 = (+$('#svcMeasure-5').text());
     $('#svcMeasure-6').text(svcMeasure1+svcMeasure2+svcMeasure3+svcMeasure4+svcMeasure5);
     if (svcActive1 != 0) {
-        $('#svcMeasureRatio-1').text(Math.round(svcMeasure1 / svcActive1) + '%');
+        $('#svcMeasureRatio-1').text(Math.round(svcMeasure1*100 / svcActive1) + '%');
     }
     if (svcActive2 != 0) {
-        $('#svcMeasureRatio-2').text(Math.round(svcMeasure2 / svcActive2) + '%');
+        $('#svcMeasureRatio-2').text(Math.round(svcMeasure2*100 / svcActive2) + '%');
     }
     if (svcActive3 != 0) {
-        $('#svcMeasureRatio-3').text(Math.round(svcMeasure3 / svcActive3) + '%');
+        $('#svcMeasureRatio-3').text(Math.round(svcMeasure3*100 / svcActive3) + '%');
     }
     if (svcActive4 != 0) {
-        $('#svcMeasureRatio-4').text(Math.round(svcMeasure4 / svcActive4) + '%');
+        $('#svcMeasureRatio-4').text(Math.round(svcMeasure4*100 / svcActive4) + '%');
     }
     if (svcActive5 != 0) {
-        $('#svcMeasureRatio-5').text(Math.round(svcMeasure5 / svcActive5) + '%');
+        $('#svcMeasureRatio-5').text(Math.round(svcMeasure5*100 / svcActive5) + '%');
     }
     if (svcActive6 != 0) {
-        $('#svcMeasureRatio-6').text(Math.round(svcMeasure6 / svcActive6) + '%');
+        $('#svcMeasureRatio-6').text(Math.round(svcMeasure6*100 / svcActive6) + '%');
         $('#svc12-6').text(Math.round((+$('#svc12-5').text()) / svcActive6));
         $('#svc8to11-6').text(Math.round((+$('#svc8to11-5').text()) / svcActive6));
         $('#svc4to7-6').text(Math.round((+$('#svc4to7-5').text()) / svcActive6));
@@ -2368,52 +2388,52 @@ function runFormula() {
     $('#cmApoTotal-5').text(agpTotal5);
     $('#cmApoTotal-6').text(agpTotal6);
     if (cmCallIn1 != 0) {
-        $('#cmInApptRatio-1').text(Math.round(cmInApoTotal1/cmCallIn1) + '%');
+        $('#cmInApptRatio-1').text(Math.round(cmInApoTotal1*100/cmCallIn1) + '%');
     }
     if (cmCallIn2 != 0) {
-        $('#cmInApptRatio-2').text(Math.round(cmInApoTotal2/cmCallIn2) + '%');
+        $('#cmInApptRatio-2').text(Math.round(cmInApoTotal2*100/cmCallIn2) + '%');
     }
     if (cmCallIn3 != 0) {
-        $('#cmInApptRatio-3').text(Math.round(cmInApoTotal3/cmCallIn3) + '%');
+        $('#cmInApptRatio-3').text(Math.round(cmInApoTotal3*100/cmCallIn3) + '%');
     }
     if (cmCallIn4 != 0) {
-        $('#cmInApptRatio-4').text(Math.round(cmInApoTotal4/cmCallIn4) + '%');
+        $('#cmInApptRatio-4').text(Math.round(cmInApoTotal4*100/cmCallIn4) + '%');
     }
     if (cmCallIn5 != 0) {
-        $('#cmInApptRatio-5').text(Math.round(cmInApoTotal5/cmCallIn5) + '%');
+        $('#cmInApptRatio-5').text(Math.round(cmInApoTotal5*100/cmCallIn5) + '%');
     }
     if (cmCallIn6 != 0) {
-        $('#cmInApptRatio-6').text(Math.round(cmInApoTotal6/cmCallIn6) + '%');
+        $('#cmInApptRatio-6').text(Math.round(cmInApoTotal6*100/cmCallIn6) + '%');
     }
     var cmGotCallTotal1 = (+$('#cmOutGotCall-1').text())+(+$('#cmInGotCall-1').text())+(+$('#cmBlogGotCall-1').text())+(+$('#cmBagGotCall-1').text());
-    $('#cmOutApptRatio-1').text(Math.round(cmGotCallTotal1/ApgOutTotal1) + '%');
+    $('#cmOutApptRatio-1').text(Math.round(cmGotCallTotal1*100/ApgOutTotal1) + '%');
     var cmGotCallTotal2 = (+$('#cmOutGotCall-2').text())+(+$('#cmInGotCall-2').text())+(+$('#cmBlogGotCall-2').text())+(+$('#cmBagGotCall-2').text());
-    $('#cmOutApptRatio-2').text(Math.round(cmGotCallTotal2/ApgOutTotal2) + '%');
+    $('#cmOutApptRatio-2').text(Math.round(cmGotCallTotal2*100/ApgOutTotal2) + '%');
     var cmGotCallTotal3 = (+$('#cmOutGotCall-3').text())+(+$('#cmInGotCall-3').text())+(+$('#cmBlogGotCall-3').text())+(+$('#cmBagGotCall-3').text());
-    $('#cmOutApptRatio-3').text(Math.round(cmGotCallTotal3/ApgOutTotal3) + '%');
+    $('#cmOutApptRatio-3').text(Math.round(cmGotCallTotal3*100/ApgOutTotal3) + '%');
     var cmGotCallTotal4 = (+$('#cmOutGotCall-4').text())+(+$('#cmInGotCall-4').text())+(+$('#cmBlogGotCall-4').text())+(+$('#cmBagGotCall-4').text());
-    $('#cmOutApptRatio-4').text(Math.round(cmGotCallTotal4/ApgOutTotal4) + '%');
+    $('#cmOutApptRatio-4').text(Math.round(cmGotCallTotal4*100/ApgOutTotal4) + '%');
     var cmGotCallTotal5 = (+$('#cmOutGotCall-5').text())+(+$('#cmInGotCall-5').text())+(+$('#cmBlogGotCall-5').text())+(+$('#cmBagGotCall-5').text());
-    $('#cmOutApptRatio-5').text(Math.round(cmGotCallTotal5/ApgOutTotal5) + '%');
+    $('#cmOutApptRatio-5').text(Math.round(cmGotCallTotal5*100/ApgOutTotal5) + '%');
     var cmGotCallTotal6 = (+$('#cmOutGotCall-6').text())+(+$('#cmInGotCall-6').text())+(+$('#cmBlogGotCall-6').text())+(+$('#cmBagGotCall-6').text());
-    $('#cmOutApptRatio-6').text(Math.round(cmGotCallTotal6/ApgOutTotal6) + '%');
+    $('#cmOutApptRatio-6').text(Math.round(cmGotCallTotal6*100/ApgOutTotal6) + '%');
 
     $('#cmPostPerApo-6').text((+$('#cmPostFlyer-6').text())/(+$('#cmPostFlyerAgpIn-6').text()));
     $('#cmHandPerApo-6').text((+$('#cmHandFlyer-6').text())/(+$('#cmHandFlyerAgpIn-6').text()));
     $('#cmOutPerApo-6').text((+$('#cmOutGp-6').text())/(+$('#cmOutAgpOut-6').text()));
-    $('#cmBrAgpRatio-1').text(Math.round((cmOwnRefs1+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal1)) + '%');
-    $('#cmBrAgpRatio-2').text(Math.round((cmOwnRefs2+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal2)) + '%');
-    $('#cmBrAgpRatio-3').text(Math.round((cmOwnRefs3+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal3)) + '%');
-    $('#cmBrAgpRatio-4').text(Math.round((cmOwnRefs4+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal4)) + '%');
-    $('#cmBrAgpRatio-5').text(Math.round((cmOwnRefs5+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal5)) + '%');
-    $('#cmBrAgpRatio-6').text(Math.round((cmOwnRefs6+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)/(agpTotal6)) + '%');
+    $('#cmBrAgpRatio-1').text(Math.round((cmOwnRefs1+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal1)) + '%');
+    $('#cmBrAgpRatio-2').text(Math.round((cmOwnRefs2+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal2)) + '%');
+    $('#cmBrAgpRatio-3').text(Math.round((cmOwnRefs3+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal3)) + '%');
+    $('#cmBrAgpRatio-4').text(Math.round((cmOwnRefs4+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal4)) + '%');
+    $('#cmBrAgpRatio-5').text(Math.round((cmOwnRefs5+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal5)) + '%');
+    $('#cmBrAgpRatio-6').text(Math.round((cmOwnRefs6+cmMailAgpIn1+cmPostFlyerAgpIn1+cmHandFlyerAgpIn1+cmCpAgpIn1+cmOutAgpOut1+cmInAgpOut1+cmBlogAgpOut1+cmBagAgpOut1)*100/(agpTotal6)) + '%');
     $('#cmFaSum-6').text((+$('#cmFaSum-1').text())+(+$('#cmFaSum-2').text())+(+$('#cmFaSum-3').text())+(+$('#cmFaSum-4').text())+(+$('#cmFaSum-5').text()));
-    $('#cmShowRatio-1').text(Math.round((+$('#cmFaSum-1').text())/agpTotal1) + '%');
-    $('#cmShowRatio-2').text(Math.round((+$('#cmFaSum-2').text())/agpTotal2) + '%');
-    $('#cmShowRatio-3').text(Math.round((+$('#cmFaSum-3').text())/agpTotal3) + '%');
-    $('#cmShowRatio-4').text(Math.round((+$('#cmFaSum-4').text())/agpTotal4) + '%');
-    $('#cmShowRatio-5').text(Math.round((+$('#cmFaSum-5').text())/agpTotal5) + '%');
-    $('#cmShowRatio-6').text(Math.round((+$('#cmFaSum-6').text())/agpTotal6) + '%');
+    $('#cmShowRatio-1').text(Math.round((+$('#cmFaSum-1').text())*100/agpTotal1) + '%');
+    $('#cmShowRatio-2').text(Math.round((+$('#cmFaSum-2').text())*100/agpTotal2) + '%');
+    $('#cmShowRatio-3').text(Math.round((+$('#cmFaSum-3').text())*100/agpTotal3) + '%');
+    $('#cmShowRatio-4').text(Math.round((+$('#cmFaSum-4').text())*100/agpTotal4) + '%');
+    $('#cmShowRatio-5').text(Math.round((+$('#cmFaSum-5').text())*100/agpTotal5) + '%');
+    $('#cmShowRatio-6').text(Math.round((+$('#cmFaSum-6').text())*100/agpTotal6) + '%');
 
     $('#salesAch-6').text((+$('#salesAch-1').text())+(+$('#salesAch-2').text())+(+$('#salesAch-3').text())+(+$('#salesAch-4').text())+(+$('#salesAch-5').text()));
     $('#salesMonthly-6').text((+$('#salesMonthly-1').text())+(+$('#salesMonthly-2').text())+(+$('#salesMonthly-3').text())+(+$('#salesMonthly-4').text())+(+$('#salesMonthly-5').text()));
@@ -2430,18 +2450,18 @@ function runFormula() {
     $('#salesTotal-4').text(salesTotal4);
     $('#salesTotal-5').text(salesTotal5);
     $('#salesTotal-6').text(salesTotal6);
-    $('#salesRatio-1').text(Math.round(salesTotal1/(+$('#cmFaSum-1').text())) + '%');
-    $('#salesRatio-2').text(Math.round(salesTotal2/(+$('#cmFaSum-2').text())) + '%');
-    $('#salesRatio-3').text(Math.round(salesTotal3/(+$('#cmFaSum-3').text())) + '%');
-    $('#salesRatio-4').text(Math.round(salesTotal4/(+$('#cmFaSum-4').text())) + '%');
-    $('#salesRatio-5').text(Math.round(salesTotal5/(+$('#cmFaSum-5').text())) + '%');
-    $('#salesRatio-6').text(Math.round(salesTotal6/(+$('#cmFaSum-6').text())) + '%');
-    $('#salesAchAppRatio-1').text(Math.round(((+$('#salesAch-1').text()) + (+$('#salesAllPrepay-1').text()))/salesTotal1) + '%');
-    $('#salesAchAppRatio-2').text(Math.round(((+$('#salesAch-2').text()) + (+$('#salesAllPrepay-2').text()))/salesTotal2) + '%');
-    $('#salesAchAppRatio-3').text(Math.round(((+$('#salesAch-3').text()) + (+$('#salesAllPrepay-3').text()))/salesTotal3) + '%');
-    $('#salesAchAppRatio-4').text(Math.round(((+$('#salesAch-4').text()) + (+$('#salesAllPrepay-4').text()))/salesTotal4) + '%');
-    $('#salesAchAppRatio-5').text(Math.round(((+$('#salesAch-5').text()) + (+$('#salesAllPrepay-5').text()))/salesTotal5) + '%');
-    $('#salesAchAppRatio-6').text(Math.round(((+$('#salesAch-6').text()) + (+$('#salesAllPrepay-6').text()))/salesTotal6) + '%');
+    $('#salesRatio-1').text(Math.round(salesTotal1*100/(+$('#cmFaSum-1').text())) + '%');
+    $('#salesRatio-2').text(Math.round(salesTotal2*100/(+$('#cmFaSum-2').text())) + '%');
+    $('#salesRatio-3').text(Math.round(salesTotal3*100/(+$('#cmFaSum-3').text())) + '%');
+    $('#salesRatio-4').text(Math.round(salesTotal4*100/(+$('#cmFaSum-4').text())) + '%');
+    $('#salesRatio-5').text(Math.round(salesTotal5*100/(+$('#cmFaSum-5').text())) + '%');
+    $('#salesRatio-6').text(Math.round(salesTotal6*100/(+$('#cmFaSum-6').text())) + '%');
+    $('#salesAchAppRatio-1').text(Math.round(((+$('#salesAch-1').text()) + (+$('#salesAllPrepay-1').text()))*100/salesTotal1) + '%');
+    $('#salesAchAppRatio-2').text(Math.round(((+$('#salesAch-2').text()) + (+$('#salesAllPrepay-2').text()))*100/salesTotal2) + '%');
+    $('#salesAchAppRatio-3').text(Math.round(((+$('#salesAch-3').text()) + (+$('#salesAllPrepay-3').text()))*100/salesTotal3) + '%');
+    $('#salesAchAppRatio-4').text(Math.round(((+$('#salesAch-4').text()) + (+$('#salesAllPrepay-4').text()))*100/salesTotal4) + '%');
+    $('#salesAchAppRatio-5').text(Math.round(((+$('#salesAch-5').text()) + (+$('#salesAllPrepay-5').text()))*100/salesTotal5) + '%');
+    $('#salesAchAppRatio-6').text(Math.round(((+$('#salesAch-6').text()) + (+$('#salesAllPrepay-6').text()))*100/salesTotal6) + '%');
 
     var staff1AchTotal = (+$('#staff1Ach-1').text())+(+$('#staff1Ach-2').text())+(+$('#staff1Ach-3').text())+(+$('#staff1Ach-4').text())+(+$('#staff1Ach-5').text());
     var staff2AchTotal = (+$('#staff2Ach-1').text())+(+$('#staff2Ach-2').text())+(+$('#staff2Ach-3').text())+(+$('#staff2Ach-4').text())+(+$('#staff2Ach-5').text());
@@ -2562,11 +2582,11 @@ function runFormula() {
     var ama = (+$('#clubAch-6').text()) + (+$('#clubAch-6').text()) + (+$('#clubAch-6').text());
     if (ama != 0) {
         var aa = (+$('#clubAch-6').text()) + (+$('#clubAch-6').text());
-        $('#clubAchAppRatio').text(Math.round(aa/ama) + '%');
+        $('#clubAchAppRatio').text(Math.round(aa*100/ama) + '%');
     }
     var aman = ama+(+$('#clubNs-6').text());
     if (aman != 0) {
-        $('#clubSalesRatio').text(Math.round(ama/aman) + '%');
+        $('#clubSalesRatio').text(Math.round(ama*100/aman) + '%');
     }
 }
 
