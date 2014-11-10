@@ -7,16 +7,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/jquery-ui.min.css" rel="stylesheet">
-    <link href="css/jquery-ui.structure.min.css" rel="stylesheet">
-    <link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
 		<link href="css/site.css" rel="stylesheet">
 		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	</head>
 	<body>
-		<div class="container">
+		<div class="container-fluid" style="overflow: auto">
 			<nav class="navbar navbar-default" role="navigation">
-			  <div class="container">
+			  <div class="container-fluid">
 			    <!-- Brand and toggle get grouped for better mobile display -->
 			    <div class="navbar-header">
 			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -35,8 +33,8 @@
               <li><a href="#">US Report</a></li>
 			      </ul>
 			      <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#" id="userId"></a></li>
-			        <li><a href="../index.htm">Logout</a></li>
+              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
 			      </ul>
 			    </div><!-- /.navbar-collapse -->
 			  </div><!-- /.container-fluid -->
@@ -53,7 +51,8 @@
 								<th>Club ID</th>
 								<th>Club Name</th>
 								<th>Owner</th>
-								<th>Manager</th>
+                <th>PJ</th>
+                <th>CA</th>
                 <th>Trends</th>
                 <th>Benchmarking</th>
 							</tr>
@@ -71,7 +70,7 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		        <h4 class="modal-title" data-toggle="modal" data-target="#edtAcct">Edit Account</h4>
+		        <h4 class="modal-title" data-toggle="modal" data-target="#edtAcct">Account</h4>
 		      </div>
 		      <div class="modal-body">
 		      	<form role="form">
@@ -87,10 +86,6 @@
             <label for="newClubOwner">Owner</label>
             <input type="text" class="form-control" id="newClubOwner" placeholder="Owner">
           </div>
-          <div class="form-group">
-            <label for="newClubManager">Club Name</label>
-            <input type="text" class="form-control" id="newClubManager" placeholder="Manager">
-          </div>
 				</form>
 		      </div>
 		      <div class="modal-footer">
@@ -101,95 +96,9 @@
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 
-    <div class="modal fade" id="showTrends" tabindex="-1" role="dialog" aria-labelledby="showTrendsLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" data-toggle="modal" data-target="#showTrends">Trends</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <button type="button" class="btn btn-primary btn-sm" trendType="PJ_NewSales">新銷售</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="PJ_ProductsRevenue">商品收入</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="PJ_Exits">退會</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="PJ_BrOwnRef">會員介紹</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="PJ_FaSum">FA總數</button>
-            </div>
-            <div class="row">
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SvcTotalWo">總WO次數</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SvcExitsRatio">退會率</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SvcMeasureRatio">量身率</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_CmTotalGot">得到電話與人名的總數</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_CmApoTotal">APO總數</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_CmInApptRatio">Apo率</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_CmFaSum">TOG人數</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_CmShowRatio">來店率</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SalesTotal">入會數</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SalesRatio">結案率</button>
-              <button type="button" class="btn btn-primary btn-sm" trendType="CA_SalesAchAppRatio">扣款+年繳比率</button>
-            </div>
-            <div class="row" align="center">
-              <div class="col-md-6">
-                <canvas id="chartTrends" width="640" height="480"></canvas>
-                <h4 id="trendTitle"></h4>
-                <span class="text-muted"></span>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal fade" id="showBenchmarking" tabindex="-1" role="dialog" aria-labelledby="showBenchmarkingLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" data-toggle="modal" data-target="#showBenchmarking">Benchmarking</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-1">在籍會員數</div>
-              <div class="col-md-1">有效會員數</div>
-              <div class="col-md-1">會員請假率</div>
-              <div class="col-md-1">總WO次數</div>
-              <div class="col-md-1">退會率</div>
-              <div class="col-md-1">A级会员数</div>
-              <div class="col-md-1">信箱傳單投遞張數</div>
-              <div class="col-md-1">手發傳單的張數</div>
-              <div class="col-md-1">GP时数</div>
-              <div class="col-md-1">會員介紹</div>
-              <div class="col-md-1">TOG人數</div>
-            </div>
-            <div class="row">
-              <div class="col-md-1"><div id="rankTM" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankTAM" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankHoldRatio" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankTotalWo" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankExitsRatio" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankActive12" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankPostFlyer" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankHandFlyer" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankOutGp" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankOwnRefs" style="height:200px;"></div></div>
-              <div class="col-md-1"><div id="rankFaSum" style="height:200px;"></div></div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
-    <script src="js/Chart.min.js"></script>
 		<script src="js/site.js"></script>
     <script src="js/management.js"></script>
 	</body>

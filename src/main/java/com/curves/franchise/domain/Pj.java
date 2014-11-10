@@ -50,7 +50,7 @@ public class Pj implements Serializable {
     private int enrollAllPrepay;
     private int exits;
 
-    protected Pj() {
+    public Pj() {
     }
 
     public void setId(Long id) {

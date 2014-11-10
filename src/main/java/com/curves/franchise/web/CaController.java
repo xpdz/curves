@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CaController {
-    private Logger logger = LoggerFactory.getLogger(PjSumController.class);
+    private Logger logger = LoggerFactory.getLogger(CaController.class);
 
     @Autowired
     CaRepository caRepo;
@@ -27,7 +27,7 @@ public class CaController {
     @RequestMapping(value = "/rest/CA", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public String saveCA(@RequestBody Ca ca) {
-        logger.info("--SaveCA--ID:"+ca.getId()+", club: "+ca.getClubId()+" @ "+ca.getCaYear()+"-"+(ca.getCaMonth()+1));
+        logger.info("--SaveCA--ID:"+ca.getId()+", club: "+ca.getClubId()+" @ "+ca.getCaYear()+"-"+(ca.getCaMonth()+1)+", plan:"+ca.getThisPlan());
         caRepo.save(ca);
         return "" + ca.getId();
     }

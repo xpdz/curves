@@ -36,9 +36,9 @@ public class PjSum implements Serializable {
     private int enrolled;
     private int leaves;
     private int valids;
-    private String salesRatio = "";
-    private String exitRatio = "";
-    private String leaveRatio = "";
+    private float salesRatio;
+    private float exitRatio;
+    private float leaveRatio;
 
     private float workingDays;
     private int maxWorkOuts;
@@ -72,7 +72,7 @@ public class PjSum implements Serializable {
     private int enrollAllPrepay;
     private int exits;
 
-    protected PjSum() {
+    public PjSum() {
     }
 
     public void setId(Long id) {
@@ -135,15 +135,15 @@ public class PjSum implements Serializable {
         this.leaves = leave;
     }
 
-    public void setSalesRatio(String salesRatio) {
+    public void setSalesRatio(float salesRatio) {
         this.salesRatio = salesRatio;
     }
 
-    public void setExitRatio(String exitRatio) {
+    public void setExitRatio(float exitRatio) {
         this.exitRatio = exitRatio;
     }
 
-    public void setLeaveRatio(String leaveRatio) {
+    public void setLeaveRatio(float leaveRatio) {
         this.leaveRatio = leaveRatio;
     }
 
@@ -327,15 +327,15 @@ public class PjSum implements Serializable {
         return leaves;
     }
 
-    public String getSalesRatio() {
+    public float getSalesRatio() {
         return salesRatio;
     }
 
-    public String getExitRatio() {
+    public float getExitRatio() {
         return exitRatio;
     }
 
-    public String getLeaveRatio() {
+    public float getLeaveRatio() {
         return leaveRatio;
     }
 

@@ -47,7 +47,8 @@ public class Ca implements Serializable {
     private boolean svcAvgWo0;
     private float svcAvgWo1, svcAvgWo2, svcAvgWo3, svcAvgWo4, svcAvgWo5, svcAvgWo6;
     private boolean svcMaxWo0;
-    private int svcMaxWo1, svcMaxWo2, svcMaxWo3, svcMaxWo4, svcMaxWo5, svcMaxWo6;
+    private int svcMaxWo1, svcMaxWo2, svcMaxWo3, svcMaxWo4, svcMaxWo5;
+    private float svcMaxWo6;
     private boolean svcExits0;
     private int svcExits1, svcExits2, svcExits3, svcExits4, svcExits5, svcExits6;
     private boolean svcExitsRatio0;
@@ -71,19 +72,31 @@ public class Ca implements Serializable {
     private boolean svc0_0;
     private int svc0_5;
     private float svc0_6;
-    private boolean svc3More0, svc3More1, svc3More2, svc3More3, svc3More4, svc3More5;
-    private boolean svcInactive0, svcInactive1, svcInactive2, svcInactive3, svcInactive4, svcInactive5;
-    private boolean svcFwoReview0, svcFwoReview1, svcFwoReview2, svcFwoReview3, svcFwoReview4, svcFwoReview5;
-    private boolean svcInterview0, svcInterview1, svcInterview2, svcInterview3, svcInterview4, svcInterview5;
-    private boolean svcThanks0, svcThanks1, svcThanks2, svcThanks3, svcThanks4, svcThanks5;
-    private boolean svc3C0, svc3C1, svc3C2, svc3C3, svc3C4, svc3C5;
-    private boolean svcReward0, svcReward1, svcReward2, svcReward3, svcReward4, svcReward5;
-    private boolean svcLoyal0, svcLoyal1, svcLoyal2, svcLoyal3, svcLoyal4, svcLoyal5;
+    private boolean svc3More0;
+    private String svc3More1, svc3More2, svc3More3, svc3More4, svc3More5;
+    private boolean svcInactive0;
+    private String svcInactive1, svcInactive2, svcInactive3, svcInactive4, svcInactive5;
+    private boolean svcFwoReview0;
+    private String svcFwoReview1, svcFwoReview2, svcFwoReview3, svcFwoReview4, svcFwoReview5;
+    private boolean svcInterview0;
+    private String svcInterview1, svcInterview2, svcInterview3, svcInterview4, svcInterview5;
+    private boolean svcThanks0;
+    private String svcThanks1, svcThanks2, svcThanks3, svcThanks4, svcThanks5;
+    private boolean svc3C0;
+    private String svc3C1, svc3C2, svc3C3, svc3C4, svc3C5;
+    private boolean svcReward0;
+    private String svcReward1, svcReward2, svcReward3, svcReward4, svcReward5;
+    private boolean svcLoyal0;
+    private String svcLoyal1, svcLoyal2, svcLoyal3, svcLoyal4, svcLoyal5;
     // customer make
     private boolean cmPostFlyer0;
     private int cmPostFlyer1, cmPostFlyer2, cmPostFlyer3, cmPostFlyer4, cmPostFlyer5, cmPostFlyer6;
     private boolean cmHandFlyer0;
     private int cmHandFlyer1, cmHandFlyer2, cmHandFlyer3, cmHandFlyer4, cmHandFlyer5, cmHandFlyer6;
+    private boolean cmHandFlyerHours0;
+    private float cmHandFlyerHours1, cmHandFlyerHours2, cmHandFlyerHours3, cmHandFlyerHours4, cmHandFlyerHours5, cmHandFlyerHours6;
+    private boolean cmOutGpHours0;
+    private float cmOutGpHours1, cmOutGpHours2, cmOutGpHours3, cmOutGpHours4, cmOutGpHours5, cmOutGpHours6;
     private boolean cmOutGp0;
     private int cmOutGp1, cmOutGp2, cmOutGp3, cmOutGp4, cmOutGp5, cmOutGp6;
     private boolean cmCpBox0;
@@ -150,17 +163,24 @@ public class Ca implements Serializable {
     private int cmPostPerApo6;
     private boolean cmHandPerApo0;
     private int cmHandPerApo6;
-    private boolean cmOutPerApo0;
-    private float cmOutPerApo6;
+    private boolean cmHandHoursPerApo0;
+    private float cmHandHoursPerApo6;
+    private boolean cmOutGpPerApo0;
+    private float cmOutGpPerApo6;
+    private boolean cmOutGpHoursPerApo0;
+    private float cmOutGpHoursPerApo6;
     private boolean cmBrAgpRatio0;
     private float cmBrAgpRatio1, cmBrAgpRatio2, cmBrAgpRatio3, cmBrAgpRatio4, cmBrAgpRatio5, cmBrAgpRatio6;
     private boolean cmFaSum0;
     private int cmFaSum1, cmFaSum2, cmFaSum3, cmFaSum4, cmFaSum5, cmFaSum6;
     private boolean cmShowRatio0;
     private float cmShowRatio1, cmShowRatio2, cmShowRatio3, cmShowRatio4, cmShowRatio5, cmShowRatio6;
-    private boolean cmTraining0, cmTraining1, cmTraining2, cmTraining3, cmTraining4, cmTraining5;
-    private boolean cmGot3_0, cmGot3_1, cmGot3_2, cmGot3_3, cmGot3_4, cmGot3_5;
-    private boolean cmInvitation0, cmInvitation1, cmInvitation2, cmInvitation3, cmInvitation4, cmInvitation5;
+    private boolean cmTraining0;
+    private String cmTraining1, cmTraining2, cmTraining3, cmTraining4, cmTraining5;
+    private boolean cmGot3_0;
+    private String cmGot3_1, cmGot3_2, cmGot3_3, cmGot3_4, cmGot3_5;
+    private boolean cmInvitation0;
+    private String cmInvitation1, cmInvitation2, cmInvitation3, cmInvitation4, cmInvitation5;
     // sales
     private boolean salesAch0;
     private int salesAch1, salesAch2, salesAch3, salesAch4, salesAch5, salesAch6;
@@ -174,28 +194,49 @@ public class Ca implements Serializable {
     private float salesRatio1, salesRatio2, salesRatio3, salesRatio4, salesRatio5, salesRatio6;
     private boolean salesAchAppRatio0;
     private float salesAchAppRatio1, salesAchAppRatio2, salesAchAppRatio3, salesAchAppRatio4, salesAchAppRatio5, salesAchAppRatio6;
-    private boolean salesFaReview0, salesFaReview1, salesFaReview2, salesFaReview3, salesFaReview4, salesFaReview5;
-    private boolean salesPriceReview0, salesPriceReview1, salesPriceReview2, salesPriceReview3, salesPriceReview4, salesPriceReview5;
-    private boolean salesAck0, salesAck1, salesAck2, salesAck3, salesAck4, salesAck5;
-    private boolean salesTarget0, salesTarget1, salesTarget2, salesTarget3, salesTarget4, salesTarget5;
-    private boolean salesMotivation0, salesMotivation1, salesMotivation2, salesMotivation3, salesMotivation4, salesMotivation5;
-    private boolean salesObstacle0, salesObstacle1, salesObstacle2, salesObstacle3, salesObstacle4, salesObstacle5;
+    private boolean salesFaReview0;
+    private String salesFaReview1, salesFaReview2, salesFaReview3, salesFaReview4, salesFaReview5;
+    private boolean salesPriceReview0;
+    private String salesPriceReview1, salesPriceReview2, salesPriceReview3, salesPriceReview4, salesPriceReview5;
+    private boolean salesAck0;
+    private String salesAck1, salesAck2, salesAck3, salesAck4, salesAck5;
+    private boolean salesTarget0;
+    private String salesTarget1, salesTarget2, salesTarget3, salesTarget4, salesTarget5;
+    private boolean salesMotivation0;
+    private String salesMotivation1, salesMotivation2, salesMotivation3, salesMotivation4, salesMotivation5;
+    private boolean salesObstacle0;
+    private String salesObstacle1, salesObstacle2, salesObstacle3, salesObstacle4, salesObstacle5;
     // management
-    private boolean mgmtMeeting0, mgmtMeeting1, mgmtMeeting2, mgmtMeeting3, mgmtMeeting4, mgmtMeeting5;
-    private boolean mgmtCa0, mgmtCa1, mgmtCa2, mgmtCa3, mgmtCa4, mgmtCa5;
-    private boolean mgmtGp0, mgmtGp1, mgmtGp2, mgmtGp3, mgmtGp4, mgmtGp5;
-    private boolean mgmtLearn0, mgmtLearn1, mgmtLearn2, mgmtLearn3, mgmtLearn4, mgmtLearn5;
-    private boolean mgmtSheet0, mgmtSheet1, mgmtSheet2, mgmtSheet3, mgmtSheet4, mgmtSheet5;
-    private boolean mgmtPolicy0, mgmtPolicy1, mgmtPolicy2, mgmtPolicy3, mgmtPolicy4, mgmtPolicy5;
-    private boolean mgmtCompiantSales0, mgmtCompiantSales1, mgmtCompiantSales2, mgmtCompiantSales3, mgmtCompiantSales4, mgmtCompiantSales5;
-    private boolean mgmtCompiantMethod0, mgmtCompiantMethod1, mgmtCompiantMethod2, mgmtCompiantMethod3, mgmtCompiantMethod4, mgmtCompiantMethod5;
-    private boolean mgmtCompiantProduct0, mgmtCompiantProduct1, mgmtCompiantProduct2, mgmtCompiantProduct3, mgmtCompiantProduct4, mgmtCompiantProduct5;
-    private boolean mgmtCompiantAd0, mgmtCompiantAd1, mgmtCompiantAd2, mgmtCompiantAd3, mgmtCompiantAd4, mgmtCompiantAd5;
-    private boolean mgmtTraining0, mgmtTraining1, mgmtTraining2, mgmtTraining3, mgmtTraining4, mgmtTraining5;
-    private boolean mgmtReport0, mgmtReport1, mgmtReport2, mgmtReport3, mgmtReport4, mgmtReport5;
-    private boolean mgmtPlan0, mgmtPlan1, mgmtPlan2, mgmtPlan3, mgmtPlan4, mgmtPlan5;
-    private boolean mgmtMaintain0, mgmtMaintain1, mgmtMaintain2, mgmtMaintain3, mgmtMaintain4, mgmtMaintain5;
-    private boolean mgmtFace2Face0, mgmtFace2Face1, mgmtFace2Face2, mgmtFace2Face3, mgmtFace2Face4, mgmtFace2Face5;
+    private boolean mgmtMeeting0;
+    private String mgmtMeeting1, mgmtMeeting2, mgmtMeeting3, mgmtMeeting4, mgmtMeeting5;
+    private boolean mgmtCa0;
+    private String mgmtCa1, mgmtCa2, mgmtCa3, mgmtCa4, mgmtCa5;
+    private boolean mgmtGp0;
+    private String mgmtGp1, mgmtGp2, mgmtGp3, mgmtGp4, mgmtGp5;
+    private boolean mgmtLearn0;
+    private String mgmtLearn1, mgmtLearn2, mgmtLearn3, mgmtLearn4, mgmtLearn5;
+    private boolean mgmtSheet0;
+    private String mgmtSheet1, mgmtSheet2, mgmtSheet3, mgmtSheet4, mgmtSheet5;
+    private boolean mgmtPolicy0;
+    private String mgmtPolicy1, mgmtPolicy2, mgmtPolicy3, mgmtPolicy4, mgmtPolicy5;
+    private boolean mgmtCompiantSales0;
+    private String mgmtCompiantSales1, mgmtCompiantSales2, mgmtCompiantSales3, mgmtCompiantSales4, mgmtCompiantSales5;
+    private boolean mgmtCompiantMethod0;
+    private String mgmtCompiantMethod1, mgmtCompiantMethod2, mgmtCompiantMethod3, mgmtCompiantMethod4, mgmtCompiantMethod5;
+    private boolean mgmtCompiantProduct0;
+    private String mgmtCompiantProduct1, mgmtCompiantProduct2, mgmtCompiantProduct3, mgmtCompiantProduct4, mgmtCompiantProduct5;
+    private boolean mgmtCompiantAd0;
+    private String mgmtCompiantAd1, mgmtCompiantAd2, mgmtCompiantAd3, mgmtCompiantAd4, mgmtCompiantAd5;
+    private boolean mgmtTraining0;
+    private String mgmtTraining1, mgmtTraining2, mgmtTraining3, mgmtTraining4, mgmtTraining5;
+    private boolean mgmtReport0;
+    private String mgmtReport1, mgmtReport2, mgmtReport3, mgmtReport4, mgmtReport5;
+    private boolean mgmtPlan0;
+    private String mgmtPlan1, mgmtPlan2, mgmtPlan3, mgmtPlan4, mgmtPlan5;
+    private boolean mgmtMaintain0;
+    private String mgmtMaintain1, mgmtMaintain2, mgmtMaintain3, mgmtMaintain4, mgmtMaintain5;
+    private boolean mgmtFace2Face0;
+    private String mgmtFace2Face1, mgmtFace2Face2, mgmtFace2Face3, mgmtFace2Face4, mgmtFace2Face5;
 
     private float clubSalesRatio;
     private float clubAchAppRatio;
@@ -205,6 +246,7 @@ public class Ca implements Serializable {
     private int clubNs1, clubNs2, clubNs3, clubNs4, clubNs5, clubNs6;
     private int clubLx1, clubLx2, clubLx3, clubLx4, clubLx5, clubLx6;
 
+    private String staff1Name;
     private float staff1SalesRatio;
     private float staff1AchAppRatio;
     private int staff1Ach1, staff1Ach2, staff1Ach3, staff1Ach4, staff1Ach5, staff1Ach6;
@@ -213,6 +255,7 @@ public class Ca implements Serializable {
     private int staff1Ns1, staff1Ns2, staff1Ns3, staff1Ns4, staff1Ns5, staff1Ns6;
     private int staff1Lx1, staff1Lx2, staff1Lx3, staff1Lx4, staff1Lx5, staff1Lx6;
 
+    private String staff2Name;
     private float staff2SalesRatio;
     private float staff2AchAppRatio;
     private int staff2Ach1, staff2Ach2, staff2Ach3, staff2Ach4, staff2Ach5, staff2Ach6;
@@ -221,6 +264,7 @@ public class Ca implements Serializable {
     private int staff2Ns1, staff2Ns2, staff2Ns3, staff2Ns4, staff2Ns5, staff2Ns6;
     private int staff2Lx1, staff2Lx2, staff2Lx3, staff2Lx4, staff2Lx5, staff2Lx6;
 
+    private String staff3Name;
     private float staff3SalesRatio;
     private float staff3AchAppRatio;
     private int staff3Ach1, staff3Ach2, staff3Ach3, staff3Ach4, staff3Ach5, staff3Ach6;
@@ -229,6 +273,7 @@ public class Ca implements Serializable {
     private int staff3Ns1, staff3Ns2, staff3Ns3, staff3Ns4, staff3Ns5, staff3Ns6;
     private int staff3Lx1, staff3Lx2, staff3Lx3, staff3Lx4, staff3Lx5, staff3Lx6;
 
+    private String staff4Name;
     private float staff4SalesRatio;
     private float staff4AchAppRatio;
     private int staff4Ach1, staff4Ach2, staff4Ach3, staff4Ach4, staff4Ach5, staff4Ach6;
@@ -237,6 +282,7 @@ public class Ca implements Serializable {
     private int staff4Ns1, staff4Ns2, staff4Ns3, staff4Ns4, staff4Ns5, staff4Ns6;
     private int staff4Lx1, staff4Lx2, staff4Lx3, staff4Lx4, staff4Lx5, staff4Lx6;
 
+    private String staff5Name;
     private float staff5SalesRatio;
     private float staff5AchAppRatio;
     private int staff5Ach1, staff5Ach2, staff5Ach3, staff5Ach4, staff5Ach5, staff5Ach6;
@@ -245,6 +291,7 @@ public class Ca implements Serializable {
     private int staff5Ns1, staff5Ns2, staff5Ns3, staff5Ns4, staff5Ns5, staff5Ns6;
     private int staff5Lx1, staff5Lx2, staff5Lx3, staff5Lx4, staff5Lx5, staff5Lx6;
 
+    private String staff6Name;
     private float staff6SalesRatio;
     private float staff6AchAppRatio;
     private int staff6Ach1, staff6Ach2, staff6Ach3, staff6Ach4, staff6Ach5, staff6Ach6;
@@ -259,8 +306,168 @@ public class Ca implements Serializable {
     public Ca() {
     }
 
-    public Long getId() {
-        return id;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public void setCmOutGpHours0(boolean cmOutGpHours0) {
+        this.cmOutGpHours0 = cmOutGpHours0;
+    }
+
+    public void setCmOutGpHours1(float cmOutGpHours1) {
+        this.cmOutGpHours1 = cmOutGpHours1;
+    }
+
+    public void setCmOutGpHours2(float cmOutGpHours2) {
+        this.cmOutGpHours2 = cmOutGpHours2;
+    }
+
+    public void setCmOutGpHours3(float cmOutGpHours3) {
+        this.cmOutGpHours3 = cmOutGpHours3;
+    }
+
+    public void setCmOutGpHours4(float cmOutGpHours4) {
+        this.cmOutGpHours4 = cmOutGpHours4;
+    }
+
+    public void setCmOutGpHours5(float cmOutGpHours5) {
+        this.cmOutGpHours5 = cmOutGpHours5;
+    }
+
+    public void setCmOutGpHours6(float cmOutGpHours6) {
+        this.cmOutGpHours6 = cmOutGpHours6;
+    }
+
+    public void setCmOutGpPerApo0(boolean cmOutGpPerApo0) {
+        this.cmOutGpPerApo0 = cmOutGpPerApo0;
+    }
+
+    public void setCmOutGpPerApo6(float cmOutGpPerApo6) {
+        this.cmOutGpPerApo6 = cmOutGpPerApo6;
+    }
+
+    public void setCmOutGpHoursPerApo0(boolean cmOutGpHoursPerApo0) {
+        this.cmOutGpHoursPerApo0 = cmOutGpHoursPerApo0;
+    }
+
+    public void setCmOutGpHoursPerApo6(float cmOutGpHoursPerApo6) {
+        this.cmOutGpHoursPerApo6 = cmOutGpHoursPerApo6;
+    }
+
+    public boolean isCmOutGpHours0() {
+        return cmOutGpHours0;
+    }
+
+    public float getCmOutGpHours1() {
+        return cmOutGpHours1;
+    }
+
+    public float getCmOutGpHours2() {
+        return cmOutGpHours2;
+    }
+
+    public float getCmOutGpHours3() {
+        return cmOutGpHours3;
+    }
+
+    public float getCmOutGpHours4() {
+        return cmOutGpHours4;
+    }
+
+    public float getCmOutGpHours5() {
+        return cmOutGpHours5;
+    }
+
+    public float getCmOutGpHours6() {
+        return cmOutGpHours6;
+    }
+
+    public boolean isCmOutGpPerApo0() {
+        return cmOutGpPerApo0;
+    }
+
+    public float getCmOutGpPerApo6() {
+        return cmOutGpPerApo6;
+    }
+
+    public boolean isCmOutGpHoursPerApo0() {
+        return cmOutGpHoursPerApo0;
+    }
+
+    public float getCmOutGpHoursPerApo6() {
+        return cmOutGpHoursPerApo6;
+    }
+
+    public void setCmHandHoursPerApo0(boolean cmHandHoursPerApo0) {
+        this.cmHandHoursPerApo0 = cmHandHoursPerApo0;
+    }
+
+    public void setCmHandHoursPerApo6(float cmHandHoursPerApo6) {
+        this.cmHandHoursPerApo6 = cmHandHoursPerApo6;
+    }
+
+    public boolean isCmHandHoursPerApo0() {
+        return cmHandHoursPerApo0;
+    }
+
+    public float getCmHandHoursPerApo6() {
+        return cmHandHoursPerApo6;
+    }
+
+    public void setCmHandFlyerHours0(boolean cmHandFlyerHours0) {
+        this.cmHandFlyerHours0 = cmHandFlyerHours0;
+    }
+
+    public void setCmHandFlyerHours1(float cmHandFlyerHours1) {
+        this.cmHandFlyerHours1 = cmHandFlyerHours1;
+    }
+
+    public void setCmHandFlyerHours2(float cmHandFlyerHours2) {
+        this.cmHandFlyerHours2 = cmHandFlyerHours2;
+    }
+
+    public void setCmHandFlyerHours3(float cmHandFlyerHours3) {
+        this.cmHandFlyerHours3 = cmHandFlyerHours3;
+    }
+
+    public void setCmHandFlyerHours4(float cmHandFlyerHours4) {
+        this.cmHandFlyerHours4 = cmHandFlyerHours4;
+    }
+
+    public void setCmHandFlyerHours5(float cmHandFlyerHours5) {
+        this.cmHandFlyerHours5 = cmHandFlyerHours5;
+    }
+
+    public void setCmHandFlyerHours6(float cmHandFlyerHours6) {
+        this.cmHandFlyerHours6 = cmHandFlyerHours6;
+    }
+
+    public boolean isCmHandFlyerHours0() {
+        return cmHandFlyerHours0;
+    }
+
+    public float getCmHandFlyerHours1() {
+        return cmHandFlyerHours1;
+    }
+
+    public float getCmHandFlyerHours2() {
+        return cmHandFlyerHours2;
+    }
+
+    public float getCmHandFlyerHours3() {
+        return cmHandFlyerHours3;
+    }
+
+    public float getCmHandFlyerHours4() {
+        return cmHandFlyerHours4;
+    }
+
+    public float getCmHandFlyerHours5() {
+        return cmHandFlyerHours5;
+    }
+
+    public float getCmHandFlyerHours6() {
+        return cmHandFlyerHours6;
     }
 
     public void setId(Long id) {
@@ -535,7 +742,7 @@ public class Ca implements Serializable {
         this.svcMaxWo5 = svcMaxWo5;
     }
 
-    public void setSvcMaxWo6(int svcMaxWo6) {
+    public void setSvcMaxWo6(float svcMaxWo6) {
         this.svcMaxWo6 = svcMaxWo6;
     }
 
@@ -715,23 +922,23 @@ public class Ca implements Serializable {
         this.svc3More0 = svc3More0;
     }
 
-    public void setSvc3More1(boolean svc3More1) {
+    public void setSvc3More1(String svc3More1) {
         this.svc3More1 = svc3More1;
     }
 
-    public void setSvc3More2(boolean svc3More2) {
+    public void setSvc3More2(String svc3More2) {
         this.svc3More2 = svc3More2;
     }
 
-    public void setSvc3More3(boolean svc3More3) {
+    public void setSvc3More3(String svc3More3) {
         this.svc3More3 = svc3More3;
     }
 
-    public void setSvc3More4(boolean svc3More4) {
+    public void setSvc3More4(String svc3More4) {
         this.svc3More4 = svc3More4;
     }
 
-    public void setSvc3More5(boolean svc3More5) {
+    public void setSvc3More5(String svc3More5) {
         this.svc3More5 = svc3More5;
     }
 
@@ -739,23 +946,23 @@ public class Ca implements Serializable {
         this.svcInactive0 = svcInactive0;
     }
 
-    public void setSvcInactive1(boolean svcInactive1) {
+    public void setSvcInactive1(String svcInactive1) {
         this.svcInactive1 = svcInactive1;
     }
 
-    public void setSvcInactive2(boolean svcInactive2) {
+    public void setSvcInactive2(String svcInactive2) {
         this.svcInactive2 = svcInactive2;
     }
 
-    public void setSvcInactive3(boolean svcInactive3) {
+    public void setSvcInactive3(String svcInactive3) {
         this.svcInactive3 = svcInactive3;
     }
 
-    public void setSvcInactive4(boolean svcInactive4) {
+    public void setSvcInactive4(String svcInactive4) {
         this.svcInactive4 = svcInactive4;
     }
 
-    public void setSvcInactive5(boolean svcInactive5) {
+    public void setSvcInactive5(String svcInactive5) {
         this.svcInactive5 = svcInactive5;
     }
 
@@ -763,23 +970,23 @@ public class Ca implements Serializable {
         this.svcFwoReview0 = svcFwoReview0;
     }
 
-    public void setSvcFwoReview1(boolean svcFwoReview1) {
+    public void setSvcFwoReview1(String svcFwoReview1) {
         this.svcFwoReview1 = svcFwoReview1;
     }
 
-    public void setSvcFwoReview2(boolean svcFwoReview2) {
+    public void setSvcFwoReview2(String svcFwoReview2) {
         this.svcFwoReview2 = svcFwoReview2;
     }
 
-    public void setSvcFwoReview3(boolean svcFwoReview3) {
+    public void setSvcFwoReview3(String svcFwoReview3) {
         this.svcFwoReview3 = svcFwoReview3;
     }
 
-    public void setSvcFwoReview4(boolean svcFwoReview4) {
+    public void setSvcFwoReview4(String svcFwoReview4) {
         this.svcFwoReview4 = svcFwoReview4;
     }
 
-    public void setSvcFwoReview5(boolean svcFwoReview5) {
+    public void setSvcFwoReview5(String svcFwoReview5) {
         this.svcFwoReview5 = svcFwoReview5;
     }
 
@@ -787,23 +994,23 @@ public class Ca implements Serializable {
         this.svcInterview0 = svcInterview0;
     }
 
-    public void setSvcInterview1(boolean svcInterview1) {
+    public void setSvcInterview1(String svcInterview1) {
         this.svcInterview1 = svcInterview1;
     }
 
-    public void setSvcInterview2(boolean svcInterview2) {
+    public void setSvcInterview2(String svcInterview2) {
         this.svcInterview2 = svcInterview2;
     }
 
-    public void setSvcInterview3(boolean svcInterview3) {
+    public void setSvcInterview3(String svcInterview3) {
         this.svcInterview3 = svcInterview3;
     }
 
-    public void setSvcInterview4(boolean svcInterview4) {
+    public void setSvcInterview4(String svcInterview4) {
         this.svcInterview4 = svcInterview4;
     }
 
-    public void setSvcInterview5(boolean svcInterview5) {
+    public void setSvcInterview5(String svcInterview5) {
         this.svcInterview5 = svcInterview5;
     }
 
@@ -811,23 +1018,23 @@ public class Ca implements Serializable {
         this.svcThanks0 = svcThanks0;
     }
 
-    public void setSvcThanks1(boolean svcThanks1) {
+    public void setSvcThanks1(String svcThanks1) {
         this.svcThanks1 = svcThanks1;
     }
 
-    public void setSvcThanks2(boolean svcThanks2) {
+    public void setSvcThanks2(String svcThanks2) {
         this.svcThanks2 = svcThanks2;
     }
 
-    public void setSvcThanks3(boolean svcThanks3) {
+    public void setSvcThanks3(String svcThanks3) {
         this.svcThanks3 = svcThanks3;
     }
 
-    public void setSvcThanks4(boolean svcThanks4) {
+    public void setSvcThanks4(String svcThanks4) {
         this.svcThanks4 = svcThanks4;
     }
 
-    public void setSvcThanks5(boolean svcThanks5) {
+    public void setSvcThanks5(String svcThanks5) {
         this.svcThanks5 = svcThanks5;
     }
 
@@ -835,23 +1042,23 @@ public class Ca implements Serializable {
         this.svc3C0 = svc3C0;
     }
 
-    public void setSvc3C1(boolean svc3C1) {
+    public void setSvc3C1(String svc3C1) {
         this.svc3C1 = svc3C1;
     }
 
-    public void setSvc3C2(boolean svc3C2) {
+    public void setSvc3C2(String svc3C2) {
         this.svc3C2 = svc3C2;
     }
 
-    public void setSvc3C3(boolean svc3C3) {
+    public void setSvc3C3(String svc3C3) {
         this.svc3C3 = svc3C3;
     }
 
-    public void setSvc3C4(boolean svc3C4) {
+    public void setSvc3C4(String svc3C4) {
         this.svc3C4 = svc3C4;
     }
 
-    public void setSvc3C5(boolean svc3C5) {
+    public void setSvc3C5(String svc3C5) {
         this.svc3C5 = svc3C5;
     }
 
@@ -859,23 +1066,23 @@ public class Ca implements Serializable {
         this.svcReward0 = svcReward0;
     }
 
-    public void setSvcReward1(boolean svcReward1) {
+    public void setSvcReward1(String svcReward1) {
         this.svcReward1 = svcReward1;
     }
 
-    public void setSvcReward2(boolean svcReward2) {
+    public void setSvcReward2(String svcReward2) {
         this.svcReward2 = svcReward2;
     }
 
-    public void setSvcReward3(boolean svcReward3) {
+    public void setSvcReward3(String svcReward3) {
         this.svcReward3 = svcReward3;
     }
 
-    public void setSvcReward4(boolean svcReward4) {
+    public void setSvcReward4(String svcReward4) {
         this.svcReward4 = svcReward4;
     }
 
-    public void setSvcReward5(boolean svcReward5) {
+    public void setSvcReward5(String svcReward5) {
         this.svcReward5 = svcReward5;
     }
 
@@ -883,23 +1090,23 @@ public class Ca implements Serializable {
         this.svcLoyal0 = svcLoyal0;
     }
 
-    public void setSvcLoyal1(boolean svcLoyal1) {
+    public void setSvcLoyal1(String svcLoyal1) {
         this.svcLoyal1 = svcLoyal1;
     }
 
-    public void setSvcLoyal2(boolean svcLoyal2) {
+    public void setSvcLoyal2(String svcLoyal2) {
         this.svcLoyal2 = svcLoyal2;
     }
 
-    public void setSvcLoyal3(boolean svcLoyal3) {
+    public void setSvcLoyal3(String svcLoyal3) {
         this.svcLoyal3 = svcLoyal3;
     }
 
-    public void setSvcLoyal4(boolean svcLoyal4) {
+    public void setSvcLoyal4(String svcLoyal4) {
         this.svcLoyal4 = svcLoyal4;
     }
 
-    public void setSvcLoyal5(boolean svcLoyal5) {
+    public void setSvcLoyal5(String svcLoyal5) {
         this.svcLoyal5 = svcLoyal5;
     }
 
@@ -1843,14 +2050,6 @@ public class Ca implements Serializable {
         this.cmHandPerApo6 = cmHandPerApo6;
     }
 
-    public void setCmOutPerApo0(boolean cmOutPerApo0) {
-        this.cmOutPerApo0 = cmOutPerApo0;
-    }
-
-    public void setCmOutPerApo6(float cmOutPerApo6) {
-        this.cmOutPerApo6 = cmOutPerApo6;
-    }
-
     public void setCmBrAgpRatio0(boolean cmBrAgpRatio0) {
         this.cmBrAgpRatio0 = cmBrAgpRatio0;
     }
@@ -1939,23 +2138,23 @@ public class Ca implements Serializable {
         this.cmTraining0 = cmTraining0;
     }
 
-    public void setCmTraining1(boolean cmTraining1) {
+    public void setCmTraining1(String cmTraining1) {
         this.cmTraining1 = cmTraining1;
     }
 
-    public void setCmTraining2(boolean cmTraining2) {
+    public void setCmTraining2(String cmTraining2) {
         this.cmTraining2 = cmTraining2;
     }
 
-    public void setCmTraining3(boolean cmTraining3) {
+    public void setCmTraining3(String cmTraining3) {
         this.cmTraining3 = cmTraining3;
     }
 
-    public void setCmTraining4(boolean cmTraining4) {
+    public void setCmTraining4(String cmTraining4) {
         this.cmTraining4 = cmTraining4;
     }
 
-    public void setCmTraining5(boolean cmTraining5) {
+    public void setCmTraining5(String cmTraining5) {
         this.cmTraining5 = cmTraining5;
     }
 
@@ -1963,23 +2162,23 @@ public class Ca implements Serializable {
         this.cmGot3_0 = cmGot3_0;
     }
 
-    public void setCmGot3_1(boolean cmGot3_1) {
+    public void setCmGot3_1(String cmGot3_1) {
         this.cmGot3_1 = cmGot3_1;
     }
 
-    public void setCmGot3_2(boolean cmGot3_2) {
+    public void setCmGot3_2(String cmGot3_2) {
         this.cmGot3_2 = cmGot3_2;
     }
 
-    public void setCmGot3_3(boolean cmGot3_3) {
+    public void setCmGot3_3(String cmGot3_3) {
         this.cmGot3_3 = cmGot3_3;
     }
 
-    public void setCmGot3_4(boolean cmGot3_4) {
+    public void setCmGot3_4(String cmGot3_4) {
         this.cmGot3_4 = cmGot3_4;
     }
 
-    public void setCmGot3_5(boolean cmGot3_5) {
+    public void setCmGot3_5(String cmGot3_5) {
         this.cmGot3_5 = cmGot3_5;
     }
 
@@ -1987,23 +2186,23 @@ public class Ca implements Serializable {
         this.cmInvitation0 = cmInvitation0;
     }
 
-    public void setCmInvitation1(boolean cmInvitation1) {
+    public void setCmInvitation1(String cmInvitation1) {
         this.cmInvitation1 = cmInvitation1;
     }
 
-    public void setCmInvitation2(boolean cmInvitation2) {
+    public void setCmInvitation2(String cmInvitation2) {
         this.cmInvitation2 = cmInvitation2;
     }
 
-    public void setCmInvitation3(boolean cmInvitation3) {
+    public void setCmInvitation3(String cmInvitation3) {
         this.cmInvitation3 = cmInvitation3;
     }
 
-    public void setCmInvitation4(boolean cmInvitation4) {
+    public void setCmInvitation4(String cmInvitation4) {
         this.cmInvitation4 = cmInvitation4;
     }
 
-    public void setCmInvitation5(boolean cmInvitation5) {
+    public void setCmInvitation5(String cmInvitation5) {
         this.cmInvitation5 = cmInvitation5;
     }
 
@@ -2179,23 +2378,23 @@ public class Ca implements Serializable {
         this.salesFaReview0 = salesFaReview0;
     }
 
-    public void setSalesFaReview1(boolean salesFaReview1) {
+    public void setSalesFaReview1(String salesFaReview1) {
         this.salesFaReview1 = salesFaReview1;
     }
 
-    public void setSalesFaReview2(boolean salesFaReview2) {
+    public void setSalesFaReview2(String salesFaReview2) {
         this.salesFaReview2 = salesFaReview2;
     }
 
-    public void setSalesFaReview3(boolean salesFaReview3) {
+    public void setSalesFaReview3(String salesFaReview3) {
         this.salesFaReview3 = salesFaReview3;
     }
 
-    public void setSalesFaReview4(boolean salesFaReview4) {
+    public void setSalesFaReview4(String salesFaReview4) {
         this.salesFaReview4 = salesFaReview4;
     }
 
-    public void setSalesFaReview5(boolean salesFaReview5) {
+    public void setSalesFaReview5(String salesFaReview5) {
         this.salesFaReview5 = salesFaReview5;
     }
 
@@ -2203,23 +2402,23 @@ public class Ca implements Serializable {
         this.salesPriceReview0 = salesPriceReview0;
     }
 
-    public void setSalesPriceReview1(boolean salesPriceReview1) {
+    public void setSalesPriceReview1(String salesPriceReview1) {
         this.salesPriceReview1 = salesPriceReview1;
     }
 
-    public void setSalesPriceReview2(boolean salesPriceReview2) {
+    public void setSalesPriceReview2(String salesPriceReview2) {
         this.salesPriceReview2 = salesPriceReview2;
     }
 
-    public void setSalesPriceReview3(boolean salesPriceReview3) {
+    public void setSalesPriceReview3(String salesPriceReview3) {
         this.salesPriceReview3 = salesPriceReview3;
     }
 
-    public void setSalesPriceReview4(boolean salesPriceReview4) {
+    public void setSalesPriceReview4(String salesPriceReview4) {
         this.salesPriceReview4 = salesPriceReview4;
     }
 
-    public void setSalesPriceReview5(boolean salesPriceReview5) {
+    public void setSalesPriceReview5(String salesPriceReview5) {
         this.salesPriceReview5 = salesPriceReview5;
     }
 
@@ -2227,23 +2426,23 @@ public class Ca implements Serializable {
         this.salesAck0 = salesAck0;
     }
 
-    public void setSalesAck1(boolean salesAck1) {
+    public void setSalesAck1(String salesAck1) {
         this.salesAck1 = salesAck1;
     }
 
-    public void setSalesAck2(boolean salesAck2) {
+    public void setSalesAck2(String salesAck2) {
         this.salesAck2 = salesAck2;
     }
 
-    public void setSalesAck3(boolean salesAck3) {
+    public void setSalesAck3(String salesAck3) {
         this.salesAck3 = salesAck3;
     }
 
-    public void setSalesAck4(boolean salesAck4) {
+    public void setSalesAck4(String salesAck4) {
         this.salesAck4 = salesAck4;
     }
 
-    public void setSalesAck5(boolean salesAck5) {
+    public void setSalesAck5(String salesAck5) {
         this.salesAck5 = salesAck5;
     }
 
@@ -2251,23 +2450,23 @@ public class Ca implements Serializable {
         this.salesTarget0 = salesTarget0;
     }
 
-    public void setSalesTarget1(boolean salesTarget1) {
+    public void setSalesTarget1(String salesTarget1) {
         this.salesTarget1 = salesTarget1;
     }
 
-    public void setSalesTarget2(boolean salesTarget2) {
+    public void setSalesTarget2(String salesTarget2) {
         this.salesTarget2 = salesTarget2;
     }
 
-    public void setSalesTarget3(boolean salesTarget3) {
+    public void setSalesTarget3(String salesTarget3) {
         this.salesTarget3 = salesTarget3;
     }
 
-    public void setSalesTarget4(boolean salesTarget4) {
+    public void setSalesTarget4(String salesTarget4) {
         this.salesTarget4 = salesTarget4;
     }
 
-    public void setSalesTarget5(boolean salesTarget5) {
+    public void setSalesTarget5(String salesTarget5) {
         this.salesTarget5 = salesTarget5;
     }
 
@@ -2275,23 +2474,23 @@ public class Ca implements Serializable {
         this.salesMotivation0 = salesMotivation0;
     }
 
-    public void setSalesMotivation1(boolean salesMotivation1) {
+    public void setSalesMotivation1(String salesMotivation1) {
         this.salesMotivation1 = salesMotivation1;
     }
 
-    public void setSalesMotivation2(boolean salesMotivation2) {
+    public void setSalesMotivation2(String salesMotivation2) {
         this.salesMotivation2 = salesMotivation2;
     }
 
-    public void setSalesMotivation3(boolean salesMotivation3) {
+    public void setSalesMotivation3(String salesMotivation3) {
         this.salesMotivation3 = salesMotivation3;
     }
 
-    public void setSalesMotivation4(boolean salesMotivation4) {
+    public void setSalesMotivation4(String salesMotivation4) {
         this.salesMotivation4 = salesMotivation4;
     }
 
-    public void setSalesMotivation5(boolean salesMotivation5) {
+    public void setSalesMotivation5(String salesMotivation5) {
         this.salesMotivation5 = salesMotivation5;
     }
 
@@ -2299,23 +2498,23 @@ public class Ca implements Serializable {
         this.salesObstacle0 = salesObstacle0;
     }
 
-    public void setSalesObstacle1(boolean salesObstacle1) {
+    public void setSalesObstacle1(String salesObstacle1) {
         this.salesObstacle1 = salesObstacle1;
     }
 
-    public void setSalesObstacle2(boolean salesObstacle2) {
+    public void setSalesObstacle2(String salesObstacle2) {
         this.salesObstacle2 = salesObstacle2;
     }
 
-    public void setSalesObstacle3(boolean salesObstacle3) {
+    public void setSalesObstacle3(String salesObstacle3) {
         this.salesObstacle3 = salesObstacle3;
     }
 
-    public void setSalesObstacle4(boolean salesObstacle4) {
+    public void setSalesObstacle4(String salesObstacle4) {
         this.salesObstacle4 = salesObstacle4;
     }
 
-    public void setSalesObstacle5(boolean salesObstacle5) {
+    public void setSalesObstacle5(String salesObstacle5) {
         this.salesObstacle5 = salesObstacle5;
     }
 
@@ -2323,23 +2522,23 @@ public class Ca implements Serializable {
         this.mgmtMeeting0 = mgmtMeeting0;
     }
 
-    public void setMgmtMeeting1(boolean mgmtMeeting1) {
+    public void setMgmtMeeting1(String mgmtMeeting1) {
         this.mgmtMeeting1 = mgmtMeeting1;
     }
 
-    public void setMgmtMeeting2(boolean mgmtMeeting2) {
+    public void setMgmtMeeting2(String mgmtMeeting2) {
         this.mgmtMeeting2 = mgmtMeeting2;
     }
 
-    public void setMgmtMeeting3(boolean mgmtMeeting3) {
+    public void setMgmtMeeting3(String mgmtMeeting3) {
         this.mgmtMeeting3 = mgmtMeeting3;
     }
 
-    public void setMgmtMeeting4(boolean mgmtMeeting4) {
+    public void setMgmtMeeting4(String mgmtMeeting4) {
         this.mgmtMeeting4 = mgmtMeeting4;
     }
 
-    public void setMgmtMeeting5(boolean mgmtMeeting5) {
+    public void setMgmtMeeting5(String mgmtMeeting5) {
         this.mgmtMeeting5 = mgmtMeeting5;
     }
 
@@ -2347,23 +2546,23 @@ public class Ca implements Serializable {
         this.mgmtCa0 = mgmtCa0;
     }
 
-    public void setMgmtCa1(boolean mgmtCa1) {
+    public void setMgmtCa1(String mgmtCa1) {
         this.mgmtCa1 = mgmtCa1;
     }
 
-    public void setMgmtCa2(boolean mgmtCa2) {
+    public void setMgmtCa2(String mgmtCa2) {
         this.mgmtCa2 = mgmtCa2;
     }
 
-    public void setMgmtCa3(boolean mgmtCa3) {
+    public void setMgmtCa3(String mgmtCa3) {
         this.mgmtCa3 = mgmtCa3;
     }
 
-    public void setMgmtCa4(boolean mgmtCa4) {
+    public void setMgmtCa4(String mgmtCa4) {
         this.mgmtCa4 = mgmtCa4;
     }
 
-    public void setMgmtCa5(boolean mgmtCa5) {
+    public void setMgmtCa5(String mgmtCa5) {
         this.mgmtCa5 = mgmtCa5;
     }
 
@@ -2371,23 +2570,23 @@ public class Ca implements Serializable {
         this.mgmtGp0 = mgmtGp0;
     }
 
-    public void setMgmtGp1(boolean mgmtGp1) {
+    public void setMgmtGp1(String mgmtGp1) {
         this.mgmtGp1 = mgmtGp1;
     }
 
-    public void setMgmtGp2(boolean mgmtGp2) {
+    public void setMgmtGp2(String mgmtGp2) {
         this.mgmtGp2 = mgmtGp2;
     }
 
-    public void setMgmtGp3(boolean mgmtGp3) {
+    public void setMgmtGp3(String mgmtGp3) {
         this.mgmtGp3 = mgmtGp3;
     }
 
-    public void setMgmtGp4(boolean mgmtGp4) {
+    public void setMgmtGp4(String mgmtGp4) {
         this.mgmtGp4 = mgmtGp4;
     }
 
-    public void setMgmtGp5(boolean mgmtGp5) {
+    public void setMgmtGp5(String mgmtGp5) {
         this.mgmtGp5 = mgmtGp5;
     }
 
@@ -2395,23 +2594,23 @@ public class Ca implements Serializable {
         this.mgmtLearn0 = mgmtLearn0;
     }
 
-    public void setMgmtLearn1(boolean mgmtLearn1) {
+    public void setMgmtLearn1(String mgmtLearn1) {
         this.mgmtLearn1 = mgmtLearn1;
     }
 
-    public void setMgmtLearn2(boolean mgmtLearn2) {
+    public void setMgmtLearn2(String mgmtLearn2) {
         this.mgmtLearn2 = mgmtLearn2;
     }
 
-    public void setMgmtLearn3(boolean mgmtLearn3) {
+    public void setMgmtLearn3(String mgmtLearn3) {
         this.mgmtLearn3 = mgmtLearn3;
     }
 
-    public void setMgmtLearn4(boolean mgmtLearn4) {
+    public void setMgmtLearn4(String mgmtLearn4) {
         this.mgmtLearn4 = mgmtLearn4;
     }
 
-    public void setMgmtLearn5(boolean mgmtLearn5) {
+    public void setMgmtLearn5(String mgmtLearn5) {
         this.mgmtLearn5 = mgmtLearn5;
     }
 
@@ -2419,23 +2618,23 @@ public class Ca implements Serializable {
         this.mgmtSheet0 = mgmtSheet0;
     }
 
-    public void setMgmtSheet1(boolean mgmtSheet1) {
+    public void setMgmtSheet1(String mgmtSheet1) {
         this.mgmtSheet1 = mgmtSheet1;
     }
 
-    public void setMgmtSheet2(boolean mgmtSheet2) {
+    public void setMgmtSheet2(String mgmtSheet2) {
         this.mgmtSheet2 = mgmtSheet2;
     }
 
-    public void setMgmtSheet3(boolean mgmtSheet3) {
+    public void setMgmtSheet3(String mgmtSheet3) {
         this.mgmtSheet3 = mgmtSheet3;
     }
 
-    public void setMgmtSheet4(boolean mgmtSheet4) {
+    public void setMgmtSheet4(String mgmtSheet4) {
         this.mgmtSheet4 = mgmtSheet4;
     }
 
-    public void setMgmtSheet5(boolean mgmtSheet5) {
+    public void setMgmtSheet5(String mgmtSheet5) {
         this.mgmtSheet5 = mgmtSheet5;
     }
 
@@ -2443,23 +2642,23 @@ public class Ca implements Serializable {
         this.mgmtPolicy0 = mgmtPolicy0;
     }
 
-    public void setMgmtPolicy1(boolean mgmtPolicy1) {
+    public void setMgmtPolicy1(String mgmtPolicy1) {
         this.mgmtPolicy1 = mgmtPolicy1;
     }
 
-    public void setMgmtPolicy2(boolean mgmtPolicy2) {
+    public void setMgmtPolicy2(String mgmtPolicy2) {
         this.mgmtPolicy2 = mgmtPolicy2;
     }
 
-    public void setMgmtPolicy3(boolean mgmtPolicy3) {
+    public void setMgmtPolicy3(String mgmtPolicy3) {
         this.mgmtPolicy3 = mgmtPolicy3;
     }
 
-    public void setMgmtPolicy4(boolean mgmtPolicy4) {
+    public void setMgmtPolicy4(String mgmtPolicy4) {
         this.mgmtPolicy4 = mgmtPolicy4;
     }
 
-    public void setMgmtPolicy5(boolean mgmtPolicy5) {
+    public void setMgmtPolicy5(String mgmtPolicy5) {
         this.mgmtPolicy5 = mgmtPolicy5;
     }
 
@@ -2467,23 +2666,23 @@ public class Ca implements Serializable {
         this.mgmtCompiantSales0 = mgmtCompiantSales0;
     }
 
-    public void setMgmtCompiantSales1(boolean mgmtCompiantSales1) {
+    public void setMgmtCompiantSales1(String mgmtCompiantSales1) {
         this.mgmtCompiantSales1 = mgmtCompiantSales1;
     }
 
-    public void setMgmtCompiantSales2(boolean mgmtCompiantSales2) {
+    public void setMgmtCompiantSales2(String mgmtCompiantSales2) {
         this.mgmtCompiantSales2 = mgmtCompiantSales2;
     }
 
-    public void setMgmtCompiantSales3(boolean mgmtCompiantSales3) {
+    public void setMgmtCompiantSales3(String mgmtCompiantSales3) {
         this.mgmtCompiantSales3 = mgmtCompiantSales3;
     }
 
-    public void setMgmtCompiantSales4(boolean mgmtCompiantSales4) {
+    public void setMgmtCompiantSales4(String mgmtCompiantSales4) {
         this.mgmtCompiantSales4 = mgmtCompiantSales4;
     }
 
-    public void setMgmtCompiantSales5(boolean mgmtCompiantSales5) {
+    public void setMgmtCompiantSales5(String mgmtCompiantSales5) {
         this.mgmtCompiantSales5 = mgmtCompiantSales5;
     }
 
@@ -2491,23 +2690,23 @@ public class Ca implements Serializable {
         this.mgmtCompiantMethod0 = mgmtCompiantMethod0;
     }
 
-    public void setMgmtCompiantMethod1(boolean mgmtCompiantMethod1) {
+    public void setMgmtCompiantMethod1(String mgmtCompiantMethod1) {
         this.mgmtCompiantMethod1 = mgmtCompiantMethod1;
     }
 
-    public void setMgmtCompiantMethod2(boolean mgmtCompiantMethod2) {
+    public void setMgmtCompiantMethod2(String mgmtCompiantMethod2) {
         this.mgmtCompiantMethod2 = mgmtCompiantMethod2;
     }
 
-    public void setMgmtCompiantMethod3(boolean mgmtCompiantMethod3) {
+    public void setMgmtCompiantMethod3(String mgmtCompiantMethod3) {
         this.mgmtCompiantMethod3 = mgmtCompiantMethod3;
     }
 
-    public void setMgmtCompiantMethod4(boolean mgmtCompiantMethod4) {
+    public void setMgmtCompiantMethod4(String mgmtCompiantMethod4) {
         this.mgmtCompiantMethod4 = mgmtCompiantMethod4;
     }
 
-    public void setMgmtCompiantMethod5(boolean mgmtCompiantMethod5) {
+    public void setMgmtCompiantMethod5(String mgmtCompiantMethod5) {
         this.mgmtCompiantMethod5 = mgmtCompiantMethod5;
     }
 
@@ -2515,23 +2714,23 @@ public class Ca implements Serializable {
         this.mgmtCompiantProduct0 = mgmtCompiantProduct0;
     }
 
-    public void setMgmtCompiantProduct1(boolean mgmtCompiantProduct1) {
+    public void setMgmtCompiantProduct1(String mgmtCompiantProduct1) {
         this.mgmtCompiantProduct1 = mgmtCompiantProduct1;
     }
 
-    public void setMgmtCompiantProduct2(boolean mgmtCompiantProduct2) {
+    public void setMgmtCompiantProduct2(String mgmtCompiantProduct2) {
         this.mgmtCompiantProduct2 = mgmtCompiantProduct2;
     }
 
-    public void setMgmtCompiantProduct3(boolean mgmtCompiantProduct3) {
+    public void setMgmtCompiantProduct3(String mgmtCompiantProduct3) {
         this.mgmtCompiantProduct3 = mgmtCompiantProduct3;
     }
 
-    public void setMgmtCompiantProduct4(boolean mgmtCompiantProduct4) {
+    public void setMgmtCompiantProduct4(String mgmtCompiantProduct4) {
         this.mgmtCompiantProduct4 = mgmtCompiantProduct4;
     }
 
-    public void setMgmtCompiantProduct5(boolean mgmtCompiantProduct5) {
+    public void setMgmtCompiantProduct5(String mgmtCompiantProduct5) {
         this.mgmtCompiantProduct5 = mgmtCompiantProduct5;
     }
 
@@ -2539,23 +2738,23 @@ public class Ca implements Serializable {
         this.mgmtCompiantAd0 = mgmtCompiantAd0;
     }
 
-    public void setMgmtCompiantAd1(boolean mgmtCompiantAd1) {
+    public void setMgmtCompiantAd1(String mgmtCompiantAd1) {
         this.mgmtCompiantAd1 = mgmtCompiantAd1;
     }
 
-    public void setMgmtCompiantAd2(boolean mgmtCompiantAd2) {
+    public void setMgmtCompiantAd2(String mgmtCompiantAd2) {
         this.mgmtCompiantAd2 = mgmtCompiantAd2;
     }
 
-    public void setMgmtCompiantAd3(boolean mgmtCompiantAd3) {
+    public void setMgmtCompiantAd3(String mgmtCompiantAd3) {
         this.mgmtCompiantAd3 = mgmtCompiantAd3;
     }
 
-    public void setMgmtCompiantAd4(boolean mgmtCompiantAd4) {
+    public void setMgmtCompiantAd4(String mgmtCompiantAd4) {
         this.mgmtCompiantAd4 = mgmtCompiantAd4;
     }
 
-    public void setMgmtCompiantAd5(boolean mgmtCompiantAd5) {
+    public void setMgmtCompiantAd5(String mgmtCompiantAd5) {
         this.mgmtCompiantAd5 = mgmtCompiantAd5;
     }
 
@@ -2563,23 +2762,23 @@ public class Ca implements Serializable {
         this.mgmtTraining0 = mgmtTraining0;
     }
 
-    public void setMgmtTraining1(boolean mgmtTraining1) {
+    public void setMgmtTraining1(String mgmtTraining1) {
         this.mgmtTraining1 = mgmtTraining1;
     }
 
-    public void setMgmtTraining2(boolean mgmtTraining2) {
+    public void setMgmtTraining2(String mgmtTraining2) {
         this.mgmtTraining2 = mgmtTraining2;
     }
 
-    public void setMgmtTraining3(boolean mgmtTraining3) {
+    public void setMgmtTraining3(String mgmtTraining3) {
         this.mgmtTraining3 = mgmtTraining3;
     }
 
-    public void setMgmtTraining4(boolean mgmtTraining4) {
+    public void setMgmtTraining4(String mgmtTraining4) {
         this.mgmtTraining4 = mgmtTraining4;
     }
 
-    public void setMgmtTraining5(boolean mgmtTraining5) {
+    public void setMgmtTraining5(String mgmtTraining5) {
         this.mgmtTraining5 = mgmtTraining5;
     }
 
@@ -2587,23 +2786,23 @@ public class Ca implements Serializable {
         this.mgmtReport0 = mgmtReport0;
     }
 
-    public void setMgmtReport1(boolean mgmtReport1) {
+    public void setMgmtReport1(String mgmtReport1) {
         this.mgmtReport1 = mgmtReport1;
     }
 
-    public void setMgmtReport2(boolean mgmtReport2) {
+    public void setMgmtReport2(String mgmtReport2) {
         this.mgmtReport2 = mgmtReport2;
     }
 
-    public void setMgmtReport3(boolean mgmtReport3) {
+    public void setMgmtReport3(String mgmtReport3) {
         this.mgmtReport3 = mgmtReport3;
     }
 
-    public void setMgmtReport4(boolean mgmtReport4) {
+    public void setMgmtReport4(String mgmtReport4) {
         this.mgmtReport4 = mgmtReport4;
     }
 
-    public void setMgmtReport5(boolean mgmtReport5) {
+    public void setMgmtReport5(String mgmtReport5) {
         this.mgmtReport5 = mgmtReport5;
     }
 
@@ -2611,23 +2810,23 @@ public class Ca implements Serializable {
         this.mgmtPlan0 = mgmtPlan0;
     }
 
-    public void setMgmtPlan1(boolean mgmtPlan1) {
+    public void setMgmtPlan1(String mgmtPlan1) {
         this.mgmtPlan1 = mgmtPlan1;
     }
 
-    public void setMgmtPlan2(boolean mgmtPlan2) {
+    public void setMgmtPlan2(String mgmtPlan2) {
         this.mgmtPlan2 = mgmtPlan2;
     }
 
-    public void setMgmtPlan3(boolean mgmtPlan3) {
+    public void setMgmtPlan3(String mgmtPlan3) {
         this.mgmtPlan3 = mgmtPlan3;
     }
 
-    public void setMgmtPlan4(boolean mgmtPlan4) {
+    public void setMgmtPlan4(String mgmtPlan4) {
         this.mgmtPlan4 = mgmtPlan4;
     }
 
-    public void setMgmtPlan5(boolean mgmtPlan5) {
+    public void setMgmtPlan5(String mgmtPlan5) {
         this.mgmtPlan5 = mgmtPlan5;
     }
 
@@ -2635,23 +2834,23 @@ public class Ca implements Serializable {
         this.mgmtMaintain0 = mgmtMaintain0;
     }
 
-    public void setMgmtMaintain1(boolean mgmtMaintain1) {
+    public void setMgmtMaintain1(String mgmtMaintain1) {
         this.mgmtMaintain1 = mgmtMaintain1;
     }
 
-    public void setMgmtMaintain2(boolean mgmtMaintain2) {
+    public void setMgmtMaintain2(String mgmtMaintain2) {
         this.mgmtMaintain2 = mgmtMaintain2;
     }
 
-    public void setMgmtMaintain3(boolean mgmtMaintain3) {
+    public void setMgmtMaintain3(String mgmtMaintain3) {
         this.mgmtMaintain3 = mgmtMaintain3;
     }
 
-    public void setMgmtMaintain4(boolean mgmtMaintain4) {
+    public void setMgmtMaintain4(String mgmtMaintain4) {
         this.mgmtMaintain4 = mgmtMaintain4;
     }
 
-    public void setMgmtMaintain5(boolean mgmtMaintain5) {
+    public void setMgmtMaintain5(String mgmtMaintain5) {
         this.mgmtMaintain5 = mgmtMaintain5;
     }
 
@@ -2659,23 +2858,23 @@ public class Ca implements Serializable {
         this.mgmtFace2Face0 = mgmtFace2Face0;
     }
 
-    public void setMgmtFace2Face1(boolean mgmtFace2Face1) {
+    public void setMgmtFace2Face1(String mgmtFace2Face1) {
         this.mgmtFace2Face1 = mgmtFace2Face1;
     }
 
-    public void setMgmtFace2Face2(boolean mgmtFace2Face2) {
+    public void setMgmtFace2Face2(String mgmtFace2Face2) {
         this.mgmtFace2Face2 = mgmtFace2Face2;
     }
 
-    public void setMgmtFace2Face3(boolean mgmtFace2Face3) {
+    public void setMgmtFace2Face3(String mgmtFace2Face3) {
         this.mgmtFace2Face3 = mgmtFace2Face3;
     }
 
-    public void setMgmtFace2Face4(boolean mgmtFace2Face4) {
+    public void setMgmtFace2Face4(String mgmtFace2Face4) {
         this.mgmtFace2Face4 = mgmtFace2Face4;
     }
 
-    public void setMgmtFace2Face5(boolean mgmtFace2Face5) {
+    public void setMgmtFace2Face5(String mgmtFace2Face5) {
         this.mgmtFace2Face5 = mgmtFace2Face5;
     }
 
@@ -2807,6 +3006,10 @@ public class Ca implements Serializable {
         this.clubLx6 = clubLx6;
     }
 
+    public void setStaff1Name(String staff1Name) {
+        this.staff1Name = staff1Name;
+    }
+
     public void setStaff1SalesRatio(float staff1SalesRatio) {
         this.staff1SalesRatio = staff1SalesRatio;
     }
@@ -2933,6 +3136,10 @@ public class Ca implements Serializable {
 
     public void setStaff1Lx6(int staff1Lx6) {
         this.staff1Lx6 = staff1Lx6;
+    }
+
+    public void setStaff2Name(String staff2Name) {
+        this.staff2Name = staff2Name;
     }
 
     public void setStaff2SalesRatio(float staff2SalesRatio) {
@@ -3063,6 +3270,10 @@ public class Ca implements Serializable {
         this.staff2Lx6 = staff2Lx6;
     }
 
+    public void setStaff3Name(String staff3Name) {
+        this.staff3Name = staff3Name;
+    }
+
     public void setStaff3SalesRatio(float staff3SalesRatio) {
         this.staff3SalesRatio = staff3SalesRatio;
     }
@@ -3189,6 +3400,10 @@ public class Ca implements Serializable {
 
     public void setStaff3Lx6(int staff3Lx6) {
         this.staff3Lx6 = staff3Lx6;
+    }
+
+    public void setStaff4Name(String staff4Name) {
+        this.staff4Name = staff4Name;
     }
 
     public void setStaff4SalesRatio(float staff4SalesRatio) {
@@ -3319,6 +3534,10 @@ public class Ca implements Serializable {
         this.staff4Lx6 = staff4Lx6;
     }
 
+    public void setStaff5Name(String staff5Name) {
+        this.staff5Name = staff5Name;
+    }
+
     public void setStaff5SalesRatio(float staff5SalesRatio) {
         this.staff5SalesRatio = staff5SalesRatio;
     }
@@ -3445,6 +3664,10 @@ public class Ca implements Serializable {
 
     public void setStaff5Lx6(int staff5Lx6) {
         this.staff5Lx6 = staff5Lx6;
+    }
+
+    public void setStaff6Name(String staff6Name) {
+        this.staff6Name = staff6Name;
     }
 
     public void setStaff6SalesRatio(float staff6SalesRatio) {
@@ -3581,6 +3804,10 @@ public class Ca implements Serializable {
 
     public void setNextPlan(String nextPlan) {
         this.nextPlan = nextPlan;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Date getLastModified() {
@@ -3851,7 +4078,7 @@ public class Ca implements Serializable {
         return svcMaxWo5;
     }
 
-    public int getSvcMaxWo6() {
+    public float getSvcMaxWo6() {
         return svcMaxWo6;
     }
 
@@ -4031,23 +4258,23 @@ public class Ca implements Serializable {
         return svc3More0;
     }
 
-    public boolean isSvc3More1() {
+    public String getSvc3More1() {
         return svc3More1;
     }
 
-    public boolean isSvc3More2() {
+    public String getSvc3More2() {
         return svc3More2;
     }
 
-    public boolean isSvc3More3() {
+    public String getSvc3More3() {
         return svc3More3;
     }
 
-    public boolean isSvc3More4() {
+    public String getSvc3More4() {
         return svc3More4;
     }
 
-    public boolean isSvc3More5() {
+    public String getSvc3More5() {
         return svc3More5;
     }
 
@@ -4055,23 +4282,23 @@ public class Ca implements Serializable {
         return svcInactive0;
     }
 
-    public boolean isSvcInactive1() {
+    public String getSvcInactive1() {
         return svcInactive1;
     }
 
-    public boolean isSvcInactive2() {
+    public String getSvcInactive2() {
         return svcInactive2;
     }
 
-    public boolean isSvcInactive3() {
+    public String getSvcInactive3() {
         return svcInactive3;
     }
 
-    public boolean isSvcInactive4() {
+    public String getSvcInactive4() {
         return svcInactive4;
     }
 
-    public boolean isSvcInactive5() {
+    public String getSvcInactive5() {
         return svcInactive5;
     }
 
@@ -4079,23 +4306,23 @@ public class Ca implements Serializable {
         return svcFwoReview0;
     }
 
-    public boolean isSvcFwoReview1() {
+    public String getSvcFwoReview1() {
         return svcFwoReview1;
     }
 
-    public boolean isSvcFwoReview2() {
+    public String getSvcFwoReview2() {
         return svcFwoReview2;
     }
 
-    public boolean isSvcFwoReview3() {
+    public String getSvcFwoReview3() {
         return svcFwoReview3;
     }
 
-    public boolean isSvcFwoReview4() {
+    public String getSvcFwoReview4() {
         return svcFwoReview4;
     }
 
-    public boolean isSvcFwoReview5() {
+    public String getSvcFwoReview5() {
         return svcFwoReview5;
     }
 
@@ -4103,23 +4330,23 @@ public class Ca implements Serializable {
         return svcInterview0;
     }
 
-    public boolean isSvcInterview1() {
+    public String getSvcInterview1() {
         return svcInterview1;
     }
 
-    public boolean isSvcInterview2() {
+    public String getSvcInterview2() {
         return svcInterview2;
     }
 
-    public boolean isSvcInterview3() {
+    public String getSvcInterview3() {
         return svcInterview3;
     }
 
-    public boolean isSvcInterview4() {
+    public String getSvcInterview4() {
         return svcInterview4;
     }
 
-    public boolean isSvcInterview5() {
+    public String getSvcInterview5() {
         return svcInterview5;
     }
 
@@ -4127,23 +4354,23 @@ public class Ca implements Serializable {
         return svcThanks0;
     }
 
-    public boolean isSvcThanks1() {
+    public String getSvcThanks1() {
         return svcThanks1;
     }
 
-    public boolean isSvcThanks2() {
+    public String getSvcThanks2() {
         return svcThanks2;
     }
 
-    public boolean isSvcThanks3() {
+    public String getSvcThanks3() {
         return svcThanks3;
     }
 
-    public boolean isSvcThanks4() {
+    public String getSvcThanks4() {
         return svcThanks4;
     }
 
-    public boolean isSvcThanks5() {
+    public String getSvcThanks5() {
         return svcThanks5;
     }
 
@@ -4151,23 +4378,23 @@ public class Ca implements Serializable {
         return svc3C0;
     }
 
-    public boolean isSvc3C1() {
+    public String getSvc3C1() {
         return svc3C1;
     }
 
-    public boolean isSvc3C2() {
+    public String getSvc3C2() {
         return svc3C2;
     }
 
-    public boolean isSvc3C3() {
+    public String getSvc3C3() {
         return svc3C3;
     }
 
-    public boolean isSvc3C4() {
+    public String getSvc3C4() {
         return svc3C4;
     }
 
-    public boolean isSvc3C5() {
+    public String getSvc3C5() {
         return svc3C5;
     }
 
@@ -4175,23 +4402,23 @@ public class Ca implements Serializable {
         return svcReward0;
     }
 
-    public boolean isSvcReward1() {
+    public String getSvcReward1() {
         return svcReward1;
     }
 
-    public boolean isSvcReward2() {
+    public String getSvcReward2() {
         return svcReward2;
     }
 
-    public boolean isSvcReward3() {
+    public String getSvcReward3() {
         return svcReward3;
     }
 
-    public boolean isSvcReward4() {
+    public String getSvcReward4() {
         return svcReward4;
     }
 
-    public boolean isSvcReward5() {
+    public String getSvcReward5() {
         return svcReward5;
     }
 
@@ -4199,23 +4426,23 @@ public class Ca implements Serializable {
         return svcLoyal0;
     }
 
-    public boolean isSvcLoyal1() {
+    public String getSvcLoyal1() {
         return svcLoyal1;
     }
 
-    public boolean isSvcLoyal2() {
+    public String getSvcLoyal2() {
         return svcLoyal2;
     }
 
-    public boolean isSvcLoyal3() {
+    public String getSvcLoyal3() {
         return svcLoyal3;
     }
 
-    public boolean isSvcLoyal4() {
+    public String getSvcLoyal4() {
         return svcLoyal4;
     }
 
-    public boolean isSvcLoyal5() {
+    public String getSvcLoyal5() {
         return svcLoyal5;
     }
 
@@ -5159,14 +5386,6 @@ public class Ca implements Serializable {
         return cmHandPerApo6;
     }
 
-    public boolean isCmOutPerApo0() {
-        return cmOutPerApo0;
-    }
-
-    public float getCmOutPerApo6() {
-        return cmOutPerApo6;
-    }
-
     public boolean isCmBrAgpRatio0() {
         return cmBrAgpRatio0;
     }
@@ -5255,23 +5474,23 @@ public class Ca implements Serializable {
         return cmTraining0;
     }
 
-    public boolean isCmTraining1() {
+    public String getCmTraining1() {
         return cmTraining1;
     }
 
-    public boolean isCmTraining2() {
+    public String getCmTraining2() {
         return cmTraining2;
     }
 
-    public boolean isCmTraining3() {
+    public String getCmTraining3() {
         return cmTraining3;
     }
 
-    public boolean isCmTraining4() {
+    public String getCmTraining4() {
         return cmTraining4;
     }
 
-    public boolean isCmTraining5() {
+    public String getCmTraining5() {
         return cmTraining5;
     }
 
@@ -5279,23 +5498,23 @@ public class Ca implements Serializable {
         return cmGot3_0;
     }
 
-    public boolean isCmGot3_1() {
+    public String getCmGot3_1() {
         return cmGot3_1;
     }
 
-    public boolean isCmGot3_2() {
+    public String getCmGot3_2() {
         return cmGot3_2;
     }
 
-    public boolean isCmGot3_3() {
+    public String getCmGot3_3() {
         return cmGot3_3;
     }
 
-    public boolean isCmGot3_4() {
+    public String getCmGot3_4() {
         return cmGot3_4;
     }
 
-    public boolean isCmGot3_5() {
+    public String getCmGot3_5() {
         return cmGot3_5;
     }
 
@@ -5303,23 +5522,23 @@ public class Ca implements Serializable {
         return cmInvitation0;
     }
 
-    public boolean isCmInvitation1() {
+    public String getCmInvitation1() {
         return cmInvitation1;
     }
 
-    public boolean isCmInvitation2() {
+    public String getCmInvitation2() {
         return cmInvitation2;
     }
 
-    public boolean isCmInvitation3() {
+    public String getCmInvitation3() {
         return cmInvitation3;
     }
 
-    public boolean isCmInvitation4() {
+    public String getCmInvitation4() {
         return cmInvitation4;
     }
 
-    public boolean isCmInvitation5() {
+    public String getCmInvitation5() {
         return cmInvitation5;
     }
 
@@ -5495,23 +5714,23 @@ public class Ca implements Serializable {
         return salesFaReview0;
     }
 
-    public boolean isSalesFaReview1() {
+    public String getSalesFaReview1() {
         return salesFaReview1;
     }
 
-    public boolean isSalesFaReview2() {
+    public String getSalesFaReview2() {
         return salesFaReview2;
     }
 
-    public boolean isSalesFaReview3() {
+    public String getSalesFaReview3() {
         return salesFaReview3;
     }
 
-    public boolean isSalesFaReview4() {
+    public String getSalesFaReview4() {
         return salesFaReview4;
     }
 
-    public boolean isSalesFaReview5() {
+    public String getSalesFaReview5() {
         return salesFaReview5;
     }
 
@@ -5519,23 +5738,23 @@ public class Ca implements Serializable {
         return salesPriceReview0;
     }
 
-    public boolean isSalesPriceReview1() {
+    public String getSalesPriceReview1() {
         return salesPriceReview1;
     }
 
-    public boolean isSalesPriceReview2() {
+    public String getSalesPriceReview2() {
         return salesPriceReview2;
     }
 
-    public boolean isSalesPriceReview3() {
+    public String getSalesPriceReview3() {
         return salesPriceReview3;
     }
 
-    public boolean isSalesPriceReview4() {
+    public String getSalesPriceReview4() {
         return salesPriceReview4;
     }
 
-    public boolean isSalesPriceReview5() {
+    public String getSalesPriceReview5() {
         return salesPriceReview5;
     }
 
@@ -5543,23 +5762,23 @@ public class Ca implements Serializable {
         return salesAck0;
     }
 
-    public boolean isSalesAck1() {
+    public String getSalesAck1() {
         return salesAck1;
     }
 
-    public boolean isSalesAck2() {
+    public String getSalesAck2() {
         return salesAck2;
     }
 
-    public boolean isSalesAck3() {
+    public String getSalesAck3() {
         return salesAck3;
     }
 
-    public boolean isSalesAck4() {
+    public String getSalesAck4() {
         return salesAck4;
     }
 
-    public boolean isSalesAck5() {
+    public String getSalesAck5() {
         return salesAck5;
     }
 
@@ -5567,23 +5786,23 @@ public class Ca implements Serializable {
         return salesTarget0;
     }
 
-    public boolean isSalesTarget1() {
+    public String getSalesTarget1() {
         return salesTarget1;
     }
 
-    public boolean isSalesTarget2() {
+    public String getSalesTarget2() {
         return salesTarget2;
     }
 
-    public boolean isSalesTarget3() {
+    public String getSalesTarget3() {
         return salesTarget3;
     }
 
-    public boolean isSalesTarget4() {
+    public String getSalesTarget4() {
         return salesTarget4;
     }
 
-    public boolean isSalesTarget5() {
+    public String getSalesTarget5() {
         return salesTarget5;
     }
 
@@ -5591,23 +5810,23 @@ public class Ca implements Serializable {
         return salesMotivation0;
     }
 
-    public boolean isSalesMotivation1() {
+    public String getSalesMotivation1() {
         return salesMotivation1;
     }
 
-    public boolean isSalesMotivation2() {
+    public String getSalesMotivation2() {
         return salesMotivation2;
     }
 
-    public boolean isSalesMotivation3() {
+    public String getSalesMotivation3() {
         return salesMotivation3;
     }
 
-    public boolean isSalesMotivation4() {
+    public String getSalesMotivation4() {
         return salesMotivation4;
     }
 
-    public boolean isSalesMotivation5() {
+    public String getSalesMotivation5() {
         return salesMotivation5;
     }
 
@@ -5615,23 +5834,23 @@ public class Ca implements Serializable {
         return salesObstacle0;
     }
 
-    public boolean isSalesObstacle1() {
+    public String getSalesObstacle1() {
         return salesObstacle1;
     }
 
-    public boolean isSalesObstacle2() {
+    public String getSalesObstacle2() {
         return salesObstacle2;
     }
 
-    public boolean isSalesObstacle3() {
+    public String getSalesObstacle3() {
         return salesObstacle3;
     }
 
-    public boolean isSalesObstacle4() {
+    public String getSalesObstacle4() {
         return salesObstacle4;
     }
 
-    public boolean isSalesObstacle5() {
+    public String getSalesObstacle5() {
         return salesObstacle5;
     }
 
@@ -5639,23 +5858,23 @@ public class Ca implements Serializable {
         return mgmtMeeting0;
     }
 
-    public boolean isMgmtMeeting1() {
+    public String getMgmtMeeting1() {
         return mgmtMeeting1;
     }
 
-    public boolean isMgmtMeeting2() {
+    public String getMgmtMeeting2() {
         return mgmtMeeting2;
     }
 
-    public boolean isMgmtMeeting3() {
+    public String getMgmtMeeting3() {
         return mgmtMeeting3;
     }
 
-    public boolean isMgmtMeeting4() {
+    public String getMgmtMeeting4() {
         return mgmtMeeting4;
     }
 
-    public boolean isMgmtMeeting5() {
+    public String getMgmtMeeting5() {
         return mgmtMeeting5;
     }
 
@@ -5663,23 +5882,23 @@ public class Ca implements Serializable {
         return mgmtCa0;
     }
 
-    public boolean isMgmtCa1() {
+    public String getMgmtCa1() {
         return mgmtCa1;
     }
 
-    public boolean isMgmtCa2() {
+    public String getMgmtCa2() {
         return mgmtCa2;
     }
 
-    public boolean isMgmtCa3() {
+    public String getMgmtCa3() {
         return mgmtCa3;
     }
 
-    public boolean isMgmtCa4() {
+    public String getMgmtCa4() {
         return mgmtCa4;
     }
 
-    public boolean isMgmtCa5() {
+    public String getMgmtCa5() {
         return mgmtCa5;
     }
 
@@ -5687,23 +5906,23 @@ public class Ca implements Serializable {
         return mgmtGp0;
     }
 
-    public boolean isMgmtGp1() {
+    public String getMgmtGp1() {
         return mgmtGp1;
     }
 
-    public boolean isMgmtGp2() {
+    public String getMgmtGp2() {
         return mgmtGp2;
     }
 
-    public boolean isMgmtGp3() {
+    public String getMgmtGp3() {
         return mgmtGp3;
     }
 
-    public boolean isMgmtGp4() {
+    public String getMgmtGp4() {
         return mgmtGp4;
     }
 
-    public boolean isMgmtGp5() {
+    public String getMgmtGp5() {
         return mgmtGp5;
     }
 
@@ -5711,23 +5930,23 @@ public class Ca implements Serializable {
         return mgmtLearn0;
     }
 
-    public boolean isMgmtLearn1() {
+    public String getMgmtLearn1() {
         return mgmtLearn1;
     }
 
-    public boolean isMgmtLearn2() {
+    public String getMgmtLearn2() {
         return mgmtLearn2;
     }
 
-    public boolean isMgmtLearn3() {
+    public String getMgmtLearn3() {
         return mgmtLearn3;
     }
 
-    public boolean isMgmtLearn4() {
+    public String getMgmtLearn4() {
         return mgmtLearn4;
     }
 
-    public boolean isMgmtLearn5() {
+    public String getMgmtLearn5() {
         return mgmtLearn5;
     }
 
@@ -5735,23 +5954,23 @@ public class Ca implements Serializable {
         return mgmtSheet0;
     }
 
-    public boolean isMgmtSheet1() {
+    public String getMgmtSheet1() {
         return mgmtSheet1;
     }
 
-    public boolean isMgmtSheet2() {
+    public String getMgmtSheet2() {
         return mgmtSheet2;
     }
 
-    public boolean isMgmtSheet3() {
+    public String getMgmtSheet3() {
         return mgmtSheet3;
     }
 
-    public boolean isMgmtSheet4() {
+    public String getMgmtSheet4() {
         return mgmtSheet4;
     }
 
-    public boolean isMgmtSheet5() {
+    public String getMgmtSheet5() {
         return mgmtSheet5;
     }
 
@@ -5759,23 +5978,23 @@ public class Ca implements Serializable {
         return mgmtPolicy0;
     }
 
-    public boolean isMgmtPolicy1() {
+    public String getMgmtPolicy1() {
         return mgmtPolicy1;
     }
 
-    public boolean isMgmtPolicy2() {
+    public String getMgmtPolicy2() {
         return mgmtPolicy2;
     }
 
-    public boolean isMgmtPolicy3() {
+    public String getMgmtPolicy3() {
         return mgmtPolicy3;
     }
 
-    public boolean isMgmtPolicy4() {
+    public String getMgmtPolicy4() {
         return mgmtPolicy4;
     }
 
-    public boolean isMgmtPolicy5() {
+    public String getMgmtPolicy5() {
         return mgmtPolicy5;
     }
 
@@ -5783,23 +6002,23 @@ public class Ca implements Serializable {
         return mgmtCompiantSales0;
     }
 
-    public boolean isMgmtCompiantSales1() {
+    public String getMgmtCompiantSales1() {
         return mgmtCompiantSales1;
     }
 
-    public boolean isMgmtCompiantSales2() {
+    public String getMgmtCompiantSales2() {
         return mgmtCompiantSales2;
     }
 
-    public boolean isMgmtCompiantSales3() {
+    public String getMgmtCompiantSales3() {
         return mgmtCompiantSales3;
     }
 
-    public boolean isMgmtCompiantSales4() {
+    public String getMgmtCompiantSales4() {
         return mgmtCompiantSales4;
     }
 
-    public boolean isMgmtCompiantSales5() {
+    public String getMgmtCompiantSales5() {
         return mgmtCompiantSales5;
     }
 
@@ -5807,23 +6026,23 @@ public class Ca implements Serializable {
         return mgmtCompiantMethod0;
     }
 
-    public boolean isMgmtCompiantMethod1() {
+    public String getMgmtCompiantMethod1() {
         return mgmtCompiantMethod1;
     }
 
-    public boolean isMgmtCompiantMethod2() {
+    public String getMgmtCompiantMethod2() {
         return mgmtCompiantMethod2;
     }
 
-    public boolean isMgmtCompiantMethod3() {
+    public String getMgmtCompiantMethod3() {
         return mgmtCompiantMethod3;
     }
 
-    public boolean isMgmtCompiantMethod4() {
+    public String getMgmtCompiantMethod4() {
         return mgmtCompiantMethod4;
     }
 
-    public boolean isMgmtCompiantMethod5() {
+    public String getMgmtCompiantMethod5() {
         return mgmtCompiantMethod5;
     }
 
@@ -5831,23 +6050,23 @@ public class Ca implements Serializable {
         return mgmtCompiantProduct0;
     }
 
-    public boolean isMgmtCompiantProduct1() {
+    public String getMgmtCompiantProduct1() {
         return mgmtCompiantProduct1;
     }
 
-    public boolean isMgmtCompiantProduct2() {
+    public String getMgmtCompiantProduct2() {
         return mgmtCompiantProduct2;
     }
 
-    public boolean isMgmtCompiantProduct3() {
+    public String getMgmtCompiantProduct3() {
         return mgmtCompiantProduct3;
     }
 
-    public boolean isMgmtCompiantProduct4() {
+    public String getMgmtCompiantProduct4() {
         return mgmtCompiantProduct4;
     }
 
-    public boolean isMgmtCompiantProduct5() {
+    public String getMgmtCompiantProduct5() {
         return mgmtCompiantProduct5;
     }
 
@@ -5855,23 +6074,23 @@ public class Ca implements Serializable {
         return mgmtCompiantAd0;
     }
 
-    public boolean isMgmtCompiantAd1() {
+    public String getMgmtCompiantAd1() {
         return mgmtCompiantAd1;
     }
 
-    public boolean isMgmtCompiantAd2() {
+    public String getMgmtCompiantAd2() {
         return mgmtCompiantAd2;
     }
 
-    public boolean isMgmtCompiantAd3() {
+    public String getMgmtCompiantAd3() {
         return mgmtCompiantAd3;
     }
 
-    public boolean isMgmtCompiantAd4() {
+    public String getMgmtCompiantAd4() {
         return mgmtCompiantAd4;
     }
 
-    public boolean isMgmtCompiantAd5() {
+    public String getMgmtCompiantAd5() {
         return mgmtCompiantAd5;
     }
 
@@ -5879,23 +6098,23 @@ public class Ca implements Serializable {
         return mgmtTraining0;
     }
 
-    public boolean isMgmtTraining1() {
+    public String getMgmtTraining1() {
         return mgmtTraining1;
     }
 
-    public boolean isMgmtTraining2() {
+    public String getMgmtTraining2() {
         return mgmtTraining2;
     }
 
-    public boolean isMgmtTraining3() {
+    public String getMgmtTraining3() {
         return mgmtTraining3;
     }
 
-    public boolean isMgmtTraining4() {
+    public String getMgmtTraining4() {
         return mgmtTraining4;
     }
 
-    public boolean isMgmtTraining5() {
+    public String getMgmtTraining5() {
         return mgmtTraining5;
     }
 
@@ -5903,23 +6122,23 @@ public class Ca implements Serializable {
         return mgmtReport0;
     }
 
-    public boolean isMgmtReport1() {
+    public String getMgmtReport1() {
         return mgmtReport1;
     }
 
-    public boolean isMgmtReport2() {
+    public String getMgmtReport2() {
         return mgmtReport2;
     }
 
-    public boolean isMgmtReport3() {
+    public String getMgmtReport3() {
         return mgmtReport3;
     }
 
-    public boolean isMgmtReport4() {
+    public String getMgmtReport4() {
         return mgmtReport4;
     }
 
-    public boolean isMgmtReport5() {
+    public String getMgmtReport5() {
         return mgmtReport5;
     }
 
@@ -5927,23 +6146,23 @@ public class Ca implements Serializable {
         return mgmtPlan0;
     }
 
-    public boolean isMgmtPlan1() {
+    public String getMgmtPlan1() {
         return mgmtPlan1;
     }
 
-    public boolean isMgmtPlan2() {
+    public String getMgmtPlan2() {
         return mgmtPlan2;
     }
 
-    public boolean isMgmtPlan3() {
+    public String getMgmtPlan3() {
         return mgmtPlan3;
     }
 
-    public boolean isMgmtPlan4() {
+    public String getMgmtPlan4() {
         return mgmtPlan4;
     }
 
-    public boolean isMgmtPlan5() {
+    public String getMgmtPlan5() {
         return mgmtPlan5;
     }
 
@@ -5951,23 +6170,23 @@ public class Ca implements Serializable {
         return mgmtMaintain0;
     }
 
-    public boolean isMgmtMaintain1() {
+    public String getMgmtMaintain1() {
         return mgmtMaintain1;
     }
 
-    public boolean isMgmtMaintain2() {
+    public String getMgmtMaintain2() {
         return mgmtMaintain2;
     }
 
-    public boolean isMgmtMaintain3() {
+    public String getMgmtMaintain3() {
         return mgmtMaintain3;
     }
 
-    public boolean isMgmtMaintain4() {
+    public String getMgmtMaintain4() {
         return mgmtMaintain4;
     }
 
-    public boolean isMgmtMaintain5() {
+    public String getMgmtMaintain5() {
         return mgmtMaintain5;
     }
 
@@ -5975,23 +6194,23 @@ public class Ca implements Serializable {
         return mgmtFace2Face0;
     }
 
-    public boolean isMgmtFace2Face1() {
+    public String getMgmtFace2Face1() {
         return mgmtFace2Face1;
     }
 
-    public boolean isMgmtFace2Face2() {
+    public String getMgmtFace2Face2() {
         return mgmtFace2Face2;
     }
 
-    public boolean isMgmtFace2Face3() {
+    public String getMgmtFace2Face3() {
         return mgmtFace2Face3;
     }
 
-    public boolean isMgmtFace2Face4() {
+    public String getMgmtFace2Face4() {
         return mgmtFace2Face4;
     }
 
-    public boolean isMgmtFace2Face5() {
+    public String getMgmtFace2Face5() {
         return mgmtFace2Face5;
     }
 
@@ -6123,6 +6342,10 @@ public class Ca implements Serializable {
         return clubLx6;
     }
 
+    public String getStaff1Name() {
+        return staff1Name;
+    }
+
     public float getStaff1SalesRatio() {
         return staff1SalesRatio;
     }
@@ -6249,6 +6472,10 @@ public class Ca implements Serializable {
 
     public int getStaff1Lx6() {
         return staff1Lx6;
+    }
+
+    public String getStaff2Name() {
+        return staff2Name;
     }
 
     public float getStaff2SalesRatio() {
@@ -6379,6 +6606,10 @@ public class Ca implements Serializable {
         return staff2Lx6;
     }
 
+    public String getStaff3Name() {
+        return staff3Name;
+    }
+
     public float getStaff3SalesRatio() {
         return staff3SalesRatio;
     }
@@ -6505,6 +6736,10 @@ public class Ca implements Serializable {
 
     public int getStaff3Lx6() {
         return staff3Lx6;
+    }
+
+    public String getStaff4Name() {
+        return staff4Name;
     }
 
     public float getStaff4SalesRatio() {
@@ -6635,6 +6870,10 @@ public class Ca implements Serializable {
         return staff4Lx6;
     }
 
+    public String getStaff5Name() {
+        return staff5Name;
+    }
+
     public float getStaff5SalesRatio() {
         return staff5SalesRatio;
     }
@@ -6761,6 +7000,10 @@ public class Ca implements Serializable {
 
     public int getStaff5Lx6() {
         return staff5Lx6;
+    }
+
+    public String getStaff6Name() {
+        return staff6Name;
     }
 
     public float getStaff6SalesRatio() {

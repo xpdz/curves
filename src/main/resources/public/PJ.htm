@@ -11,7 +11,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-  <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/datepicker.css" rel="stylesheet">
   <link href="css/site.css" rel="stylesheet">
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -39,7 +40,7 @@
           <li><a href="CA.htm">CA</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#" id="userId"></a></li>
+          <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
           <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
         </ul>
       </div>
@@ -47,21 +48,17 @@
     </div>
     <!-- /.container-fluid -->
   </nav>
-  <div class="row" style="padding:0 19px">
-    <label for="datetimepicker" class="control-label">Month: </label>
-    <input type="text" id="datetimepicker" data-date-format="yyyy-mm">
-    <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
-    <!--<div class="col-md-2">-->
-    <!--</div>-->
-    <!--<div class="form-group col-md-10">-->
-      <!--<label for="picker" class="control-label">Month Picking</label>-->
-      <!--<div id="picker" class="input-group date" data-date="" data-date-format="yyyy-MM" data-link-field="dtp_input2" data-link-format="yyyy-MM">-->
-        <!--<input id="dtp_input" class="form-control" size="16" type="text" value="" readonly>-->
-        <!--<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>-->
-      <!--</div>-->
-    <!--</div>-->
+  <div class="row">
+    <div class="col-md-2">
+      <div class="input-group date">
+        <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+      </div>
+    </div>
+    <div class="col-md-1">
+      <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
+    </div>
   </div>
-  <div class="row" style="padding:0 19px">
+  <div class="row" style="padding:10px 14px">
     <div class="table-responsive">
       <table id="tbl" class="table table-bordered table-condensed" style="width: 2500px">
         <thead>
@@ -169,8 +166,8 @@
 
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
-<script src="js/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script>
+<script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+<script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
 <script src="js/PJ.js"></script>
 </body>
 </html>

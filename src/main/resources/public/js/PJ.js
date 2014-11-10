@@ -1,59 +1,55 @@
 $(document).ready(function() {
 
+var pjSumId = -1;
+var pjIds = [];
+
 var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var $tbd = $("#tbd");
-window.pjSumId = -1;
-window.pjIds = [];
 
 var today = new Date();
 var thisYear = today.getFullYear();
 var thisMonth = today.getMonth();
+var currentYear = thisYear;
+var currentMonth = thisMonth;
 
 // init user ID / club ID
 $.getJSON("/rest/whoami", function(club) {
     $('#clubId').text(club.clubId);
-    $('#userId').text(club.clubId);
+    $('#userId').html('<i class="fa fa-user"></i> '+club.clubId);
 }).fail(function() {
     alert("oops! I cannot find your ID, please logout and login again.");
 });
 
 // init date picker
-$('#datetimepicker').val = thisYear + '-' + (thisMonth+1);
-$('#datetimepicker').datetimepicker({
-    language:  'zh-TW',
-    weekStart: 1,
-    todayBtn:  1,
-    autoclose: 1,
-    todayHighlight: 1,
-    startView: 3,
-    minView: 3,
-    forceParse: 0
+$('.input-group.date').val(thisYear+"-"+(thisMonth+1));
+$('.input-group.date').datepicker({
+    minViewMode: 1,
+    language: "zh-TW",
+    todayHighlight: true
 });
-$('#datetimepicker').datetimepicker().on('changeDate', function(ev) {
-    var selYear = ev.date.getFullYear();
-    var selMonth = ev.date.getMonth();
-    getPJ(selYear, selMonth);
+$('.input-group.date').datepicker().on('changeDate', function(ev) {
+    currentYear = ev.date.getFullYear();
+    currentMonth = ev.date.getMonth();
+    getPJ();
 });
 
 // init page
-getPJ(thisYear, thisMonth);
+getPJ();
 
-function getPJ(y, m) {
+function getPJ() {
     $tbd.empty();
 
-    $.getJSON("/rest/PJ", {year: y, month: m}, function(pjSum) {
-        $('#year').text(y);
-        $('#month').text(m + 1);
-
-        fillSheet(y, m, pjSum);
+    $('#year').text(currentYear);
+    $('#month').text(currentMonth + 1);
+    $.getJSON("/rest/PJ", {year: currentYear, month: currentMonth}, function(pjSum) {
+        fillSheet(pjSum);
     }).fail(function() {
-        $('#year').text(thisYear);
-        $('#month').text(thisMonth + 1);
-
-        fillThisMonth();
+        if (currentYear == thisYear && currentMonth == thisMonth) {
+            fillThisMonth();
+        }
     });
 
-    if (y == thisYear && m == thisMonth) {
+    if (currentYear == thisYear && currentMonth == thisMonth) {
         $('#btnSave').attr("disabled", false);
         $('td[contenteditable="false"]').attr('contenteditable', 'true');
         $('td[contenteditable="false"]').css('border', '1px dashed green !important');
@@ -62,16 +58,10 @@ function getPJ(y, m) {
         $('td[contenteditable="true"]').attr('contenteditable', 'false');
         $('td[contenteditable="false"]').css('border', '1px solid #ddd !important');
     }
-
-    $('td').each(function() {
-        if (0 == +$(this).text()) {
-            $(this).text('');
-        }
-    });
 }
 
-function fillSheet(y, m, pjSum) {
-    window.pjSumId = pjSum.id;
+function fillSheet(pjSum) {
+    pjSumId = pjSum.id;
     $('#newSales').text(pjSum.newSales);
     $('#exits').text(pjSum.exits);
     $('#shiftIn').text(pjSum.shiftIn);
@@ -81,51 +71,49 @@ function fillSheet(y, m, pjSum) {
     $('#enrolled').text(pjSum.enrolled);
     $('#leaves').text(pjSum.leaves);
     $('#valids').text(pjSum.valids);
-    $('#salesRatio').text(pjSum.salesRatio);
-    $('#exitRatio').text(pjSum.exitRatio);
-    $('#leaveRatio').text(pjSum.leaveRatio);
+    $('#salesRatio').text((pjSum.salesRatio*100).toFixed(0)+'%');
+    $('#exitRatio').text((pjSum.exitRatio*100).toFixed(1)+'%');
+    $('#leaveRatio').text((pjSum.leaveRatio*100).toFixed(1)+'%');
     for (var idx = 1; idx <= pjSum.pjSet.length; idx++) {
         var pj = pjSum.pjSet[idx-1];
-        if (window.pjSumId != -1) {
-            window.pjIds[idx] = pj.id;
-        }
+        pjIds[idx] = pj.id;
         var d = new Date(pj.pjDate);
         $tbd.append(
           $('<tr/>').append(
             $('<td id="date-' + idx + '" style="background-color: #FFFF99">' + d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + '</td>'),
             $('<td>' + weekdays[d.getDay()] + '</td>'),
             $('<td>' + idx + '</td>'),
-            $('<td id="workingDays-' + idx + '" contenteditable style="background-color: #FFFF99">' + pj.workingDays + '</td>'),
-            $('<td id="workOuts-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.workOuts + '</td>'),
-            $('<td id="newSalesRevenue-' + idx + '" contenteditable style="background-color: #FFFF99">' + pj.newSalesRevenue + '</td>'),
-            $('<td id="duesDraftsRevenue-' + idx + '" contenteditable style="background-color: #FFFF99">' + pj.duesDraftsRevenue + '</td>'),
-            $('<td id="productsRevenue-' + idx + '" contenteditable style="background-color: #FFFF99">' + pj.productsRevenue + '</td>'),
-            $('<td id="otherRevenue-' + idx + '" contenteditable style="background-color: #FFFF99">' + pj.otherRevenue + '</td>'),
-            $('<td id="incomingCalls-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.incomingCalls + '</td>'),
-            $('<td id="incomingApo-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.incomingApo + '</td>'),
-            $('<td id="outgoingCalls-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.outgoingCalls + '</td>'),
-            $('<td id="outgoingApo-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.outgoingApo + '</td>'),
-            $('<td id="brOwnRef-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brOwnRef + '</td>'),
-            $('<td id="brOthersRef-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brOthersRef + '</td>'),
-            $('<td id="brandedNewspaper-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedNewspaper + '</td>'),
-            $('<td id="brandedTv-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedTv + '</td>'),
-            $('<td id="brandedInternet-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedInternet + '</td>'),
-            $('<td id="brandedSign-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedSign + '</td>'),
-            $('<td id="brandedMate-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedMate + '</td>'),
-            $('<td id="brandedOthers-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.brandedOthers + '</td>'),
-            $('<td id="agpInDirectMail-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpInDirectMail + '</td>'),
-            $('<td id="agpInMailFlyer-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpInMailFlyer + '</td>'),
-            $('<td id="agpInHandFlyer-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpInHandFlyer + '</td>'),
-            $('<td id="agpInCp-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpInCp + '</td>'),
-            $('<td id="agpOutApoOut-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpOutApoOut + '</td>'),
-            $('<td id="agpOutApoIn-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpOutApoIn + '</td>'),
-            $('<td id="agpOutApoBlog-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpOutApoBlog + '</td>'),
-            $('<td id="agpOutApoBag-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.agpOutApoBag + '</td>'),
+            $('<td id="workingDays-' + idx + '" contenteditable="true" style="background-color: #FFFF99">' + pj.workingDays + '</td>'),
+            $('<td id="workOuts-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.workOuts + '</td>'),
+            $('<td id="newSalesRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99">' + pj.newSalesRevenue + '</td>'),
+            $('<td id="duesDraftsRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99">' + pj.duesDraftsRevenue + '</td>'),
+            $('<td id="productsRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99">' + pj.productsRevenue + '</td>'),
+            $('<td id="otherRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99">' + pj.otherRevenue + '</td>'),
+            $('<td id="incomingCalls-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.incomingCalls + '</td>'),
+            $('<td id="incomingApo-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.incomingApo + '</td>'),
+            $('<td id="outgoingCalls-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.outgoingCalls + '</td>'),
+            $('<td id="outgoingApo-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.outgoingApo + '</td>'),
+            $('<td id="brOwnRef-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brOwnRef + '</td>'),
+            $('<td id="brOthersRef-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brOthersRef + '</td>'),
+            $('<td id="brandedNewspaper-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedNewspaper + '</td>'),
+            $('<td id="brandedTv-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedTv + '</td>'),
+            $('<td id="brandedInternet-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedInternet + '</td>'),
+            $('<td id="brandedSign-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedSign + '</td>'),
+            $('<td id="brandedMate-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedMate + '</td>'),
+            $('<td id="brandedOthers-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.brandedOthers + '</td>'),
+            $('<td id="agpInDirectMail-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpInDirectMail + '</td>'),
+            $('<td id="agpInMailFlyer-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpInMailFlyer + '</td>'),
+            $('<td id="agpInHandFlyer-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpInHandFlyer + '</td>'),
+            $('<td id="agpInCp-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpInCp + '</td>'),
+            $('<td id="agpOutApoOut-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpOutApoOut + '</td>'),
+            $('<td id="agpOutApoIn-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpOutApoIn + '</td>'),
+            $('<td id="agpOutApoBlog-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpOutApoBlog + '</td>'),
+            $('<td id="agpOutApoBag-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.agpOutApoBag + '</td>'),
             $('<td id="fa-' + idx + '" style="background-color: LightGray">' + pj.fa + '</td>'),
-            $('<td id="enrollAch-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.enrollAch + '</td>'),
-            $('<td id="enrollMonthly-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.enrollMonthly + '</td>'),
-            $('<td id="enrollAllPrepay-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.enrollAllPrepay + '</td>'),
-            $('<td id="exits-' + idx + '" contenteditable style="background-color: #CCFFFF">' + pj.exits + '</td>')
+            $('<td id="enrollAch-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.enrollAch + '</td>'),
+            $('<td id="enrollMonthly-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.enrollMonthly + '</td>'),
+            $('<td id="enrollAllPrepay-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.enrollAllPrepay + '</td>'),
+            $('<td id="exits-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.exits + '</td>')
           )
         );
     }
@@ -144,37 +132,37 @@ function fillThisMonth() {
             $('<td id="date-' + i + '" style="background-color: #FFFF99">' + thisYear + '-' + (thisMonth + 1) + '-' + i + '</td>'),
             $('<td>' + weekdays[d.getDay()] + '</td>'),
             $('<td>' + i + '</td>'),
-            $('<td id="workingDays-' + i + '" contenteditable style="background-color: #FFFF99"/>'),
-            $('<td id="workOuts-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="newSalesRevenue-' + i + '" contenteditable style="background-color: #FFFF99"/>'),
-            $('<td id="duesDraftsRevenue-' + i + '" contenteditable style="background-color: #FFFF99"/>'),
-            $('<td id="productsRevenue-' + i + '" contenteditable style="background-color: #FFFF99"/>'),
-            $('<td id="otherRevenue-' + i + '" contenteditable style="background-color: #FFFF99"/>'),
-            $('<td id="incomingCalls-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="incomingApo-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="outgoingCalls-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="outgoingApo-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brOwnRef-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brOthersRef-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedNewspaper-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedTv-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedInternet-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedSign-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedMate-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="brandedOthers-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpInDirectMail-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpInMailFlyer-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpInHandFlyer-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpInCp-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpOutApoOut-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpOutApoIn-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpOutApoBlog-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="agpOutApoBag-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
+            $('<td id="workingDays-' + i + '" contenteditable="true" style="background-color: #FFFF99"/>'),
+            $('<td id="workOuts-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="newSalesRevenue-' + i + '" contenteditable="true" style="background-color: #FFFF99"/>'),
+            $('<td id="duesDraftsRevenue-' + i + '" contenteditable="true" style="background-color: #FFFF99"/>'),
+            $('<td id="productsRevenue-' + i + '" contenteditable="true" style="background-color: #FFFF99"/>'),
+            $('<td id="otherRevenue-' + i + '" contenteditable="true" style="background-color: #FFFF99"/>'),
+            $('<td id="incomingCalls-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="incomingApo-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="outgoingCalls-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="outgoingApo-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brOwnRef-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brOthersRef-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedNewspaper-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedTv-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedInternet-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedSign-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedMate-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="brandedOthers-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpInDirectMail-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpInMailFlyer-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpInHandFlyer-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpInCp-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpOutApoOut-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpOutApoIn-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpOutApoBlog-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="agpOutApoBag-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
             $('<td id="fa-' + i + '" style="background-color: LightGray"/>'),
-            $('<td id="enrollAch-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="enrollMonthly-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="enrollAllPrepay-' + i + '" contenteditable style="background-color: #CCFFFF"/>'),
-            $('<td id="exits-' + i + '" contenteditable style="background-color: #CCFFFF"/>')
+            $('<td id="enrollAch-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="enrollMonthly-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="enrollAllPrepay-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>'),
+            $('<td id="exits-' + i + '" contenteditable="true" style="background-color: #CCFFFF"/>')
           )
         );
     }
@@ -186,37 +174,15 @@ function fillSummary(pjSum) {
     // add summary row (background color - lightGray)
     $tbd.append(
       $('<tr style="background-color: LightGray"/>').append(
-        $('<td/>'),$('<td/>'),$('<td/>'),
+        $('<td/><td/><td/>'),
         $('<td>' + "営業日数" + '</td>'),
         $('<td>' + "最高人数" + '</td>'),
-        $('<td/>'),$('<td/>'),$('<td/>'),$('<td/>'),$('<td/>'),$('<td/>'),$('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>'),
-        $('<td/>')
+        $('<td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/>')
       )
     );
     $tbd.append(
       $('<tr style="background-color: LightGray"/>').append(
-        $('<td/>'),$('<td/>'),$('<td/>'),
+        $('<td/><td/><td/>'),
         $('<td id="workingDays" >' + (pjSum.workingDays || 0) + '</td>'),
         $('<td id="maxWorkOuts" >' + (pjSum.maxWorkOuts || 0) + '</td>'),
         $('<td id="newSalesRevenue" >' + (pjSum.newSalesRevenue || 0) + '</td>'),
@@ -250,6 +216,13 @@ function fillSummary(pjSum) {
         $('<td id="exits" >' + (pjSum.exits || 0) + '</td>')
       )
     );
+
+    $('td').each(function() {
+        var valueX = $(this).text();
+        if (valueX === '0' || valueX === '0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+            $(this).text('');
+        }
+    });
 }
 
 // save PJ
@@ -259,9 +232,7 @@ $("#btnSave").click(function() {
     runFormula(lastDayOfMonth);
 
     var pjSum = {};
-    if (window.pjSumId != -1) {
-        pjSum.id = window.pjSumId;
-    }
+    pjSum.id = pjSumId;
     pjSum.clubId = +$('#clubId').text();
     pjSum.year = +$('#year').text();
     pjSum.month = +$('#month').text() - 1;
@@ -274,9 +245,9 @@ $("#btnSave").click(function() {
     pjSum.enrolled = +$('#enrolled').text();
     pjSum.leaves = +$('#leaves').text();
     pjSum.valids = +$('#valids').text();
-    pjSum.salesRatio = $('#salesRatio').text();
-    pjSum.exitRatio = $('#exitRatio').text();
-    pjSum.leaveRatio = $('#leaveRatio').text();
+    pjSum.salesRatio = parseFloat($('#salesRatio').text())/100;
+    pjSum.exitRatio = parseFloat($('#exitRatio').text())/100;
+    pjSum.leaveRatio = parseFloat($('#leaveRatio').text())/100;
 
     pjSum.workingDays = +$('#workingDays').text();
     pjSum.maxWorkOuts = +$('#maxWorkOuts').text();
@@ -313,7 +284,7 @@ $("#btnSave").click(function() {
     pjSum.pjSet = [];
     for (var idx = 1; idx <= lastDayOfMonth; idx++) {
         var pj = {};
-        pj.id = window.pjIds[idx];
+        pj.id = pjIds[idx];
         pj.pjDate = new Date(thisYear, thisMonth, idx);
         pj.workingDays = +$('#workingDays-' + idx).text();
         pj.workOuts = +$('#workOuts-' + idx).text();
@@ -366,7 +337,8 @@ $("#btnSave").click(function() {
     });
 
     $('td').each(function() {
-        if (0 == +$(this).text()) {
+        var valueX = $(this).text();
+        if (valueX === '0' || valueX === '0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
             $(this).text('');
         }
     });
@@ -399,22 +371,22 @@ function runFormula(lastDayOfMonth) {
         incomingApo += Number($('#incomingApo-' + idx).text());
         outgoingCalls += Number($('#outgoingCalls-' + idx).text());
         outgoingApo += Number($('#outgoingApo-' + idx).text());
-        brOwnRef += Number($('#brOwnRef').text());
-        brOthersRef += Number($('#brOthersRef').text());
-        brandedNewspaper += Number($('#brandedNewspaper').text());
-        brandedTv += Number($('#brandedTv').text());
-        brandedInternet += Number($('#brandedInternet').text());
-        brandedSign += Number($('#brandedSign').text());
-        brandedMate += Number($('#brandedMate').text());
-        brandedOthers += Number($('#brandedOthers').text());
-        agpInDirectMail += Number($('#agpInDirectMail').text());
-        agpInMailFlyer += Number($('#agpInMailFlyer').text());
-        agpInHandFlyer += Number($('#agpInHandFlyer').text());
-        agpInCp += Number($('#agpInCp').text());
-        agpOutApoOut += Number($('#agpOutApoOut').text());
-        agpOutApoIn += Number($('#agpOutApoIn').text());
-        agpOutApoBlog += Number($('#agpOutApoBlog').text());
-        agpOutApoBag += Number($('#agpOutApoBag').text());
+        brOwnRef += Number($('#brOwnRef-' + idx).text());
+        brOthersRef += Number($('#brOthersRef-' + idx).text());
+        brandedNewspaper += Number($('#brandedNewspaper-' + idx).text());
+        brandedTv += Number($('#brandedTv-' + idx).text());
+        brandedInternet += Number($('#brandedInternet-' + idx).text());
+        brandedSign += Number($('#brandedSign-' + idx).text());
+        brandedMate += Number($('#brandedMate-' + idx).text());
+        brandedOthers += Number($('#brandedOthers-' + idx).text());
+        agpInDirectMail += Number($('#agpInDirectMail-' + idx).text());
+        agpInMailFlyer += Number($('#agpInMailFlyer-' + idx).text());
+        agpInHandFlyer += Number($('#agpInHandFlyer-' + idx).text());
+        agpInCp += Number($('#agpInCp-' + idx).text());
+        agpOutApoOut += Number($('#agpOutApoOut-' + idx).text());
+        agpOutApoIn += Number($('#agpOutApoIn-' + idx).text());
+        agpOutApoBlog += Number($('#agpOutApoBlog-' + idx).text());
+        agpOutApoBag += Number($('#agpOutApoBag-' + idx).text());
         enrollAch += Number($('#enrollAch-' + idx).text());
         enrollMonthly += Number($('#enrollMonthly-' + idx).text());
         enrollAllPrepay += Number($('#enrollAllPrepay-' + idx).text());
@@ -459,14 +431,14 @@ function runFormula(lastDayOfMonth) {
     $('#increment').text(newSales-exits+Number($('#shiftIn').text())-Number($('#shiftOut').text()));
     $('#revenue').text(newSalesRevenue+duesDraftsRevenue+productsRevenue+otherRevenue);
     if (faSum != 0) {
-        $('#salesRatio').text(Math.round(newSales/faSum*100) + "%");
+        $('#salesRatio').text((newSales*100/faSum).toFixed(0) + "%");
     }
 
     var enrolled = Number($('#enrolled').text());
     if (enrolled != 0) {
-        $('#exitRatio').text(Math.round(exits/enrolled*100) + "%");
+        $('#exitRatio').text((exits*100/enrolled).toFixed(1) + "%");
         var leaves = Number($('#leaves').text());
-        $('#leaveRatio').text(Math.round(leaves/enrolled*100) + "%");
+        $('#leaveRatio').text((leaves*100/enrolled).toFixed(1) + "%");
     }
 }
 

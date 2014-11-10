@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en"><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>Benchmarking</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap-slider.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+		<link href="css/site.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid" style="overflow: auto">
+			<nav class="navbar navbar-default" role="navigation">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#">Curves</a>
+			    </div>
+
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+		          <li><a href="management.htm">Clubs</a></li>
+              <li><a href="#">US Report</a></li>
+			      </ul>
+			      <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+
+      <div class="row">
+        <div class="col-md-2">
+          <div class="input-group date">
+            <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-1">信箱傳單投遞張數</div>
+        <div class="col-md-1">員工手發傳單的張數</div>
+        <div class="col-md-1">員工手發傳單的時數</div>
+        <div class="col-md-1">店外GP的时数</div>
+        <div class="col-md-1">店外GP的張数</div>
+        <div class="col-md-1">CP拜訪、檢查Lead Box的次數</div>
+        <div class="col-md-1">APO總數</div>
+        <div class="col-md-1">TOG人數(全部做FA人次)</div>
+        <div class="col-md-1">入會數</div>
+        <div class="col-md-1">結案率</div>
+      </div>
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-1"><input id="CmPostFlyer" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmHandFlyer" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmHandFlyerHours" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmOutGp" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmOutGpHours" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmCpBox" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmApoTotal" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="CmFaSum" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="SalesAch" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+        <div class="col-md-1"><input id="SalesRatio" type="text" data-slider-orientation="vertical" data-slider-handle="triangle" data-slider-enabled="false"/></div>
+      </div>
+		</div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-slider.min.js"></script>
+    <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+    <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+		<script src="js/site.js"></script>
+    <script src="js/benchmarking.js"></script>
+	</body>
+</html>
