@@ -2,8 +2,6 @@ $(document).ready(function() {
 
 $('#userId').html('<i class="fa fa-user"></i> 000000');
 
-var clubId;
-
 getClubs();
 
 function getClubs() {
@@ -15,8 +13,7 @@ function getClubs() {
                 $('<td>' + clubs[i].owner + '</td>'),
                 $('<td><a class="btn btn-info" href="PJ.htm?clubId='+clubs[i].clubId+'">PJ</a></td>'),
                 $('<td><a class="btn btn-info" href="CA.htm?clubId='+clubs[i].clubId+'">CA</a></td>'),
-                $('<td><a class="btn btn-primary" href="trends.htm?clubId=' + clubs[i].clubId+'"><i class="fa fa-line-chart"></i> Trends</a></td>'),
-                $('<td><a class="btn btn-primary" href="benchmarking.htm?clubId='+clubs[i].clubId+'">Benchmarking</a></td>')
+                $('<td><a class="btn btn-primary" href="trends.htm?clubId=' + clubs[i].clubId+'"><i class="fa fa-line-chart"></i> Trends</a></td>')
             ));
         }
     }).fail(function() {

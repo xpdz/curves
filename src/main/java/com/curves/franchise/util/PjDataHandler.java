@@ -2,12 +2,14 @@ package com.curves.franchise.util;
 
 import com.curves.franchise.domain.Pj;
 import com.curves.franchise.domain.PjSum;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,118 +26,94 @@ public class PjDataHandler {
         this.cp = cp;
     }
 
-    public void processPJ() {
-        for (File f : cp.allPJ) {
-            Workbook wb = null;
-            try {
-                wb = WorkbookFactory.create(f);
-            } catch (Exception e) {
-                logger.error("==!!!== OPEN FILE ERROR ==!!!=="+f);
-                continue;
-            }
+    public void processPJ(Sheet sh, FormulaEvaluator evaluator, int clubId) {
+        this.evaluator = evaluator;
 
-            setup(f, wb);
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+            if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
+                return;
+            }
+        } catch (Exception e) {
+            return;
         }
-    }
 
-    private void setup(File f, Workbook wb) {
-        String clubName = cp.getClubNameFromFileName(f);
-        int clubId = cp.getIdByName(clubName);
-
-        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-            Sheet sh = wb.getSheetAt(i);
-            if (cp.parseChinese(sh.getSheetName()).length() > 0) {
-                continue;
-            }
-
-            Calendar c = Calendar.getInstance();
+        if (clubId == -1) {
             try {
-                c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
-                if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
+                clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
+            } catch (Exception e) {
+                logger.error(">>> CANNOT GET CLUB-ID FROM PJ");
+                return;
+            }
+        }
+
+        int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int sumRowIdx = lastDayOfMonth + 5;
+        for (Cell cTest = sh.getRow(sumRowIdx).getCell(3); cTest != null;cTest = sh.getRow(sumRowIdx).getCell(3)) {
+            if (sumRowIdx > 45 || Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
+                break;
+            }
+            sumRowIdx++;
+        }
+
+        PjSum pjSum = new PjSum();
+        pjSum.setLastModified(new Date());
+        pjSum.setClubId(clubId);
+        pjSum.setYear(cp.year);
+        pjSum.setMonth(cp.month);
+        pjSum.setEnrolled(cp.getCellIntValue(sh, 1, 3));
+        pjSum.setLeaves(cp.getCellIntValue(sh, 1, 4));
+        pjSum.setValids(cp.getCellIntValue(sh, 1, 5));
+        pjSum.setExits(cp.getCellIntValue(sh, 1, 6));
+
+        setupPjSum(sh, sumRowIdx, pjSum);
+
+        List<Pj> pjs = new ArrayList<>(31);
+        pjSum.setPjSet(pjs);
+
+        for (int j = 4; j < sumRowIdx; j++) {
+            Date pjDate = null;
+            try {
+                pjDate = sh.getRow(j).getCell(0).getDateCellValue();
+                Calendar c1 = Calendar.getInstance();
+                c1.setTime(pjDate);
+                if (c1.get(Calendar.YEAR) != cp.year && c1.get(Calendar.MONTH) != cp.month) {
                     continue;
                 }
             } catch (Exception e) {
                 continue;
             }
 
-            cp.evaluator = wb.getCreationHelper().createFormulaEvaluator();
+            Pj pj = new Pj();
+            pj.setLastModified(new Date());
+            pjs.add(pj);
 
-            try {
-                if (clubId == -1) {
-                    try {
-                        clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
-                    } catch (Exception e) {
-                        logger.error("----@@@ cannot get club ID: "+f+", sheet:"+sh.getSheetName());
-                        continue;
-                    }
-                }
+            pj.setPjDate(pjDate);
 
-                int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-                int sumRowIdx = lastDayOfMonth + 5;
-                for (Cell cTest = sh.getRow(sumRowIdx).getCell(3); cTest != null;cTest = sh.getRow(sumRowIdx).getCell(3)) {
-                    if (sumRowIdx > 45 || Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
-                        break;
-                    }
-                    sumRowIdx++;
-                }
-
-                PjSum pjSum = new PjSum();
-                pjSum.setClubId(clubId);
-                pjSum.setYear(cp.year);
-                pjSum.setMonth(cp.month);
-                pjSum.setEnrolled(cp.getCellIntValue(sh, 1, 3));
-                pjSum.setLeaves(cp.getCellIntValue(sh, 1, 4));
-                pjSum.setValids(cp.getCellIntValue(sh, 1, 5));
-                pjSum.setExits(cp.getCellIntValue(sh, 1, 6));
-
-                setupPjSum(sh, sumRowIdx, pjSum);
-
-                List<Pj> pjs = new ArrayList<>(31);
-                pjSum.setPjSet(pjs);
-
-                for (int j = 4; j < sumRowIdx; j++) {
-                    Date pjDate = null;
-                    try {
-                        pjDate = sh.getRow(j).getCell(0).getDateCellValue();
-                        Calendar c1 = Calendar.getInstance();
-                        c1.setTime(pjDate);
-                        if (c1.get(Calendar.YEAR) != cp.year && c1.get(Calendar.MONTH) != cp.month) {
-                            continue;
-                        }
-                    } catch (Exception e) {
-                        continue;
-                    }
-
-                    Pj pj = new Pj();
-                    pjs.add(pj);
-
-                    pj.setPjDate(pjDate);
-
-                    setupPj(sh, j, pj);
-                }
-
-                PjSum pjSumX = cp.pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
-                if (pjSumX != null) {
-                    BeanUtils.copyProperties(pjSumX, pjSum);
-                }
-                cp.pjSumRepo.save(pjSum);
-            } catch (Exception e) {
-                logger.error("==!!!==ERROR==!!=="+f+",sheet:"+sh.getSheetName()+", clubName:"+clubName +", Exception: ", e);
-            }
+            setupPj(sh, j, pj);
         }
+
+        PjSum pjSumX = cp.pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
+        if (pjSumX != null) {
+            BeanUtils.copyProperties(pjSumX, pjSum);
+        }
+        cp.pjSumRepo.save(pjSum);
+
+        logger.info("### Saved PJ : "+sh.getSheetName() + " ###");
     }
 
     private void setupPjSum(Sheet sh, int sumRowIdx, PjSum pjSum) {
-        try {pjSum.setWorkingDays((float) sh.getRow(sumRowIdx).getCell(3).getNumericCellValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(3));pjSum.setWorkingDays((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setMaxWorkOuts(cp.getCellIntValue(sh, sumRowIdx, 4));} catch (Exception e) {}
         try {pjSum.setNewSalesRevenue(cp.getCellIntValue(sh, sumRowIdx, 5));} catch (Exception e) {}
         try {pjSum.setDuesDraftsRevenue(cp.getCellIntValue(sh, sumRowIdx, 6));} catch (Exception e) {}
         try {pjSum.setProductsRevenue(cp.getCellIntValue(sh, sumRowIdx, 7));} catch (Exception e) {}
         try {pjSum.setRevenue(cp.getCellIntValue(sh, sumRowIdx, 8));} catch (Exception e) {}
-        try {pjSum.setExitRatio((float)sh.getRow(sumRowIdx).getCell(9).getNumericCellValue());} catch (Exception e) {}
-        try {pjSum.setLeaveRatio((float)sh.getRow(sumRowIdx).getCell(10).getNumericCellValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(9));pjSum.setExitRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(10));pjSum.setLeaveRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setNewSales(cp.getCellIntValue(sh, sumRowIdx, 11));} catch (Exception e) {}
-        try {pjSum.setSalesRatio((float)sh.getRow(sumRowIdx).getCell(12).getNumericCellValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(12));pjSum.setSalesRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setBrOwnRef(cp.getCellIntValue(sh, sumRowIdx, 13));} catch (Exception e) {}
         try {pjSum.setBrOthersRef(cp.getCellIntValue(sh, sumRowIdx, 14));} catch (Exception e) {}
         try {pjSum.setBrandedTv(cp.getCellIntValue(sh, sumRowIdx, 15));} catch (Exception e) {}

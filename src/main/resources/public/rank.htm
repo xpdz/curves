@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en"><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>Benchmarking</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+		<link href="css/site.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid" style="overflow: auto">
+			<nav class="navbar navbar-default" role="navigation">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#">Curves</a>
+			    </div>
+
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+		          <li><a href="management.htm">Clubs</a></li>
+              <li><a href="us_report.htm">US Report</a></li>
+              <li class="active"><a href="#">Benchmarking</a></li>
+			      </ul>
+			      <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+      <div class="row">
+        <div class="col-md-2">
+          <h4>Average : <span class="label label-default" id="avgRank"></span></h4>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group date">
+            <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info">Benchmarking</button>
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+              <span class="sr-only">信箱傳單投遞張數</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href= "#" id="cmPostFlyer6">信箱傳單投遞張數</a></li>
+              <li><a href= "#" id="cmHandFlyer6">員工手發傳單的張數</a></li>
+              <li><a href= "#" id="cmHandFlyerHours6">員工手發傳單的時數</a></li>
+              <li><a href= "#" id="cmOutGp6">店外GP的时数</a></li>
+              <li><a href= "#" id="cmOutGpHours6">店外GP的張数</a></li>
+              <li><a href= "#" id="cmCpBox6">CP拜訪、檢查Lead Box的次數</a></li>
+              <li><a href= "#" id="cmApoTotal6">APO總數</a></li>
+              <li><a href= "#" id="cmFaSum6">TOG人數(全部做FA人次)</a></li>
+              <li><a href= "#" id="salesAch6">入會數</a></li>
+              <li><a href= "#" id="salesRatio6">結案率</a></li>
+              <li><a href= "#" id="newSalesRevenue">新銷售營收</a></li>
+              <li><a href= "#" id="duesDraftsRevenue">月費收入</a></li>
+              <li><a href= "#" id="productsRevenue">商品</a></li>
+              <li><a href= "#" id="revenue">本月總營收</a></li>
+              <li><a href= "#" id="cmOutAgpOut6">會員介紹 (本店)</a></li>
+              <li><a href= "#" id="cmOutAgpOut">從店外得到的人名的APO數</a></li>
+              <li><a href= "#" id="cmInAgpOut6">從店內得到的人名的APO數</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <input type="text" class="form-control" id="thisGoal" value="" placeholder="本月目標">
+        </div>
+        <div class="col-md-1">
+          <button type="button" class="btn btn-success" id="btnSave">Save</button>
+        </div>
+        <div class="col-md-3">
+          <div class="alert" role="alert"></div>
+        </div>
+      </div>
+			<div class="row" align="center">
+				<div class="col-xs-8 col-md-10" align="center">
+					<table class="table table-bordered table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>Club Name</th>
+                <th id="itemTitle">信箱傳單投遞張數</th>
+							</tr>
+						</thead>
+						<tbody id="tbd">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+    <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+		<script src="js/site.js"></script>
+    <script src="js/rank.js"></script>
+	</body>
+</html>

@@ -16,6 +16,8 @@ getBenchmarking();
 $('.input-group.date').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
+    autoclose: true,
+    format: "yyyy-mm",
     language: "zh-TW",
     todayHighlight: true
 });
@@ -27,7 +29,7 @@ $('.input-group.date').datepicker().on('changeDate', function(ev) {
 
 function getBenchmarking() {
     $.getJSON("/rest/benchmarking", {clubId: clubId, year: currentYear, month: currentMonth}, function(data) {
-        if (data['CmPostFlyer'][0] == undefined) {
+        if (data.CmPostFlyer.val == undefined) {
             return;
         }
 
@@ -49,11 +51,10 @@ function getBenchmarking() {
 function makeSliderX(sliderId, sliderData, dataType) {
     $(sliderId).slider({
       orientation: "vertical",
-      disabled: true,
       tooltip: 'always',
-      min: sliderData[dataType][0],
-      max: sliderData[dataType][1],
-      value: sliderData[dataType][2]
+      min: sliderData[dataType]['max'],
+      max: sliderData[dataType]['min'],
+      value: sliderData[dataType]['val']
     });
 }
 

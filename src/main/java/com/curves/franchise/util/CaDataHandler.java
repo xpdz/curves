@@ -1,13 +1,15 @@
 package com.curves.franchise.util;
 
 import com.curves.franchise.domain.Ca;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
-import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CaDataHandler {
     private Logger logger = LoggerFactory.getLogger(CaDataHandler.class);
@@ -20,63 +22,39 @@ public class CaDataHandler {
         this.cp = cp;
     }
 
-    public void processCA() {
-        for (File f : cp.allCA) {
-            logger.info("----> "+f+" <----");
-            Workbook wb = null;
+    public void processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
+        this.evaluator = evaluator;
+
+        String sheetName = sh.getSheetName();
+        sheetName = sheetName.replaceAll("[\\.-]", "");
+        if (sheetName.startsWith(cp.year+"") && sheetName.endsWith((cp.month+1)+"")) {
+        } else {
             try {
-                wb = WorkbookFactory.create(f);
+                Calendar c = Calendar.getInstance();
+                c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
+                if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
+                    return;
+                }
             } catch (Exception e) {
-                logger.error("====>> OPEN FILE ERROR <<====");
-                continue;
-            }
-
-            String clubName = cp.getClubNameFromFileName(f);
-            int clubId = cp.getIdByName(clubName);
-            if (clubId == -1) {
-                logger.error("====>> Club ID NOT FOUND !!!");
-                continue;
-            }
-
-            for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-                Sheet sh = wb.getSheetAt(i);
-                String sheetName = sh.getSheetName();
-                if (cp.parseChinese(sheetName).length() > 0) {
-                    continue;
-                }
-                if ( !cp.isSheetNameMatch(sheetName) ) {
-                    try {
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
-                        if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
-                            continue;
-                        }
-                    } catch (Exception e) {
-                        continue;
-                    }
-                }
-
-                evaluator = wb.getCreationHelper().createFormulaEvaluator();
-
-                try {
-                    Ca ca = new Ca();
-                    ca.setClubId(clubId);
-                    ca.setCaYear(cp.year);
-                    ca.setCaMonth(cp.month);
-
-                    setupCa(sh, ca);
-
-                    Ca cax = cp.caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth());
-                    if (cax != null) {
-                        BeanUtils.copyProperties(cax, ca);
-                    }
-                    cp.caRepo.save(ca);
-                } catch (Exception e) {
-                    logger.error("===>> ERROR Parsing Sheet: " + sheetName + ", id:" + clubName +", ", e);
-                    continue;
-                }
+                return;
             }
         }
+
+        Ca ca = new Ca();
+        ca.setLastModified(new Date());
+        ca.setClubId(clubId);
+        ca.setCaYear(cp.year);
+        ca.setCaMonth(cp.month);
+
+        setupCa(sh, ca);
+
+        Ca cax = cp.caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth());
+        if (cax != null) {
+            BeanUtils.copyProperties(cax, ca);
+        }
+        cp.caRepo.save(ca);
+
+        logger.info("*** Saved CA : "+sh.getSheetName() + " ***");
     }
 
     private void setupCa(Sheet sh, Ca ca) {
@@ -270,20 +248,20 @@ public class CaDataHandler {
         try {String value = cp.getCellValue(sh.getRow(36).getCell(8));ca.setSvcLoyal5(value);} catch (Exception e) {}
 
         try {String value = cp.getCellValue(sh.getRow(39).getCell(3));ca.setCmPostFlyer0(value.length() > 0);} catch (Exception e) {}
-        try {ca.setCmPostFlyer1((int)sh.getRow(39).getCell(4).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmPostFlyer2((int)sh.getRow(39).getCell(5).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmPostFlyer3((int)sh.getRow(39).getCell(6).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmPostFlyer4((int)sh.getRow(39).getCell(7).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmPostFlyer5((int)sh.getRow(39).getCell(8).getNumericCellValue());} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(39).getCell(9));ca.setCmPostFlyer6((int)cellValue.getNumberValue());} catch (Exception e) {}
+        try {ca.setCmPostFlyer1((int) sh.getRow(39).getCell(4).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmPostFlyer2((int) sh.getRow(39).getCell(5).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmPostFlyer3((int) sh.getRow(39).getCell(6).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmPostFlyer4((int) sh.getRow(39).getCell(7).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmPostFlyer5((int) sh.getRow(39).getCell(8).getNumericCellValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(39).getCell(9));ca.setCmPostFlyer6((int) cellValue.getNumberValue());} catch (Exception e) {}
 
         try {String value = cp.getCellValue(sh.getRow(40).getCell(3));ca.setCmHandFlyerHours0(value.length() > 0);} catch (Exception e) {}
-        try {ca.setCmHandFlyerHours1((float)sh.getRow(40).getCell(4).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmHandFlyerHours2((float)sh.getRow(40).getCell(5).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmHandFlyerHours3((float)sh.getRow(40).getCell(6).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmHandFlyerHours4((float)sh.getRow(40).getCell(7).getNumericCellValue());} catch (Exception e) {}
-        try {ca.setCmHandFlyerHours5((float)sh.getRow(40).getCell(8).getNumericCellValue());} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(40).getCell(9));ca.setCmHandFlyerHours6((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {ca.setCmHandFlyerHours1((float) sh.getRow(40).getCell(4).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmHandFlyerHours2((float) sh.getRow(40).getCell(5).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmHandFlyerHours3((float) sh.getRow(40).getCell(6).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmHandFlyerHours4((float) sh.getRow(40).getCell(7).getNumericCellValue());} catch (Exception e) {}
+        try {ca.setCmHandFlyerHours5((float) sh.getRow(40).getCell(8).getNumericCellValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(40).getCell(9));ca.setCmHandFlyerHours6((float) cellValue.getNumberValue());} catch (Exception e) {}
 
         try {String value = cp.getCellValue(sh.getRow(41).getCell(3));ca.setCmOutGp0(value.length() > 0);} catch (Exception e) {}
         try {ca.setCmOutGp1((int)sh.getRow(41).getCell(4).getNumericCellValue());} catch (Exception e) {}
@@ -526,11 +504,11 @@ public class CaDataHandler {
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(72).getCell(9));ca.setCmOutApptRatio6((float)cellValue.getNumberValue());} catch (Exception e) {}
 
         try {String value = cp.getCellValue(sh.getRow(73).getCell(3));ca.setCmPostPerApo0(value.length() > 0);} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(73).getCell(9));ca.setCmPostPerApo6((int)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(73).getCell(9));ca.setCmPostPerApo6((int) cellValue.getNumberValue());} catch (Exception e) {}
         try {String value = cp.getCellValue(sh.getRow(74).getCell(3));ca.setCmHandHoursPerApo0(value.length() > 0);} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(74).getCell(9));ca.setCmHandHoursPerApo6((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(74).getCell(9));ca.setCmHandHoursPerApo6((float) cellValue.getNumberValue());} catch (Exception e) {}
         try {String value = cp.getCellValue(sh.getRow(75).getCell(3));ca.setCmOutGpHoursPerApo0(value.length() > 0);} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(75).getCell(9));ca.setCmOutGpHoursPerApo6((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(75).getCell(9));ca.setCmOutGpHoursPerApo6((float) cellValue.getNumberValue());} catch (Exception e) {}
 
         try {String value = cp.getCellValue(sh.getRow(76).getCell(3));ca.setCmBrAgpRatio0(value.length() > 0);} catch (Exception e) {}
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(76).getCell(4));ca.setCmBrAgpRatio1((float)cellValue.getNumberValue());} catch (Exception e) {}

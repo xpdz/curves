@@ -22,6 +22,8 @@ $.getJSON("/rest/whoami", function(club) {
 $('.input-group.date').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
+    autoclose: true,
+    format: "yyyy-mm",
     language: "zh-TW",
     todayHighlight: true
 });
@@ -66,6 +68,26 @@ $('.toggleV').click(function() {
         return;
     }
     $(this).text(($(this).text().length == 0) ? 'v' : '');
+});
+
+$('td[contenteditable="true"]').focusout(function() {
+    runFormula();
+});
+
+$('td[contenteditable="true"]').keydown(function (e) {
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+         // Allow: Ctrl+A
+        (e.keyCode == 65 && e.ctrlKey === true) ||
+         // Allow: home, end, left, right
+        (e.keyCode >= 35 && e.keyCode <= 39)) {
+             // let it happen, don't do anything
+             return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+    }
 });
 
 function fillSheet(ca) {
@@ -1142,7 +1164,8 @@ function fillSheet(ca) {
 
 // save CA
 $("#btnSave").click(function() {
-    $('#btnSave').prop("disabled", true);
+    $('#btnSave').attr("disabled", true);
+    $('.alert').html('<i class="fa fa-spinner"></i>');
 
     runFormula();
 
@@ -2026,19 +2049,16 @@ $("#btnSave").click(function() {
         'data': JSON.stringify(ca),
         'dataType': 'json'
     }).done(function() {
-        alert("Save successfully.");
+        $('.alert').removeClass('alert-danger');
+        $('.alert').addClass('alert-success');
+        $('.alert').text("Save successfully.");
     }).fail(function() {
-        alert("oops! Save failed, please try again.");
+        $('.alert').removeClass('alert-success');
+        $('.alert').addClass('alert-danger');
+        $('.alert').text("Save Fail. Please refresh and retry.");
     });
 
-    $('td').each(function() {
-        var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0%' || valueX === '0.0' || valueX === '0.0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-            $(this).text('');
-        }
-    });
-
-    $('#btnSave').prop("disabled", false);
+    $('#btnSave').attr("disabled", false);
 });
 
 function runFormula() {
@@ -2569,6 +2589,13 @@ function runFormula() {
     if (aman != 0) {
         $('#clubSalesRatio').text((ama*100/aman).toFixed(0) + '%');
     }
+
+    $('td[contenteditable!="true"]').each(function() {
+        var valueX = $(this).text();
+        if (valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+            $(this).text('');
+        }
+    });
 }
 
 });

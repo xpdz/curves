@@ -24,6 +24,8 @@ $.getJSON("/rest/whoami", function(club) {
 $('.input-group.date').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
+    autoclose: true,
+    format: "yyyy-mm",
     language: "zh-TW",
     todayHighlight: true
 });
@@ -55,6 +57,7 @@ function getPJ() {
         $('td[contenteditable="false"]').css('border', '1px dashed green !important');
     } else {
         $('#btnSave').attr("disabled", true);
+        $('#btnSave').toggleClass('btn-success btn-default')
         $('td[contenteditable="true"]').attr('contenteditable', 'false');
         $('td[contenteditable="false"]').css('border', '1px solid #ddd !important');
     }
@@ -217,9 +220,29 @@ function fillSummary(pjSum) {
       )
     );
 
+    $('td[contenteditable="true"]').focusout(function() {
+        runFormula();
+    });
+
+    $('td[contenteditable="true"]').keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
     $('td').each(function() {
         var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+        if (valueX === '0' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
             $(this).text('');
         }
     });
@@ -227,6 +250,9 @@ function fillSummary(pjSum) {
 
 // save PJ
 $("#btnSave").click(function() {
+    $(this).attr('disabled', true);
+    $('.alert').html('<i class="fa fa-spinner"></i>');
+
     var lastDayOfMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
 
     runFormula(lastDayOfMonth);
@@ -331,17 +357,16 @@ $("#btnSave").click(function() {
         'data': JSON.stringify(pjSum),
         'dataType': 'json'
     }).done(function() {
-        alert("Save successfully.");
+        $('.alert').removeClass('alert-danger');
+        $('.alert').addClass('alert-success');
+        $('.alert').text("Save successfully.");
     }).fail(function() {
-        alert("oops! Save failed, please try again.");
+        $('.alert').removeClass('alert-success');
+        $('.alert').addClass('alert-danger');
+        $('.alert').text("Save Fail. Please refresh and retry.");
     });
 
-    $('td').each(function() {
-        var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-            $(this).text('');
-        }
-    });
+    $(this).attr('disabled', false);
 });
 
 function runFormula(lastDayOfMonth) {
@@ -440,6 +465,13 @@ function runFormula(lastDayOfMonth) {
         var leaves = Number($('#leaves').text());
         $('#leaveRatio').text((leaves*100/enrolled).toFixed(1) + "%");
     }
+
+    $('td[contenteditable!="true"]').each(function() {
+        var valueX = $(this).text();
+        if (valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+            $(this).text('');
+        }
+    });
 }
 
 });

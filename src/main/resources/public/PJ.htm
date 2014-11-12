@@ -57,6 +57,9 @@
     <div class="col-md-1">
       <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
     </div>
+    <div class="col-md-3">
+      <div class="alert" role="alert"></div>
+    </div>
   </div>
   <div class="row" style="padding:10px 14px">
     <div class="table-responsive">
@@ -66,25 +69,22 @@
             <th style="color: red">加盟店編號</th>
             <th style="color: red">年份</th>
             <th style="color: red">月份</th>
-            <th style="color: red"></th>
+            <th rowspan="2" style="color: red"></th>
             <th style="color: red">新銷售</th>
             <th style="color: red">退會</th>
             <th style="color: red">移入</th>
             <th style="color: red">移出</th>
             <th style="color: red">純增</th>
-            <th colspan="25"></th>
           </tr>
           <tr>
             <th id="clubId"></th>
             <th id="year"></th>
             <th id="month"></th>
-            <th></th>
             <th id="newSales"></th>
             <th id="exits"></th>
             <th contenteditable="true" id="shiftIn"></th>
             <th contenteditable="true" id="shiftOut"></th>
             <th id="increment"></th>
-            <th colspan="25"></th>
           </tr>
           <tr>
             <th style="color: red">本月總營收</th>
@@ -94,12 +94,12 @@
             <th style="color: red">銷售率</th>
             <th style="color: red">退會率</th>
             <th style="color: red">請假率</th>
-            <th colspan="2"></th>
-            <th colspan="4">詢問/APO</th>
-            <th colspan="16">有來FA的人的來源</th>
-            <th>FA總數</th>
-            <th colspan="3">入會數</th>
-            <th>退會數</th>
+            <th colspan="2" rowspan="2"></th>
+            <th rowspan="2" colspan="4" style="background-color: #B7DEE8">詢問/APO</th>
+            <th colspan="16" style="background-color: #FF99CC">有來FA的人的來源</th>
+            <th rowspan="2" style="background-color: #FF99CC">FA總數</th>
+            <th rowspan="2" colspan="3" style="background-color: #CCFFFF">入會數</th>
+            <th rowspan="2" style="background-color: #CCFFFF">退會數</th>
           </tr>
           <tr>
           <tr>
@@ -112,13 +112,10 @@
             <th id="leaveRatio"></th>
             <th colspan="2"></th>
             <th colspan="4"></th>
-            <th colspan="2">BRs</th>
-            <th colspan="6">Branded</th>
-            <th colspan="4">AGP：Incoming Calls</th>
-            <th colspan="4">AGP：Outgoing Calls</th>
-            <th></th>
-            <th colspan="3"></th>
-            <th></th>
+            <th colspan="2" style="background-color: #FF99CC">BRs</th>
+            <th colspan="6" style="background-color: #FF99CC">Branded</th>
+            <th colspan="4" style="background-color: #FF99CC">AGP：Incoming Calls</th>
+            <th colspan="4" style="background-color: #FF99CC">AGP：Outgoing Calls</th>
           </tr>
           <tr>
             <th>日期<br>Day</th>

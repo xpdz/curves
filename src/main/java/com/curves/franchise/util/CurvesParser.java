@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
 public class CurvesParser {
     private Logger logger = LoggerFactory.getLogger(CurvesParser.class);
 
+    Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    File baseDir = null;
+    File dataFolder = null;
     List<File> allPJ = new ArrayList<>();
     List<File> allCA = new ArrayList<>();
     List<File> allOthers = new ArrayList<>();
@@ -29,27 +30,61 @@ public class CurvesParser {
 
     FormulaEvaluator evaluator = null;
 
-    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, int year, int month) {
+    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, int year, int month, String folder) {
         this.pjSumRepo = pjSumRepo;
         this.caRepo = caRepo;
-        if (year == -1 && month == -1) {
-            sortFiles("C:\\Users\\212307274\\Projects\\Franchise\\doc\\data\\test");
-        } else if (month > 12) {
-            sortFiles("C:\\Users\\212307274\\Projects\\Franchise\\doc\\data\\" + year);
-        } else {
-            sortFiles("C:\\Users\\212307274\\Projects\\Franchise\\doc\\data\\" + year + "\\" + year + "0" + month);
-        }
+        String home = System.getProperty("user.home");
+        logger.info("user.home: "+home);
+        home += File.separator + folder.replace("-", File.separator);
+        logger.info("folder: "+home);
+        dataFolder = new File(home);
+//        sortFiles(dataFolder);
         buildClubNameIdMap();
         this.year = year;
         this.month = month - 1;
     }
 
-    public void processPJ() {
-        new PjDataHandler(this).processPJ();
-    }
+    public void processAll() {
+        Collection<File> allFiles = FileUtils.listFiles(dataFolder, null, true);
+        int clubId = -1;
+        for (File f : allFiles) {
+            Workbook wb = null;
+            try {
+                wb = WorkbookFactory.create(f);
 
-    public void processCA() {
-        new CaDataHandler(this).processCA();
+                clubId = getIdByName(parseChinese(f.getName()));
+            } catch (Exception e) {
+                logger.error(">>> OPEN FILE ERROR: "+f);
+                allOthers.add(f);
+                continue;
+            }
+
+            logger.info("--- open file ---"+f);
+
+            for (int i = 0; i < wb.getNumberOfSheets(); i++) {
+                Sheet sh = wb.getSheetAt(i);
+                String sheetName = sh.getSheetName();
+                try {
+                    int rows = sh.getLastRowNum();
+                    int columns = sh.getRow(0).getPhysicalNumberOfCells();
+                    if (rows > 100 && columns < 26) {
+                        allCA.add(f);
+//                        logger.info("--- processing CA ---"+sheetName);
+                        FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                        new CaDataHandler(this).processCA(sh, evaluator, clubId);
+                    } else if (rows < 80 && columns > 30) {
+                        allPJ.add(f);
+//                        logger.info("=== processing PJ ==="+sheetName);
+                        FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                        new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+                    } else {
+                        allOthers.add(f);
+                    }
+                } catch (Exception e) {
+                    logger.error(">>> ERROR <<< file: " + f + ", sheet: " + sheetName, e);
+                }
+            }
+        }
     }
 
     int getCellIntValue(Sheet sh, int row, int col) {
@@ -68,16 +103,19 @@ public class CurvesParser {
     }
 
     String parseChinese(String s) {
-        Pattern pat = Pattern.compile("([\\u4e00-\\u9fa5]+)");
-        Matcher mat = pat.matcher(s);
+        Matcher mat = chinesePattern.matcher(s);
         if (mat.find()) {
             return mat.group(0);
         }
         return "";
     }
 
-    String getClubNameFromFileName(File f) {
-        return parseChinese(f.getName());
+    String replaceChinese(String src, String target) {
+        Matcher mat = chinesePattern.matcher(src);
+        if (mat.find()) {
+            return mat.replaceAll(target);
+        }
+        return "";
     }
 
     String getCellValue(Cell cell) {
@@ -139,26 +177,5 @@ public class CurvesParser {
             }
         }
         return -1;
-    }
-
-    boolean isSheetNameMatch(String name) {
-        return (name.startsWith(year+"") && name.endsWith(month+""));
-    }
-
-    void sortFiles(String baseFolder) {
-        baseDir = new File(baseFolder);
-        Collection<File> allFiles = FileUtils.listFiles(baseDir, null, true);
-        logger.info("=== files count: " + allFiles.size());
-        for (File f : allFiles) {
-            String fName = f.getName().toUpperCase();
-            if (fName.indexOf("CA") != -1) {
-                allCA.add(f);
-            } else if (fName.indexOf("PJ") != -1) {
-                allPJ.add(f);
-            } else {
-                allOthers.add(f);
-            }
-        }
-        logger.info("---PJ:"+allPJ.size()+",CA:"+allCA.size()+",others:"+allOthers.size());
     }
 }

@@ -43,16 +43,17 @@
         </div>
         <!-- /.container-fluid -->
       </nav>
-      <div class="row well" style="padding:10px 10px 10px 10px">
+      <div class="row">
         <div class="col-md-2">
-          <div class="row">
-            <div class="input-group date">
-              <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
+          <div class="input-group date">
+            <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
           <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
+        </div>
+        <div class="col-md-3">
+          <div class="alert" role="alert"></div>
         </div>
         <div class="col-md-2">
           <h4>Club：<span class="label label-default" id="clubName"></span></h4>
@@ -64,7 +65,7 @@
           <h4>店長：<span class="label label-default" id="mgr"></span></h4>
         </div>
       </div>
-      <div style="padding:0 19px">
+      <div>
         <ul id="myTab" class="nav nav-tabs" role="tablist">
           <li class="active"><a href="#goalsTab" role="tab" data-toggle="tab">Goals</a></li>
           <li><a href="#thisPlanTab" role="tab" data-toggle="tab">本月行動計畫</a></li>

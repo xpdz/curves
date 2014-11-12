@@ -65,10 +65,8 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/data", method = RequestMethod.GET)
-    public String processData(@RequestParam("year") int year, @RequestParam("month") int month) throws Exception {
-        CurvesParser cp = new CurvesParser(pjSumRepo, caRepo, year, month);
-        cp.processCA();
-        cp.processPJ();
+    public String processData(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("folder") String folder) throws Exception {
+        new CurvesParser(pjSumRepo, caRepo, year, month, folder).processAll();
         return "completed";
     }
 }

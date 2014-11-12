@@ -14,6 +14,8 @@ var mStart = dt.getMonth();
 $('#x1Date').val(yStart + '-' + (mStart+1));
 $('#x1Date').datepicker({
     minViewMode: 1,
+    autoclose: true,
+    format: "yyyy-mm",
     language: "zh-TW",
     todayHighlight: true
 });
@@ -24,7 +26,8 @@ $('#x1Date').datepicker().on('changeDate', function(ev) {
 $('#x2Date').val(yEnd + '-' + (mEnd+1));
 $('#x2Date').datepicker({
     minViewMode: 1,
-    todayBtn: "linked",
+    autoclose: true,
+    format: "yyyy-mm",
     language: "zh-TW",
     todayHighlight: true
 });
