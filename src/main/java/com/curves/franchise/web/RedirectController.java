@@ -54,8 +54,7 @@ public class RedirectController {
 
     @RequestMapping("/rest/whoami")
     public @ResponseBody Club whoAmI(@AuthenticationPrincipal UserDetails user) {
-        Club club = clubRepo.findOne(Integer.parseInt(user.getUsername()));
-        return club;
+        return clubRepo.findOne(Integer.parseInt(user.getUsername()));
     }
 
     @RequestMapping("/errorMsg")
@@ -65,8 +64,7 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/data", method = RequestMethod.GET)
-    public String processData(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("folder") String folder) throws Exception {
+    public void processData(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("folder") String folder) throws Exception {
         new CurvesParser(pjSumRepo, caRepo, year, month, folder).processAll();
-        return "completed";
     }
 }

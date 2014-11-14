@@ -13,7 +13,7 @@ var currentMonth = thisMonth;
 getBenchmarking();
 
 // init date picker
-$('.input-group.date').val(thisYear+"-"+(thisMonth+1));
+$('#monthPicker').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
     autoclose: true,
@@ -44,8 +44,18 @@ function getBenchmarking() {
         makeSliderX('#SalesAch', data, 'SalesAch');
         makeSliderX('#SalesRatio', data, 'SalesRatio');
     }).fail(function() {
-        alert("oops! I cannot find data, please refresh.");
+        showAlert("alert-danger", "Cannot find data, please refresh and retry.");
     });
+}
+
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
 }
 
 function makeSliderX(sliderId, sliderData, dataType) {

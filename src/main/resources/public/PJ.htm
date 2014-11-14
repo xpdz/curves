@@ -51,14 +51,14 @@
   <div class="row">
     <div class="col-md-2">
       <div class="input-group date">
-        <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+        <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
     <div class="col-md-1">
       <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
     </div>
     <div class="col-md-3">
-      <div class="alert" role="alert"></div>
+      <div class="alert hide" role="alert"></div>
     </div>
   </div>
   <div class="row" style="padding:10px 14px">
@@ -97,7 +97,7 @@
             <th colspan="2" rowspan="2"></th>
             <th rowspan="2" colspan="4" style="background-color: #B7DEE8">詢問/APO</th>
             <th colspan="16" style="background-color: #FF99CC">有來FA的人的來源</th>
-            <th rowspan="2" style="background-color: #FF99CC">FA總數</th>
+            <th rowspan="2" style="background-color: LightGray">FA總數</th>
             <th rowspan="2" colspan="3" style="background-color: #CCFFFF">入會數</th>
             <th rowspan="2" style="background-color: #CCFFFF">退會數</th>
           </tr>
@@ -151,7 +151,7 @@
             <th>ACH 或 信用卡</th>
             <th>月繳或季繳<br>Monthly Member</th>
             <th>年繳<br>All Prepays</th>
-            <th>退會數<br>Member Cansels</th>
+            <th>退會數<br>Member Cancels</th>
           </tr>
         </thead>
         <tbody id="tbd">

@@ -9,7 +9,7 @@ var currentYear = thisYear;
 var currentMonth = thisMonth;
 
 // init date picker
-$('.input-group.date').val(thisYear+"-"+(thisMonth+1));
+$('#monthPicker').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
     autoclose: true,
@@ -68,8 +68,18 @@ function getUsReport() {
             ));
         }
     }).fail(function() {
-        alert("oops! I cannot find goal, please try again.");
+        showAlert("alert-danger", "Cannot find goal, please refresh and retry.");
     });
+}
+
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
 }
 
 });

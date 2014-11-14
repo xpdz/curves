@@ -54,10 +54,13 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/goal", method = RequestMethod.POST)
     @ResponseBody
-    public String saveGoal(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("item") String item, @RequestParam("value") float value) {
+    public Long saveGoal(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("item") String item, @RequestParam("value") float value) {
+        logger.info("Save goal, item: "+item+", value: "+value+" @ "+year+"-"+month);
         Goal goal = goalRepo.findByGYearAndGMonth(year, month);
         if (goal == null) {
             goal = new Goal();
+            goal.setgYear(year);
+            goal.setgMonth(month);
         }
         if ("newSalesRevenue".equals(item) || "duesDraftRevenue".equals(item) ||
                 "productsRevenue".equals(item) || "revenue".equals(item)) {
@@ -99,8 +102,8 @@ public class ManagementController {
                 goal.setCmInAgpOut6((int)value);
             }
         }
-        Goal g = goalRepo.save(goal);
-        return g.getId()+"";
+        goal = goalRepo.save(goal);
+        return goal.getId();
     }
 
     @RequestMapping(value = "/rest/rank", method = RequestMethod.GET)

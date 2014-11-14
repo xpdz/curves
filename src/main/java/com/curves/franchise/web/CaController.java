@@ -21,14 +21,17 @@ public class CaController {
                                            @AuthenticationPrincipal UserDetails user) {
         logger.info("=== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
+        if (ca == null) {
+            ca = new Ca();
+        }
         return ca;
     }
 
     @RequestMapping(value = "/rest/CA", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public String saveCA(@RequestBody Ca ca) {
+    public Long saveCA(@RequestBody Ca ca) {
         logger.info("--SaveCA--ID:"+ca.getId()+", club: "+ca.getClubId()+" @ "+ca.getCaYear()+"-"+(ca.getCaMonth()+1)+", plan:"+ca.getThisPlan());
         caRepo.save(ca);
-        return "" + ca.getId();
+        return ca.getId();
     }
 }

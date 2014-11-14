@@ -21,14 +21,17 @@ public class PjSumController {
                                            @AuthenticationPrincipal UserDetails user) {
         logger.info("=== user: " + user.getUsername() + " get PJ - " + year + "." + (month+1));
         PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(Integer.parseInt(user.getUsername()), year, month);
+        if (pjSum == null) {
+            pjSum = new PjSum();
+        }
         return pjSum;
     }
 
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public String savePJ(@RequestBody PjSum pjSum) {
+    public Long savePJ(@RequestBody PjSum pjSum) {
         logger.info("--SavePJ--ID:"+pjSum.getId()+", club: "+pjSum.getClubId()+"@"+pjSum.getYear()+"-"+(pjSum.getMonth()+1));
         pjSumRepo.save(pjSum);
-        return "" + pjSum.getId();
+        return pjSum.getId();
     }
 }

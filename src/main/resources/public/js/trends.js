@@ -121,8 +121,18 @@ console.log("---"+yStart+","+yEnd+",,,"+mStart+","+mEnd);
         lineData.datasets[0].data = respData.SalesRatio;
         chartSalesRatio.Line(lineData, chartOption);
     }).fail(function() {
-        alert("oops! I cannot find data, please refresh.");
+        showAlert("alert-danger", "Cannot find data, please refresh and retry.");
     });
+}
+
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
 }
 
 });

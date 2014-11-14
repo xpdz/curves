@@ -11,7 +11,7 @@ var currentYear = thisYear;
 var currentMonth = thisMonth;
 
 // init date picker
-$('.input-group.date').val(thisYear+"-"+(thisMonth+1));
+$('#monthPicker').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
     autoclose: true,
@@ -25,6 +25,7 @@ $('.input-group.date').datepicker().on('changeDate', function(ev) {
     getRank();
 });
 
+getGoal();
 getRank();
 
 $('#btnSave').click(function() {
@@ -32,13 +33,9 @@ $('#btnSave').click(function() {
 
     $.post("/rest/goal", {year: currentYear, month: currentMonth, item: item, value: value})
         .done(function() {
-            $('.alert').removeClass('alert-danger');
-            $('.alert').addClass('alert-success');
-            $('.alert').text("Save successfully.");
+            showAlert("alert-success", "Save successfully.");
         }).fail(function() {
-            $('.alert').removeClass('alert-success');
-            $('.alert').addClass('alert-danger');
-            $('.alert').text("Save Fail. Please refresh and retry.");
+            showAlert("alert-danger", "Save Fail. Please refresh and retry.");
         });
 });
 
@@ -49,13 +46,21 @@ $('a').click(function() {
     getRank();
 });
 
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
+}
+
 function getGoal() {
     $.getJSON("/rest/goal", {year: currentYear, month: currentMonth}, function(goal) {
-        if (goal && goal[item]) {
-            $('#thisGoal').val(formatValue(goal[item]));
-        }
+        $('#thisGoal').val(formatValue(goal[item]));
     }).fail(function() {
-        alert("oops! I cannot find goal, please try again.");
+        showAlert("alert-danger", "Cannot find goal. Please refresh and retry.");
     });
 }
 
@@ -74,7 +79,7 @@ function getRank() {
         });
         $('#avgRank').text(formatValue(amount/counter));
     }).fail(function() {
-        alert("oops! I cannot find clubs, please try again.");
+        showAlert("alert-danger", "Cannot find data. Please refresh and retry.");
     });
 }
 

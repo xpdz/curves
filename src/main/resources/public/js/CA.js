@@ -15,11 +15,11 @@ $.getJSON("/rest/whoami", function(club) {
     $('#owner').text(club.owner);
     $('#mgr').text(club.mgr);
 }).fail(function() {
-    alert("oops! I cannot find your ID, please logout and login again.");
+    showAlert("alert-danger", "Cannot find club info. Please refresh and retry.");
 });
 
 // init date picker
-$('.input-group.date').val(thisYear+"-"+(thisMonth+1));
+$('#monthPicker').val(thisYear+"-"+(thisMonth+1));
 $('.input-group.date').datepicker({
     minViewMode: 1,
     autoclose: true,
@@ -36,9 +36,21 @@ $('.input-group.date').datepicker().on('changeDate', function(ev) {
 // init CA page
 getCA();
 
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
+}
+
 function getCA() {
     $.getJSON("/rest/CA", {caYear: currentYear, caMonth: currentMonth}, function(ca) {
         fillSheet(ca);
+    }).fail(function() {
+        showAlert("alert-danger", "Cannot load data. Please refresh and retry.");
     });
 
     if (currentYear == thisYear && currentMonth == thisMonth) {
@@ -91,7 +103,7 @@ $('td[contenteditable="true"]').keydown(function (e) {
 });
 
 function fillSheet(ca) {
-    caId = ca.id;
+    caId = ca.id || -1;
     $('#goalsTm').text(ca.goalsTm);
     $('#goalsLastTm').text(ca.goalsLastTm);
     $('#goalsLastActive').text(ca.goalsLastActive);
@@ -1154,18 +1166,12 @@ function fillSheet(ca) {
 
     $('#nextPlan').val(ca.nextPlan);
 
-    $('td').each(function() {
-        var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0%' || valueX === '0.0' || valueX === '0.0%' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-            $(this).text('');
-        }
-    });
+    clearZero();
 }
 
 // save CA
 $("#btnSave").click(function() {
     $('#btnSave').attr("disabled", true);
-    $('.alert').html('<i class="fa fa-spinner"></i>');
 
     runFormula();
 
@@ -2048,14 +2054,11 @@ $("#btnSave").click(function() {
         'url': "/rest/CA",
         'data': JSON.stringify(ca),
         'dataType': 'json'
-    }).done(function() {
-        $('.alert').removeClass('alert-danger');
-        $('.alert').addClass('alert-success');
-        $('.alert').text("Save successfully.");
+    }).done(function(data) {
+        caId = data;
+        showAlert("alert-success", "Save successfully.");
     }).fail(function() {
-        $('.alert').removeClass('alert-success');
-        $('.alert').addClass('alert-danger');
-        $('.alert').text("Save Fail. Please refresh and retry.");
+        showAlert("alert-danger", "Save Fail. Please refresh and retry.");
     });
 
     $('#btnSave').attr("disabled", false);
@@ -2590,9 +2593,22 @@ function runFormula() {
         $('#clubSalesRatio').text((ama*100/aman).toFixed(0) + '%');
     }
 
-    $('td[contenteditable!="true"]').each(function() {
+    clearNaN();
+}
+
+function clearNaN() {
+    $('td').each(function() {
         var valueX = $(this).text();
-        if (valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+        if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+            $(this).text('');
+        }
+    });
+}
+
+function clearZero() {
+    $('td[contenteditable="true"]').each(function() {
+        var valueX = $(this).text();
+        if (valueX === '0' || valueX === '0.0') {
             $(this).text('');
         }
     });

@@ -43,14 +43,11 @@
 			</nav>
       <div class="row">
         <div class="col-md-2">
-          <h4>Average : <span class="label label-default" id="avgRank"></span></h4>
-        </div>
-        <div class="col-md-2">
           <div class="input-group date">
-            <input type="text" class="form-control" data-date-format="yyyy-mm"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="btn-group">
             <button type="button" class="btn btn-info">Benchmarking</button>
             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
@@ -81,15 +78,18 @@
         <div class="col-md-1">
           <input type="text" class="form-control" id="thisGoal" value="" placeholder="本月目標">
         </div>
-        <div class="col-md-1">
-          <button type="button" class="btn btn-success" id="btnSave">Save</button>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-success" id="btnSave"><span class="glyphicon glyphicon-ok"></span> Save</button>
+        </div>
+        <div class="col-md-2">
+          <h4>Average : <span class="label label-default" id="avgRank"></span></h4>
         </div>
         <div class="col-md-3">
-          <div class="alert" role="alert"></div>
+          <div class="alert hide" role="alert"></div>
         </div>
       </div>
-			<div class="row" align="center">
-				<div class="col-xs-8 col-md-10" align="center">
+			<div class="row">
+				<div class="col-md-12">
 					<table class="table table-bordered table-hover table-condensed">
 						<thead>
 							<tr>

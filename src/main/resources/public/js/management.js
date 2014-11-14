@@ -17,8 +17,18 @@ function getClubs() {
             ));
         }
     }).fail(function() {
-        alert("oops! I cannot find clubs, please try again.");
+        showAlert("alert-danger", "Cannot find clubs, please refresh and retry.");
     });
+}
+
+function showAlert(alertClass, msg) {
+    $('.alert').removeClass('hide');
+    $('.alert').addClass(alertClass);
+    $('.alert').text(msg);
+    setTimeout(function() {
+        $('.alert').addClass('hide');
+        $('.alert').removeClass(alertClass);
+    }, 5000);
 }
 
 });
