@@ -7,10 +7,9 @@ var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var $tbd = $("#tbd");
 
 var today = new Date();
-var thisYear = today.getFullYear();
-var thisMonth = today.getMonth();
-var currentYear = thisYear;
-var currentMonth = thisMonth;
+var thisYear = today.getFullYear(), thisMonth = today.getMonth(),
+    currentYear = thisYear, currentMonth = thisMonth;
+var lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
 // init user ID / club ID
 $.getJSON("/rest/whoami", function(club) {
@@ -58,17 +57,6 @@ function getPJ() {
     }).fail(function() {
         showAlert("alert-danger", "Cannot load data. Please refresh and retry.");
     });
-
-    if (currentYear == thisYear && currentMonth == thisMonth) {
-        $('#btnSave').attr("disabled", false);
-        $('td[contenteditable="false"]').attr('contenteditable', 'true');
-        $('td[contenteditable="false"]').css('border', '1px dashed green !important');
-    } else {
-        $('#btnSave').attr("disabled", true);
-        $('#btnSave').toggleClass('btn-success btn-default')
-        $('td[contenteditable="true"]').attr('contenteditable', 'false');
-        $('td[contenteditable="false"]').css('border', '1px solid #ddd !important');
-    }
 }
 
 function fillSheet(pjSum) {
@@ -77,7 +65,7 @@ function fillSheet(pjSum) {
     $('#exits').text(pjSum.exits);
     $('#shiftIn').text(pjSum.shiftIn);
     $('#shiftOut').text(pjSum.shiftIn);
-    $('#increment').text(pjSum.delta);
+    $('#increment').text(pjSum.increment);
     $('#revenue').text(pjSum.revenue);
     $('#enrolled').text(pjSum.enrolled);
     $('#leaves').text(pjSum.leaves);
@@ -85,8 +73,7 @@ function fillSheet(pjSum) {
     $('#salesRatio').text((pjSum.salesRatio*100).toFixed(0)+'%');
     $('#exitRatio').text((pjSum.exitRatio*100).toFixed(1)+'%');
     $('#leaveRatio').text((pjSum.leaveRatio*100).toFixed(1)+'%');
-    var dt = new Date(currentYear, currentMonth+1, 0);
-    for (var idx = 1; idx <= dt.getDate(); idx++) {
+    for (var idx = 1; idx <= lastDayOfMonth; idx++) {
         var pj = pjSum.pjSet[idx-1];
         if ( !pj ) {
             pj = {};
@@ -132,6 +119,17 @@ function fillSheet(pjSum) {
             $('<td id="exits-' + idx + '" contenteditable="true" style="background-color: #CCFFFF">' + pj.exits + '</td>')
           )
         );
+    }
+
+    if (currentYear === thisYear && currentMonth === thisMonth) {
+        $('#btnSave').prop("disabled", false);
+        $('td[contenteditable]').css('border', '1px dashed green !important');
+        $('td[contenteditable="false"]').prop('contenteditable', true);
+    } else {
+        $('#btnSave').prop("disabled", true);
+        $('#btnSave').toggleClass('btn-success btn-default')
+        $('td[contenteditable]').css('border', '1px solid #ddd !important');
+        $('td[contenteditable="true"]').prop('contenteditable', false);
     }
 
     clearZeroAndNaN();
@@ -194,24 +192,21 @@ function fillSummary(pjSum) {
       )
     );
 
-    $('td[contenteditable="true"]').focusout(function() {
-        runFormula();
+    $(function () {
+      $('[contenteditable]').tooltipster();
+    })
+    $('td[contenteditable]').focus(function() {
+        var xId = $(this).attr('id');
+        var idx = xId.split('-');
+        var xDate = currentYear+'-'+(currentMonth+1)+'-'+idx[1];
+        var ttl = $('#'+idx[0]+'Title').text();
+        $(this).tooltipster({multiple: true, updateAnimation: false, trigger: 'custom', position: 'top', content: ttl});
+        $(this).tooltipster({multiple: true, updateAnimation: false, trigger: 'custom', position: 'left', content: xDate});
+        $(this).tooltipster('show');
     });
 
-    $('td[contenteditable="true"]').keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-             // Allow: Ctrl+A
-            (e.keyCode == 65 && e.ctrlKey === true) ||
-             // Allow: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
+    $('td[contenteditable="true"]').focusout(function() {
+        runFormula();
     });
 }
 
@@ -244,11 +239,9 @@ function clearZeroAndNaN() {
 
 // save PJ
 $("#btnSave").click(function() {
-    $(this).attr('disabled', true);
+    $(this).prop('disabled', true);
 
-    var lastDayOfMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
-
-    runFormula(lastDayOfMonth);
+    runFormula();
 
     var pjSum = {};
     pjSum.id = pjSumId;
@@ -356,10 +349,10 @@ $("#btnSave").click(function() {
         showAlert("alert-danger", "Save Fail. Please refresh and retry.");
     });
 
-    $(this).attr('disabled', false);
+    $(this).prop('disabled', false);
 });
 
-function runFormula(lastDayOfMonth) {
+function runFormula() {
     var workingDays = 0, workOuts = 0, newSalesRevenue = 0, duesDraftsRevenue = 0, productsRevenue = 0, otherRevenue = 0, incomingCalls = 0, incomingApo = 0,
         outgoingCalls = 0, outgoingApo = 0, brOwnRef = 0, brOthersRef = 0, brandedNewspaper = 0, brandedTv = 0, brandedInternet = 0, brandedSign = 0,
         brandedMate = 0, brandedOthers = 0, agpInDirectMail = 0, agpInMailFlyer = 0, agpInHandFlyer = 0, agpInCp = 0, agpOutApoOut = 0, agpOutApoIn = 0,

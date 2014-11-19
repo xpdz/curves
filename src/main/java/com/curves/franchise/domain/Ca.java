@@ -32,210 +32,112 @@ public class Ca implements Serializable {
     private int goalsAppoints;
 
     // service
-    private boolean svcTm0;
     private int svcTm1, svcTm2, svcTm3, svcTm4, svcTm5, svcTm6;
-    private boolean svcShift0;
     private int svcShift1, svcShift2, svcShift3, svcShift4, svcShift5, svcShift6;
-    private boolean svcHold0;
     private int svcHold1, svcHold2, svcHold3, svcHold4, svcHold5, svcHold6;
-    private boolean svcActive0;
     private int svcActive1, svcActive2, svcActive3, svcActive4, svcActive5, svcActive6;
-    private boolean svcHoldRatio0;
     private float svcHoldRatio1, svcHoldRatio2, svcHoldRatio3, svcHoldRatio4, svcHoldRatio5, svcHoldRatio6;
-    private boolean svcTotalWo0;
     private int svcTotalWo1, svcTotalWo2, svcTotalWo3, svcTotalWo4, svcTotalWo5, svcTotalWo6;
-    private boolean svcAvgWo0;
     private float svcAvgWo1, svcAvgWo2, svcAvgWo3, svcAvgWo4, svcAvgWo5, svcAvgWo6;
-    private boolean svcMaxWo0;
     private int svcMaxWo1, svcMaxWo2, svcMaxWo3, svcMaxWo4, svcMaxWo5;
     private float svcMaxWo6;
-    private boolean svcExits0;
     private int svcExits1, svcExits2, svcExits3, svcExits4, svcExits5, svcExits6;
-    private boolean svcExitsRatio0;
     private float svcExitsRatio1, svcExitsRatio2, svcExitsRatio3, svcExitsRatio4, svcExitsRatio5, svcExitsRatio6;
-    private boolean svcMeasure0;
     private int svcMeasure1, svcMeasure2, svcMeasure3, svcMeasure4, svcMeasure5, svcMeasure6;
-    private boolean svcMeasureRatio0;
     private float svcMeasureRatio1, svcMeasureRatio2, svcMeasureRatio3, svcMeasureRatio4, svcMeasureRatio5, svcMeasureRatio6;
-    private boolean svc12_0;
     private int svc12_5;
     private float svc12_6;
-    private boolean svc8to11_0;
     private int svc8to11_5;
     private float svc8to11_6;
-    private boolean svc4to7_0;
     private int svc4to7_5;
     private float svc4to7_6;
-    private boolean svc1to3_0;
     private int svc1to3_5;
     private float svc1to3_6;
-    private boolean svc0_0;
     private int svc0_5;
     private float svc0_6;
-    private boolean svc3More0;
     private String svc3More1, svc3More2, svc3More3, svc3More4, svc3More5;
-    private boolean svcInactive0;
     private String svcInactive1, svcInactive2, svcInactive3, svcInactive4, svcInactive5;
-    private boolean svcFwoReview0;
     private String svcFwoReview1, svcFwoReview2, svcFwoReview3, svcFwoReview4, svcFwoReview5;
-    private boolean svcInterview0;
     private String svcInterview1, svcInterview2, svcInterview3, svcInterview4, svcInterview5;
-    private boolean svcThanks0;
     private String svcThanks1, svcThanks2, svcThanks3, svcThanks4, svcThanks5;
-    private boolean svc3C0;
     private String svc3C1, svc3C2, svc3C3, svc3C4, svc3C5;
-    private boolean svcReward0;
     private String svcReward1, svcReward2, svcReward3, svcReward4, svcReward5;
-    private boolean svcLoyal0;
     private String svcLoyal1, svcLoyal2, svcLoyal3, svcLoyal4, svcLoyal5;
     // customer make
-    private boolean cmPostFlyer0;
     private int cmPostFlyer1, cmPostFlyer2, cmPostFlyer3, cmPostFlyer4, cmPostFlyer5, cmPostFlyer6;
-    private boolean cmHandFlyer0;
     private int cmHandFlyer1, cmHandFlyer2, cmHandFlyer3, cmHandFlyer4, cmHandFlyer5, cmHandFlyer6;
-    private boolean cmHandFlyerHours0;
     private float cmHandFlyerHours1, cmHandFlyerHours2, cmHandFlyerHours3, cmHandFlyerHours4, cmHandFlyerHours5, cmHandFlyerHours6;
-    private boolean cmOutGpHours0;
     private float cmOutGpHours1, cmOutGpHours2, cmOutGpHours3, cmOutGpHours4, cmOutGpHours5, cmOutGpHours6;
-    private boolean cmOutGp0;
     private int cmOutGp1, cmOutGp2, cmOutGp3, cmOutGp4, cmOutGp5, cmOutGp6;
-    private boolean cmCpBox0;
     private int cmCpBox1, cmCpBox2, cmCpBox3, cmCpBox4, cmCpBox5, cmCpBox6;
-    private boolean cmOutGot0;
     private int cmOutGot1, cmOutGot2, cmOutGot3, cmOutGot4, cmOutGot5, cmOutGot6;
-    private boolean cmInGot0;
     private int cmInGot1, cmInGot2, cmInGot3, cmInGot4, cmInGot5, cmInGot6;
-    private boolean cmBlogGot0;
     private int cmBlogGot1, cmBlogGot2, cmBlogGot3, cmBlogGot4, cmBlogGot5, cmBlogGot6;
-    private boolean cmBagGot0;
     private int cmBagGot1, cmBagGot2, cmBagGot3, cmBagGot4, cmBagGot5, cmBagGot6;
-    private boolean cmTotalGot0;
     private int cmTotalGot1, cmTotalGot2, cmTotalGot3, cmTotalGot4, cmTotalGot5, cmTotalGot6;
-    private boolean cmCallIn0;
     private int cmCallIn1, cmCallIn2, cmCallIn3, cmCallIn4, cmCallIn5, cmCallIn6;
-    private boolean cmOutGotCall0;
     private int cmOutGotCall1, cmOutGotCall2, cmOutGotCall3, cmOutGotCall4, cmOutGotCall5, cmOutGotCall6;
-    private boolean cmInGotCall0;
     private int cmInGotCall1, cmInGotCall2, cmInGotCall3, cmInGotCall4, cmInGotCall5, cmInGotCall6;
-    private boolean cmBlogGotCall0;
     private int cmBlogGotCall1, cmBlogGotCall2, cmBlogGotCall3, cmBlogGotCall4, cmBlogGotCall5, cmBlogGotCall6;
-    private boolean cmBagGotCall0;
     private int cmBagGotCall1, cmBagGotCall2, cmBagGotCall3, cmBagGotCall4, cmBagGotCall5, cmBagGotCall6;
-    private boolean cmOwnRefs0;
     private int cmOwnRefs1, cmOwnRefs2, cmOwnRefs3, cmOwnRefs4, cmOwnRefs5, cmOwnRefs6;
-    private boolean cmOtherRefs0;
     private int cmOtherRefs1, cmOtherRefs2, cmOtherRefs3, cmOtherRefs4, cmOtherRefs5, cmOtherRefs6;
-    private boolean cmNewspaper0;
     private int cmNewspaper1, cmNewspaper2, cmNewspaper3, cmNewspaper4, cmNewspaper5, cmNewspaper6;
-    private boolean cmTv0;
     private int cmTv1, cmTv2, cmTv3, cmTv4, cmTv5, cmTv6;
-    private boolean cmInternet0;
     private int cmInternet1, cmInternet2, cmInternet3, cmInternet4, cmInternet5, cmInternet6;
-    private boolean cmSign0;
     private int cmSign1, cmSign2, cmSign3, cmSign4, cmSign5, cmSign6;
-    private boolean cmMate0;
     private int cmMate1, cmMate2, cmMate3, cmMate4, cmMate5, cmMate6;
-    private boolean cmOthers0;
     private int cmOthers1, cmOthers2, cmOthers3, cmOthers4, cmOthers5, cmOthers6;
-    private boolean cmMailAgpIn0;
     private int cmMailAgpIn1, cmMailAgpIn2, cmMailAgpIn3, cmMailAgpIn4, cmMailAgpIn5, cmMailAgpIn6;
-    private boolean cmPostFlyerAgpIn0;
     private int cmPostFlyerAgpIn1, cmPostFlyerAgpIn2, cmPostFlyerAgpIn3, cmPostFlyerAgpIn4, cmPostFlyerAgpIn5, cmPostFlyerAgpIn6;
-    private boolean cmHandFlyerAgpIn0;
     private int cmHandFlyerAgpIn1, cmHandFlyerAgpIn2, cmHandFlyerAgpIn3, cmHandFlyerAgpIn4, cmHandFlyerAgpIn5, cmHandFlyerAgpIn6;
-    private boolean cmCpAgpIn0;
     private int cmCpAgpIn1, cmCpAgpIn2, cmCpAgpIn3, cmCpAgpIn4, cmCpAgpIn5, cmCpAgpIn6;
-    private boolean cmOutAgpOut0;
     private int cmOutAgpOut1, cmOutAgpOut2, cmOutAgpOut3, cmOutAgpOut4, cmOutAgpOut5, cmOutAgpOut6;
-    private boolean cmInAgpOut0;
     private int cmInAgpOut1, cmInAgpOut2, cmInAgpOut3, cmInAgpOut4, cmInAgpOut5, cmInAgpOut6;
-    private boolean cmBlogAgpOut0;
     private int cmBlogAgpOut1, cmBlogAgpOut2, cmBlogAgpOut3, cmBlogAgpOut4, cmBlogAgpOut5, cmBlogAgpOut6;
-    private boolean cmBagAgpOut0;
     private int cmBagAgpOut1, cmBagAgpOut2, cmBagAgpOut3, cmBagAgpOut4, cmBagAgpOut5, cmBagAgpOut6;
-    private boolean cmApoTotal0;
     private int cmApoTotal1, cmApoTotal2, cmApoTotal3, cmApoTotal4, cmApoTotal5, cmApoTotal6;
-    private boolean cmInApptRatio0;
     private float cmInApptRatio1, cmInApptRatio2, cmInApptRatio3, cmInApptRatio4, cmInApptRatio5, cmInApptRatio6;
-    private boolean cmOutApptRatio0;
     private float cmOutApptRatio1, cmOutApptRatio2, cmOutApptRatio3, cmOutApptRatio4, cmOutApptRatio5, cmOutApptRatio6;
-    private boolean cmPostPerApo0;
     private int cmPostPerApo6;
-    private boolean cmHandPerApo0;
     private int cmHandPerApo6;
-    private boolean cmHandHoursPerApo0;
     private float cmHandHoursPerApo6;
-    private boolean cmOutGpPerApo0;
     private float cmOutGpPerApo6;
-    private boolean cmOutGpHoursPerApo0;
     private float cmOutGpHoursPerApo6;
-    private boolean cmBrAgpRatio0;
     private float cmBrAgpRatio1, cmBrAgpRatio2, cmBrAgpRatio3, cmBrAgpRatio4, cmBrAgpRatio5, cmBrAgpRatio6;
-    private boolean cmFaSum0;
     private int cmFaSum1, cmFaSum2, cmFaSum3, cmFaSum4, cmFaSum5, cmFaSum6;
-    private boolean cmShowRatio0;
     private float cmShowRatio1, cmShowRatio2, cmShowRatio3, cmShowRatio4, cmShowRatio5, cmShowRatio6;
-    private boolean cmTraining0;
     private String cmTraining1, cmTraining2, cmTraining3, cmTraining4, cmTraining5;
-    private boolean cmGot3_0;
     private String cmGot3_1, cmGot3_2, cmGot3_3, cmGot3_4, cmGot3_5;
-    private boolean cmInvitation0;
     private String cmInvitation1, cmInvitation2, cmInvitation3, cmInvitation4, cmInvitation5;
     // sales
-    private boolean salesAch0;
     private int salesAch1, salesAch2, salesAch3, salesAch4, salesAch5, salesAch6;
-    private boolean salesMonthly0;
     private int salesMonthly1, salesMonthly2, salesMonthly3, salesMonthly4, salesMonthly5, salesMonthly6;
-    private boolean salesAllPrepay0;
     private int salesAllPrepay1, salesAllPrepay2, salesAllPrepay3, salesAllPrepay4, salesAllPrepay5, salesAllPrepay6;
-    private boolean salesTotal0;
     private int salesTotal1, salesTotal2, salesTotal3, salesTotal4, salesTotal5, salesTotal6;
-    private boolean salesRatio0;
     private float salesRatio1, salesRatio2, salesRatio3, salesRatio4, salesRatio5, salesRatio6;
-    private boolean salesAchAppRatio0;
     private float salesAchAppRatio1, salesAchAppRatio2, salesAchAppRatio3, salesAchAppRatio4, salesAchAppRatio5, salesAchAppRatio6;
-    private boolean salesFaReview0;
     private String salesFaReview1, salesFaReview2, salesFaReview3, salesFaReview4, salesFaReview5;
-    private boolean salesPriceReview0;
     private String salesPriceReview1, salesPriceReview2, salesPriceReview3, salesPriceReview4, salesPriceReview5;
-    private boolean salesAck0;
     private String salesAck1, salesAck2, salesAck3, salesAck4, salesAck5;
-    private boolean salesTarget0;
     private String salesTarget1, salesTarget2, salesTarget3, salesTarget4, salesTarget5;
-    private boolean salesMotivation0;
     private String salesMotivation1, salesMotivation2, salesMotivation3, salesMotivation4, salesMotivation5;
-    private boolean salesObstacle0;
     private String salesObstacle1, salesObstacle2, salesObstacle3, salesObstacle4, salesObstacle5;
     // management
-    private boolean mgmtMeeting0;
     private String mgmtMeeting1, mgmtMeeting2, mgmtMeeting3, mgmtMeeting4, mgmtMeeting5;
-    private boolean mgmtCa0;
     private String mgmtCa1, mgmtCa2, mgmtCa3, mgmtCa4, mgmtCa5;
-    private boolean mgmtGp0;
     private String mgmtGp1, mgmtGp2, mgmtGp3, mgmtGp4, mgmtGp5;
-    private boolean mgmtLearn0;
     private String mgmtLearn1, mgmtLearn2, mgmtLearn3, mgmtLearn4, mgmtLearn5;
-    private boolean mgmtSheet0;
     private String mgmtSheet1, mgmtSheet2, mgmtSheet3, mgmtSheet4, mgmtSheet5;
-    private boolean mgmtPolicy0;
     private String mgmtPolicy1, mgmtPolicy2, mgmtPolicy3, mgmtPolicy4, mgmtPolicy5;
-    private boolean mgmtCompiantSales0;
     private String mgmtCompiantSales1, mgmtCompiantSales2, mgmtCompiantSales3, mgmtCompiantSales4, mgmtCompiantSales5;
-    private boolean mgmtCompiantMethod0;
     private String mgmtCompiantMethod1, mgmtCompiantMethod2, mgmtCompiantMethod3, mgmtCompiantMethod4, mgmtCompiantMethod5;
-    private boolean mgmtCompiantProduct0;
     private String mgmtCompiantProduct1, mgmtCompiantProduct2, mgmtCompiantProduct3, mgmtCompiantProduct4, mgmtCompiantProduct5;
-    private boolean mgmtCompiantAd0;
     private String mgmtCompiantAd1, mgmtCompiantAd2, mgmtCompiantAd3, mgmtCompiantAd4, mgmtCompiantAd5;
-    private boolean mgmtTraining0;
     private String mgmtTraining1, mgmtTraining2, mgmtTraining3, mgmtTraining4, mgmtTraining5;
-    private boolean mgmtReport0;
     private String mgmtReport1, mgmtReport2, mgmtReport3, mgmtReport4, mgmtReport5;
-    private boolean mgmtPlan0;
     private String mgmtPlan1, mgmtPlan2, mgmtPlan3, mgmtPlan4, mgmtPlan5;
-    private boolean mgmtMaintain0;
     private String mgmtMaintain1, mgmtMaintain2, mgmtMaintain3, mgmtMaintain4, mgmtMaintain5;
-    private boolean mgmtFace2Face0;
     private String mgmtFace2Face1, mgmtFace2Face2, mgmtFace2Face3, mgmtFace2Face4, mgmtFace2Face5;
 
     private float clubSalesRatio;
@@ -310,164 +212,8 @@ public class Ca implements Serializable {
         return serialVersionUID;
     }
 
-    public void setCmOutGpHours0(boolean cmOutGpHours0) {
-        this.cmOutGpHours0 = cmOutGpHours0;
-    }
-
-    public void setCmOutGpHours1(float cmOutGpHours1) {
-        this.cmOutGpHours1 = cmOutGpHours1;
-    }
-
-    public void setCmOutGpHours2(float cmOutGpHours2) {
-        this.cmOutGpHours2 = cmOutGpHours2;
-    }
-
-    public void setCmOutGpHours3(float cmOutGpHours3) {
-        this.cmOutGpHours3 = cmOutGpHours3;
-    }
-
-    public void setCmOutGpHours4(float cmOutGpHours4) {
-        this.cmOutGpHours4 = cmOutGpHours4;
-    }
-
-    public void setCmOutGpHours5(float cmOutGpHours5) {
-        this.cmOutGpHours5 = cmOutGpHours5;
-    }
-
-    public void setCmOutGpHours6(float cmOutGpHours6) {
-        this.cmOutGpHours6 = cmOutGpHours6;
-    }
-
-    public void setCmOutGpPerApo0(boolean cmOutGpPerApo0) {
-        this.cmOutGpPerApo0 = cmOutGpPerApo0;
-    }
-
-    public void setCmOutGpPerApo6(float cmOutGpPerApo6) {
-        this.cmOutGpPerApo6 = cmOutGpPerApo6;
-    }
-
-    public void setCmOutGpHoursPerApo0(boolean cmOutGpHoursPerApo0) {
-        this.cmOutGpHoursPerApo0 = cmOutGpHoursPerApo0;
-    }
-
-    public void setCmOutGpHoursPerApo6(float cmOutGpHoursPerApo6) {
-        this.cmOutGpHoursPerApo6 = cmOutGpHoursPerApo6;
-    }
-
-    public boolean isCmOutGpHours0() {
-        return cmOutGpHours0;
-    }
-
-    public float getCmOutGpHours1() {
-        return cmOutGpHours1;
-    }
-
-    public float getCmOutGpHours2() {
-        return cmOutGpHours2;
-    }
-
-    public float getCmOutGpHours3() {
-        return cmOutGpHours3;
-    }
-
-    public float getCmOutGpHours4() {
-        return cmOutGpHours4;
-    }
-
-    public float getCmOutGpHours5() {
-        return cmOutGpHours5;
-    }
-
-    public float getCmOutGpHours6() {
-        return cmOutGpHours6;
-    }
-
-    public boolean isCmOutGpPerApo0() {
-        return cmOutGpPerApo0;
-    }
-
-    public float getCmOutGpPerApo6() {
-        return cmOutGpPerApo6;
-    }
-
-    public boolean isCmOutGpHoursPerApo0() {
-        return cmOutGpHoursPerApo0;
-    }
-
-    public float getCmOutGpHoursPerApo6() {
-        return cmOutGpHoursPerApo6;
-    }
-
-    public void setCmHandHoursPerApo0(boolean cmHandHoursPerApo0) {
-        this.cmHandHoursPerApo0 = cmHandHoursPerApo0;
-    }
-
-    public void setCmHandHoursPerApo6(float cmHandHoursPerApo6) {
-        this.cmHandHoursPerApo6 = cmHandHoursPerApo6;
-    }
-
-    public boolean isCmHandHoursPerApo0() {
-        return cmHandHoursPerApo0;
-    }
-
-    public float getCmHandHoursPerApo6() {
-        return cmHandHoursPerApo6;
-    }
-
-    public void setCmHandFlyerHours0(boolean cmHandFlyerHours0) {
-        this.cmHandFlyerHours0 = cmHandFlyerHours0;
-    }
-
-    public void setCmHandFlyerHours1(float cmHandFlyerHours1) {
-        this.cmHandFlyerHours1 = cmHandFlyerHours1;
-    }
-
-    public void setCmHandFlyerHours2(float cmHandFlyerHours2) {
-        this.cmHandFlyerHours2 = cmHandFlyerHours2;
-    }
-
-    public void setCmHandFlyerHours3(float cmHandFlyerHours3) {
-        this.cmHandFlyerHours3 = cmHandFlyerHours3;
-    }
-
-    public void setCmHandFlyerHours4(float cmHandFlyerHours4) {
-        this.cmHandFlyerHours4 = cmHandFlyerHours4;
-    }
-
-    public void setCmHandFlyerHours5(float cmHandFlyerHours5) {
-        this.cmHandFlyerHours5 = cmHandFlyerHours5;
-    }
-
-    public void setCmHandFlyerHours6(float cmHandFlyerHours6) {
-        this.cmHandFlyerHours6 = cmHandFlyerHours6;
-    }
-
-    public boolean isCmHandFlyerHours0() {
-        return cmHandFlyerHours0;
-    }
-
-    public float getCmHandFlyerHours1() {
-        return cmHandFlyerHours1;
-    }
-
-    public float getCmHandFlyerHours2() {
-        return cmHandFlyerHours2;
-    }
-
-    public float getCmHandFlyerHours3() {
-        return cmHandFlyerHours3;
-    }
-
-    public float getCmHandFlyerHours4() {
-        return cmHandFlyerHours4;
-    }
-
-    public float getCmHandFlyerHours5() {
-        return cmHandFlyerHours5;
-    }
-
-    public float getCmHandFlyerHours6() {
-        return cmHandFlyerHours6;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -522,10 +268,6 @@ public class Ca implements Serializable {
         this.goalsAppoints = goalsAppoints;
     }
 
-    public void setSvcTm0(boolean svcTm0) {
-        this.svcTm0 = svcTm0;
-    }
-
     public void setSvcTm1(int svcTm1) {
         this.svcTm1 = svcTm1;
     }
@@ -548,10 +290,6 @@ public class Ca implements Serializable {
 
     public void setSvcTm6(int svcTm6) {
         this.svcTm6 = svcTm6;
-    }
-
-    public void setSvcShift0(boolean svcShift0) {
-        this.svcShift0 = svcShift0;
     }
 
     public void setSvcShift1(int svcShift1) {
@@ -578,10 +316,6 @@ public class Ca implements Serializable {
         this.svcShift6 = svcShift6;
     }
 
-    public void setSvcHold0(boolean svcHold0) {
-        this.svcHold0 = svcHold0;
-    }
-
     public void setSvcHold1(int svcHold1) {
         this.svcHold1 = svcHold1;
     }
@@ -604,10 +338,6 @@ public class Ca implements Serializable {
 
     public void setSvcHold6(int svcHold6) {
         this.svcHold6 = svcHold6;
-    }
-
-    public void setSvcActive0(boolean svcActive0) {
-        this.svcActive0 = svcActive0;
     }
 
     public void setSvcActive1(int svcActive1) {
@@ -634,10 +364,6 @@ public class Ca implements Serializable {
         this.svcActive6 = svcActive6;
     }
 
-    public void setSvcHoldRatio0(boolean svcHoldRatio0) {
-        this.svcHoldRatio0 = svcHoldRatio0;
-    }
-
     public void setSvcHoldRatio1(float svcHoldRatio1) {
         this.svcHoldRatio1 = svcHoldRatio1;
     }
@@ -660,10 +386,6 @@ public class Ca implements Serializable {
 
     public void setSvcHoldRatio6(float svcHoldRatio6) {
         this.svcHoldRatio6 = svcHoldRatio6;
-    }
-
-    public void setSvcTotalWo0(boolean svcTotalWo0) {
-        this.svcTotalWo0 = svcTotalWo0;
     }
 
     public void setSvcTotalWo1(int svcTotalWo1) {
@@ -690,10 +412,6 @@ public class Ca implements Serializable {
         this.svcTotalWo6 = svcTotalWo6;
     }
 
-    public void setSvcAvgWo0(boolean svcAvgWo0) {
-        this.svcAvgWo0 = svcAvgWo0;
-    }
-
     public void setSvcAvgWo1(float svcAvgWo1) {
         this.svcAvgWo1 = svcAvgWo1;
     }
@@ -716,10 +434,6 @@ public class Ca implements Serializable {
 
     public void setSvcAvgWo6(float svcAvgWo6) {
         this.svcAvgWo6 = svcAvgWo6;
-    }
-
-    public void setSvcMaxWo0(boolean svcMaxWo0) {
-        this.svcMaxWo0 = svcMaxWo0;
     }
 
     public void setSvcMaxWo1(int svcMaxWo1) {
@@ -746,10 +460,6 @@ public class Ca implements Serializable {
         this.svcMaxWo6 = svcMaxWo6;
     }
 
-    public void setSvcExits0(boolean svcExits0) {
-        this.svcExits0 = svcExits0;
-    }
-
     public void setSvcExits1(int svcExits1) {
         this.svcExits1 = svcExits1;
     }
@@ -772,10 +482,6 @@ public class Ca implements Serializable {
 
     public void setSvcExits6(int svcExits6) {
         this.svcExits6 = svcExits6;
-    }
-
-    public void setSvcExitsRatio0(boolean svcExitsRatio0) {
-        this.svcExitsRatio0 = svcExitsRatio0;
     }
 
     public void setSvcExitsRatio1(float svcExitsRatio1) {
@@ -802,10 +508,6 @@ public class Ca implements Serializable {
         this.svcExitsRatio6 = svcExitsRatio6;
     }
 
-    public void setSvcMeasure0(boolean svcMeasure0) {
-        this.svcMeasure0 = svcMeasure0;
-    }
-
     public void setSvcMeasure1(int svcMeasure1) {
         this.svcMeasure1 = svcMeasure1;
     }
@@ -828,10 +530,6 @@ public class Ca implements Serializable {
 
     public void setSvcMeasure6(int svcMeasure6) {
         this.svcMeasure6 = svcMeasure6;
-    }
-
-    public void setSvcMeasureRatio0(boolean svcMeasureRatio0) {
-        this.svcMeasureRatio0 = svcMeasureRatio0;
     }
 
     public void setSvcMeasureRatio1(float svcMeasureRatio1) {
@@ -858,20 +556,12 @@ public class Ca implements Serializable {
         this.svcMeasureRatio6 = svcMeasureRatio6;
     }
 
-    public void setSvc12_0(boolean svc12_0) {
-        this.svc12_0 = svc12_0;
-    }
-
     public void setSvc12_5(int svc12_5) {
         this.svc12_5 = svc12_5;
     }
 
     public void setSvc12_6(float svc12_6) {
         this.svc12_6 = svc12_6;
-    }
-
-    public void setSvc8to11_0(boolean svc8to11_0) {
-        this.svc8to11_0 = svc8to11_0;
     }
 
     public void setSvc8to11_5(int svc8to11_5) {
@@ -882,20 +572,12 @@ public class Ca implements Serializable {
         this.svc8to11_6 = svc8to11_6;
     }
 
-    public void setSvc4to7_0(boolean svc4to7_0) {
-        this.svc4to7_0 = svc4to7_0;
-    }
-
     public void setSvc4to7_5(int svc4to7_5) {
         this.svc4to7_5 = svc4to7_5;
     }
 
     public void setSvc4to7_6(float svc4to7_6) {
         this.svc4to7_6 = svc4to7_6;
-    }
-
-    public void setSvc1to3_0(boolean svc1to3_0) {
-        this.svc1to3_0 = svc1to3_0;
     }
 
     public void setSvc1to3_5(int svc1to3_5) {
@@ -906,20 +588,12 @@ public class Ca implements Serializable {
         this.svc1to3_6 = svc1to3_6;
     }
 
-    public void setSvc0_0(boolean svc0_0) {
-        this.svc0_0 = svc0_0;
-    }
-
     public void setSvc0_5(int svc0_5) {
         this.svc0_5 = svc0_5;
     }
 
     public void setSvc0_6(float svc0_6) {
         this.svc0_6 = svc0_6;
-    }
-
-    public void setSvc3More0(boolean svc3More0) {
-        this.svc3More0 = svc3More0;
     }
 
     public void setSvc3More1(String svc3More1) {
@@ -942,10 +616,6 @@ public class Ca implements Serializable {
         this.svc3More5 = svc3More5;
     }
 
-    public void setSvcInactive0(boolean svcInactive0) {
-        this.svcInactive0 = svcInactive0;
-    }
-
     public void setSvcInactive1(String svcInactive1) {
         this.svcInactive1 = svcInactive1;
     }
@@ -964,10 +634,6 @@ public class Ca implements Serializable {
 
     public void setSvcInactive5(String svcInactive5) {
         this.svcInactive5 = svcInactive5;
-    }
-
-    public void setSvcFwoReview0(boolean svcFwoReview0) {
-        this.svcFwoReview0 = svcFwoReview0;
     }
 
     public void setSvcFwoReview1(String svcFwoReview1) {
@@ -990,10 +656,6 @@ public class Ca implements Serializable {
         this.svcFwoReview5 = svcFwoReview5;
     }
 
-    public void setSvcInterview0(boolean svcInterview0) {
-        this.svcInterview0 = svcInterview0;
-    }
-
     public void setSvcInterview1(String svcInterview1) {
         this.svcInterview1 = svcInterview1;
     }
@@ -1012,10 +674,6 @@ public class Ca implements Serializable {
 
     public void setSvcInterview5(String svcInterview5) {
         this.svcInterview5 = svcInterview5;
-    }
-
-    public void setSvcThanks0(boolean svcThanks0) {
-        this.svcThanks0 = svcThanks0;
     }
 
     public void setSvcThanks1(String svcThanks1) {
@@ -1038,10 +696,6 @@ public class Ca implements Serializable {
         this.svcThanks5 = svcThanks5;
     }
 
-    public void setSvc3C0(boolean svc3C0) {
-        this.svc3C0 = svc3C0;
-    }
-
     public void setSvc3C1(String svc3C1) {
         this.svc3C1 = svc3C1;
     }
@@ -1060,10 +714,6 @@ public class Ca implements Serializable {
 
     public void setSvc3C5(String svc3C5) {
         this.svc3C5 = svc3C5;
-    }
-
-    public void setSvcReward0(boolean svcReward0) {
-        this.svcReward0 = svcReward0;
     }
 
     public void setSvcReward1(String svcReward1) {
@@ -1086,10 +736,6 @@ public class Ca implements Serializable {
         this.svcReward5 = svcReward5;
     }
 
-    public void setSvcLoyal0(boolean svcLoyal0) {
-        this.svcLoyal0 = svcLoyal0;
-    }
-
     public void setSvcLoyal1(String svcLoyal1) {
         this.svcLoyal1 = svcLoyal1;
     }
@@ -1108,10 +754,6 @@ public class Ca implements Serializable {
 
     public void setSvcLoyal5(String svcLoyal5) {
         this.svcLoyal5 = svcLoyal5;
-    }
-
-    public void setCmPostFlyer0(boolean cmPostFlyer0) {
-        this.cmPostFlyer0 = cmPostFlyer0;
     }
 
     public void setCmPostFlyer1(int cmPostFlyer1) {
@@ -1138,10 +780,6 @@ public class Ca implements Serializable {
         this.cmPostFlyer6 = cmPostFlyer6;
     }
 
-    public void setCmHandFlyer0(boolean cmHandFlyer0) {
-        this.cmHandFlyer0 = cmHandFlyer0;
-    }
-
     public void setCmHandFlyer1(int cmHandFlyer1) {
         this.cmHandFlyer1 = cmHandFlyer1;
     }
@@ -1166,8 +804,52 @@ public class Ca implements Serializable {
         this.cmHandFlyer6 = cmHandFlyer6;
     }
 
-    public void setCmOutGp0(boolean cmOutGp0) {
-        this.cmOutGp0 = cmOutGp0;
+    public void setCmHandFlyerHours1(float cmHandFlyerHours1) {
+        this.cmHandFlyerHours1 = cmHandFlyerHours1;
+    }
+
+    public void setCmHandFlyerHours2(float cmHandFlyerHours2) {
+        this.cmHandFlyerHours2 = cmHandFlyerHours2;
+    }
+
+    public void setCmHandFlyerHours3(float cmHandFlyerHours3) {
+        this.cmHandFlyerHours3 = cmHandFlyerHours3;
+    }
+
+    public void setCmHandFlyerHours4(float cmHandFlyerHours4) {
+        this.cmHandFlyerHours4 = cmHandFlyerHours4;
+    }
+
+    public void setCmHandFlyerHours5(float cmHandFlyerHours5) {
+        this.cmHandFlyerHours5 = cmHandFlyerHours5;
+    }
+
+    public void setCmHandFlyerHours6(float cmHandFlyerHours6) {
+        this.cmHandFlyerHours6 = cmHandFlyerHours6;
+    }
+
+    public void setCmOutGpHours1(float cmOutGpHours1) {
+        this.cmOutGpHours1 = cmOutGpHours1;
+    }
+
+    public void setCmOutGpHours2(float cmOutGpHours2) {
+        this.cmOutGpHours2 = cmOutGpHours2;
+    }
+
+    public void setCmOutGpHours3(float cmOutGpHours3) {
+        this.cmOutGpHours3 = cmOutGpHours3;
+    }
+
+    public void setCmOutGpHours4(float cmOutGpHours4) {
+        this.cmOutGpHours4 = cmOutGpHours4;
+    }
+
+    public void setCmOutGpHours5(float cmOutGpHours5) {
+        this.cmOutGpHours5 = cmOutGpHours5;
+    }
+
+    public void setCmOutGpHours6(float cmOutGpHours6) {
+        this.cmOutGpHours6 = cmOutGpHours6;
     }
 
     public void setCmOutGp1(int cmOutGp1) {
@@ -1194,10 +876,6 @@ public class Ca implements Serializable {
         this.cmOutGp6 = cmOutGp6;
     }
 
-    public void setCmCpBox0(boolean cmCpBox0) {
-        this.cmCpBox0 = cmCpBox0;
-    }
-
     public void setCmCpBox1(int cmCpBox1) {
         this.cmCpBox1 = cmCpBox1;
     }
@@ -1220,10 +898,6 @@ public class Ca implements Serializable {
 
     public void setCmCpBox6(int cmCpBox6) {
         this.cmCpBox6 = cmCpBox6;
-    }
-
-    public void setCmOutGot0(boolean cmOutGot0) {
-        this.cmOutGot0 = cmOutGot0;
     }
 
     public void setCmOutGot1(int cmOutGot1) {
@@ -1250,10 +924,6 @@ public class Ca implements Serializable {
         this.cmOutGot6 = cmOutGot6;
     }
 
-    public void setCmInGot0(boolean cmInGot0) {
-        this.cmInGot0 = cmInGot0;
-    }
-
     public void setCmInGot1(int cmInGot1) {
         this.cmInGot1 = cmInGot1;
     }
@@ -1276,10 +946,6 @@ public class Ca implements Serializable {
 
     public void setCmInGot6(int cmInGot6) {
         this.cmInGot6 = cmInGot6;
-    }
-
-    public void setCmBlogGot0(boolean cmBlogGot0) {
-        this.cmBlogGot0 = cmBlogGot0;
     }
 
     public void setCmBlogGot1(int cmBlogGot1) {
@@ -1306,10 +972,6 @@ public class Ca implements Serializable {
         this.cmBlogGot6 = cmBlogGot6;
     }
 
-    public void setCmBagGot0(boolean cmBagGot0) {
-        this.cmBagGot0 = cmBagGot0;
-    }
-
     public void setCmBagGot1(int cmBagGot1) {
         this.cmBagGot1 = cmBagGot1;
     }
@@ -1332,10 +994,6 @@ public class Ca implements Serializable {
 
     public void setCmBagGot6(int cmBagGot6) {
         this.cmBagGot6 = cmBagGot6;
-    }
-
-    public void setCmTotalGot0(boolean cmTotalGot0) {
-        this.cmTotalGot0 = cmTotalGot0;
     }
 
     public void setCmTotalGot1(int cmTotalGot1) {
@@ -1362,10 +1020,6 @@ public class Ca implements Serializable {
         this.cmTotalGot6 = cmTotalGot6;
     }
 
-    public void setCmCallIn0(boolean cmCallIn0) {
-        this.cmCallIn0 = cmCallIn0;
-    }
-
     public void setCmCallIn1(int cmCallIn1) {
         this.cmCallIn1 = cmCallIn1;
     }
@@ -1388,10 +1042,6 @@ public class Ca implements Serializable {
 
     public void setCmCallIn6(int cmCallIn6) {
         this.cmCallIn6 = cmCallIn6;
-    }
-
-    public void setCmOutGotCall0(boolean cmOutGotCall0) {
-        this.cmOutGotCall0 = cmOutGotCall0;
     }
 
     public void setCmOutGotCall1(int cmOutGotCall1) {
@@ -1418,10 +1068,6 @@ public class Ca implements Serializable {
         this.cmOutGotCall6 = cmOutGotCall6;
     }
 
-    public void setCmInGotCall0(boolean cmInGotCall0) {
-        this.cmInGotCall0 = cmInGotCall0;
-    }
-
     public void setCmInGotCall1(int cmInGotCall1) {
         this.cmInGotCall1 = cmInGotCall1;
     }
@@ -1444,10 +1090,6 @@ public class Ca implements Serializable {
 
     public void setCmInGotCall6(int cmInGotCall6) {
         this.cmInGotCall6 = cmInGotCall6;
-    }
-
-    public void setCmBlogGotCall0(boolean cmBlogGotCall0) {
-        this.cmBlogGotCall0 = cmBlogGotCall0;
     }
 
     public void setCmBlogGotCall1(int cmBlogGotCall1) {
@@ -1474,10 +1116,6 @@ public class Ca implements Serializable {
         this.cmBlogGotCall6 = cmBlogGotCall6;
     }
 
-    public void setCmBagGotCall0(boolean cmBagGotCall0) {
-        this.cmBagGotCall0 = cmBagGotCall0;
-    }
-
     public void setCmBagGotCall1(int cmBagGotCall1) {
         this.cmBagGotCall1 = cmBagGotCall1;
     }
@@ -1500,10 +1138,6 @@ public class Ca implements Serializable {
 
     public void setCmBagGotCall6(int cmBagGotCall6) {
         this.cmBagGotCall6 = cmBagGotCall6;
-    }
-
-    public void setCmOwnRefs0(boolean cmOwnRefs0) {
-        this.cmOwnRefs0 = cmOwnRefs0;
     }
 
     public void setCmOwnRefs1(int cmOwnRefs1) {
@@ -1530,10 +1164,6 @@ public class Ca implements Serializable {
         this.cmOwnRefs6 = cmOwnRefs6;
     }
 
-    public void setCmOtherRefs0(boolean cmOtherRefs0) {
-        this.cmOtherRefs0 = cmOtherRefs0;
-    }
-
     public void setCmOtherRefs1(int cmOtherRefs1) {
         this.cmOtherRefs1 = cmOtherRefs1;
     }
@@ -1556,10 +1186,6 @@ public class Ca implements Serializable {
 
     public void setCmOtherRefs6(int cmOtherRefs6) {
         this.cmOtherRefs6 = cmOtherRefs6;
-    }
-
-    public void setCmNewspaper0(boolean cmNewspaper0) {
-        this.cmNewspaper0 = cmNewspaper0;
     }
 
     public void setCmNewspaper1(int cmNewspaper1) {
@@ -1586,10 +1212,6 @@ public class Ca implements Serializable {
         this.cmNewspaper6 = cmNewspaper6;
     }
 
-    public void setCmTv0(boolean cmTv0) {
-        this.cmTv0 = cmTv0;
-    }
-
     public void setCmTv1(int cmTv1) {
         this.cmTv1 = cmTv1;
     }
@@ -1612,10 +1234,6 @@ public class Ca implements Serializable {
 
     public void setCmTv6(int cmTv6) {
         this.cmTv6 = cmTv6;
-    }
-
-    public void setCmInternet0(boolean cmInternet0) {
-        this.cmInternet0 = cmInternet0;
     }
 
     public void setCmInternet1(int cmInternet1) {
@@ -1642,10 +1260,6 @@ public class Ca implements Serializable {
         this.cmInternet6 = cmInternet6;
     }
 
-    public void setCmSign0(boolean cmSign0) {
-        this.cmSign0 = cmSign0;
-    }
-
     public void setCmSign1(int cmSign1) {
         this.cmSign1 = cmSign1;
     }
@@ -1668,10 +1282,6 @@ public class Ca implements Serializable {
 
     public void setCmSign6(int cmSign6) {
         this.cmSign6 = cmSign6;
-    }
-
-    public void setCmMate0(boolean cmMate0) {
-        this.cmMate0 = cmMate0;
     }
 
     public void setCmMate1(int cmMate1) {
@@ -1698,10 +1308,6 @@ public class Ca implements Serializable {
         this.cmMate6 = cmMate6;
     }
 
-    public void setCmOthers0(boolean cmOthers0) {
-        this.cmOthers0 = cmOthers0;
-    }
-
     public void setCmOthers1(int cmOthers1) {
         this.cmOthers1 = cmOthers1;
     }
@@ -1724,10 +1330,6 @@ public class Ca implements Serializable {
 
     public void setCmOthers6(int cmOthers6) {
         this.cmOthers6 = cmOthers6;
-    }
-
-    public void setCmMailAgpIn0(boolean cmMailAgpIn0) {
-        this.cmMailAgpIn0 = cmMailAgpIn0;
     }
 
     public void setCmMailAgpIn1(int cmMailAgpIn1) {
@@ -1754,10 +1356,6 @@ public class Ca implements Serializable {
         this.cmMailAgpIn6 = cmMailAgpIn6;
     }
 
-    public void setCmPostFlyerAgpIn0(boolean cmPostFlyerAgpIn0) {
-        this.cmPostFlyerAgpIn0 = cmPostFlyerAgpIn0;
-    }
-
     public void setCmPostFlyerAgpIn1(int cmPostFlyerAgpIn1) {
         this.cmPostFlyerAgpIn1 = cmPostFlyerAgpIn1;
     }
@@ -1780,10 +1378,6 @@ public class Ca implements Serializable {
 
     public void setCmPostFlyerAgpIn6(int cmPostFlyerAgpIn6) {
         this.cmPostFlyerAgpIn6 = cmPostFlyerAgpIn6;
-    }
-
-    public void setCmHandFlyerAgpIn0(boolean cmHandFlyerAgpIn0) {
-        this.cmHandFlyerAgpIn0 = cmHandFlyerAgpIn0;
     }
 
     public void setCmHandFlyerAgpIn1(int cmHandFlyerAgpIn1) {
@@ -1810,10 +1404,6 @@ public class Ca implements Serializable {
         this.cmHandFlyerAgpIn6 = cmHandFlyerAgpIn6;
     }
 
-    public void setCmCpAgpIn0(boolean cmCpAgpIn0) {
-        this.cmCpAgpIn0 = cmCpAgpIn0;
-    }
-
     public void setCmCpAgpIn1(int cmCpAgpIn1) {
         this.cmCpAgpIn1 = cmCpAgpIn1;
     }
@@ -1836,10 +1426,6 @@ public class Ca implements Serializable {
 
     public void setCmCpAgpIn6(int cmCpAgpIn6) {
         this.cmCpAgpIn6 = cmCpAgpIn6;
-    }
-
-    public void setCmOutAgpOut0(boolean cmOutAgpOut0) {
-        this.cmOutAgpOut0 = cmOutAgpOut0;
     }
 
     public void setCmOutAgpOut1(int cmOutAgpOut1) {
@@ -1866,10 +1452,6 @@ public class Ca implements Serializable {
         this.cmOutAgpOut6 = cmOutAgpOut6;
     }
 
-    public void setCmInAgpOut0(boolean cmInAgpOut0) {
-        this.cmInAgpOut0 = cmInAgpOut0;
-    }
-
     public void setCmInAgpOut1(int cmInAgpOut1) {
         this.cmInAgpOut1 = cmInAgpOut1;
     }
@@ -1892,10 +1474,6 @@ public class Ca implements Serializable {
 
     public void setCmInAgpOut6(int cmInAgpOut6) {
         this.cmInAgpOut6 = cmInAgpOut6;
-    }
-
-    public void setCmBlogAgpOut0(boolean cmBlogAgpOut0) {
-        this.cmBlogAgpOut0 = cmBlogAgpOut0;
     }
 
     public void setCmBlogAgpOut1(int cmBlogAgpOut1) {
@@ -1922,10 +1500,6 @@ public class Ca implements Serializable {
         this.cmBlogAgpOut6 = cmBlogAgpOut6;
     }
 
-    public void setCmBagAgpOut0(boolean cmBagAgpOut0) {
-        this.cmBagAgpOut0 = cmBagAgpOut0;
-    }
-
     public void setCmBagAgpOut1(int cmBagAgpOut1) {
         this.cmBagAgpOut1 = cmBagAgpOut1;
     }
@@ -1948,10 +1522,6 @@ public class Ca implements Serializable {
 
     public void setCmBagAgpOut6(int cmBagAgpOut6) {
         this.cmBagAgpOut6 = cmBagAgpOut6;
-    }
-
-    public void setCmApoTotal0(boolean cmApoTotal0) {
-        this.cmApoTotal0 = cmApoTotal0;
     }
 
     public void setCmApoTotal1(int cmApoTotal1) {
@@ -1978,10 +1548,6 @@ public class Ca implements Serializable {
         this.cmApoTotal6 = cmApoTotal6;
     }
 
-    public void setCmInApptRatio0(boolean cmInApptRatio0) {
-        this.cmInApptRatio0 = cmInApptRatio0;
-    }
-
     public void setCmInApptRatio1(float cmInApptRatio1) {
         this.cmInApptRatio1 = cmInApptRatio1;
     }
@@ -2004,10 +1570,6 @@ public class Ca implements Serializable {
 
     public void setCmInApptRatio6(float cmInApptRatio6) {
         this.cmInApptRatio6 = cmInApptRatio6;
-    }
-
-    public void setCmOutApptRatio0(boolean cmOutApptRatio0) {
-        this.cmOutApptRatio0 = cmOutApptRatio0;
     }
 
     public void setCmOutApptRatio1(float cmOutApptRatio1) {
@@ -2034,24 +1596,24 @@ public class Ca implements Serializable {
         this.cmOutApptRatio6 = cmOutApptRatio6;
     }
 
-    public void setCmPostPerApo0(boolean cmPostPerApo0) {
-        this.cmPostPerApo0 = cmPostPerApo0;
-    }
-
     public void setCmPostPerApo6(int cmPostPerApo6) {
         this.cmPostPerApo6 = cmPostPerApo6;
-    }
-
-    public void setCmHandPerApo0(boolean cmHandPerApo0) {
-        this.cmHandPerApo0 = cmHandPerApo0;
     }
 
     public void setCmHandPerApo6(int cmHandPerApo6) {
         this.cmHandPerApo6 = cmHandPerApo6;
     }
 
-    public void setCmBrAgpRatio0(boolean cmBrAgpRatio0) {
-        this.cmBrAgpRatio0 = cmBrAgpRatio0;
+    public void setCmHandHoursPerApo6(float cmHandHoursPerApo6) {
+        this.cmHandHoursPerApo6 = cmHandHoursPerApo6;
+    }
+
+    public void setCmOutGpPerApo6(float cmOutGpPerApo6) {
+        this.cmOutGpPerApo6 = cmOutGpPerApo6;
+    }
+
+    public void setCmOutGpHoursPerApo6(float cmOutGpHoursPerApo6) {
+        this.cmOutGpHoursPerApo6 = cmOutGpHoursPerApo6;
     }
 
     public void setCmBrAgpRatio1(float cmBrAgpRatio1) {
@@ -2078,10 +1640,6 @@ public class Ca implements Serializable {
         this.cmBrAgpRatio6 = cmBrAgpRatio6;
     }
 
-    public void setCmFaSum0(boolean cmFaSum0) {
-        this.cmFaSum0 = cmFaSum0;
-    }
-
     public void setCmFaSum1(int cmFaSum1) {
         this.cmFaSum1 = cmFaSum1;
     }
@@ -2104,10 +1662,6 @@ public class Ca implements Serializable {
 
     public void setCmFaSum6(int cmFaSum6) {
         this.cmFaSum6 = cmFaSum6;
-    }
-
-    public void setCmShowRatio0(boolean cmShowRatio0) {
-        this.cmShowRatio0 = cmShowRatio0;
     }
 
     public void setCmShowRatio1(float cmShowRatio1) {
@@ -2134,10 +1688,6 @@ public class Ca implements Serializable {
         this.cmShowRatio6 = cmShowRatio6;
     }
 
-    public void setCmTraining0(boolean cmTraining0) {
-        this.cmTraining0 = cmTraining0;
-    }
-
     public void setCmTraining1(String cmTraining1) {
         this.cmTraining1 = cmTraining1;
     }
@@ -2156,10 +1706,6 @@ public class Ca implements Serializable {
 
     public void setCmTraining5(String cmTraining5) {
         this.cmTraining5 = cmTraining5;
-    }
-
-    public void setCmGot3_0(boolean cmGot3_0) {
-        this.cmGot3_0 = cmGot3_0;
     }
 
     public void setCmGot3_1(String cmGot3_1) {
@@ -2182,10 +1728,6 @@ public class Ca implements Serializable {
         this.cmGot3_5 = cmGot3_5;
     }
 
-    public void setCmInvitation0(boolean cmInvitation0) {
-        this.cmInvitation0 = cmInvitation0;
-    }
-
     public void setCmInvitation1(String cmInvitation1) {
         this.cmInvitation1 = cmInvitation1;
     }
@@ -2204,10 +1746,6 @@ public class Ca implements Serializable {
 
     public void setCmInvitation5(String cmInvitation5) {
         this.cmInvitation5 = cmInvitation5;
-    }
-
-    public void setSalesAch0(boolean salesAch0) {
-        this.salesAch0 = salesAch0;
     }
 
     public void setSalesAch1(int salesAch1) {
@@ -2234,10 +1772,6 @@ public class Ca implements Serializable {
         this.salesAch6 = salesAch6;
     }
 
-    public void setSalesMonthly0(boolean salesMonthly0) {
-        this.salesMonthly0 = salesMonthly0;
-    }
-
     public void setSalesMonthly1(int salesMonthly1) {
         this.salesMonthly1 = salesMonthly1;
     }
@@ -2260,10 +1794,6 @@ public class Ca implements Serializable {
 
     public void setSalesMonthly6(int salesMonthly6) {
         this.salesMonthly6 = salesMonthly6;
-    }
-
-    public void setSalesAllPrepay0(boolean salesAllPrepay0) {
-        this.salesAllPrepay0 = salesAllPrepay0;
     }
 
     public void setSalesAllPrepay1(int salesAllPrepay1) {
@@ -2290,10 +1820,6 @@ public class Ca implements Serializable {
         this.salesAllPrepay6 = salesAllPrepay6;
     }
 
-    public void setSalesTotal0(boolean salesTotal0) {
-        this.salesTotal0 = salesTotal0;
-    }
-
     public void setSalesTotal1(int salesTotal1) {
         this.salesTotal1 = salesTotal1;
     }
@@ -2316,10 +1842,6 @@ public class Ca implements Serializable {
 
     public void setSalesTotal6(int salesTotal6) {
         this.salesTotal6 = salesTotal6;
-    }
-
-    public void setSalesRatio0(boolean salesRatio0) {
-        this.salesRatio0 = salesRatio0;
     }
 
     public void setSalesRatio1(float salesRatio1) {
@@ -2346,10 +1868,6 @@ public class Ca implements Serializable {
         this.salesRatio6 = salesRatio6;
     }
 
-    public void setSalesAchAppRatio0(boolean salesAchAppRatio0) {
-        this.salesAchAppRatio0 = salesAchAppRatio0;
-    }
-
     public void setSalesAchAppRatio1(float salesAchAppRatio1) {
         this.salesAchAppRatio1 = salesAchAppRatio1;
     }
@@ -2374,10 +1892,6 @@ public class Ca implements Serializable {
         this.salesAchAppRatio6 = salesAchAppRatio6;
     }
 
-    public void setSalesFaReview0(boolean salesFaReview0) {
-        this.salesFaReview0 = salesFaReview0;
-    }
-
     public void setSalesFaReview1(String salesFaReview1) {
         this.salesFaReview1 = salesFaReview1;
     }
@@ -2396,10 +1910,6 @@ public class Ca implements Serializable {
 
     public void setSalesFaReview5(String salesFaReview5) {
         this.salesFaReview5 = salesFaReview5;
-    }
-
-    public void setSalesPriceReview0(boolean salesPriceReview0) {
-        this.salesPriceReview0 = salesPriceReview0;
     }
 
     public void setSalesPriceReview1(String salesPriceReview1) {
@@ -2422,10 +1932,6 @@ public class Ca implements Serializable {
         this.salesPriceReview5 = salesPriceReview5;
     }
 
-    public void setSalesAck0(boolean salesAck0) {
-        this.salesAck0 = salesAck0;
-    }
-
     public void setSalesAck1(String salesAck1) {
         this.salesAck1 = salesAck1;
     }
@@ -2444,10 +1950,6 @@ public class Ca implements Serializable {
 
     public void setSalesAck5(String salesAck5) {
         this.salesAck5 = salesAck5;
-    }
-
-    public void setSalesTarget0(boolean salesTarget0) {
-        this.salesTarget0 = salesTarget0;
     }
 
     public void setSalesTarget1(String salesTarget1) {
@@ -2470,10 +1972,6 @@ public class Ca implements Serializable {
         this.salesTarget5 = salesTarget5;
     }
 
-    public void setSalesMotivation0(boolean salesMotivation0) {
-        this.salesMotivation0 = salesMotivation0;
-    }
-
     public void setSalesMotivation1(String salesMotivation1) {
         this.salesMotivation1 = salesMotivation1;
     }
@@ -2492,10 +1990,6 @@ public class Ca implements Serializable {
 
     public void setSalesMotivation5(String salesMotivation5) {
         this.salesMotivation5 = salesMotivation5;
-    }
-
-    public void setSalesObstacle0(boolean salesObstacle0) {
-        this.salesObstacle0 = salesObstacle0;
     }
 
     public void setSalesObstacle1(String salesObstacle1) {
@@ -2518,10 +2012,6 @@ public class Ca implements Serializable {
         this.salesObstacle5 = salesObstacle5;
     }
 
-    public void setMgmtMeeting0(boolean mgmtMeeting0) {
-        this.mgmtMeeting0 = mgmtMeeting0;
-    }
-
     public void setMgmtMeeting1(String mgmtMeeting1) {
         this.mgmtMeeting1 = mgmtMeeting1;
     }
@@ -2540,10 +2030,6 @@ public class Ca implements Serializable {
 
     public void setMgmtMeeting5(String mgmtMeeting5) {
         this.mgmtMeeting5 = mgmtMeeting5;
-    }
-
-    public void setMgmtCa0(boolean mgmtCa0) {
-        this.mgmtCa0 = mgmtCa0;
     }
 
     public void setMgmtCa1(String mgmtCa1) {
@@ -2566,10 +2052,6 @@ public class Ca implements Serializable {
         this.mgmtCa5 = mgmtCa5;
     }
 
-    public void setMgmtGp0(boolean mgmtGp0) {
-        this.mgmtGp0 = mgmtGp0;
-    }
-
     public void setMgmtGp1(String mgmtGp1) {
         this.mgmtGp1 = mgmtGp1;
     }
@@ -2588,10 +2070,6 @@ public class Ca implements Serializable {
 
     public void setMgmtGp5(String mgmtGp5) {
         this.mgmtGp5 = mgmtGp5;
-    }
-
-    public void setMgmtLearn0(boolean mgmtLearn0) {
-        this.mgmtLearn0 = mgmtLearn0;
     }
 
     public void setMgmtLearn1(String mgmtLearn1) {
@@ -2614,10 +2092,6 @@ public class Ca implements Serializable {
         this.mgmtLearn5 = mgmtLearn5;
     }
 
-    public void setMgmtSheet0(boolean mgmtSheet0) {
-        this.mgmtSheet0 = mgmtSheet0;
-    }
-
     public void setMgmtSheet1(String mgmtSheet1) {
         this.mgmtSheet1 = mgmtSheet1;
     }
@@ -2636,10 +2110,6 @@ public class Ca implements Serializable {
 
     public void setMgmtSheet5(String mgmtSheet5) {
         this.mgmtSheet5 = mgmtSheet5;
-    }
-
-    public void setMgmtPolicy0(boolean mgmtPolicy0) {
-        this.mgmtPolicy0 = mgmtPolicy0;
     }
 
     public void setMgmtPolicy1(String mgmtPolicy1) {
@@ -2662,10 +2132,6 @@ public class Ca implements Serializable {
         this.mgmtPolicy5 = mgmtPolicy5;
     }
 
-    public void setMgmtCompiantSales0(boolean mgmtCompiantSales0) {
-        this.mgmtCompiantSales0 = mgmtCompiantSales0;
-    }
-
     public void setMgmtCompiantSales1(String mgmtCompiantSales1) {
         this.mgmtCompiantSales1 = mgmtCompiantSales1;
     }
@@ -2684,10 +2150,6 @@ public class Ca implements Serializable {
 
     public void setMgmtCompiantSales5(String mgmtCompiantSales5) {
         this.mgmtCompiantSales5 = mgmtCompiantSales5;
-    }
-
-    public void setMgmtCompiantMethod0(boolean mgmtCompiantMethod0) {
-        this.mgmtCompiantMethod0 = mgmtCompiantMethod0;
     }
 
     public void setMgmtCompiantMethod1(String mgmtCompiantMethod1) {
@@ -2710,10 +2172,6 @@ public class Ca implements Serializable {
         this.mgmtCompiantMethod5 = mgmtCompiantMethod5;
     }
 
-    public void setMgmtCompiantProduct0(boolean mgmtCompiantProduct0) {
-        this.mgmtCompiantProduct0 = mgmtCompiantProduct0;
-    }
-
     public void setMgmtCompiantProduct1(String mgmtCompiantProduct1) {
         this.mgmtCompiantProduct1 = mgmtCompiantProduct1;
     }
@@ -2732,10 +2190,6 @@ public class Ca implements Serializable {
 
     public void setMgmtCompiantProduct5(String mgmtCompiantProduct5) {
         this.mgmtCompiantProduct5 = mgmtCompiantProduct5;
-    }
-
-    public void setMgmtCompiantAd0(boolean mgmtCompiantAd0) {
-        this.mgmtCompiantAd0 = mgmtCompiantAd0;
     }
 
     public void setMgmtCompiantAd1(String mgmtCompiantAd1) {
@@ -2758,10 +2212,6 @@ public class Ca implements Serializable {
         this.mgmtCompiantAd5 = mgmtCompiantAd5;
     }
 
-    public void setMgmtTraining0(boolean mgmtTraining0) {
-        this.mgmtTraining0 = mgmtTraining0;
-    }
-
     public void setMgmtTraining1(String mgmtTraining1) {
         this.mgmtTraining1 = mgmtTraining1;
     }
@@ -2780,10 +2230,6 @@ public class Ca implements Serializable {
 
     public void setMgmtTraining5(String mgmtTraining5) {
         this.mgmtTraining5 = mgmtTraining5;
-    }
-
-    public void setMgmtReport0(boolean mgmtReport0) {
-        this.mgmtReport0 = mgmtReport0;
     }
 
     public void setMgmtReport1(String mgmtReport1) {
@@ -2806,10 +2252,6 @@ public class Ca implements Serializable {
         this.mgmtReport5 = mgmtReport5;
     }
 
-    public void setMgmtPlan0(boolean mgmtPlan0) {
-        this.mgmtPlan0 = mgmtPlan0;
-    }
-
     public void setMgmtPlan1(String mgmtPlan1) {
         this.mgmtPlan1 = mgmtPlan1;
     }
@@ -2830,10 +2272,6 @@ public class Ca implements Serializable {
         this.mgmtPlan5 = mgmtPlan5;
     }
 
-    public void setMgmtMaintain0(boolean mgmtMaintain0) {
-        this.mgmtMaintain0 = mgmtMaintain0;
-    }
-
     public void setMgmtMaintain1(String mgmtMaintain1) {
         this.mgmtMaintain1 = mgmtMaintain1;
     }
@@ -2852,10 +2290,6 @@ public class Ca implements Serializable {
 
     public void setMgmtMaintain5(String mgmtMaintain5) {
         this.mgmtMaintain5 = mgmtMaintain5;
-    }
-
-    public void setMgmtFace2Face0(boolean mgmtFace2Face0) {
-        this.mgmtFace2Face0 = mgmtFace2Face0;
     }
 
     public void setMgmtFace2Face1(String mgmtFace2Face1) {
@@ -3806,10 +3240,6 @@ public class Ca implements Serializable {
         this.nextPlan = nextPlan;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public Date getLastModified() {
         return lastModified;
     }
@@ -3858,10 +3288,6 @@ public class Ca implements Serializable {
         return goalsAppoints;
     }
 
-    public boolean isSvcTm0() {
-        return svcTm0;
-    }
-
     public int getSvcTm1() {
         return svcTm1;
     }
@@ -3884,10 +3310,6 @@ public class Ca implements Serializable {
 
     public int getSvcTm6() {
         return svcTm6;
-    }
-
-    public boolean isSvcShift0() {
-        return svcShift0;
     }
 
     public int getSvcShift1() {
@@ -3914,10 +3336,6 @@ public class Ca implements Serializable {
         return svcShift6;
     }
 
-    public boolean isSvcHold0() {
-        return svcHold0;
-    }
-
     public int getSvcHold1() {
         return svcHold1;
     }
@@ -3940,10 +3358,6 @@ public class Ca implements Serializable {
 
     public int getSvcHold6() {
         return svcHold6;
-    }
-
-    public boolean isSvcActive0() {
-        return svcActive0;
     }
 
     public int getSvcActive1() {
@@ -3970,10 +3384,6 @@ public class Ca implements Serializable {
         return svcActive6;
     }
 
-    public boolean isSvcHoldRatio0() {
-        return svcHoldRatio0;
-    }
-
     public float getSvcHoldRatio1() {
         return svcHoldRatio1;
     }
@@ -3996,10 +3406,6 @@ public class Ca implements Serializable {
 
     public float getSvcHoldRatio6() {
         return svcHoldRatio6;
-    }
-
-    public boolean isSvcTotalWo0() {
-        return svcTotalWo0;
     }
 
     public int getSvcTotalWo1() {
@@ -4026,10 +3432,6 @@ public class Ca implements Serializable {
         return svcTotalWo6;
     }
 
-    public boolean isSvcAvgWo0() {
-        return svcAvgWo0;
-    }
-
     public float getSvcAvgWo1() {
         return svcAvgWo1;
     }
@@ -4052,10 +3454,6 @@ public class Ca implements Serializable {
 
     public float getSvcAvgWo6() {
         return svcAvgWo6;
-    }
-
-    public boolean isSvcMaxWo0() {
-        return svcMaxWo0;
     }
 
     public int getSvcMaxWo1() {
@@ -4082,10 +3480,6 @@ public class Ca implements Serializable {
         return svcMaxWo6;
     }
 
-    public boolean isSvcExits0() {
-        return svcExits0;
-    }
-
     public int getSvcExits1() {
         return svcExits1;
     }
@@ -4108,10 +3502,6 @@ public class Ca implements Serializable {
 
     public int getSvcExits6() {
         return svcExits6;
-    }
-
-    public boolean isSvcExitsRatio0() {
-        return svcExitsRatio0;
     }
 
     public float getSvcExitsRatio1() {
@@ -4138,10 +3528,6 @@ public class Ca implements Serializable {
         return svcExitsRatio6;
     }
 
-    public boolean isSvcMeasure0() {
-        return svcMeasure0;
-    }
-
     public int getSvcMeasure1() {
         return svcMeasure1;
     }
@@ -4164,10 +3550,6 @@ public class Ca implements Serializable {
 
     public int getSvcMeasure6() {
         return svcMeasure6;
-    }
-
-    public boolean isSvcMeasureRatio0() {
-        return svcMeasureRatio0;
     }
 
     public float getSvcMeasureRatio1() {
@@ -4194,20 +3576,12 @@ public class Ca implements Serializable {
         return svcMeasureRatio6;
     }
 
-    public boolean isSvc12_0() {
-        return svc12_0;
-    }
-
     public int getSvc12_5() {
         return svc12_5;
     }
 
     public float getSvc12_6() {
         return svc12_6;
-    }
-
-    public boolean isSvc8to11_0() {
-        return svc8to11_0;
     }
 
     public int getSvc8to11_5() {
@@ -4218,20 +3592,12 @@ public class Ca implements Serializable {
         return svc8to11_6;
     }
 
-    public boolean isSvc4to7_0() {
-        return svc4to7_0;
-    }
-
     public int getSvc4to7_5() {
         return svc4to7_5;
     }
 
     public float getSvc4to7_6() {
         return svc4to7_6;
-    }
-
-    public boolean isSvc1to3_0() {
-        return svc1to3_0;
     }
 
     public int getSvc1to3_5() {
@@ -4242,20 +3608,12 @@ public class Ca implements Serializable {
         return svc1to3_6;
     }
 
-    public boolean isSvc0_0() {
-        return svc0_0;
-    }
-
     public int getSvc0_5() {
         return svc0_5;
     }
 
     public float getSvc0_6() {
         return svc0_6;
-    }
-
-    public boolean isSvc3More0() {
-        return svc3More0;
     }
 
     public String getSvc3More1() {
@@ -4278,10 +3636,6 @@ public class Ca implements Serializable {
         return svc3More5;
     }
 
-    public boolean isSvcInactive0() {
-        return svcInactive0;
-    }
-
     public String getSvcInactive1() {
         return svcInactive1;
     }
@@ -4300,10 +3654,6 @@ public class Ca implements Serializable {
 
     public String getSvcInactive5() {
         return svcInactive5;
-    }
-
-    public boolean isSvcFwoReview0() {
-        return svcFwoReview0;
     }
 
     public String getSvcFwoReview1() {
@@ -4326,10 +3676,6 @@ public class Ca implements Serializable {
         return svcFwoReview5;
     }
 
-    public boolean isSvcInterview0() {
-        return svcInterview0;
-    }
-
     public String getSvcInterview1() {
         return svcInterview1;
     }
@@ -4348,10 +3694,6 @@ public class Ca implements Serializable {
 
     public String getSvcInterview5() {
         return svcInterview5;
-    }
-
-    public boolean isSvcThanks0() {
-        return svcThanks0;
     }
 
     public String getSvcThanks1() {
@@ -4374,10 +3716,6 @@ public class Ca implements Serializable {
         return svcThanks5;
     }
 
-    public boolean isSvc3C0() {
-        return svc3C0;
-    }
-
     public String getSvc3C1() {
         return svc3C1;
     }
@@ -4396,10 +3734,6 @@ public class Ca implements Serializable {
 
     public String getSvc3C5() {
         return svc3C5;
-    }
-
-    public boolean isSvcReward0() {
-        return svcReward0;
     }
 
     public String getSvcReward1() {
@@ -4422,10 +3756,6 @@ public class Ca implements Serializable {
         return svcReward5;
     }
 
-    public boolean isSvcLoyal0() {
-        return svcLoyal0;
-    }
-
     public String getSvcLoyal1() {
         return svcLoyal1;
     }
@@ -4444,10 +3774,6 @@ public class Ca implements Serializable {
 
     public String getSvcLoyal5() {
         return svcLoyal5;
-    }
-
-    public boolean isCmPostFlyer0() {
-        return cmPostFlyer0;
     }
 
     public int getCmPostFlyer1() {
@@ -4474,10 +3800,6 @@ public class Ca implements Serializable {
         return cmPostFlyer6;
     }
 
-    public boolean isCmHandFlyer0() {
-        return cmHandFlyer0;
-    }
-
     public int getCmHandFlyer1() {
         return cmHandFlyer1;
     }
@@ -4502,8 +3824,52 @@ public class Ca implements Serializable {
         return cmHandFlyer6;
     }
 
-    public boolean isCmOutGp0() {
-        return cmOutGp0;
+    public float getCmHandFlyerHours1() {
+        return cmHandFlyerHours1;
+    }
+
+    public float getCmHandFlyerHours2() {
+        return cmHandFlyerHours2;
+    }
+
+    public float getCmHandFlyerHours3() {
+        return cmHandFlyerHours3;
+    }
+
+    public float getCmHandFlyerHours4() {
+        return cmHandFlyerHours4;
+    }
+
+    public float getCmHandFlyerHours5() {
+        return cmHandFlyerHours5;
+    }
+
+    public float getCmHandFlyerHours6() {
+        return cmHandFlyerHours6;
+    }
+
+    public float getCmOutGpHours1() {
+        return cmOutGpHours1;
+    }
+
+    public float getCmOutGpHours2() {
+        return cmOutGpHours2;
+    }
+
+    public float getCmOutGpHours3() {
+        return cmOutGpHours3;
+    }
+
+    public float getCmOutGpHours4() {
+        return cmOutGpHours4;
+    }
+
+    public float getCmOutGpHours5() {
+        return cmOutGpHours5;
+    }
+
+    public float getCmOutGpHours6() {
+        return cmOutGpHours6;
     }
 
     public int getCmOutGp1() {
@@ -4530,10 +3896,6 @@ public class Ca implements Serializable {
         return cmOutGp6;
     }
 
-    public boolean isCmCpBox0() {
-        return cmCpBox0;
-    }
-
     public int getCmCpBox1() {
         return cmCpBox1;
     }
@@ -4556,10 +3918,6 @@ public class Ca implements Serializable {
 
     public int getCmCpBox6() {
         return cmCpBox6;
-    }
-
-    public boolean isCmOutGot0() {
-        return cmOutGot0;
     }
 
     public int getCmOutGot1() {
@@ -4586,10 +3944,6 @@ public class Ca implements Serializable {
         return cmOutGot6;
     }
 
-    public boolean isCmInGot0() {
-        return cmInGot0;
-    }
-
     public int getCmInGot1() {
         return cmInGot1;
     }
@@ -4612,10 +3966,6 @@ public class Ca implements Serializable {
 
     public int getCmInGot6() {
         return cmInGot6;
-    }
-
-    public boolean isCmBlogGot0() {
-        return cmBlogGot0;
     }
 
     public int getCmBlogGot1() {
@@ -4642,10 +3992,6 @@ public class Ca implements Serializable {
         return cmBlogGot6;
     }
 
-    public boolean isCmBagGot0() {
-        return cmBagGot0;
-    }
-
     public int getCmBagGot1() {
         return cmBagGot1;
     }
@@ -4668,10 +4014,6 @@ public class Ca implements Serializable {
 
     public int getCmBagGot6() {
         return cmBagGot6;
-    }
-
-    public boolean isCmTotalGot0() {
-        return cmTotalGot0;
     }
 
     public int getCmTotalGot1() {
@@ -4698,10 +4040,6 @@ public class Ca implements Serializable {
         return cmTotalGot6;
     }
 
-    public boolean isCmCallIn0() {
-        return cmCallIn0;
-    }
-
     public int getCmCallIn1() {
         return cmCallIn1;
     }
@@ -4724,10 +4062,6 @@ public class Ca implements Serializable {
 
     public int getCmCallIn6() {
         return cmCallIn6;
-    }
-
-    public boolean isCmOutGotCall0() {
-        return cmOutGotCall0;
     }
 
     public int getCmOutGotCall1() {
@@ -4754,10 +4088,6 @@ public class Ca implements Serializable {
         return cmOutGotCall6;
     }
 
-    public boolean isCmInGotCall0() {
-        return cmInGotCall0;
-    }
-
     public int getCmInGotCall1() {
         return cmInGotCall1;
     }
@@ -4780,10 +4110,6 @@ public class Ca implements Serializable {
 
     public int getCmInGotCall6() {
         return cmInGotCall6;
-    }
-
-    public boolean isCmBlogGotCall0() {
-        return cmBlogGotCall0;
     }
 
     public int getCmBlogGotCall1() {
@@ -4810,10 +4136,6 @@ public class Ca implements Serializable {
         return cmBlogGotCall6;
     }
 
-    public boolean isCmBagGotCall0() {
-        return cmBagGotCall0;
-    }
-
     public int getCmBagGotCall1() {
         return cmBagGotCall1;
     }
@@ -4836,10 +4158,6 @@ public class Ca implements Serializable {
 
     public int getCmBagGotCall6() {
         return cmBagGotCall6;
-    }
-
-    public boolean isCmOwnRefs0() {
-        return cmOwnRefs0;
     }
 
     public int getCmOwnRefs1() {
@@ -4866,10 +4184,6 @@ public class Ca implements Serializable {
         return cmOwnRefs6;
     }
 
-    public boolean isCmOtherRefs0() {
-        return cmOtherRefs0;
-    }
-
     public int getCmOtherRefs1() {
         return cmOtherRefs1;
     }
@@ -4892,10 +4206,6 @@ public class Ca implements Serializable {
 
     public int getCmOtherRefs6() {
         return cmOtherRefs6;
-    }
-
-    public boolean isCmNewspaper0() {
-        return cmNewspaper0;
     }
 
     public int getCmNewspaper1() {
@@ -4922,10 +4232,6 @@ public class Ca implements Serializable {
         return cmNewspaper6;
     }
 
-    public boolean isCmTv0() {
-        return cmTv0;
-    }
-
     public int getCmTv1() {
         return cmTv1;
     }
@@ -4948,10 +4254,6 @@ public class Ca implements Serializable {
 
     public int getCmTv6() {
         return cmTv6;
-    }
-
-    public boolean isCmInternet0() {
-        return cmInternet0;
     }
 
     public int getCmInternet1() {
@@ -4978,10 +4280,6 @@ public class Ca implements Serializable {
         return cmInternet6;
     }
 
-    public boolean isCmSign0() {
-        return cmSign0;
-    }
-
     public int getCmSign1() {
         return cmSign1;
     }
@@ -5004,10 +4302,6 @@ public class Ca implements Serializable {
 
     public int getCmSign6() {
         return cmSign6;
-    }
-
-    public boolean isCmMate0() {
-        return cmMate0;
     }
 
     public int getCmMate1() {
@@ -5034,10 +4328,6 @@ public class Ca implements Serializable {
         return cmMate6;
     }
 
-    public boolean isCmOthers0() {
-        return cmOthers0;
-    }
-
     public int getCmOthers1() {
         return cmOthers1;
     }
@@ -5060,10 +4350,6 @@ public class Ca implements Serializable {
 
     public int getCmOthers6() {
         return cmOthers6;
-    }
-
-    public boolean isCmMailAgpIn0() {
-        return cmMailAgpIn0;
     }
 
     public int getCmMailAgpIn1() {
@@ -5090,10 +4376,6 @@ public class Ca implements Serializable {
         return cmMailAgpIn6;
     }
 
-    public boolean isCmPostFlyerAgpIn0() {
-        return cmPostFlyerAgpIn0;
-    }
-
     public int getCmPostFlyerAgpIn1() {
         return cmPostFlyerAgpIn1;
     }
@@ -5116,10 +4398,6 @@ public class Ca implements Serializable {
 
     public int getCmPostFlyerAgpIn6() {
         return cmPostFlyerAgpIn6;
-    }
-
-    public boolean isCmHandFlyerAgpIn0() {
-        return cmHandFlyerAgpIn0;
     }
 
     public int getCmHandFlyerAgpIn1() {
@@ -5146,10 +4424,6 @@ public class Ca implements Serializable {
         return cmHandFlyerAgpIn6;
     }
 
-    public boolean isCmCpAgpIn0() {
-        return cmCpAgpIn0;
-    }
-
     public int getCmCpAgpIn1() {
         return cmCpAgpIn1;
     }
@@ -5172,10 +4446,6 @@ public class Ca implements Serializable {
 
     public int getCmCpAgpIn6() {
         return cmCpAgpIn6;
-    }
-
-    public boolean isCmOutAgpOut0() {
-        return cmOutAgpOut0;
     }
 
     public int getCmOutAgpOut1() {
@@ -5202,10 +4472,6 @@ public class Ca implements Serializable {
         return cmOutAgpOut6;
     }
 
-    public boolean isCmInAgpOut0() {
-        return cmInAgpOut0;
-    }
-
     public int getCmInAgpOut1() {
         return cmInAgpOut1;
     }
@@ -5228,10 +4494,6 @@ public class Ca implements Serializable {
 
     public int getCmInAgpOut6() {
         return cmInAgpOut6;
-    }
-
-    public boolean isCmBlogAgpOut0() {
-        return cmBlogAgpOut0;
     }
 
     public int getCmBlogAgpOut1() {
@@ -5258,10 +4520,6 @@ public class Ca implements Serializable {
         return cmBlogAgpOut6;
     }
 
-    public boolean isCmBagAgpOut0() {
-        return cmBagAgpOut0;
-    }
-
     public int getCmBagAgpOut1() {
         return cmBagAgpOut1;
     }
@@ -5284,10 +4542,6 @@ public class Ca implements Serializable {
 
     public int getCmBagAgpOut6() {
         return cmBagAgpOut6;
-    }
-
-    public boolean isCmApoTotal0() {
-        return cmApoTotal0;
     }
 
     public int getCmApoTotal1() {
@@ -5314,10 +4568,6 @@ public class Ca implements Serializable {
         return cmApoTotal6;
     }
 
-    public boolean isCmInApptRatio0() {
-        return cmInApptRatio0;
-    }
-
     public float getCmInApptRatio1() {
         return cmInApptRatio1;
     }
@@ -5340,10 +4590,6 @@ public class Ca implements Serializable {
 
     public float getCmInApptRatio6() {
         return cmInApptRatio6;
-    }
-
-    public boolean isCmOutApptRatio0() {
-        return cmOutApptRatio0;
     }
 
     public float getCmOutApptRatio1() {
@@ -5370,24 +4616,24 @@ public class Ca implements Serializable {
         return cmOutApptRatio6;
     }
 
-    public boolean isCmPostPerApo0() {
-        return cmPostPerApo0;
-    }
-
     public int getCmPostPerApo6() {
         return cmPostPerApo6;
-    }
-
-    public boolean isCmHandPerApo0() {
-        return cmHandPerApo0;
     }
 
     public int getCmHandPerApo6() {
         return cmHandPerApo6;
     }
 
-    public boolean isCmBrAgpRatio0() {
-        return cmBrAgpRatio0;
+    public float getCmHandHoursPerApo6() {
+        return cmHandHoursPerApo6;
+    }
+
+    public float getCmOutGpPerApo6() {
+        return cmOutGpPerApo6;
+    }
+
+    public float getCmOutGpHoursPerApo6() {
+        return cmOutGpHoursPerApo6;
     }
 
     public float getCmBrAgpRatio1() {
@@ -5414,10 +4660,6 @@ public class Ca implements Serializable {
         return cmBrAgpRatio6;
     }
 
-    public boolean isCmFaSum0() {
-        return cmFaSum0;
-    }
-
     public int getCmFaSum1() {
         return cmFaSum1;
     }
@@ -5440,10 +4682,6 @@ public class Ca implements Serializable {
 
     public int getCmFaSum6() {
         return cmFaSum6;
-    }
-
-    public boolean isCmShowRatio0() {
-        return cmShowRatio0;
     }
 
     public float getCmShowRatio1() {
@@ -5470,10 +4708,6 @@ public class Ca implements Serializable {
         return cmShowRatio6;
     }
 
-    public boolean isCmTraining0() {
-        return cmTraining0;
-    }
-
     public String getCmTraining1() {
         return cmTraining1;
     }
@@ -5492,10 +4726,6 @@ public class Ca implements Serializable {
 
     public String getCmTraining5() {
         return cmTraining5;
-    }
-
-    public boolean isCmGot3_0() {
-        return cmGot3_0;
     }
 
     public String getCmGot3_1() {
@@ -5518,10 +4748,6 @@ public class Ca implements Serializable {
         return cmGot3_5;
     }
 
-    public boolean isCmInvitation0() {
-        return cmInvitation0;
-    }
-
     public String getCmInvitation1() {
         return cmInvitation1;
     }
@@ -5540,10 +4766,6 @@ public class Ca implements Serializable {
 
     public String getCmInvitation5() {
         return cmInvitation5;
-    }
-
-    public boolean isSalesAch0() {
-        return salesAch0;
     }
 
     public int getSalesAch1() {
@@ -5570,10 +4792,6 @@ public class Ca implements Serializable {
         return salesAch6;
     }
 
-    public boolean isSalesMonthly0() {
-        return salesMonthly0;
-    }
-
     public int getSalesMonthly1() {
         return salesMonthly1;
     }
@@ -5596,10 +4814,6 @@ public class Ca implements Serializable {
 
     public int getSalesMonthly6() {
         return salesMonthly6;
-    }
-
-    public boolean isSalesAllPrepay0() {
-        return salesAllPrepay0;
     }
 
     public int getSalesAllPrepay1() {
@@ -5626,10 +4840,6 @@ public class Ca implements Serializable {
         return salesAllPrepay6;
     }
 
-    public boolean isSalesTotal0() {
-        return salesTotal0;
-    }
-
     public int getSalesTotal1() {
         return salesTotal1;
     }
@@ -5652,10 +4862,6 @@ public class Ca implements Serializable {
 
     public int getSalesTotal6() {
         return salesTotal6;
-    }
-
-    public boolean isSalesRatio0() {
-        return salesRatio0;
     }
 
     public float getSalesRatio1() {
@@ -5682,10 +4888,6 @@ public class Ca implements Serializable {
         return salesRatio6;
     }
 
-    public boolean isSalesAchAppRatio0() {
-        return salesAchAppRatio0;
-    }
-
     public float getSalesAchAppRatio1() {
         return salesAchAppRatio1;
     }
@@ -5710,10 +4912,6 @@ public class Ca implements Serializable {
         return salesAchAppRatio6;
     }
 
-    public boolean isSalesFaReview0() {
-        return salesFaReview0;
-    }
-
     public String getSalesFaReview1() {
         return salesFaReview1;
     }
@@ -5732,10 +4930,6 @@ public class Ca implements Serializable {
 
     public String getSalesFaReview5() {
         return salesFaReview5;
-    }
-
-    public boolean isSalesPriceReview0() {
-        return salesPriceReview0;
     }
 
     public String getSalesPriceReview1() {
@@ -5758,10 +4952,6 @@ public class Ca implements Serializable {
         return salesPriceReview5;
     }
 
-    public boolean isSalesAck0() {
-        return salesAck0;
-    }
-
     public String getSalesAck1() {
         return salesAck1;
     }
@@ -5780,10 +4970,6 @@ public class Ca implements Serializable {
 
     public String getSalesAck5() {
         return salesAck5;
-    }
-
-    public boolean isSalesTarget0() {
-        return salesTarget0;
     }
 
     public String getSalesTarget1() {
@@ -5806,10 +4992,6 @@ public class Ca implements Serializable {
         return salesTarget5;
     }
 
-    public boolean isSalesMotivation0() {
-        return salesMotivation0;
-    }
-
     public String getSalesMotivation1() {
         return salesMotivation1;
     }
@@ -5828,10 +5010,6 @@ public class Ca implements Serializable {
 
     public String getSalesMotivation5() {
         return salesMotivation5;
-    }
-
-    public boolean isSalesObstacle0() {
-        return salesObstacle0;
     }
 
     public String getSalesObstacle1() {
@@ -5854,10 +5032,6 @@ public class Ca implements Serializable {
         return salesObstacle5;
     }
 
-    public boolean isMgmtMeeting0() {
-        return mgmtMeeting0;
-    }
-
     public String getMgmtMeeting1() {
         return mgmtMeeting1;
     }
@@ -5876,10 +5050,6 @@ public class Ca implements Serializable {
 
     public String getMgmtMeeting5() {
         return mgmtMeeting5;
-    }
-
-    public boolean isMgmtCa0() {
-        return mgmtCa0;
     }
 
     public String getMgmtCa1() {
@@ -5902,10 +5072,6 @@ public class Ca implements Serializable {
         return mgmtCa5;
     }
 
-    public boolean isMgmtGp0() {
-        return mgmtGp0;
-    }
-
     public String getMgmtGp1() {
         return mgmtGp1;
     }
@@ -5924,10 +5090,6 @@ public class Ca implements Serializable {
 
     public String getMgmtGp5() {
         return mgmtGp5;
-    }
-
-    public boolean isMgmtLearn0() {
-        return mgmtLearn0;
     }
 
     public String getMgmtLearn1() {
@@ -5950,10 +5112,6 @@ public class Ca implements Serializable {
         return mgmtLearn5;
     }
 
-    public boolean isMgmtSheet0() {
-        return mgmtSheet0;
-    }
-
     public String getMgmtSheet1() {
         return mgmtSheet1;
     }
@@ -5972,10 +5130,6 @@ public class Ca implements Serializable {
 
     public String getMgmtSheet5() {
         return mgmtSheet5;
-    }
-
-    public boolean isMgmtPolicy0() {
-        return mgmtPolicy0;
     }
 
     public String getMgmtPolicy1() {
@@ -5998,10 +5152,6 @@ public class Ca implements Serializable {
         return mgmtPolicy5;
     }
 
-    public boolean isMgmtCompiantSales0() {
-        return mgmtCompiantSales0;
-    }
-
     public String getMgmtCompiantSales1() {
         return mgmtCompiantSales1;
     }
@@ -6020,10 +5170,6 @@ public class Ca implements Serializable {
 
     public String getMgmtCompiantSales5() {
         return mgmtCompiantSales5;
-    }
-
-    public boolean isMgmtCompiantMethod0() {
-        return mgmtCompiantMethod0;
     }
 
     public String getMgmtCompiantMethod1() {
@@ -6046,10 +5192,6 @@ public class Ca implements Serializable {
         return mgmtCompiantMethod5;
     }
 
-    public boolean isMgmtCompiantProduct0() {
-        return mgmtCompiantProduct0;
-    }
-
     public String getMgmtCompiantProduct1() {
         return mgmtCompiantProduct1;
     }
@@ -6068,10 +5210,6 @@ public class Ca implements Serializable {
 
     public String getMgmtCompiantProduct5() {
         return mgmtCompiantProduct5;
-    }
-
-    public boolean isMgmtCompiantAd0() {
-        return mgmtCompiantAd0;
     }
 
     public String getMgmtCompiantAd1() {
@@ -6094,10 +5232,6 @@ public class Ca implements Serializable {
         return mgmtCompiantAd5;
     }
 
-    public boolean isMgmtTraining0() {
-        return mgmtTraining0;
-    }
-
     public String getMgmtTraining1() {
         return mgmtTraining1;
     }
@@ -6116,10 +5250,6 @@ public class Ca implements Serializable {
 
     public String getMgmtTraining5() {
         return mgmtTraining5;
-    }
-
-    public boolean isMgmtReport0() {
-        return mgmtReport0;
     }
 
     public String getMgmtReport1() {
@@ -6142,10 +5272,6 @@ public class Ca implements Serializable {
         return mgmtReport5;
     }
 
-    public boolean isMgmtPlan0() {
-        return mgmtPlan0;
-    }
-
     public String getMgmtPlan1() {
         return mgmtPlan1;
     }
@@ -6166,10 +5292,6 @@ public class Ca implements Serializable {
         return mgmtPlan5;
     }
 
-    public boolean isMgmtMaintain0() {
-        return mgmtMaintain0;
-    }
-
     public String getMgmtMaintain1() {
         return mgmtMaintain1;
     }
@@ -6188,10 +5310,6 @@ public class Ca implements Serializable {
 
     public String getMgmtMaintain5() {
         return mgmtMaintain5;
-    }
-
-    public boolean isMgmtFace2Face0() {
-        return mgmtFace2Face0;
     }
 
     public String getMgmtFace2Face1() {

@@ -1,9 +1,11 @@
 $(document).ready(function() {
 
 $('#userId').html('<i class="fa fa-user"></i> 000000');
+
 var clubId = location.search.split('=')[1];
 
-var dt = new Date();
+var today = new Date();
+var dt = new Date(today.getFullYear(), today.getMonth()-1, 1);
 var yEnd = dt.getFullYear();
 var mEnd = dt.getMonth();
 dt.setMonth(mEnd - 5);
@@ -83,8 +85,7 @@ ctx = $("#chartProductsRevenue").get(0).getContext("2d");
 var chartProductsRevenue = new Chart(ctx);
 
 function getTrends() {
-console.log("---"+yStart+","+yEnd+",,,"+mStart+","+mEnd);
-    var dt = new Date(yStart+'-'+(mStart+1));
+    var dt = new Date(yStart, mStart, 1);
     for (var i = 0; dt.getMonth() <= mEnd; i++) {
         lineData.labels[i] = dt.getFullYear()+'-'+(dt.getMonth()+1);
         dt.setMonth(dt.getMonth() + 1);

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>PJ</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid" style="overflow: auto">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Curves</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="management.htm">Clubs</a></li>
+              <li><a href="us_report.htm">US Report</a></li>
+              <li><a href="rank.htm">Benchmarking</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="input-daterange input-group" id="datepicker">
+            <span class="input-group-addon">From</span>
+            <input type="text" class="input-sm form-control" id="x1Date" />
+            <span class="input-group-addon">To</span>
+            <input type="text" class="input-sm form-control" id="x2Date" />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button id="btnLoad" type="button" class="btn btn-success"> Load Data </button>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2">
+          <h4>Club：<span class="label label-default" id="clubName"></span></h4>
+        </div>
+        <div class="col-md-2">
+          <h4>Owner：<span class="label label-default" id="clubOwner"></span></h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered table-condensed" style="width: 1880px">
+            <thead>
+              <tr style="font-weight: bold">
+                <th style="width: 40px">年份</th>
+                <th style="width: 40px">月份</th>
+                <th style="width: 60px">新銷售</th>
+                <th style="width: 60px">退會</th>
+                <th style="width: 60px">移入</th>
+                <th style="width: 60px">移出</th>
+                <th style="width: 60px">純增</th>
+                <th style="width: 80px">本月總營收</th>
+                <th style="width: 80px">在籍會員</th>
+                <th style="width: 80px">請假人數</th>
+                <th style="width: 80px">有效會員</th>
+                <th style="width: 80px">銷售率</th>
+                <th style="width: 80px">退會率</th>
+                <th style="width: 80px">請假率</th>
+                <th style="width: 100px">WO數<br>Daily Work outs</th>
+                <th style="width: 100px">新銷售營收<br>New Sales</th>
+                <th style="width: 100px">月費收入<br>Dues & Drafts</th>
+                <th style="width: 80px">商品<br>Product</th>
+                <th style="width: 80px">租櫃等<br>其他收入<br>Others</th>
+                <th style="width: 80px">Total Orig-Guests</th>
+                <th style="width: 100px">ACH 或 信用卡</th>
+                <th style="width: 100px">月繳或季繳<br>Monthly Member</th>
+                <th style="width: 100px">年繳<br>All Prepays</th>
+                <th style="width: 100px">退會數<br>Member Cansels</th>
+              </tr>
+            </thead>
+            <tbody id="tbd">
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+    <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+    <script src="js/pj_summary.js"></script>
+  </body>
+</html>

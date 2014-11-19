@@ -262,6 +262,24 @@ public class ManagementController {
         return typeValues;
     }
 
+    @RequestMapping(value = "/rest/pjSummary", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PjSum> findPjSummaryByClub(@RequestParam("clubId") int clubId,
+                                                       @RequestParam("yStart") int yStart, @RequestParam("mStart") int mStart,
+                                                       @RequestParam("yEnd") int yEnd, @RequestParam("mEnd") int mEnd) {
+
+        return pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
+    }
+
+    @RequestMapping(value = "/rest/caSummary", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Ca> findCaSummaryByClub(@RequestParam("clubId") int clubId,
+                                        @RequestParam("yStart") int yStart, @RequestParam("mStart") int mStart,
+                                        @RequestParam("yEnd") int yEnd, @RequestParam("mEnd") int mEnd) {
+
+        return caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
+    }
+
     @RequestMapping(value = "/rest/usReport", method = RequestMethod.GET)
     @ResponseBody
     public List<PjSum> findUsReport(@RequestParam("year") int year, @RequestParam("month") int month) {

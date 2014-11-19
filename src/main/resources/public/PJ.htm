@@ -13,6 +13,7 @@
   <link href="css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/datepicker.css" rel="stylesheet">
+  <link href="css/tooltipster.css" rel="stylesheet">
   <link href="css/site.css" rel="stylesheet">
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -61,9 +62,9 @@
       <div class="alert hide" role="alert"></div>
     </div>
   </div>
-  <div class="row" style="padding:10px 14px">
-    <div class="table-responsive">
-      <table id="tbl" class="table table-bordered table-condensed" style="width: 2500px">
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-bordered table-condensed" style="width: 2640px">
         <thead>
           <tr>
             <th style="color: red">加盟店編號</th>
@@ -118,40 +119,40 @@
             <th colspan="4" style="background-color: #FF99CC">AGP：Outgoing Calls</th>
           </tr>
           <tr>
-            <th>日期<br>Day</th>
-            <th>星期<br>Day</th>
-            <th>順序</th>
-            <th>營業日<br>Work Day of month</th>
-            <th>WO數<br>Daily Work outs</th>
-            <th>新銷售營收<br>New Sales</th>
-            <th>月費收入<br>Dues & Drafts</th>
-            <th>商品<br>Product</th>
-            <th>租櫃等<br>其他收入<br>Others</th>
-            <th>來電與來店<br>Incoming Calls</th>
-            <th>APO</th>
-            <th>打出去的電話<br>outgoing calls</th>
-            <th>APO</th>
-            <th>會員介紹<br>（本店）</th>
-            <th>會員介紹<br>（他店）</th>
-            <th>平面媒體</th>
-            <th>電視</th>
-            <th>網路<br>（官網留言）</th>
-            <th>招牌</th>
-            <th>策略夥伴</th>
-            <th>其他</th>
-            <th>直效信函<br>（買名單）</th>
-            <th>信箱傳單</th>
-            <th>手發傳單</th>
-            <th>CP</th>
-            <th>發招待券<br>（店外要電話）</th>
-            <th>發招待券<br>（店內要電話）</th>
-            <th>部落格問劵<br>(含自店臉書)</th>
-            <th>詢問箱</th>
-            <th>Total Orig-Guests</th>
-            <th>ACH 或 信用卡</th>
-            <th>月繳或季繳<br>Monthly Member</th>
-            <th>年繳<br>All Prepays</th>
-            <th>退會數<br>Member Cancels</th>
+            <th style="width: 80px">日期<br>Day</th>
+            <th style="width: 80px">星期<br>Day</th>
+            <th style="width: 80px">順序</th>
+            <th style="width: 80px" id="workingDaysTitle">營業日<br>Work Day of month</th>
+            <th style="width: 80px" id="workOutsTitle">WO數<br>Daily Work outs</th>
+            <th style="width: 80px"id="newSalesRevenueTitle">新銷售營收<br>New Sales</th>
+            <th style="width: 80px"id="duesDraftsRevenueTitle">月費收入<br>Dues & Drafts</th>
+            <th style="width: 80px"id="productsRevenueTitle">商品<br>Product</th>
+            <th style="width: 80px"id="otherRevenueTitle">租櫃等<br>其他收入<br>Others</th>
+            <th style="width: 80px"id="incomingCallsTitle">來電與來店<br>Incoming Calls</th>
+            <th style="width: 40px"id="incomingApoTitle">APO</th>
+            <th style="width: 100px"id="outgoingCallsTitle">打出去的電話<br>outgoing calls</th>
+            <th style="width: 40px"id="outgoingApoTitle">APO</th>
+            <th style="width: 80px"id="brOwnRefTitle">會員介紹<br>（本店）</th>
+            <th style="width: 80px"id="brOthersRefTitle">會員介紹<br>（他店）</th>
+            <th style="width: 80px"id="brandedNewspaperTitle">平面媒體</th>
+            <th style="width: 40px"id="brandedTvTitle">電視</th>
+            <th style="width: 100px"id="brandedInternetTitle">網路<br>（官網留言）</th>
+            <th style="width: 40px"id="brandedSignTitle">招牌</th>
+            <th style="width: 80px"id="brandedMateTitle">策略夥伴</th>
+            <th style="width: 40px"id="brandedOthersTitle">其他</th>
+            <th style="width: 80px"id="agpInDirectMailTitle">直效信函<br>（買名單）</th>
+            <th style="width: 80px"id="agpInMailFlyerTitle">信箱傳單</th>
+            <th style="width: 80px"id="agpInHandFlyerTitle">手發傳單</th>
+            <th style="width: 40px"id="agpInCpTitle">CP</th>
+            <th style="width: 100px"id="agpOutApoOutTitle">發招待券<br>（店外要電話）</th>
+            <th style="width: 100px"id="agpOutApoInTitle">發招待券<br>（店內要電話）</th>
+            <th style="width: 100px"id="agpOutApoBlogTitle">部落格問劵<br>(含自店臉書)</th>
+            <th style="width: 80px"id="agpOutApoBagTitle">詢問箱</th>
+            <th style="width: 80px">Total Orig-Guests</th>
+            <th style="width: 100px"id="enrollAchTitle">ACH 或 信用卡</th>
+            <th style="width: 80px"id="enrollMonthlyTitle">月繳或季繳<br>Monthly Member</th>
+            <th style="width: 80px"id="enrollAllPrepayTitle">年繳<br>All Prepays</th>
+            <th style="width: 80px"id="exitsTitle">退會數<br>Member Cancels</th>
           </tr>
         </thead>
         <tbody id="tbd">
@@ -165,6 +166,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
 <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+<script src="js/jquery.tooltipster.min.js"></script>
 <script src="js/PJ.js"></script>
 </body>
 </html>

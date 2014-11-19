@@ -47,6 +47,19 @@ function showAlert(alertClass, msg) {
 }
 
 function getCA() {
+    $.getJSON("/rest/CA/lastMonth", {caYear: currentYear, caMonth: (currentMonth-1)}, function(data) {
+        if (data['svcTm6']) {
+            $('#goalsLastTm').text(data['svcTm6']);
+            $('#goalsLastActive').text(data['svcActive6']);
+            $('#goalsLastShowRatio').text(data['cmShowRatio6']);
+            $('#goalsLastSalesRatio').text(data['salesRatio6']);
+            $('#thisPlan').val(data['nextPlan']);
+        }
+
+    }).fail(function() {
+        showAlert("alert-danger", "Cannot load data. Please refresh and retry.");
+    });
+
     $.getJSON("/rest/CA", {caYear: currentYear, caMonth: currentMonth}, function(ca) {
         fillSheet(ca);
     }).fail(function() {
@@ -55,25 +68,12 @@ function getCA() {
 
     if (currentYear == thisYear && currentMonth == thisMonth) {
         $('#btnSave').prop("disabled", false);
-        $('td[contenteditable="false"]').prop('contenteditable', 'true');
+        $('td[contenteditable="false"]').prop('contenteditable', true);
     } else {
         $('#btnSave').prop("disabled", true);
-        $('td[contenteditable="true"]').prop('contenteditable', 'false');
+        $('td[contenteditable="true"]').prop('contenteditable', false);
     }
 }
-
-// switch star sign
-$('.toggleStar').click(function() {
-    $('#caDate').val();
-    if (currentYear != thisYear || currentMonth != thisMonth) {
-        return;
-    }
-    if ($(this).children().length == 0) {
-        $(this).append('<span class="glyphicon glyphicon-star"></span>');
-    } else {
-        $(this).empty();
-    }
-});
 
 $('.toggleV').click(function() {
     if (currentYear != thisYear || currentMonth != thisMonth) {
@@ -86,75 +86,41 @@ $('td[contenteditable="true"]').focusout(function() {
     runFormula();
 });
 
-$('td[contenteditable="true"]').keydown(function (e) {
-    // Allow: backspace, delete, tab, escape, enter and .
-    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-         // Allow: Ctrl+A
-        (e.keyCode == 65 && e.ctrlKey === true) ||
-         // Allow: home, end, left, right
-        (e.keyCode >= 35 && e.keyCode <= 39)) {
-             // let it happen, don't do anything
-             return;
-    }
-    // Ensure that it is a number and stop the keypress
-    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-        e.preventDefault();
-    }
-});
-
 function fillSheet(ca) {
     caId = ca.id || -1;
     $('#goalsTm').text(ca.goalsTm);
-    $('#goalsLastTm').text(ca.goalsLastTm);
-    $('#goalsLastActive').text(ca.goalsLastActive);
-    $('#goalsLastShowRatio').text((+(ca.goalsLastShowRatio*100))+'%');
-    $('#goalsLastSalesRatio').text((+(ca.goalsLastSalesRatio*100))+'%');
     $('#goalsExitsRatio').text((+(ca.goalsExitsRatio*100))+'%');
     $('#goalsNewSales').text(ca.goalsNewSales);
     $('#salesTotalX').text(ca.goalsNewSales);
     $('#goalsAppoints').text(ca.goalsAppoints);
     $('#apoTotalX').text(ca.goalsAppoints);
 
-    $('#thisPlan').val(ca.thisPlan);
-
-    if (ca.svcTm0) {
-        $('#svcTm-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcTm-1').text(ca.svcTm1);
     $('#svcTm-2').text(ca.svcTm2);
     $('#svcTm-3').text(ca.svcTm3);
     $('#svcTm-4').text(ca.svcTm4);
     $('#svcTm-5').text(ca.svcTm5);
     $('#svcTm-6').text(ca.svcTm6);
-    if (ca.svcShift0) {
-        $('#svcShift-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcShift-1').text(ca.svcShift1);
     $('#svcShift-2').text(ca.svcShift2);
     $('#svcShift-3').text(ca.svcShift3);
     $('#svcShift-4').text(ca.svcShift4);
     $('#svcShift-5').text(ca.svcShift5);
     $('#svcShift-6').text(ca.svcShift6);
-    if (ca.svcHold0) {
-        $('#svcHold-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcHold-1').text(ca.svcHold1);
     $('#svcHold-2').text(ca.svcHold2);
     $('#svcHold-3').text(ca.svcHold3);
     $('#svcHold-4').text(ca.svcHold4);
     $('#svcHold-5').text(ca.svcHold5);
     $('#svcHold-6').text(ca.svcHold6);
-    if (ca.svcActive0) {
-        $('#svcActive-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcActive-1').text(ca.svcActive1);
     $('#svcActive-2').text(ca.svcActive2);
     $('#svcActive-3').text(ca.svcActive3);
     $('#svcActive-4').text(ca.svcActive4);
     $('#svcActive-5').text(ca.svcActive5);
     $('#svcActive-6').text(ca.svcActive6);
-    if (ca.svcHoldRatio0) {
-        $('#svcHoldRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svcHoldRatio6 < 0.12) {
+        $('#svcHoldRatio-0').css('color', 'red');
     }
     $('#svcHoldRatio-1').text((ca.svcHoldRatio1*100).toFixed(1)+'%');
     $('#svcHoldRatio-2').text((ca.svcHoldRatio2*100).toFixed(1)+'%');
@@ -162,8 +128,8 @@ function fillSheet(ca) {
     $('#svcHoldRatio-4').text((ca.svcHoldRatio4*100).toFixed(1)+'%');
     $('#svcHoldRatio-5').text((ca.svcHoldRatio5*100).toFixed(1)+'%');
     $('#svcHoldRatio-6').text((ca.svcHoldRatio6*100).toFixed(1)+'%');
-    if (ca.svcTotalWo0) {
-        $('#svcTotalWo-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svcTotalWo6 > (8 * ca.svcActive6)) {
+        $('#svcTotalWo-0').css('color', 'red');
     }
     $('#svcTotalWo-1').text(ca.svcTotalWo1);
     $('#svcTotalWo-2').text(ca.svcTotalWo2);
@@ -171,8 +137,8 @@ function fillSheet(ca) {
     $('#svcTotalWo-4').text(ca.svcTotalWo4);
     $('#svcTotalWo-5').text(ca.svcTotalWo5);
     $('#svcTotalWo-6').text(ca.svcTotalWo6);
-    if (ca.svcAvgWo0) {
-        $('#svcAvgWo-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svcAvgWo6 > 2.0) {
+        $('#svcAvgWo-0').css('color', 'red');
     }
     $('#svcAvgWo-1').text(ca.svcAvgWo1.toFixed(1));
     $('#svcAvgWo-2').text(ca.svcAvgWo2.toFixed(1));
@@ -180,26 +146,20 @@ function fillSheet(ca) {
     $('#svcAvgWo-4').text(ca.svcAvgWo4.toFixed(1));
     $('#svcAvgWo-5').text(ca.svcAvgWo5.toFixed(1));
     $('#svcAvgWo-6').text(ca.svcAvgWo6.toFixed(1));
-    if (ca.svcMaxWo0) {
-        $('#svcMaxWo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcMaxWo-1').text(ca.svcMaxWo1);
     $('#svcMaxWo-2').text(ca.svcMaxWo2);
     $('#svcMaxWo-3').text(ca.svcMaxWo3);
     $('#svcMaxWo-4').text(ca.svcMaxWo4);
     $('#svcMaxWo-5').text(ca.svcMaxWo5);
     $('#svcMaxWo-6').text((ca.svcMaxWo6*100).toFixed(0)+'%');
-    if (ca.svcExits0) {
-        $('#svcExits-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcExits-1').text(ca.svcExits1);
     $('#svcExits-2').text(ca.svcExits2);
     $('#svcExits-3').text(ca.svcExits3);
     $('#svcExits-4').text(ca.svcExits4);
     $('#svcExits-5').text(ca.svcExits5);
     $('#svcExits-6').text(ca.svcExits6);
-    if (ca.svcExitsRatio0) {
-        $('#svcExitsRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svcExitsRatio6 < 0.04) {
+        $('#svcExitsRatio-0').css('color', 'red');
     }
     $('#svcExitsRatio-1').text((ca.svcExitsRatio1*100).toFixed(1)+'%');
     $('#svcExitsRatio-2').text((ca.svcExitsRatio2*100).toFixed(1)+'%');
@@ -207,17 +167,14 @@ function fillSheet(ca) {
     $('#svcExitsRatio-4').text((ca.svcExitsRatio4*100).toFixed(1)+'%');
     $('#svcExitsRatio-5').text((ca.svcExitsRatio5*100).toFixed(1)+'%');
     $('#svcExitsRatio-6').text((ca.svcExitsRatio6*100).toFixed(1)+'%');
-    if (ca.svcMeasure0) {
-        $('#svcMeasure-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcMeasure-1').text(ca.svcMeasure1);
     $('#svcMeasure-2').text(ca.svcMeasure2);
     $('#svcMeasure-3').text(ca.svcMeasure3);
     $('#svcMeasure-4').text(ca.svcMeasure4);
     $('#svcMeasure-5').text(ca.svcMeasure5);
     $('#svcMeasure-6').text(ca.svcMeasure6);
-    if (ca.svcMeasureRatio0) {
-        $('#svcMeasureRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svcMeasureRatio6 > (ca.svcActive6*0.6)) {
+        $('#svcMeasureRatio-0').css('color', 'red');
     }
     $('#svcMeasureRatio-1').text((ca.svcMeasureRatio1*100).toFixed(0)+'%');
     $('#svcMeasureRatio-2').text((ca.svcMeasureRatio2*100).toFixed(0)+'%');
@@ -225,396 +182,263 @@ function fillSheet(ca) {
     $('#svcMeasureRatio-4').text((ca.svcMeasureRatio4*100).toFixed(0)+'%');
     $('#svcMeasureRatio-5').text((ca.svcMeasureRatio5*100).toFixed(0)+'%');
     $('#svcMeasureRatio-6').text((ca.svcMeasureRatio6*100).toFixed(0)+'%');
-    if (ca.svc12_0) {
-        $('#svc12-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svc12_6 > 0.3) {
+        $('#svc12-0').css('color', 'red');
     }
     $('#svc12-5').text(ca.svc12_5);
     $('#svc12-6').text((ca.svc12_6*100).toFixed(0)+'%');
-    if (ca.svc8to11_0) {
-        $('#svc8to11-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.svc8to11_6 > 0.25) {
+        $('#svc8to11-0').css('color', 'red');
     }
     $('#svc8to11-5').text(ca.svc8to11_5);
     $('#svc8to11-6').text((ca.svc8to11_6*100).toFixed(0)+'%');
-    if (ca.svc4to7_0) {
-        $('#svc4to7-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svc4to7-5').text(ca.svc4to7_5);
     $('#svc4to7-6').text((ca.svc4to7_6*100).toFixed(0)+'%');
-    if (ca.svc1to3_0) {
-        $('#svc1to3-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svc1to3-5').text(ca.svc1to3_5);
     $('#svc1to3-6').text((ca.svc1to3_6*100).toFixed(0)+'%');
-    if (ca.svc0_0) {
-        $('#svc0-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svc0-5').text(ca.svc0_5);
     $('#svc0-6').text((ca.svc0_6*100).toFixed(0)+'%');
-    if (ca.svc3More0) {
-        $('#svc3More-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svc3More-1').text(ca.svc3More1);
     $('#svc3More-2').text(ca.svc3More2);
     $('#svc3More-3').text(ca.svc3More3);
     $('#svc3More-4').text(ca.svc3More4);
     $('#svc3More-5').text(ca.svc3More5);
-    if (ca.svcInactive0) {
-        $('#svcInactive-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcInactive-1').text(ca.svcInactive1);
     $('#svcInactive-2').text(ca.svcInactive2);
     $('#svcInactive-3').text(ca.svcInactive3);
     $('#svcInactive-4').text(ca.svcInactive4);
     $('#svcInactive-5').text(ca.svcInactive5);
-    if (ca.svcFwoReview0) {
-        $('#svcFwoReview-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcFwoReview-1').text(ca.svcFwoReview1);
     $('#svcFwoReview-2').text(ca.svcFwoReview2);
     $('#svcFwoReview-3').text(ca.svcFwoReview3);
     $('#svcFwoReview-4').text(ca.svcFwoReview4);
     $('#svcFwoReview-5').text(ca.svcFwoReview5);
-    if (ca.svcInterview0) {
-        $('#svcInterview-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcInterview-1').text(ca.svc3More1);
     $('#svcInterview-2').text(ca.svcInterview2);
     $('#svcInterview-3').text(ca.svcInterview3);
     $('#svcInterview-4').text(ca.svcInterview4);
     $('#svcInterview-5').text(ca.svcInterview5);
-    if (ca.svcThanks0) {
-        $('#svcThanks-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcThanks-1').text(ca.svcThanks1);
     $('#svcThanks-2').text(ca.svcThanks2);
     $('#svcThanks-3').text(ca.svcThanks3);
     $('#svcThanks-4').text(ca.svcThanks4);
     $('#svcThanks-5').text(ca.svcThanks5);
-    if (ca.svc3C0) {
-        $('#svc3C-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svc3C-1').text(ca.svc3C1);
     $('#svc3C-2').text(ca.svc3C2);
     $('#svc3C-3').text(ca.svc3C3);
     $('#svc3C-4').text(ca.svc3C4);
     $('#svc3C-5').text(ca.svc3C5);
-    if (ca.svcReward0) {
-        $('#svcReward-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcReward-1').text(ca.svcReward1);
     $('#svcReward-2').text(ca.svcReward2);
     $('#svcReward-3').text(ca.svcReward3);
     $('#svcReward-4').text(ca.svcReward4);
     $('#svcReward-5').text(ca.svcReward5);
-    if (ca.svcLoyal0) {
-        $('#svcLoyal-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#svcLoyal-1').text(ca.svcLoyal1);
     $('#svcLoyal-2').text(ca.svcLoyal2);
     $('#svcLoyal-3').text(ca.svcLoyal3);
     $('#svcLoyal-4').text(ca.svcLoyal4);
     $('#svcLoyal-5').text(ca.svcLoyal5);
 
-    if (ca.cmPostFlyer0) {
-        $('#cmPostFlyer-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmPostFlyer-1').text(ca.cmPostFlyer1);
     $('#cmPostFlyer-2').text(ca.cmPostFlyer2);
     $('#cmPostFlyer-3').text(ca.cmPostFlyer3);
     $('#cmPostFlyer-4').text(ca.cmPostFlyer4);
     $('#cmPostFlyer-5').text(ca.cmPostFlyer5);
     $('#cmPostFlyer-6').text(ca.cmPostFlyer6);
-    if (ca.cmHandFlyer0) {
-        $('#cmHandFlyer-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmHandFlyer-1').text(ca.cmHandFlyer1);
     $('#cmHandFlyer-2').text(ca.cmHandFlyer2);
     $('#cmHandFlyer-3').text(ca.cmHandFlyer3);
     $('#cmHandFlyer-4').text(ca.cmHandFlyer4);
     $('#cmHandFlyer-5').text(ca.cmHandFlyer5);
     $('#cmHandFlyer-6').text(ca.cmHandFlyer6);
-    if (ca.cmHandFlyerHours0) {
-        $('#cmHandFlyerHours-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmHandFlyerHours-1').text(ca.cmHandFlyerHours1.toFixed(1));
     $('#cmHandFlyerHours-2').text(ca.cmHandFlyerHours2.toFixed(1));
     $('#cmHandFlyerHours-3').text(ca.cmHandFlyerHours3.toFixed(1));
     $('#cmHandFlyerHours-4').text(ca.cmHandFlyerHours4.toFixed(1));
     $('#cmHandFlyerHours-5').text(ca.cmHandFlyerHours5.toFixed(1));
     $('#cmHandFlyerHours-6').text(ca.cmHandFlyerHours6.toFixed(1));
-    if (ca.cmOutGphours0) {
-        $('#cmOutGphours-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGpHours-1').text(ca.cmOutGpHours1.toFixed(1));
     $('#cmOutGpHours-2').text(ca.cmOutGpHours2.toFixed(1));
     $('#cmOutGpHours-3').text(ca.cmOutGpHours3.toFixed(1));
     $('#cmOutGpHours-4').text(ca.cmOutGpHours4.toFixed(1));
     $('#cmOutGpHours-5').text(ca.cmOutGpHours5.toFixed(1));
     $('#cmOutGpHours-6').text(ca.cmOutGpHours6.toFixed(1));
-    if (ca.cmOutGp0) {
-        $('#cmOutGp-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGp-1').text(ca.cmOutGp1);
     $('#cmOutGp-2').text(ca.cmOutGp2);
     $('#cmOutGp-3').text(ca.cmOutGp3);
     $('#cmOutGp-4').text(ca.cmOutGp4);
     $('#cmOutGp-5').text(ca.cmOutGp5);
     $('#cmOutGp-6').text(ca.cmOutGp6);
-    if (ca.cmCpBox0) {
-        $('#cmCpBox-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmCpBox-1').text(ca.cmCpBox1);
     $('#cmCpBox-2').text(ca.cmCpBox2);
     $('#cmCpBox-3').text(ca.cmCpBox3);
     $('#cmCpBox-4').text(ca.cmCpBox4);
     $('#cmCpBox-5').text(ca.cmCpBox5);
     $('#cmCpBox-6').text(ca.cmCpBox6);
-    if (ca.cmOutGot0) {
-        $('#cmOutGot-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGot-1').text(ca.cmOutGot1);
     $('#cmOutGot-2').text(ca.cmOutGot2);
     $('#cmOutGot-3').text(ca.cmOutGot3);
     $('#cmOutGot-4').text(ca.cmOutGot4);
     $('#cmOutGot-5').text(ca.cmOutGot5);
     $('#cmOutGot-6').text(ca.cmOutGot6);
-    if (ca.cmInGot0) {
-        $('#cmInGot-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmInGot-1').text(ca.cmInGot1);
     $('#cmInGot-2').text(ca.cmInGot2);
     $('#cmInGot-3').text(ca.cmInGot3);
     $('#cmInGot-4').text(ca.cmInGot4);
     $('#cmInGot-5').text(ca.cmInGot5);
     $('#cmInGot-6').text(ca.cmInGot6);
-    if (ca.cmBlogGot0) {
-        $('#cmBlogGot-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmBlogGot-1').text(ca.cmBlogGot1);
     $('#cmBlogGot-2').text(ca.cmBlogGot2);
     $('#cmBlogGot-3').text(ca.cmBlogGot3);
     $('#cmBlogGot-4').text(ca.cmBlogGot4);
     $('#cmBlogGot-5').text(ca.cmBlogGot5);
     $('#cmBlogGot-6').text(ca.cmBlogGot6);
-    if (ca.cmBagGot0) {
-        $('#cmBagGot-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmBagGot-1').text(ca.cmBagGot1);
     $('#cmBagGot-2').text(ca.cmBagGot2);
     $('#cmBagGot-3').text(ca.cmBagGot3);
     $('#cmBagGot-4').text(ca.cmBagGot4);
     $('#cmBagGot-5').text(ca.cmBagGot5);
     $('#cmBagGot-6').text(ca.cmBagGot6);
-    if (ca.cmTotalGot0) {
-        $('#cmTotalGot-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmTotalGot-1').text(ca.cmTotalGot1);
     $('#cmTotalGot-2').text(ca.cmTotalGot2);
     $('#cmTotalGot-3').text(ca.cmTotalGot3);
     $('#cmTotalGot-4').text(ca.cmTotalGot4);
     $('#cmTotalGot-5').text(ca.cmTotalGot5);
     $('#cmTotalGot-6').text(ca.cmTotalGot6);
-    if (ca.cmCallIn0) {
-        $('#cmCallIn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmCallIn-1').text(ca.cmCallIn1);
     $('#cmCallIn-2').text(ca.cmCallIn2);
     $('#cmCallIn-3').text(ca.cmCallIn3);
     $('#cmCallIn-4').text(ca.cmCallIn4);
     $('#cmCallIn-5').text(ca.cmCallIn5);
     $('#cmCallIn-6').text(ca.cmCallIn6);
-    if (ca.cmOutGotCall0) {
-        $('#cmOutGotCall-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGotCall-1').text(ca.cmOutGotCall1);
     $('#cmOutGotCall-2').text(ca.cmOutGotCall2);
     $('#cmOutGotCall-3').text(ca.cmOutGotCall3);
     $('#cmOutGotCall-4').text(ca.cmOutGotCall4);
     $('#cmOutGotCall-5').text(ca.cmOutGotCall5);
     $('#cmOutGotCall-6').text(ca.cmOutGotCall6);
-    if (ca.cmInGotCall0) {
-        $('#cmInGotCall-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmInGotCall-1').text(ca.cmInGotCall1);
     $('#cmInGotCall-2').text(ca.cmInGotCall2);
     $('#cmInGotCall-3').text(ca.cmInGotCall3);
     $('#cmInGotCall-4').text(ca.cmInGotCall4);
     $('#cmInGotCall-5').text(ca.cmInGotCall5);
     $('#cmInGotCall-6').text(ca.cmInGotCall6);
-    if (ca.cmBlogGotCall0) {
-        $('#cmBlogGotCall-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmBlogGotCall-1').text(ca.cmBlogGotCall1);
     $('#cmBlogGotCall-2').text(ca.cmBlogGotCall2);
     $('#cmBlogGotCall-3').text(ca.cmBlogGotCall3);
     $('#cmBlogGotCall-4').text(ca.cmBlogGotCall4);
     $('#cmBlogGotCall-5').text(ca.cmBlogGotCall5);
     $('#cmBlogGotCall-6').text(ca.cmBlogGotCall6);
-    if (ca.cmBagGotCall0) {
-        $('#cmBagGotCall-0').append('<span class="glyphicon glyphicon-star"></span>');
-        $('#cmBagGotCall-0').addClass('glyphicon-star');
-    }
     $('#cmBagGotCall-1').text(ca.cmBagGotCall1);
     $('#cmBagGotCall-2').text(ca.cmBagGotCall2);
     $('#cmBagGotCall-3').text(ca.cmBagGotCall3);
     $('#cmBagGotCall-4').text(ca.cmBagGotCall4);
     $('#cmBagGotCall-5').text(ca.cmBagGotCall5);
     $('#cmBagGotCall-6').text(ca.cmBagGotCall6);
-    if (ca.cmOwnRefs0) {
-        $('#cmOwnRefs-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOwnRefs-1').text(ca.cmOwnRefs1);
     $('#cmOwnRefs-2').text(ca.cmOwnRefs2);
     $('#cmOwnRefs-3').text(ca.cmOwnRefs3);
     $('#cmOwnRefs-4').text(ca.cmOwnRefs4);
     $('#cmOwnRefs-5').text(ca.cmOwnRefs5);
     $('#cmOwnRefs-6').text(ca.cmOwnRefs6);
-    if (ca.cmOtherRefs0) {
-        $('#cmOtherRefs-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOtherRefs-1').text(ca.cmOtherRefs1);
     $('#cmOtherRefs-2').text(ca.cmOtherRefs2);
     $('#cmOtherRefs-3').text(ca.cmOtherRefs3);
     $('#cmOtherRefs-4').text(ca.cmOtherRefs4);
     $('#cmOtherRefs-5').text(ca.cmOtherRefs5);
     $('#cmOtherRefs-6').text(ca.cmOtherRefs6);
-    if (ca.cmNewspaper0) {
-        $('#cmNewspaper-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmNewspaper-1').text(ca.cmNewspaper1);
     $('#cmNewspaper-2').text(ca.cmNewspaper2);
     $('#cmNewspaper-3').text(ca.cmNewspaper3);
     $('#cmNewspaper-4').text(ca.cmNewspaper4);
     $('#cmNewspaper-5').text(ca.cmNewspaper5);
     $('#cmNewspaper-6').text(ca.cmNewspaper6);
-    if (ca.cmTv0) {
-        $('#cmTv-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmTv-1').text(ca.cmTv1);
     $('#cmTv-2').text(ca.cmTv2);
     $('#cmTv-3').text(ca.cmTv3);
     $('#cmTv-4').text(ca.cmTv4);
     $('#cmTv-5').text(ca.cmTv5);
     $('#cmTv-6').text(ca.cmTv6);
-    if (ca.cmInternet0) {
-        $('#cmInternet-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmInternet-1').text(ca.cmInternet1);
     $('#cmInternet-2').text(ca.cmInternet2);
     $('#cmInternet-3').text(ca.cmInternet3);
     $('#cmInternet-4').text(ca.cmInternet4);
     $('#cmInternet-5').text(ca.cmInternet5);
     $('#cmInternet-6').text(ca.cmInternet6);
-    if (ca.cmSign0) {
-        $('#cmSign-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmSign-1').text(ca.cmSign1);
     $('#cmSign-2').text(ca.cmSign2);
     $('#cmSign-3').text(ca.cmSign3);
     $('#cmSign-4').text(ca.cmSign4);
     $('#cmSign-5').text(ca.cmSign5);
     $('#cmSign-6').text(ca.cmSign6);
-    if (ca.cmMate0) {
-        $('#cmMate-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmMate-1').text(ca.cmMate1);
     $('#cmMate-2').text(ca.cmMate2);
     $('#cmMate-3').text(ca.cmMate3);
     $('#cmMate-4').text(ca.cmMate4);
     $('#cmMate-5').text(ca.cmMate5);
     $('#cmMate-6').text(ca.cmMate6);
-    if (ca.cmOthers0) {
-        $('#cmOthers-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOthers-1').text(ca.cmOthers1);
     $('#cmOthers-2').text(ca.cmOthers2);
     $('#cmOthers-3').text(ca.cmOthers3);
     $('#cmOthers-4').text(ca.cmOthers4);
     $('#cmOthers-5').text(ca.cmOthers5);
     $('#cmOthers-6').text(ca.cmOthers6);
-    if (ca.cmMailAgpIn0) {
-        $('#cmMailAgpIn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmMailAgpIn-1').text(ca.cmMailAgpIn1);
     $('#cmMailAgpIn-2').text(ca.cmMailAgpIn2);
     $('#cmMailAgpIn-3').text(ca.cmMailAgpIn3);
     $('#cmMailAgpIn-4').text(ca.cmMailAgpIn4_);
     $('#cmMailAgpIn-5').text(ca.cmMailAgpIn5);
     $('#cmMailAgpIn-6').text(ca.cmMailAgpIn6);
-    if (ca.cmPostFlyerAgpIn0) {
-        $('#cmPostFlyerAgpIn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmPostFlyerAgpIn-1').text(ca.cmPostFlyerAgpIn1);
     $('#cmPostFlyerAgpIn-2').text(ca.cmPostFlyerAgpIn2);
     $('#cmPostFlyerAgpIn-3').text(ca.cmPostFlyerAgpIn3);
     $('#cmPostFlyerAgpIn-4').text(ca.cmPostFlyerAgpIn4);
     $('#cmPostFlyerAgpIn-5').text(ca.cmPostFlyerAgpIn5);
     $('#cmPostFlyerAgpIn-6').text(ca.cmPostFlyerAgpIn6);
-    if (ca.cmHandFlyerAgpIn0) {
-        $('#cmHandFlyerAgpIn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmHandFlyerAgpIn-1').text(ca.cmHandFlyerAgpIn1);
     $('#cmHandFlyerAgpIn-2').text(ca.cmHandFlyerAgpIn2);
     $('#cmHandFlyerAgpIn-3').text(ca.cmHandFlyerAgpIn3);
     $('#cmHandFlyerAgpIn-4').text(ca.cmHandFlyerAgpIn4);
     $('#cmHandFlyerAgpIn-5').text(ca.cmHandFlyerAgpIn5);
     $('#cmHandFlyerAgpIn-6').text(ca.cmHandFlyerAgpIn6);
-    if (ca.cmCpAgpIn0) {
-        $('#cmCpAgpIn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmCpAgpIn-1').text(ca.cmCpAgpIn1);
     $('#cmCpAgpIn-2').text(ca.cmCpAgpIn2);
     $('#cmCpAgpIn-3').text(ca.cmCpAgpIn3);
     $('#cmCpAgpIn-4').text(ca.cmCpAgpIn4);
     $('#cmCpAgpIn-5').text(ca.cmCpAgpIn5);
     $('#cmCpAgpIn-6').text(ca.cmCpAgpIn6);
-    if (ca.cmOutAgpOut0) {
-        $('#cmOutAgpOut-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutAgpOut-1').text(ca.cmOutAgpOut1);
     $('#cmOutAgpOut-2').text(ca.cmOutAgpOut2);
     $('#cmOutAgpOut-3').text(ca.cmOutAgpOut3);
     $('#cmOutAgpOut-4').text(ca.cmOutAgpOut4);
     $('#cmOutAgpOut-5').text(ca.cmOutAgpOut5);
     $('#cmOutAgpOut-6').text(ca.cmOutAgpOut6);
-    if (ca.cmInAgpOut0) {
-        $('#cmInAgpOut-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmInAgpOut-1').text(ca.cmInAgpOut1);
     $('#cmInAgpOut-2').text(ca.cmInAgpOut2);
     $('#cmInAgpOut-3').text(ca.cmInAgpOut3);
     $('#cmInAgpOut-4').text(ca.cmInAgpOut4);
     $('#cmInAgpOut-5').text(ca.cmInAgpOut5);
     $('#cmInAgpOut-6').text(ca.cmInAgpOut6);
-    if (ca.cmBlogAgpOut0) {
-        $('#cmBlogAgpOut-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmBlogAgpOut-1').text(ca.cmBlogAgpOut1);
     $('#cmBlogAgpOut-2').text(ca.cmBlogAgpOut2);
     $('#cmBlogAgpOut-3').text(ca.cmBlogAgpOut3);
     $('#cmBlogAgpOut-4').text(ca.cmBlogAgpOut4);
     $('#cmBlogAgpOut-5').text(ca.cmBlogAgpOut5);
     $('#cmBlogAgpOut-6').text(ca.cmBlogAgpOut6);
-    if (ca.cmBagAgpOut0) {
-        $('#cmBagAgpOut-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmBagAgpOut-1').text(ca.cmBagAgpOut1);
     $('#cmBagAgpOut-2').text(ca.cmBagAgpOut2);
     $('#cmBagAgpOut-3').text(ca.cmBagAgpOut3);
     $('#cmBagAgpOut-4').text(ca.cmBagAgpOut4);
     $('#cmBagAgpOut-5').text(ca.cmBagAgpOut5);
     $('#cmBagAgpOut-6').text(ca.cmBagAgpOut6);
-    if (ca.cmApoTotal0) {
-        $('#cmApoTotal-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmApoTotal-1').text(ca.cmApoTotal1);
     $('#cmApoTotal-2').text(ca.cmApoTotal2);
     $('#cmApoTotal-3').text(ca.cmApoTotal3);
     $('#cmApoTotal-4').text(ca.cmApoTotal4);
     $('#cmApoTotal-5').text(ca.cmApoTotal5);
     $('#cmApoTotal-6').text(ca.cmApoTotal6);
-    if (ca.cmInApptRatio0) {
-        $('#cmInApptRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.cmInApptRatio6 > 1) {
+        $('#cmInApptRatio-0').css('color', 'red');
     }
     $('#cmInApptRatio-1').text((ca.cmInApptRatio1*100).toFixed(0)+'%');
     $('#cmInApptRatio-2').text((ca.cmInApptRatio2*100).toFixed(0)+'%');
@@ -622,37 +446,19 @@ function fillSheet(ca) {
     $('#cmInApptRatio-4').text((ca.cmInApptRatio4*100).toFixed(0)+'%');
     $('#cmInApptRatio-5').text((ca.cmInApptRatio5*100).toFixed(0)+'%');
     $('#cmInApptRatio-6').text((ca.cmInApptRatio6*100).toFixed(0)+'%');
-    if (ca.cmOutApptRatio0) {
-        $('#cmOutApptRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutApptRatio-1').text((ca.cmOutApptRatio1*100).toFixed(0)+'%');
     $('#cmOutApptRatio-2').text((ca.cmOutApptRatio2*100).toFixed(0)+'%');
     $('#cmOutApptRatio-3').text((ca.cmOutApptRatio3*100).toFixed(0)+'%');
     $('#cmOutApptRatio-4').text((ca.cmOutApptRatio4*100).toFixed(0)+'%');
     $('#cmOutApptRatio-5').text((ca.cmOutApptRatio5*100).toFixed(0)+'%');
     $('#cmOutApptRatio-6').text((ca.cmOutApptRatio6*100).toFixed(0)+'%');
-    if (ca.cmPostPerApo0) {
-        $('#cmPostPerApo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmPostPerApo-6').text(ca.cmPostPerApo6);
-    if (ca.cmHandPerApo0) {
-        $('#cmHandPerApo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmHandPerApo-6').text(ca.cmHandPerApo6);
-    if (ca.cmHandHoursPerApo0) {
-        $('#cmHandHoursPerApo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmHandHoursPerApo-6').text(ca.cmHandHoursPerApo6.toFixed(1));
-    if (ca.cmOutGpHoursPerApo0) {
-        $('#cmOutGpHoursPerApo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGpHoursPerApo-6').text(ca.cmOutGpHoursPerApo6.toFixed(1));
-    if (ca.cmOutGpPerApo0) {
-        $('#cmOutGpPerApo-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmOutGpPerApo-6').text(ca.cmOutGpPerApo6);
-    if (ca.cmBrAgpRatio0) {
-        $('#cmBrAgpRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.cmBrAgpRatio6 > 0.75) {
+        $('#cmBrAgpRatio-0').css('color', 'red');
     }
     $('#cmBrAgpRatio-1').text((ca.cmBrAgpRatio1*100).toFixed(0)+'%');
     $('#cmBrAgpRatio-2').text((ca.cmBrAgpRatio2*100).toFixed(0)+'%');
@@ -660,17 +466,14 @@ function fillSheet(ca) {
     $('#cmBrAgpRatio-4').text((ca.cmBrAgpRatio4*100).toFixed(0)+'%');
     $('#cmBrAgpRatio-5').text((ca.cmBrAgpRatio5*100).toFixed(0)+'%');
     $('#cmBrAgpRatio-6').text((ca.cmBrAgpRatio6*100).toFixed(0)+'%');
-    if (ca.cmFaSum0) {
-        $('#cmFaSum-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmFaSum-1').text(ca.cmFaSum1);
     $('#cmFaSum-2').text(ca.cmFaSum2);
     $('#cmFaSum-3').text(ca.cmFaSum3);
     $('#cmFaSum-4').text(ca.cmFaSum4);
     $('#cmFaSum-5').text(ca.cmFaSum5);
     $('#cmFaSum-6').text(ca.cmFaSum6);
-    if (ca.cmShowRatio0) {
-        $('#cmShowRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.cmShowRatio6 > 0.8) {
+        $('#cmShowRatio-0').css('color', 'red');
     }
     $('#cmShowRatio-1').text((ca.cmShowRatio1*100).toFixed(0)+'%');
     $('#cmShowRatio-2').text((ca.cmShowRatio2*100).toFixed(0)+'%');
@@ -678,69 +481,48 @@ function fillSheet(ca) {
     $('#cmShowRatio-4').text((ca.cmShowRatio4*100).toFixed(0)+'%');
     $('#cmShowRatio-5').text((ca.cmShowRatio5*100).toFixed(0)+'%');
     $('#cmShowRatio-6').text((ca.cmShowRatio6*100).toFixed(0)+'%');
-    if (ca.cmTraining0) {
-        $('#cmTraining-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmTraining-1').text(ca.cmTraining1);
     $('#cmTraining-2').text(ca.cmTraining2);
     $('#cmTraining-3').text(ca.cmTraining3);
     $('#cmTraining-4').text(ca.cmTraining4);
     $('#cmTraining-5').text(ca.cmTraining5);
-    if (ca.cmGot3_0) {
-        $('#cmGot3-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmGot3-1').text(ca.cmGot3_1);
     $('#cmGot3-2').text(ca.cmGot3_2);
     $('#cmGot3-3').text(ca.cmGot3_3);
     $('#cmGot3-4').text(ca.cmGot3_4);
     $('#cmGot3-5').text(ca.cmGot3_5);
-    if (ca.cmInvitation0) {
-        $('#cmInvitation-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#cmInvitation-1').text(ca.cmInvitation1);
     $('#cmInvitation-2').text(ca.cmInvitation2);
     $('#cmInvitation-3').text(ca.cmInvitation3);
     $('#cmInvitation-4').text(ca.cmInvitation4);
     $('#cmInvitation-5').text(ca.cmInvitation5);
 
-    if (ca.salesAch0) {
-        $('#salesAch-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesAch-1').text(ca.salesAch1);
     $('#salesAch-2').text(ca.salesAch2);
     $('#salesAch-3').text(ca.salesAch3);
     $('#salesAch-4').text(ca.salesAch4);
     $('#salesAch-5').text(ca.salesAch5);
-    $('#salesAch-5').text(ca.salesAch6);
-    if (ca.salesMonthly0) {
-        $('#salesMonthly-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
+    $('#salesAch-6').text(ca.salesAch6);
     $('#salesMonthly-1').text(ca.salesMonthly1);
     $('#salesMonthly-2').text(ca.salesMonthly2);
     $('#salesMonthly-3').text(ca.salesMonthly3);
     $('#salesMonthly-4').text(ca.salesMonthly4);
     $('#salesMonthly-5').text(ca.salesMonthly5);
     $('#salesMonthly-6').text(ca.salesMonthly6);
-    if (ca.salesAllPrepay0) {
-        $('#salesAllPrepay-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesAllPrepay-1').text(ca.salesAllPrepay1);
     $('#salesAllPrepay-2').text(ca.salesAllPrepay2);
     $('#salesAllPrepay-3').text(ca.salesAllPrepay3);
     $('#salesAllPrepay-4').text(ca.salesAllPrepay4);
     $('#salesAllPrepay-5').text(ca.salesAllPrepay5);
     $('#salesAllPrepay-6').text(ca.salesAllPrepay6);
-    if (ca.salesTotal0) {
-        $('#salesTotal-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesTotal-1').text(ca.salesTotal1);
     $('#salesTotal-2').text(ca.salesTotal2);
     $('#salesTotal-3').text(ca.salesTotal3);
     $('#salesTotal-4').text(ca.salesTotal4);
     $('#salesTotal-5').text(ca.salesTotal5);
     $('#salesTotal-6').text(ca.salesTotal6);
-    if (ca.salesRatio0) {
-        $('#salesRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.salesRatio6 > 0.85) {
+        $('#salesRatio-0').css('color', 'red');
     }
     $('#salesRatio-1').text((ca.salesRatio1*100).toFixed(0)+'%');
     $('#salesRatio-2').text((ca.salesRatio2*100).toFixed(0)+'%');
@@ -748,8 +530,8 @@ function fillSheet(ca) {
     $('#salesRatio-4').text((ca.salesRatio4*100).toFixed(0)+'%');
     $('#salesRatio-5').text((ca.salesRatio5*100).toFixed(0)+'%');
     $('#salesRatio-6').text((ca.salesRatio6*100).toFixed(0)+'%');
-    if (ca.salesAchAppRatio0) {
-        $('#salesAchAppRatio-0').append('<span class="glyphicon glyphicon-star"></span>');
+    if (ca.salesAchAppRatio6 > 0.9) {
+        $('#salesAchAppRatio-0').css('color', 'red');
     }
     $('#salesAchAppRatio-1').text((ca.salesAchAppRatio1*100).toFixed(0)+'%');
     $('#salesAchAppRatio-2').text((ca.salesAchAppRatio2*100).toFixed(0)+'%');
@@ -757,170 +539,107 @@ function fillSheet(ca) {
     $('#salesAchAppRatio-4').text((ca.salesAchAppRatio4*100).toFixed(0)+'%');
     $('#salesAchAppRatio-5').text((ca.salesAchAppRatio5*100).toFixed(0)+'%');
     $('#salesAchAppRatio-6').text((ca.salesAchAppRatio6*100).toFixed(0)+'%');
-    if (ca.salesFaReview0) {
-        $('#salesFaReview-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesFaReview-1').text(ca.salesFaReview1);
     $('#salesFaReview-2').text(ca.salesFaReview2);
     $('#salesFaReview-3').text(ca.salesFaReview3);
     $('#salesFaReview-4').text(ca.salesFaReview4);
     $('#salesFaReview-5').text(ca.salesFaReview5);
-    if (ca.salesPriceReview0) {
-        $('#salesPriceReview-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesPriceReview-1').text(ca.salesPriceReview1);
     $('#salesPriceReview-2').text(ca.salesPriceReview2);
     $('#salesPriceReview-3').text(ca.salesPriceReview3);
     $('#salesPriceReview-4').text(ca.salesPriceReview4);
     $('#salesPriceReview-5').text(ca.salesPriceReview5);
-    if (ca.salesAck0) {
-        $('#salesAck-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesAck-1').text(ca.salesAck1);
     $('#salesAck-2').text(ca.salesAck2);
     $('#salesAck-3').text(ca.salesAck3);
     $('#salesAck-4').text(ca.salesAck4);
     $('#salesAck-5').text(ca.salesAck5);
-    if (ca.salesTarget0) {
-        $('#salesTarget-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesTarget-1').text(ca.salesTarget1);
     $('#salesTarget-2').text(ca.salesTarget2);
     $('#salesTarget-3').text(ca.salesTarget3);
     $('#salesTarget-4').text(ca.salesTarget4);
     $('#salesTarget-5').text(ca.salesTarget5);
-    if (ca.salesMotivation0) {
-        $('#salesMotivation-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesMotivation-1').text(ca.salesMotivation1);
     $('#salesMotivation-2').text(ca.salesMotivation2);
     $('#salesMotivation-3').text(ca.salesMotivation3);
     $('#salesMotivation-4').text(ca.salesMotivation4);
     $('#salesMotivation-5').text(ca.salesMotivation5);
-    if (ca.salesObstacle0) {
-        $('#salesObstacle-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#salesObstacle-1').text(ca.salesObstacle1);
     $('#salesObstacle-2').text(ca.salesObstacle2);
     $('#salesObstacle-3').text(ca.salesObstacle3);
     $('#salesObstacle-4').text(ca.salesObstacle4);
     $('#salesObstacle-5').text(ca.salesObstacle5);
 
-    if (ca.mgmtMeeting0) {
-        $('#mgmtMeeting-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtMeeting-1').text(ca.mgmtMeeting1);
     $('#mgmtMeeting-2').text(ca.mgmtMeeting2);
     $('#mgmtMeeting-3').text(ca.mgmtMeeting3);
     $('#mgmtMeeting-4').text(ca.mgmtMeeting4);
     $('#mgmtMeeting-5').text(ca.mgmtMeeting5);
-    if (ca.mgmtCa0) {
-        $('#mgmtCa-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtCa-1').text(ca.mgmtCa1);
     $('#mgmtCa-2').text(ca.mgmtCa2);
     $('#mgmtCa-3').text(ca.mgmtCa3);
     $('#mgmtCa-4').text(ca.mgmtCa4);
     $('#mgmtCa-5').text(ca.mgmtCa5);
-    if (ca.mgmtGp0) {
-        $('#mgmtGp-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtGp-1').text(ca.mgmtGp1);
     $('#mgmtGp-2').text(ca.mgmtGp2);
     $('#mgmtGp-3').text(ca.mgmtGp3);
     $('#mgmtGp-4').text(ca.mgmtGp4);
     $('#mgmtGp-5').text(ca.mgmtGp5);
-    if (ca.mgmtLearn0) {
-        $('#mgmtLearn-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtLearn-1').text(ca.mgmtLearn1);
     $('#mgmtLearn-2').text(ca.mgmtLearn2);
     $('#mgmtLearn-3').text(ca.mgmtLearn3);
     $('#mgmtLearn-4').text(ca.mgmtLearn4);
     $('#mgmtLearn-5').text(ca.mgmtLearn5);
-    if (ca.mgmtSheet0) {
-        $('#mgmtSheet-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtSheet-1').text(ca.mgmtSheet1);
     $('#mgmtSheet-2').text(ca.mgmtSheet2);
     $('#mgmtSheet-3').text(ca.mgmtSheet3);
     $('#mgmtSheet-4').text(ca.mgmtSheet4);
     $('#mgmtSheet-5').text(ca.mgmtSheet5);
-    if (ca.mgmtPolicy0) {
-        $('#mgmtPolicy-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtPolicy-1').text(ca.mgmtPolicy1);
     $('#mgmtPolicy-2').text(ca.mgmtPolicy2);
     $('#mgmtPolicy-3').text(ca.mgmtPolicy3);
     $('#mgmtPolicy-4').text(ca.mgmtPolicy4);
     $('#mgmtPolicy-5').text(ca.mgmtPolicy5);
-    if (ca.mgmtCompiantSales0) {
-        $('#mgmtCompiantSales-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtCompiantSales-1').text(ca.mgmtCompiantSales1);
     $('#mgmtCompiantSales-2').text(ca.mgmtCompiantSales2);
     $('#mgmtCompiantSales-3').text(ca.mgmtCompiantSales3);
     $('#mgmtCompiantSales-4').text(ca.mgmtCompiantSales4);
     $('#mgmtCompiantSales-5').text(ca.mgmtCompiantSales5);
-    if (ca.mgmtCompiantMethod0) {
-        $('#mgmtCompiantMethod-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtCompiantMethod-1').text(ca.mgmtCompiantMethod1);
     $('#mgmtCompiantMethod-2').text(ca.mgmtCompiantMethod2);
     $('#mgmtCompiantMethod-3').text(ca.mgmtCompiantMethod3);
     $('#mgmtCompiantMethod-4').text(ca.mgmtCompiantMethod4);
     $('#mgmtCompiantMethod-5').text(ca.mgmtCompiantMethod5);
-    if (ca.mgmtCompiantProduct0) {
-        $('#mgmtCompiantProduct-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtCompiantProduct-1').text(ca.mgmtCompiantProduct1);
     $('#mgmtCompiantProduct-2').text(ca.mgmtCompiantProduct2);
     $('#mgmtCompiantProduct-3').text(ca.mgmtCompiantProduct3);
     $('#mgmtCompiantProduct-4').text(ca.mgmtCompiantProduct4);
     $('#mgmtCompiantProduct-5').text(ca.mgmtCompiantProduct5);
-    if (ca.mgmtCompiantAd0) {
-        $('#mgmtCompiantAd-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtCompiantAd-1').text(ca.mgmtCompiantAd1);
     $('#mgmtCompiantAd-2').text(ca.mgmtCompiantAd2);
     $('#mgmtCompiantAd-3').text(ca.mgmtCompiantAd3);
     $('#mgmtCompiantAd-4').text(ca.mgmtCompiantAd4);
     $('#mgmtCompiantAd-5').text(ca.mgmtCompiantAd5);
-    if (ca.mgmtCompiantTraining0) {
-        $('#mgmtCompiantTraining-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtTraining-1').text(ca.mgmtCompiantTraining1);
     $('#mgmtTraining-2').text(ca.mgmtCompiantTraining2);
     $('#mgmtTraining-3').text(ca.mgmtCompiantTraining3);
     $('#mgmtTraining-4').text(ca.mgmtCompiantTraining4);
     $('#mgmtTraining-5').text(ca.mgmtCompiantTraining5);
-    if (ca.mgmtCompiantReport0) {
-        $('#mgmtCompiantReport-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtReport-1').text(ca.mgmtCompiantReport1);
     $('#mgmtReport-2').text(ca.mgmtCompiantReport2);
     $('#mgmtReport-3').text(ca.mgmtCompiantReport3);
     $('#mgmtReport-4').text(ca.mgmtCompiantReport4);
     $('#mgmtReport-5').text(ca.mgmtCompiantReport5);
-    if (ca.mgmtPlan0) {
-        $('#mgmtPlan-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtPlan-1').text(ca.mgmtPlan1);
     $('#mgmtPlan-2').text(ca.mgmtPlan2);
     $('#mgmtPlan-3').text(ca.mgmtPlan3);
     $('#mgmtPlan-4').text(ca.mgmtPlan4);
     $('#mgmtPlan-5').text(ca.mgmtPlan5);
-    if (ca.mgmtMaintain0) {
-        $('#mgmtMaintain-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtMaintain-1').text(ca.mgmtMaintain1);
     $('#mgmtMaintain-2').text(ca.mgmtMaintain2);
     $('#mgmtMaintain-3').text(ca.mgmtMaintain3);
     $('#mgmtMaintain-4').text(ca.mgmtMaintain4);
     $('#mgmtMaintain-5').text(ca.mgmtMaintain5);
-    if (ca.mgmtFace2Face0) {
-        $('#mgmtFace2Face-0').append('<span class="glyphicon glyphicon-star"></span>');
-    }
     $('#mgmtFace2Face-1').text(ca.mgmtFace2Face1);
     $('#mgmtFace2Face-2').text(ca.mgmtFace2Face2);
     $('#mgmtFace2Face-3').text(ca.mgmtFace2Face3);
@@ -1171,7 +890,7 @@ function fillSheet(ca) {
 
 // save CA
 $("#btnSave").click(function() {
-    $('#btnSave').attr("disabled", true);
+    $('#btnSave').prop("disabled", true);
 
     runFormula();
 
@@ -1192,613 +911,515 @@ $("#btnSave").click(function() {
     ca.goalsNewSales = +$('#goalsNewSales').text();
     ca.goalsAppoints = +$('#goalsAppoints').text();
 
-    ca.svcTm0 = $('#svcTm-0').children().length > 0;
     ca.svcTm1 = +$('#svcTm-1').text();
     ca.svcTm2 = +$('#svcTm-2').text();
     ca.svcTm3 = +$('#svcTm-3').text();
     ca.svcTm4 = +$('#svcTm-4').text();
     ca.svcTm5 = +$('#svcTm-5').text();
     ca.svcTm6 = +$('#svcTm-6').text();
-    ca.svcShift0 = $('#svcShift-0').children().length > 0;
     ca.svcShift1 = +$('#svcShift-1').text();
     ca.svcShift2 = +$('#svcShift-2').text();
     ca.svcShift3 = +$('#svcShift-3').text();
     ca.svcShift4 = +$('#svcShift-4').text();
     ca.svcShift5 = +$('#svcShift-5').text();
     ca.svcShift6 = +$('#svcShift-6').text();
-    ca.svcHold0 = $('#svcHold-0').children().length > 0;
     ca.svcHold1 = +$('#svcHold-1').text();
     ca.svcHold2 = +$('#svcHold-2').text();
     ca.svcHold3 = +$('#svcHold-3').text();
     ca.svcHold4 = +$('#svcHold-4').text();
     ca.svcHold5 = +$('#svcHold-5').text();
     ca.svcHold6 = +$('#svcHold-6').text();
-    ca.svcActive0 = $('#svcActive-0').children().length > 0;
     ca.svcActive1 = +$('#svcActive-1').text();
     ca.svcActive2 = +$('#svcActive-2').text();
     ca.svcActive3 = +$('#svcActive-3').text();
     ca.svcActive4 = +$('#svcActive-4').text();
     ca.svcActive5 = +$('#svcActive-5').text();
     ca.svcActive6 = +$('#svcActive-6').text();
-    ca.svcHoldRatio0 = $('#svcHoldRatio-0').children().length > 0;
     ca.svcHoldRatio1 = parseFloat($('#svcHoldRatio-1').text())/100;
     ca.svcHoldRatio2 = parseFloat($('#svcHoldRatio-2').text())/100;
     ca.svcHoldRatio3 = parseFloat($('#svcHoldRatio-3').text())/100;
     ca.svcHoldRatio4 = parseFloat($('#svcHoldRatio-4').text())/100;
     ca.svcHoldRatio5 = parseFloat($('#svcHoldRatio-5').text())/100;
     ca.svcHoldRatio6 = parseFloat($('#svcHoldRatio-6').text())/100;
-    ca.svcTotalWo0 = $('#svcTotalWo-0').children().length > 0;
     ca.svcTotalWo1 = +$('#svcTotalWo-1').text();
     ca.svcTotalWo2 = +$('#svcTotalWo-2').text();
     ca.svcTotalWo3 = +$('#svcTotalWo-3').text();
     ca.svcTotalWo4 = +$('#svcTotalWo-4').text();
     ca.svcTotalWo5 = +$('#svcTotalWo-5').text();
     ca.svcTotalWo6 = +$('#svcTotalWo-6').text();
-    ca.svcAvgWo0 = $('#svcAvgWo-0').children().length > 0;
     ca.svcAvgWo1 = parseFloat($('#svcAvgWo-1').text());
     ca.svcAvgWo2 = parseFloat($('#svcAvgWo-2').text());
     ca.svcAvgWo3 = parseFloat($('#svcAvgWo-3').text());
     ca.svcAvgWo4 = parseFloat($('#svcAvgWo-4').text());
     ca.svcAvgWo5 = parseFloat($('#svcAvgWo-5').text());
     ca.svcAvgWo6 = parseFloat($('#svcAvgWo-6').text());
-    ca.svcMaxWo0 = $('#svcMaxWo-0').children().length > 0;
     ca.svcMaxWo1 = +$('#svcMaxWo-1').text();
     ca.svcMaxWo2 = +$('#svcMaxWo-2').text();
     ca.svcMaxWo3 = +$('#svcMaxWo-3').text();
     ca.svcMaxWo4 = +$('#svcMaxWo-4').text();
     ca.svcMaxWo5 = +$('#svcMaxWo-5').text();
     ca.svcMaxWo6 = parseFloat($('#svcMaxWo-6').text());
-    ca.svcExits0 = $('#svcExits-0').children().length > 0;
     ca.svcExits1 = +$('#svcExits-1').text();
     ca.svcExits2 = +$('#svcExits-2').text();
     ca.svcExits3 = +$('#svcExits-3').text();
     ca.svcExits4 = +$('#svcExits-4').text();
     ca.svcExits5 = +$('#svcExits-5').text();
     ca.svcExits6 = +$('#svcExits-6').text();
-    ca.svcExitsRatio0 = $('#svcExitsRatio-0').children().length > 0;
     ca.svcExitsRatio1 = parseFloat($('#svcExitsRatio-1').text())/100;
     ca.svcExitsRatio2 = parseFloat($('#svcExitsRatio-2').text())/100;
     ca.svcExitsRatio3 = parseFloat($('#svcExitsRatio-3').text())/100;
     ca.svcExitsRatio4 = parseFloat($('#svcExitsRatio-4').text())/100;
     ca.svcExitsRatio5 = parseFloat($('#svcExitsRatio-5').text())/100;
     ca.svcExitsRatio6 = parseFloat($('#svcExitsRatio-6').text())/100;
-    ca.svcMeasure0 = $('#svcMeasure-0').children().length > 0;
     ca.svcMeasure1 = +$('#svcMeasure-1').text();
     ca.svcMeasure2 = +$('#svcMeasure-2').text();
     ca.svcMeasure3 = +$('#svcMeasure-3').text();
     ca.svcMeasure4 = +$('#svcMeasure-4').text();
     ca.svcMeasure5 = +$('#svcMeasure-5').text();
     ca.svcMeasure6 = +$('#svcMeasure-6').text();
-    ca.svcMeasureRatio0 = $('#svcMeasureRatio-0').children().length > 0;
     ca.svcMeasureRatio1 = parseFloat($('#svcMeasureRatio-1').text())/100;
     ca.svcMeasureRatio2 = parseFloat($('#svcMeasureRatio-2').text())/100;
     ca.svcMeasureRatio3 = parseFloat($('#svcMeasureRatio-3').text())/100;
     ca.svcMeasureRatio4 = parseFloat($('#svcMeasureRatio-4').text())/100;
     ca.svcMeasureRatio5 = parseFloat($('#svcMeasureRatio-5').text())/100;
     ca.svcMeasureRatio6 = parseFloat($('#svcMeasureRatio-6').text())/100;
-    ca.svc12_0 = $('#svc12-0').children().length > 0;
     ca.svc12_5 = +$('#svc12-5').text();
     ca.svc12_6 = parseFloat($('#svc12-6').text())/100;
-    ca.svc8to11_0 = $('#svc8to11-0').children().length > 0;
     ca.svc8to11_5 = +$('#svc8to11-5').text();
     ca.svc8to11_6 = parseFloat($('#svc8to11-6').text())/100;
-    ca.svc4to7_0 = $('#svc4to7-0').children().length > 0;
     ca.svc4to7_5 = +$('#svc4to7-5').text();
     ca.svc4to7_6 = parseFloat($('#svc4to7-6').text())/100;
-    ca.svc1to3_0 = $('#svc1to3-0').children().length > 0;
     ca.svc1to3_5 = +$('#svc1to3-5').text();
     ca.svc1to3_6 = parseFloat($('#svc1to3-6').text())/100;
-    ca.svc0_0 = $('#svc0-0').children().length > 0;
     ca.svc0_5 = +$('#svc0-5').text();
     ca.svc0_6 = parseFloat($('#svc0-6').text())/100;
-    ca.svc3More0 = $('#svc3More-0').children().length > 0;
     ca.svc3More1 = $('#svc3More-1').text();
     ca.svc3More2 = $('#svc3More-2').text();
     ca.svc3More3 = $('#svc3More-3').text();
     ca.svc3More4 = $('#svc3More-4').text();
     ca.svc3More5 = $('#svc3More-5').text();
-    ca.svcInactive0 = $('#svcInactive-0').children().length > 0;
     ca.svcInactive1 = $('#svcInactive-1').text();
     ca.svcInactive2 = $('#svcInactive-2').text();
     ca.svcInactive3 = $('#svcInactive-3').text();
     ca.svcInactive4 = $('#svcInactive-4').text();
     ca.svcInactive5 = $('#svcInactive-5').text();
-    ca.svcFwoReview0 = $('#svcFwoReview-0').children().length > 0;
     ca.svcFwoReview1 = $('#svcFwoReview-1').text();
     ca.svcFwoReview2 = $('#svcFwoReview-2').text();
     ca.svcFwoReview3 = $('#svcFwoReview-3').text();
     ca.svcFwoReview4 = $('#svcFwoReview-4').text();
     ca.svcFwoReview5 = $('#svcFwoReview-5').text();
-    ca.svcInterview0 = $('#svcInterview-0').children().length > 0;
     ca.svcInterview1 = $('#svcInterview-1').text();
     ca.svcInterview2 = $('#svcInterview-2').text();
     ca.svcInterview3 = $('#svcInterview-3').text();
     ca.svcInterview4 = $('#svcInterview-4').text();
     ca.svcInterview5 = $('#svcInterview-5').text();
-    ca.svcThanks0 = $('#svcThanks-0').children().length > 0;
     ca.svcThanks1 = $('#svcThanks-1').text();
     ca.svcThanks2 = $('#svcThanks-2').text();
     ca.svcThanks3 = $('#svcThanks-3').text();
     ca.svcThanks4 = $('#svcThanks-4').text();
     ca.svcThanks5 = $('#svcThanks-5').text();
-    ca.svc3C0 = $('#svc3C-0').children().length > 0;
     ca.svc3C1 = $('#svc3C-1').text();
     ca.svc3C2 = $('#svc3C-2').text();
     ca.svc3C3 = $('#svc3C-3').text();
     ca.svc3C4 = $('#svc3C-4').text();
     ca.svc3C5 = $('#svc3C-5').text();
-    ca.svcReward0 = $('#svcReward-0').children().length > 0;
     ca.svcReward1 = $('#svcReward-1').text();
     ca.svcReward2 = $('#svcReward-2').text();
     ca.svcReward3 = $('#svcReward-3').text();
     ca.svcReward4 = $('#svcReward-4').text();
     ca.svcReward5 = $('#svcReward-5').text();
-    ca.svcLoyal0 = $('#svcLoyal-0').children().length > 0;
     ca.svcLoyal1 = $('#svcLoyal-1').text();
     ca.svcLoyal2 = $('#svcLoyal-2').text();
     ca.svcLoyal3 = $('#svcLoyal-3').text();
     ca.svcLoyal4 = $('#svcLoyal-4').text();
     ca.svcLoyal5 = $('#svcLoyal-5').text();
 
-    ca.cmPostFlyer0 = $('#cmPostFlyer-0').children().length > 0;
     ca.cmPostFlyer1 = +$('#cmPostFlyer-1').text();
     ca.cmPostFlyer2 = +$('#cmPostFlyer-2').text();
     ca.cmPostFlyer3 = +$('#cmPostFlyer-3').text();
     ca.cmPostFlyer4 = +$('#cmPostFlyer-4').text();
     ca.cmPostFlyer5 = +$('#cmPostFlyer-5').text();
     ca.cmPostFlyer6 = +$('#cmPostFlyer-6').text();
-    ca.cmHandFlyer0 = $('#cmHandFlyer-0').children().length > 0;
     ca.cmHandFlyer1 = +$('#cmHandFlyer-1').text();
     ca.cmHandFlyer2 = +$('#cmHandFlyer-2').text();
     ca.cmHandFlyer3 = +$('#cmHandFlyer-3').text();
     ca.cmHandFlyer4 = +$('#cmHandFlyer-4').text();
     ca.cmHandFlyer5 = +$('#cmHandFlyer-5').text();
     ca.cmHandFlyer6 = +$('#cmHandFlyer-6').text();
-    ca.cmHandFlyerHours0 = $('#cmHandFlyerHours-0').children().length > 0;
     ca.cmHandFlyerHours1 = +$('#cmHandFlyerHours-1').text();
     ca.cmHandFlyerHours2 = +$('#cmHandFlyerHours-2').text();
     ca.cmHandFlyerHours3 = +$('#cmHandFlyerHours-3').text();
     ca.cmHandFlyerHours4 = +$('#cmHandFlyerHours-4').text();
     ca.cmHandFlyerHours5 = +$('#cmHandFlyerHours-5').text();
     ca.cmHandFlyerHours6 = +$('#cmHandFlyerHours-6').text();
-    ca.cmOutGpHours0 = $('#cmOutGpHours-0').children().length > 0;
     ca.cmOutGpHours1 = +$('#cmOutGpHours-1').text();
     ca.cmOutGpHours2 = +$('#cmOutGpHours-2').text();
     ca.cmOutGpHours3 = +$('#cmOutGpHours-3').text();
     ca.cmOutGpHours4 = +$('#cmOutGpHours-4').text();
     ca.cmOutGpHours5 = +$('#cmOutGpHours-5').text();
     ca.cmOutGpHours6 = +$('#cmOutGpHours-6').text();
-    ca.cmOutGp0 = $('#cmOutGp-0').children().length > 0;
     ca.cmOutGp1 = +$('#cmOutGp-1').text();
     ca.cmOutGp2 = +$('#cmOutGp-2').text();
     ca.cmOutGp3 = +$('#cmOutGp-3').text();
     ca.cmOutGp4 = +$('#cmOutGp-4').text();
     ca.cmOutGp5 = +$('#cmOutGp-5').text();
     ca.cmOutGp6 = +$('#cmOutGp-6').text();
-    ca.cmCpBox0 = $('#cmCpBox-0').children().length > 0;
     ca.cmCpBox1 = +$('#cmCpBox-1').text();
     ca.cmCpBox2 = +$('#cmCpBox-2').text();
     ca.cmCpBox3 = +$('#cmCpBox-3').text();
     ca.cmCpBox4 = +$('#cmCpBox-4').text();
     ca.cmCpBox5 = +$('#cmCpBox-5').text();
     ca.cmCpBox6 = +$('#cmCpBox-6').text();
-    ca.cmOutGot0 = $('#cmOutGot-0').children().length > 0;
     ca.cmOutGot1 = +$('#cmOutGot-1').text();
     ca.cmOutGot2 = +$('#cmOutGot-2').text();
     ca.cmOutGot3 = +$('#cmOutGot-3').text();
     ca.cmOutGot4 = +$('#cmOutGot-4').text();
     ca.cmOutGot5 = +$('#cmOutGot-5').text();
     ca.cmOutGot6 = +$('#cmOutGot-6').text();
-    ca.cmInGot0 = $('#cmInGot-0').children().length > 0;
     ca.cmInGot1 = +$('#cmInGot-1').text();
     ca.cmInGot2 = +$('#cmInGot-2').text();
     ca.cmInGot3 = +$('#cmInGot-3').text();
     ca.cmInGot4 = +$('#cmInGot-4').text();
     ca.cmInGot5 = +$('#cmInGot-5').text();
     ca.cmInGot6 = +$('#cmInGot-6').text();
-    ca.cmBlogGot0 = $('#cmBlogGot-0').children().length > 0;
     ca.cmBlogGot1 = +$('#cmBlogGot-1').text();
     ca.cmBlogGot2 = +$('#cmBlogGot-2').text();
     ca.cmBlogGot3 = +$('#cmBlogGot-3').text();
     ca.cmBlogGot4 = +$('#cmBlogGot-4').text();
     ca.cmBlogGot5 = +$('#cmBlogGot-5').text();
     ca.cmBlogGot6 = +$('#cmBlogGot-6').text();
-    ca.cmBagGot0 = $('#cmBagGot-0').children().length > 0;
     ca.cmBagGot1 = +$('#cmBagGot-1').text();
     ca.cmBagGot2 = +$('#cmBagGot-2').text();
     ca.cmBagGot3 = +$('#cmBagGot-3').text();
     ca.cmBagGot4 = +$('#cmBagGot-4').text();
     ca.cmBagGot5 = +$('#cmBagGot-5').text();
     ca.cmBagGot6 = +$('#cmBagGot-6').text();
-    ca.cmTotalGot0 = $('#cmTotalGot-0').children().length > 0;
     ca.cmTotalGot1 = +$('#cmTotalGot-1').text();
     ca.cmTotalGot2 = +$('#cmTotalGot-2').text();
     ca.cmTotalGot3 = +$('#cmTotalGot-3').text();
     ca.cmTotalGot4 = +$('#cmTotalGot-4').text();
     ca.cmTotalGot5 = +$('#cmTotalGot-5').text();
     ca.cmTotalGot6 = +$('#cmTotalGot-6').text();
-    ca.cmCallIn0 = $('#cmCallIn-0').children().length > 0;
     ca.cmCallIn1 = +$('#cmCallIn-1').text();
     ca.cmCallIn2 = +$('#cmCallIn-2').text();
     ca.cmCallIn3 = +$('#cmCallIn-3').text();
     ca.cmCallIn4 = +$('#cmCallIn-4').text();
     ca.cmCallIn5 = +$('#cmCallIn-5').text();
     ca.cmCallIn6 = +$('#cmCallIn-6').text();
-    ca.cmOutGotCall0 = $('#cmOutGotCall-0').children().length > 0;
     ca.cmOutGotCall1 = +$('#cmOutGotCall-1').text();
     ca.cmOutGotCall2 = +$('#cmOutGotCall-2').text();
     ca.cmOutGotCall3 = +$('#cmOutGotCall-3').text();
     ca.cmOutGotCall4 = +$('#cmOutGotCall-4').text();
     ca.cmOutGotCall5 = +$('#cmOutGotCall-5').text();
     ca.cmOutGotCall6 = +$('#cmOutGotCall-6').text();
-    ca.cmInGotCall0 = $('#cmInGotCall-0').children().length > 0;
     ca.cmInGotCall1 = +$('#cmInGotCall-1').text();
     ca.cmInGotCall2 = +$('#cmInGotCall-2').text();
     ca.cmInGotCall3 = +$('#cmInGotCall-3').text();
     ca.cmInGotCall4 = +$('#cmInGotCall-4').text();
     ca.cmInGotCall5 = +$('#cmInGotCall-5').text();
     ca.cmInGotCall6 = +$('#cmInGotCall-6').text();
-    ca.cmBlogGotCall0 = $('#cmBlogGotCall-0').children().length > 0;
     ca.cmBlogGotCall1 = +$('#cmBlogGotCall-1').text();
     ca.cmBlogGotCall2 = +$('#cmBlogGotCall-2').text();
     ca.cmBlogGotCall3 = +$('#cmBlogGotCall-3').text();
     ca.cmBlogGotCall4 = +$('#cmBlogGotCall-4').text();
     ca.cmBlogGotCall5 = +$('#cmBlogGotCall-5').text();
     ca.cmBlogGotCall6 = +$('#cmBlogGotCall-6').text();
-    ca.cmBagGotCall0 = $('#cmBagGotCall-0').children().length > 0;
     ca.cmBagGotCall1 = +$('#cmBagGotCall-1').text();
     ca.cmBagGotCall2 = +$('#cmBagGotCall-2').text();
     ca.cmBagGotCall3 = +$('#cmBagGotCall-3').text();
     ca.cmBagGotCall4 = +$('#cmBagGotCall-4').text();
     ca.cmBagGotCall5 = +$('#cmBagGotCall-5').text();
     ca.cmBagGotCall6 = +$('#cmBagGotCall-6').text();
-    ca.cmOwnRefs0 = $('#cmOwnRefs-0').children().length > 0;
     ca.cmOwnRefs1 = +$('#cmOwnRefs-1').text();
     ca.cmOwnRefs2 = +$('#cmOwnRefs-2').text();
     ca.cmOwnRefs3 = +$('#cmOwnRefs-3').text();
     ca.cmOwnRefs4 = +$('#cmOwnRefs-4').text();
     ca.cmOwnRefs5 = +$('#cmOwnRefs-5').text();
     ca.cmOwnRefs6 = +$('#cmOwnRefs-6').text();
-    ca.cmOtherRefs0 = $('#cmOtherRefs-0').children().length > 0;
     ca.cmOtherRefs1 = +$('#cmOtherRefs-1').text();
     ca.cmOtherRefs2 = +$('#cmOtherRefs-2').text();
     ca.cmOtherRefs3 = +$('#cmOtherRefs-3').text();
     ca.cmOtherRefs4 = +$('#cmOtherRefs-4').text();
     ca.cmOtherRefs5 = +$('#cmOtherRefs-5').text();
     ca.cmOtherRefs6 = +$('#cmOtherRefs-6').text();
-    ca.cmNewspaper0 = $('#cmNewspaper-0').children().length > 0;
     ca.cmNewspaper1 = +$('#cmNewspaper-1').text();
     ca.cmNewspaper2 = +$('#cmNewspaper-2').text();
     ca.cmNewspaper3 = +$('#cmNewspaper-3').text();
     ca.cmNewspaper4 = +$('#cmNewspaper-4').text();
     ca.cmNewspaper5 = +$('#cmNewspaper-5').text();
     ca.cmNewspaper6 = +$('#cmNewspaper-6').text();
-    ca.cmTv0 = $('#cmTv-0').children().length > 0;
     ca.cmTv1 = +$('#cmTv-1').text();
     ca.cmTv2 = +$('#cmTv-2').text();
     ca.cmTv3 = +$('#cmTv-3').text();
     ca.cmTv4 = +$('#cmTv-4').text();
     ca.cmTv5 = +$('#cmTv-5').text();
     ca.cmTv6 = +$('#cmTv-6').text();
-    ca.cmInternet0 = $('#cmInternet-0').children().length > 0;
     ca.cmInternet1 = +$('#cmInternet-1').text();
     ca.cmInternet2 = +$('#cmInternet-2').text();
     ca.cmInternet3 = +$('#cmInternet-3').text();
     ca.cmInternet4 = +$('#cmInternet-4').text();
     ca.cmInternet5 = +$('#cmInternet-5').text();
     ca.cmInternet6 = +$('#cmInternet-6').text();
-    ca.cmSign0 = $('#cmSign-0').children().length > 0;
     ca.cmSign1 = +$('#cmSign-1').text();
     ca.cmSign2 = +$('#cmSign-2').text();
     ca.cmSign3 = +$('#cmSign-3').text();
     ca.cmSign4 = +$('#cmSign-4').text();
     ca.cmSign5 = +$('#cmSign-5').text();
     ca.cmSign6 = +$('#cmSign-6').text();
-    ca.cmMate0 = $('#cmMate-0').children().length > 0;
     ca.cmMate1 = +$('#cmMate-1').text();
     ca.cmMate2 = +$('#cmMate-2').text();
     ca.cmMate3 = +$('#cmMate-3').text();
     ca.cmMate4 = +$('#cmMate-4').text();
     ca.cmMate5 = +$('#cmMate-5').text();
     ca.cmMate6 = +$('#cmMate-6').text();
-    ca.cmOthers0 = $('#cmOthers-0').children().length > 0;
     ca.cmOthers1 = +$('#cmOthers-1').text();
     ca.cmOthers2 = +$('#cmOthers-2').text();
     ca.cmOthers3 = +$('#cmOthers-3').text();
     ca.cmOthers4 = +$('#cmOthers-4').text();
     ca.cmOthers5 = +$('#cmOthers-5').text();
     ca.cmOthers6 = +$('#cmOthers-6').text();
-    ca.cmMailAgpIn0 = $('#cmMailAgpIn-0').children().length > 0;
     ca.cmMailAgpIn1 = +$('#cmMailAgpIn-1').text();
     ca.cmMailAgpIn2 = +$('#cmMailAgpIn-2').text();
     ca.cmMailAgpIn3 = +$('#cmMailAgpIn-3').text();
     ca.cmMailAgpIn4 = +$('#cmMailAgpIn-4').text();
     ca.cmMailAgpIn5 = +$('#cmMailAgpIn-5').text();
     ca.cmMailAgpIn6 = +$('#cmMailAgpIn-6').text();
-    ca.cmPostFlyerAgpIn0 = $('#cmPostFlyerAgpIn-0').children().length > 0;
     ca.cmPostFlyerAgpIn1 = +$('#cmPostFlyerAgpIn-1').text();
     ca.cmPostFlyerAgpIn2 = +$('#cmPostFlyerAgpIn-2').text();
     ca.cmPostFlyerAgpIn3 = +$('#cmPostFlyerAgpIn-3').text();
     ca.cmPostFlyerAgpIn4 = +$('#cmPostFlyerAgpIn-4').text();
     ca.cmPostFlyerAgpIn5 = +$('#cmPostFlyerAgpIn-5').text();
     ca.cmPostFlyerAgpIn6 = +$('#cmPostFlyerAgpIn-6').text();
-    ca.cmHandFlyerAgpIn0 = $('#cmHandFlyerAgpIn-0').children().length > 0;
     ca.cmHandFlyerAgpIn1 = +$('#cmHandFlyerAgpIn-1').text();
     ca.cmHandFlyerAgpIn2 = +$('#cmHandFlyerAgpIn-2').text();
     ca.cmHandFlyerAgpIn3 = +$('#cmHandFlyerAgpIn-3').text();
     ca.cmHandFlyerAgpIn4 = +$('#cmHandFlyerAgpIn-4').text();
     ca.cmHandFlyerAgpIn5 = +$('#cmHandFlyerAgpIn-5').text();
     ca.cmHandFlyerAgpIn6 = +$('#cmHandFlyerAgpIn-6').text();
-    ca.cmCpAgpIn0 = $('#cmCpAgpIn-0').children().length > 0;
     ca.cmCpAgpIn1 = +$('#cmCpAgpIn-1').text();
     ca.cmCpAgpIn2 = +$('#cmCpAgpIn-2').text();
     ca.cmCpAgpIn3 = +$('#cmCpAgpIn-3').text();
     ca.cmCpAgpIn4 = +$('#cmCpAgpIn-4').text();
     ca.cmCpAgpIn5 = +$('#cmCpAgpIn-5').text();
     ca.cmCpAgpIn6 = +$('#cmCpAgpIn-6').text();
-    ca.cmOutAgpOut0 = $('#cmOutAgpOut-0').children().length > 0;
     ca.cmOutAgpOut1 = +$('#cmOutAgpOut-1').text();
     ca.cmOutAgpOut2 = +$('#cmOutAgpOut-2').text();
     ca.cmOutAgpOut3 = +$('#cmOutAgpOut-3').text();
     ca.cmOutAgpOut4 = +$('#cmOutAgpOut-4').text();
     ca.cmOutAgpOut5 = +$('#cmOutAgpOut-5').text();
     ca.cmOutAgpOut6 = +$('#cmOutAgpOut-6').text();
-    ca.cmInAgpOut0 = $('#cmInAgpOut-0').children().length > 0;
     ca.cmInAgpOut1 = +$('#cmInAgpOut-1').text();
     ca.cmInAgpOut2 = +$('#cmInAgpOut-2').text();
     ca.cmInAgpOut3 = +$('#cmInAgpOut-3').text();
     ca.cmInAgpOut4 = +$('#cmInAgpOut-4').text();
     ca.cmInAgpOut5 = +$('#cmInAgpOut-5').text();
     ca.cmInAgpOut6 = +$('#cmInAgpOut-6').text();
-    ca.cmBlogAgpOut0 = $('#cmBlogAgpOut-0').children().length > 0;
     ca.cmBlogAgpOut1 = +$('#cmBlogAgpOut-1').text();
     ca.cmBlogAgpOut2 = +$('#cmBlogAgpOut-2').text();
     ca.cmBlogAgpOut3 = +$('#cmBlogAgpOut-3').text();
     ca.cmBlogAgpOut4 = +$('#cmBlogAgpOut-4').text();
     ca.cmBlogAgpOut5 = +$('#cmBlogAgpOut-5').text();
     ca.cmBlogAgpOut6 = +$('#cmBlogAgpOut-6').text();
-    ca.cmBagAgpOut0 = $('#cmBagAgpOut-0').children().length > 0;
     ca.cmBagAgpOut1 = +$('#cmBagAgpOut-1').text();
     ca.cmBagAgpOut2 = +$('#cmBagAgpOut-2').text();
     ca.cmBagAgpOut3 = +$('#cmBagAgpOut-3').text();
     ca.cmBagAgpOut4 = +$('#cmBagAgpOut-4').text();
     ca.cmBagAgpOut5 = +$('#cmBagAgpOut-5').text();
     ca.cmBagAgpOut6 = +$('#cmBagAgpOut-6').text();
-    ca.cmApoTotal0 = $('#cmApoTotal-0').children().length > 0;
     ca.cmApoTotal1 = +$('#cmApoTotal-1').text();
     ca.cmApoTotal2 = +$('#cmApoTotal-2').text();
     ca.cmApoTotal3 = +$('#cmApoTotal-3').text();
     ca.cmApoTotal4 = +$('#cmApoTotal-4').text();
     ca.cmApoTotal5 = +$('#cmApoTotal-5').text();
     ca.cmApoTotal6 = +$('#cmApoTotal-6').text();
-    ca.cmInApptRatio0 = $('#cmInApptRatio-0').children().length > 0;
     ca.cmInApptRatio1 = parseFloat($('#cmInApptRatio-1').text())/100;
     ca.cmInApptRatio2 = parseFloat($('#cmInApptRatio-2').text())/100;
     ca.cmInApptRatio3 = parseFloat($('#cmInApptRatio-3').text())/100;
     ca.cmInApptRatio4 = parseFloat($('#cmInApptRatio-4').text())/100;
     ca.cmInApptRatio5 = parseFloat($('#cmInApptRatio-5').text())/100;
     ca.cmInApptRatio6 = parseFloat($('#cmInApptRatio-6').text())/100;
-    ca.cmOutApptRatio0 = $('#cmOutApptRatio-0').children().length > 0;
     ca.cmOutApptRatio1 = parseFloat($('#cmOutApptRatio-1').text())/100;
     ca.cmOutApptRatio2 = parseFloat($('#cmOutApptRatio-2').text())/100;
     ca.cmOutApptRatio3 = parseFloat($('#cmOutApptRatio-3').text())/100;
     ca.cmOutApptRatio4 = parseFloat($('#cmOutApptRatio-4').text())/100;
     ca.cmOutApptRatio5 = parseFloat($('#cmOutApptRatio-5').text())/100;
     ca.cmOutApptRatio6 = parseFloat($('#cmOutApptRatio-6').text())/100;
-    ca.cmPostPerApo0 = $('#cmPostPerApo-0').children().length > 0;
     ca.cmPostPerApo6 = +$('#cmPostPerApo-6').text();
-    ca.cmHandPerApo0 = $('#cmHandPerApo-0').children().length > 0;
     ca.cmHandPerApo6 = +$('#cmHandPerApo-6').text();
-    ca.cmHandHoursPerApo0 = $('#cmHandHoursPerApo-0').children().length > 0;
     ca.cmHandHoursPerApo6 = +$('#cmHandHoursPerApo-6').text();
-    ca.cmOutGpHoursPerApo0 = $('#cmOutGpHoursPerApo-0').children().length > 0;
     ca.cmOutGpHoursPerApo6 = parseFloat($('#cmOutGpHoursPerApo-6').text());
-    ca.cmOutGpPerApo0 = $('#cmOutGpPerApo-0').children().length > 0;
     ca.cmOutGpPerApo6 = +$('#cmOutGpPerApo-6').text();
-    ca.cmBrAgpRatio0 = $('#cmBrAgpRatio-0').children().length > 0;
     ca.cmBrAgpRatio1 = parseFloat($('#cmBrAgpRatio-1').text())/100;
     ca.cmBrAgpRatio2 = parseFloat($('#cmBrAgpRatio-2').text())/100;
     ca.cmBrAgpRatio3 = parseFloat($('#cmBrAgpRatio-3').text())/100;
     ca.cmBrAgpRatio4 = parseFloat($('#cmBrAgpRatio-4').text())/100;
     ca.cmBrAgpRatio5 = parseFloat($('#cmBrAgpRatio-5').text())/100;
     ca.cmBrAgpRatio6 = parseFloat($('#cmBrAgpRatio-6').text())/100;
-    ca.cmFaSum0 = $('#cmFaSum-0').children().length > 0;
     ca.cmFaSum1 = +$('#cmFaSum-1').text();
     ca.cmFaSum2 = +$('#cmFaSum-2').text();
     ca.cmFaSum3 = +$('#cmFaSum-3').text();
     ca.cmFaSum4 = +$('#cmFaSum-4').text();
     ca.cmFaSum5 = +$('#cmFaSum-5').text();
     ca.cmFaSum6 = +$('#cmFaSum-6').text();
-    ca.cmShowRatio0 = $('#cmShowRatio-0').children().length > 0;
     ca.cmShowRatio1 = parseFloat($('#cmShowRatio-1').text())/100;
     ca.cmShowRatio2 = parseFloat($('#cmShowRatio-2').text())/100;
     ca.cmShowRatio3 = parseFloat($('#cmShowRatio-3').text())/100;
     ca.cmShowRatio4 = parseFloat($('#cmShowRatio-4').text())/100;
     ca.cmShowRatio5 = parseFloat($('#cmShowRatio-5').text())/100;
     ca.cmShowRatio6 = parseFloat($('#cmShowRatio-6').text())/100;
-    ca.cmTraining0 = $('#cmTraining-0').children().length > 0;
     ca.cmTraining1 = $('#cmTraining-1').text();
     ca.cmTraining2 = $('#cmTraining-2').text();
     ca.cmTraining3 = $('#cmTraining-3').text();
     ca.cmTraining4 = $('#cmTraining-4').text();
     ca.cmTraining5 = $('#cmTraining-5').text();
-    ca.cmGot3_0 = $('#cmGot3-0').children().length > 0;
     ca.cmGot3_1 = $('#cmGot3-1').text();
     ca.cmGot3_2 = $('#cmGot3-2').text();
     ca.cmGot3_3 = $('#cmGot3-3').text();
     ca.cmGot3_4 = $('#cmGot3-4').text();
     ca.cmGot3_5 = $('#cmGot3-5').text();
-    ca.cmInvitation0 = $('#cmInvitation-0').children().length > 0;
     ca.cmInvitation1 = $('#cmInvitation-1').text();
     ca.cmInvitation2 = $('#cmInvitation-2').text();
     ca.cmInvitation3 = $('#cmInvitation-3').text();
     ca.cmInvitation4 = $('#cmInvitation-4').text();
     ca.cmInvitation5 = $('#cmInvitation-5').text();
 
-    ca.salesAch0 = $('#salesAch-0').children().length > 0;
     ca.salesAch1 = +$('#salesAch-1').text();
     ca.salesAch2 = +$('#salesAch-2').text();
     ca.salesAch3 = +$('#salesAch-3').text();
     ca.salesAch4 = +$('#salesAch-4').text();
     ca.salesAch5 = +$('#salesAch-5').text();
     ca.salesAch6 = +$('#salesAch-5').text();
-    ca.salesMonthly0 = $('#salesMonthly-0').children().length > 0;
     ca.salesMonthly1 = +$('#salesMonthly-1').text();
     ca.salesMonthly2 = +$('#salesMonthly-2').text();
     ca.salesMonthly3 = +$('#salesMonthly-3').text();
     ca.salesMonthly4 = +$('#salesMonthly-4').text();
     ca.salesMonthly5 = +$('#salesMonthly-5').text();
     ca.salesMonthly6 = +$('#salesMonthly-6').text();
-    ca.salesAllPrepay0 = $('#salesAllPrepay-0').children().length > 0;
     ca.salesAllPrepay1 = +$('#salesAllPrepay-1').text();
     ca.salesAllPrepay2 = +$('#salesAllPrepay-2').text();
     ca.salesAllPrepay3 = +$('#salesAllPrepay-3').text();
     ca.salesAllPrepay4 = +$('#salesAllPrepay-4').text();
     ca.salesAllPrepay5 = +$('#salesAllPrepay-5').text();
     ca.salesAllPrepay6 = +$('#salesAllPrepay-6').text();
-    ca.salesTotal0 = $('#salesTotal-0').children().length > 0;
     ca.salesTotal1 = +$('#salesTotal-1').text();
     ca.salesTotal2 = +$('#salesTotal-2').text();
     ca.salesTotal3 = +$('#salesTotal-3').text();
     ca.salesTotal4 = +$('#salesTotal-4').text();
     ca.salesTotal5 = +$('#salesTotal-5').text();
     ca.salesTotal6 = +$('#salesTotal-6').text();
-    ca.salesRatio0 = $('#salesRatio-0').children().length > 0;
     ca.salesRatio1 = parseFloat($('#salesRatio-1').text())/100;
     ca.salesRatio2 = parseFloat($('#salesRatio-2').text())/100;
     ca.salesRatio3 = parseFloat($('#salesRatio-3').text())/100;
     ca.salesRatio4 = parseFloat($('#salesRatio-4').text())/100;
     ca.salesRatio5 = parseFloat($('#salesRatio-5').text())/100;
     ca.salesRatio6 = parseFloat($('#salesRatio-6').text())/100;
-    ca.salesAchAppRatio0 = $('#salesAchAppRatio-0').children().length > 0;
     ca.salesAchAppRatio1 = parseFloat($('#salesAchAppRatio-1').text())/100;
     ca.salesAchAppRatio2 = parseFloat($('#salesAchAppRatio-2').text())/100;
     ca.salesAchAppRatio3 = parseFloat($('#salesAchAppRatio-3').text())/100;
     ca.salesAchAppRatio4 = parseFloat($('#salesAchAppRatio-4').text())/100;
     ca.salesAchAppRatio5 = parseFloat($('#salesAchAppRatio-5').text())/100;
     ca.salesAchAppRatio6 = parseFloat($('#salesAchAppRatio-6').text())/100;
-    ca.salesFaReview0 = $('#salesFaReview-0').children().length > 0;
     ca.salesFaReview1 = $('#salesFaReview-1').text();
     ca.salesFaReview2 = $('#salesFaReview-2').text();
     ca.salesFaReview3 = $('#salesFaReview-3').text();
     ca.salesFaReview4 = $('#salesFaReview-4').text();
     ca.salesFaReview5 = $('#salesFaReview-5').text();
-    ca.salesPriceReview0 = $('#salesPriceReview-0').children().length > 0;
     ca.salesPriceReview1 = $('#salesPriceReview-1').text();
     ca.salesPriceReview2 = $('#salesPriceReview-2').text();
     ca.salesPriceReview3 = $('#salesPriceReview-3').text();
     ca.salesPriceReview4 = $('#salesPriceReview-4').text();
     ca.salesPriceReview5 = $('#salesPriceReview-5').text();
-    ca.salesAck0 = $('#salesAck-0').children().length > 0;
     ca.salesAck1 = $('#salesAck-1').text();
     ca.salesAck2 = $('#salesAck-2').text();
     ca.salesAck3 = $('#salesAck-3').text();
     ca.salesAck4 = $('#salesAck-4').text();
     ca.salesAck5 = $('#salesAck-5').text();
-    ca.salesTarget0 = $('#salesTarget-0').children().length > 0;
     ca.salesTarget1 = $('#salesTarget-1').text();
     ca.salesTarget2 = $('#salesTarget-2').text();
     ca.salesTarget3 = $('#salesTarget-3').text();
     ca.salesTarget4 = $('#salesTarget-4').text();
     ca.salesTarget5 = $('#salesTarget-5').text();
-    ca.salesMotivation0 = $('#salesMotivation-0').children().length > 0;
     ca.salesMotivation1 = $('#salesMotivation-1').text();
     ca.salesMotivation2 = $('#salesMotivation-2').text();
     ca.salesMotivation3 = $('#salesMotivation-3').text();
     ca.salesMotivation4 = $('#salesMotivation-4').text();
     ca.salesMotivation5 = $('#salesMotivation-5').text();
-    ca.salesObstacle0 = $('#salesObstacle-0').children().length > 0;
     ca.salesObstacle1 = $('#salesObstacle-1').text();
     ca.salesObstacle2 = $('#salesObstacle-2').text();
     ca.salesObstacle3 = $('#salesObstacle-3').text();
     ca.salesObstacle4 = $('#salesObstacle-4').text();
     ca.salesObstacle5 = $('#salesObstacle-5').text();
 
-    ca.mgmtMeeting0 = $('#mgmtMeeting-0').children().length > 0;
     ca.mgmtMeeting1 = $('#mgmtMeeting-1').text();
     ca.mgmtMeeting2 = $('#mgmtMeeting-2').text();
     ca.mgmtMeeting3 = $('#mgmtMeeting-3').text();
     ca.mgmtMeeting4 = $('#mgmtMeeting-4').text();
     ca.mgmtMeeting5 = $('#mgmtMeeting-5').text();
-    ca.mgmtCa0 = $('#mgmtCa-0').children().length > 0;
     ca.mgmtCa1 = $('#mgmtCa-1').text();
     ca.mgmtCa2 = $('#mgmtCa-2').text();
     ca.mgmtCa3 = $('#mgmtCa-3').text();
     ca.mgmtCa4 = $('#mgmtCa-4').text();
     ca.mgmtCa5 = $('#mgmtCa-5').text();
-    ca.mgmtGp0 = $('#mgmtGp-0').children().length > 0;
     ca.mgmtGp1 = $('#mgmtGp-1').text();
     ca.mgmtGp2 = $('#mgmtGp-2').text();
     ca.mgmtGp3 = $('#mgmtGp-3').text();
     ca.mgmtGp4 = $('#mgmtGp-4').text();
     ca.mgmtGp5 = $('#mgmtGp-5').text();
-    ca.mgmtLearn0 = $('#mgmtLearn-0').children().length > 0;
     ca.mgmtLearn1 = $('#mgmtLearn-1').text();
     ca.mgmtLearn2 = $('#mgmtLearn-2').text();
     ca.mgmtLearn3 = $('#mgmtLearn-3').text();
     ca.mgmtLearn4 = $('#mgmtLearn-4').text();
     ca.mgmtLearn5 = $('#mgmtLearn-5').text();
-    ca.mgmtSheet0 = $('#mgmtSheet-0').children().length > 0;
     ca.mgmtSheet1 = $('#mgmtSheet-1').text();
     ca.mgmtSheet2 = $('#mgmtSheet-2').text();
     ca.mgmtSheet3 = $('#mgmtSheet-3').text();
     ca.mgmtSheet4 = $('#mgmtSheet-4').text();
     ca.mgmtSheet5 = $('#mgmtSheet-5').text();
-    ca.mgmtPolicy0 = $('#mgmtPolicy-0').children().length > 0;
     ca.mgmtPolicy1 = $('#mgmtPolicy-1').text();
     ca.mgmtPolicy2 = $('#mgmtPolicy-2').text();
     ca.mgmtPolicy3 = $('#mgmtPolicy-3').text();
     ca.mgmtPolicy4 = $('#mgmtPolicy-4').text();
     ca.mgmtPolicy5 = $('#mgmtPolicy-5').text();
-    ca.mgmtCompiantSales0 = $('#mgmtCompiantSales-0').children().length > 0;
     ca.mgmtCompiantSales1 = $('#mgmtCompiantSales-1').text();
     ca.mgmtCompiantSales2 = $('#mgmtCompiantSales-2').text();
     ca.mgmtCompiantSales3 = $('#mgmtCompiantSales-3').text();
     ca.mgmtCompiantSales4 = $('#mgmtCompiantSales-4').text();
     ca.mgmtCompiantSales5 = $('#mgmtCompiantSales-5').text();
-    ca.mgmtCompiantMethod0 = $('#mgmtCompiantMethod-0').children().length > 0;
     ca.mgmtCompiantMethod1 = $('#mgmtCompiantMethod-1').text();
     ca.mgmtCompiantMethod2 = $('#mgmtCompiantMethod-2').text();
     ca.mgmtCompiantMethod3 = $('#mgmtCompiantMethod-3').text();
     ca.mgmtCompiantMethod4 = $('#mgmtCompiantMethod-4').text();
     ca.mgmtCompiantMethod5 = $('#mgmtCompiantMethod-5').text();
-    ca.mgmtCompiantProduct0 = $('#mgmtCompiantProduct-0').children().length > 0;
     ca.mgmtCompiantProduct1 = $('#mgmtCompiantProduct-1').text();
     ca.mgmtCompiantProduct2 = $('#mgmtCompiantProduct-2').text();
     ca.mgmtCompiantProduct3 = $('#mgmtCompiantProduct-3').text();
     ca.mgmtCompiantProduct4 = $('#mgmtCompiantProduct-4').text();
     ca.mgmtCompiantProduct5 = $('#mgmtCompiantProduct-5').text();
-    ca.mgmtCompiantAd0 = $('#mgmtCompiantAd-0').children().length > 0;
     ca.mgmtCompiantAd1 = $('#mgmtCompiantAd-1').text();
     ca.mgmtCompiantAd2 = $('#mgmtCompiantAd-2').text();
     ca.mgmtCompiantAd3 = $('#mgmtCompiantAd-3').text();
     ca.mgmtCompiantAd4 = $('#mgmtCompiantAd-4').text();
     ca.mgmtCompiantAd5 = $('#mgmtCompiantAd-5').text();
-    ca.mgmtTraining0 = $('#mgmtTraining-0').children().length > 0;
     ca.mgmtTraining1 = $('#mgmtTraining-1').text();
     ca.mgmtTraining2 = $('#mgmtTraining-2').text();
     ca.mgmtTraining3 = $('#mgmtTraining-3').text();
     ca.mgmtTraining4 = $('#mgmtTraining-4').text();
     ca.mgmtTraining5 = $('#mgmtTraining-5').text();
-    ca.mgmtReport0 = $('#mgmtReport-0').children().length > 0;
     ca.mgmtReport1 = $('#mgmtReport-1').text();
     ca.mgmtReport2 = $('#mgmtReport-2').text();
     ca.mgmtReport3 = $('#mgmtReport-3').text();
     ca.mgmtReport4 = $('#mgmtReport-4').text();
     ca.mgmtReport5 = $('#mgmtReport-5').text();
-    ca.mgmtPlan0 = $('#mgmtPlan-0').children().length > 0;
     ca.mgmtPlan1 = $('#mgmtPlan-1').text();
     ca.mgmtPlan2 = $('#mgmtPlan-2').text();
     ca.mgmtPlan3 = $('#mgmtPlan-3').text();
     ca.mgmtPlan4 = $('#mgmtPlan-4').text();
     ca.mgmtPlan5 = $('#mgmtPlan-5').text();
-    ca.mgmtMaintain0 = $('#mgmtMaintain-0').children().length > 0;
     ca.mgmtMaintain1 = $('#mgmtMaintain-1').text();
     ca.mgmtMaintain2 = $('#mgmtMaintain-2').text();
     ca.mgmtMaintain3 = $('#mgmtMaintain-3').text();
     ca.mgmtMaintain4 = $('#mgmtMaintain-4').text();
     ca.mgmtMaintain5 = $('#mgmtMaintain-5').text();
-    ca.mgmtFace2Face0 = $('#mgmtFace2Face-0').children().length > 0;
     ca.mgmtFace2Face1 = $('#mgmtFace2Face-1').text();
     ca.mgmtFace2Face2 = $('#mgmtFace2Face-2').text();
     ca.mgmtFace2Face3 = $('#mgmtFace2Face-3').text();
@@ -2061,7 +1682,7 @@ $("#btnSave").click(function() {
         showAlert("alert-danger", "Save Fail. Please refresh and retry.");
     });
 
-    $('#btnSave').attr("disabled", false);
+    $('#btnSave').prop("disabled", false);
 });
 
 function runFormula() {
@@ -2069,11 +1690,13 @@ function runFormula() {
     var goalsExitsRatio = parseFloat($('#goalsExitsRatio').text())/100;
     var goalsLastTm = +$('#goalsLastTm').text();
     $('#goalsNewSales').text((goalsTm*(1+goalsExitsRatio)-goalsLastTm).toFixed(0));
+    $('#salesTotalX').text($('#goalsNewSales').text());
     var goalsLastShowRatio = parseFloat($('#goalsLastShowRatio').text())/100;
     var goalsLastSalesRatio = parseFloat($('#goalsLastSalesRatio').text())/100;
     if (goalsLastShowRatio != 0 && goalsLastSalesRatio != 0) {
         var goalsNewSales = +$('#goalsNewSales').text();
         $('#goalsAppoints').text((goalsNewSales/goalsLastShowRatio/goalsLastSalesRatio).toFixed(0));
+        $('#apoTotalX').text($('#goalsAppoints').text());
     }
 
     var svcTm1 = (+$('#svcTm-1').text());
@@ -2104,7 +1727,11 @@ function runFormula() {
     var svcTm6 = (+$('#svcTm-1').text());
     if (svcTm6 != 0) {
         var svcHold6 = (+$('#svcHold-6').text());
-        $('#svcHoldRatio-6').text((svcHold6*100 / svcTm6).toFixed(1) + '%');
+        var holds = (svcHold6*100 / svcTm6);
+        $('#svcHoldRatio-6').text(holds.toFixed(1) + '%');
+        if (holds < 0.12) {
+            $('#svcHoldRatio-0').css('color', 'red');
+        }
     }
 
     var svcTotalWo1 = (+$('#svcTotalWo-1').text());
@@ -2138,8 +1765,15 @@ function runFormula() {
     var svcActive6 = (+$('#svcActive-6').text());
     if (svcActive6 != 0) {
         var max6 = Math.max(+$('#svcMaxWo-1').text(), +$('#svcMaxWo-2').text(), +$('#svcMaxWo-3').text(), +$('#svcMaxWo-4').text(), +$('#svcMaxWo-5').text());
-        $('#svcAvgWo-6').text((svcTotalWo6/svcActive6/4).toFixed(1));
+        var avgWo = svcTotalWo6/svcActive6/4;
+        $('#svcAvgWo-6').text(avgWo.toFixed(1));
+        if (avgWo > 2) {
+            $('#svcAvgWo-0').css('color', 'red');
+        }
         $('#svcMaxWo-6').text((max6*100/svcActive6).toFixed(0)+'%');
+    }
+    if (svcTotalWo6 > (8*svcActive6)) {
+        $('#svcTotalWo-0').css('color', 'red');
     }
 
     var svcExits1 = (+$('#svcExits-1').text());
@@ -2165,7 +1799,11 @@ function runFormula() {
         $('#svcExitsRatio-5').text((svcExits5*100 / svcTm5).toFixed(1) + '%');
     }
     if (svcTm6 != 0) {
-        $('#svcExitsRatio-6').text((svcExits6*100 / svcTm6).toFixed(1) + '%');
+        var exitsRatios = svcExits6*100 / svcTm6;
+        if (exitsRatios < 0.04) {
+            $('#svcExitsRatio-0').css('color', 'red');
+        }
+        $('#svcExitsRatio-6').text(exitsRatios.toFixed(1) + '%');
     }
 
     var svcMeasure1 = (+$('#svcMeasure-1').text());
@@ -2191,9 +1829,21 @@ function runFormula() {
         $('#svcMeasureRatio-5').text((svcMeasure5*100 / svcActive5).toFixed(0) + '%');
     }
     if (svcActive6 != 0) {
-        $('#svcMeasureRatio-6').text((svcMeasure6*100 / svcActive6).toFixed(0) + '%');
-        $('#svc12-6').text(((+$('#svc12-5').text())*100 / svcActive6).toFixed(0) + '%');
-        $('#svc8to11-6').text(((+$('#svc8to11-5').text())*100 / svcActive6).toFixed(0) + '%');
+        var msr = svcMeasure6*100 / svcActive6;
+        if (msr > (svcActive6*0.6)) {
+            $('#svcMeasureRatio-0').css('color', 'red');
+        }
+        $('#svcMeasureRatio-6').text(msr.toFixed(0) + '%');
+        var svc12 = (+$('#svc12-5').text())*100 / svcActive6;
+        if (svc12 > 0.3) {
+            $('#svc12-0').css('color', 'red');
+        }
+        $('#svc12-6').text(svc12.toFixed(0) + '%');
+        var svc8to11 = (+$('#svc8to11-5').text())*100 / svcActive6;
+        if (svc8to11 > 0.25) {
+            $('#svc8to11-0').css('color', 'red');
+        }
+        $('#svc8to11-6').text(svc8to11.toFixed(0) + '%');
         $('#svc4to7-6').text(((+$('#svc4to7-5').text())*100 / svcActive6).toFixed(0) + '%');
         $('#svc1to3-6').text(((+$('#svc1to3-5').text())*100 / svcActive6).toFixed(0) + '%');
         $('#svc0-6').text(((+$('#svc0-5').text())*100 / svcActive6).toFixed(0) + '%');
@@ -2387,7 +2037,11 @@ function runFormula() {
         $('#cmInApptRatio-5').text((cmInApoTotal5*100/cmCallIn5).toFixed(0) + '%');
     }
     if (cmCallIn6 != 0) {
-        $('#cmInApptRatio-6').text((cmInApoTotal6*100/cmCallIn6).toFixed(0) + '%');
+        var apptRatio = cmInApoTotal6*100/cmCallIn6;
+        if (apptRatio == 1) {
+            $('#cmInApptRatio-0').css('color', 'red');
+        }
+        $('#cmInApptRatio-6').text(apptRatio.toFixed(0) + '%');
     }
     var cmGotCallTotal1 = (+$('#cmOutGotCall-1').text())+(+$('#cmInGotCall-1').text())+(+$('#cmBlogGotCall-1').text())+(+$('#cmBagGotCall-1').text());
     $('#cmOutApptRatio-1').text((ApgOutTotal1*100/cmGotCallTotal1).toFixed(0) + '%');
@@ -2419,7 +2073,11 @@ function runFormula() {
     $('#cmShowRatio-3').text(((+$('#cmFaSum-3').text())*100/agpTotal3).toFixed(0) + '%');
     $('#cmShowRatio-4').text(((+$('#cmFaSum-4').text())*100/agpTotal4).toFixed(0) + '%');
     $('#cmShowRatio-5').text(((+$('#cmFaSum-5').text())*100/agpTotal5).toFixed(0) + '%');
-    $('#cmShowRatio-6').text(((+$('#cmFaSum-6').text())*100/agpTotal6).toFixed(0) + '%');
+    var showUpRate = (+$('#cmFaSum-6').text())*100/agpTotal6;
+    if (showUpRate > 0.8) {
+        $('#cmShowRatio-0').css('color', 'red');
+    }
+    $('#cmShowRatio-6').text(showUpRate.toFixed(0) + '%');
 
     $('#salesAch-6').text((+$('#salesAch-1').text())+(+$('#salesAch-2').text())+(+$('#salesAch-3').text())+(+$('#salesAch-4').text())+(+$('#salesAch-5').text()));
     $('#salesMonthly-6').text((+$('#salesMonthly-1').text())+(+$('#salesMonthly-2').text())+(+$('#salesMonthly-3').text())+(+$('#salesMonthly-4').text())+(+$('#salesMonthly-5').text()));
@@ -2441,13 +2099,21 @@ function runFormula() {
     $('#salesRatio-3').text((salesTotal3*100/(+$('#cmFaSum-3').text())).toFixed(0) + '%');
     $('#salesRatio-4').text((salesTotal4*100/(+$('#cmFaSum-4').text())).toFixed(0) + '%');
     $('#salesRatio-5').text((salesTotal5*100/(+$('#cmFaSum-5').text())).toFixed(0) + '%');
-    $('#salesRatio-6').text((salesTotal6*100/(+$('#cmFaSum-6').text())).toFixed(0) + '%');
+    var salesRate = salesTotal6*100/(+$('#cmFaSum-6').text());
+    if (salesRate > 0.85) {
+        $('#salesRatio-0').css('color', 'red');
+    }
+    $('#salesRatio-6').text(salesRate.toFixed(0) + '%');
     $('#salesAchAppRatio-1').text((((+$('#salesAch-1').text()) + (+$('#salesAllPrepay-1').text()))*100/salesTotal1).toFixed(0) + '%');
     $('#salesAchAppRatio-2').text((((+$('#salesAch-2').text()) + (+$('#salesAllPrepay-2').text()))*100/salesTotal2).toFixed(0) + '%');
     $('#salesAchAppRatio-3').text((((+$('#salesAch-3').text()) + (+$('#salesAllPrepay-3').text()))*100/salesTotal3).toFixed(0) + '%');
     $('#salesAchAppRatio-4').text((((+$('#salesAch-4').text()) + (+$('#salesAllPrepay-4').text()))*100/salesTotal4).toFixed(0) + '%');
     $('#salesAchAppRatio-5').text((((+$('#salesAch-5').text()) + (+$('#salesAllPrepay-5').text()))*100/salesTotal5).toFixed(0) + '%');
-    $('#salesAchAppRatio-6').text((((+$('#salesAch-6').text()) + (+$('#salesAllPrepay-6').text()))*100/salesTotal6).toFixed(0) + '%');
+    var achAppRate = ((+$('#salesAch-6').text()) + (+$('#salesAllPrepay-6').text()))*100/salesTotal6;
+    if (achAppRate > 0.9) {
+        $('#salesAchAppRatio-0').css('color', 'red');
+    }
+    $('#salesAchAppRatio-6').text(achAppRate.toFixed(0) + '%');
 
     var staff1AchTotal = (+$('#staff1Ach-1').text())+(+$('#staff1Ach-2').text())+(+$('#staff1Ach-3').text())+(+$('#staff1Ach-4').text())+(+$('#staff1Ach-5').text());
     var staff2AchTotal = (+$('#staff2Ach-1').text())+(+$('#staff2Ach-2').text())+(+$('#staff2Ach-3').text())+(+$('#staff2Ach-4').text())+(+$('#staff2Ach-5').text());
@@ -2503,89 +2169,89 @@ function runFormula() {
     $('#staff4Ach-6').text(staff4AchTotal);
     $('#staff5Ach-6').text(staff5AchTotal);
     $('#staff6Ach-6').text(staff6AchTotal);
-    var ach1Total = (+$('#staff1Ach-1').text())+(+$('#staff2Ach-1').text())+(+$('#staff3Ach-1').text())+(+$('#staff4Ach-1').text())+(+$('#staff5Ach-1').text())+(+$('#staff6Ach-1').text());
-    $('#clubAch-1').text(ach1Total);
-    var ach2Total = (+$('#staff1Ach-2').text())+(+$('#staff2Ach-2').text())+(+$('#staff3Ach-2').text())+(+$('#staff4Ach-2').text())+(+$('#staff5Ach-2').text())+(+$('#staff6Ach-2').text());
-    $('#clubAch-2').text(ach2Total);
-    var ach3Total = (+$('#staff1Ach-3').text())+(+$('#staff2Ach-3').text())+(+$('#staff3Ach-3').text())+(+$('#staff4Ach-3').text())+(+$('#staff5Ach-3').text())+(+$('#staff6Ach-3').text());
-    $('#clubAch-3').text(ach3Total);
-    var ach4Total = (+$('#staff1Ach-4').text())+(+$('#staff2Ach-4').text())+(+$('#staff3Ach-4').text())+(+$('#staff4Ach-4').text())+(+$('#staff5Ach-4').text())+(+$('#staff6Ach-4').text());
-    $('#clubAch-4').text(ach4Total);
-    var ach5Total = (+$('#staff1Ach-5').text())+(+$('#staff2Ach-5').text())+(+$('#staff3Ach-5').text())+(+$('#staff4Ach-5').text())+(+$('#staff5Ach-5').text())+(+$('#staff6Ach-5').text());
-    $('#clubAch-5').text(ach5Total);
-    $('#clubAch-6').text(ach1Total+ach2Total+ach3Total+ach4Total+ach5Total);
+    var clubAch1 = (+$('#staff1Ach-1').text())+(+$('#staff2Ach-1').text())+(+$('#staff3Ach-1').text())+(+$('#staff4Ach-1').text())+(+$('#staff5Ach-1').text())+(+$('#staff6Ach-1').text());
+    $('#clubAch-1').text(clubAch1);
+    var clubAch2 = (+$('#staff1Ach-2').text())+(+$('#staff2Ach-2').text())+(+$('#staff3Ach-2').text())+(+$('#staff4Ach-2').text())+(+$('#staff5Ach-2').text())+(+$('#staff6Ach-2').text());
+    $('#clubAch-2').text(clubAch2);
+    var clubAch3 = (+$('#staff1Ach-3').text())+(+$('#staff2Ach-3').text())+(+$('#staff3Ach-3').text())+(+$('#staff4Ach-3').text())+(+$('#staff5Ach-3').text())+(+$('#staff6Ach-3').text());
+    $('#clubAch-3').text(clubAch3);
+    var clubAch4 = (+$('#staff1Ach-4').text())+(+$('#staff2Ach-4').text())+(+$('#staff3Ach-4').text())+(+$('#staff4Ach-4').text())+(+$('#staff5Ach-4').text())+(+$('#staff6Ach-4').text());
+    $('#clubAch-4').text(clubAch4);
+    var clubAch5 = (+$('#staff1Ach-5').text())+(+$('#staff2Ach-5').text())+(+$('#staff3Ach-5').text())+(+$('#staff4Ach-5').text())+(+$('#staff5Ach-5').text())+(+$('#staff6Ach-5').text());
+    $('#clubAch-5').text(clubAch5);
+    $('#clubAch-6').text(clubAch1+clubAch2+clubAch3+clubAch4+clubAch5);
     $('#staff1Mm-6').text(staff1MmTotal);
     $('#staff2Mm-6').text(staff2MmTotal);
     $('#staff3Mm-6').text(staff3MmTotal);
     $('#staff4Mm-6').text(staff4MmTotal);
     $('#staff5Mm-6').text(staff5MmTotal);
     $('#staff6Mm-6').text(staff6MmTotal);
-    var mm1Total = (+$('#staff1Mm-1').text())+(+$('#staff2Mm-1').text())+(+$('#staff3Mm-1').text())+(+$('#staff4Mm-1').text())+(+$('#staff5Mm-1').text())+(+$('#staff6Mm-1').text());
-    $('#clubMm-1').text(mm1Total);
-    var mm2Total = (+$('#staff1Mm-2').text())+(+$('#staff2Mm-2').text())+(+$('#staff3Mm-2').text())+(+$('#staff4Mm-2').text())+(+$('#staff5Mm-2').text())+(+$('#staff6Mm-2').text());
-    $('#clubMm-2').text(mm2Total);
-    var mm3Total = (+$('#staff1Mm-3').text())+(+$('#staff2Mm-3').text())+(+$('#staff3Mm-3').text())+(+$('#staff4Mm-3').text())+(+$('#staff5Mm-3').text())+(+$('#staff6Mm-3').text());
-    $('#clubMm-3').text(mm3Total);
-    var mm4Total = (+$('#staff1Mm-4').text())+(+$('#staff2Mm-4').text())+(+$('#staff3Mm-4').text())+(+$('#staff4Mm-4').text())+(+$('#staff5Mm-4').text())+(+$('#staff6Mm-4').text());
-    $('#clubMm-4').text(mm4Total);
-    var mm5Total = (+$('#staff1Mm-5').text())+(+$('#staff2Mm-5').text())+(+$('#staff3Mm-5').text())+(+$('#staff4Mm-5').text())+(+$('#staff5Mm-5').text())+(+$('#staff6Mm-5').text());
-    $('#clubMm-5').text(mm5Total);
-    $('#clubMm-6').text(mm1Total+mm2Total+mm3Total+mm4Total+mm5Total);
+    var clubMm1 = (+$('#staff1Mm-1').text())+(+$('#staff2Mm-1').text())+(+$('#staff3Mm-1').text())+(+$('#staff4Mm-1').text())+(+$('#staff5Mm-1').text())+(+$('#staff6Mm-1').text());
+    $('#clubMm-1').text(clubMm1);
+    var clubMm2 = (+$('#staff1Mm-2').text())+(+$('#staff2Mm-2').text())+(+$('#staff3Mm-2').text())+(+$('#staff4Mm-2').text())+(+$('#staff5Mm-2').text())+(+$('#staff6Mm-2').text());
+    $('#clubMm-2').text(clubMm2);
+    var clubMm3 = (+$('#staff1Mm-3').text())+(+$('#staff2Mm-3').text())+(+$('#staff3Mm-3').text())+(+$('#staff4Mm-3').text())+(+$('#staff5Mm-3').text())+(+$('#staff6Mm-3').text());
+    $('#clubMm-3').text(clubMm3);
+    var clubMm4 = (+$('#staff1Mm-4').text())+(+$('#staff2Mm-4').text())+(+$('#staff3Mm-4').text())+(+$('#staff4Mm-4').text())+(+$('#staff5Mm-4').text())+(+$('#staff6Mm-4').text());
+    $('#clubMm-4').text(clubMm4);
+    var clubMm5 = (+$('#staff1Mm-5').text())+(+$('#staff2Mm-5').text())+(+$('#staff3Mm-5').text())+(+$('#staff4Mm-5').text())+(+$('#staff5Mm-5').text())+(+$('#staff6Mm-5').text());
+    $('#clubMm-5').text(clubMm5);
+    $('#clubMm-6').text(clubMm1+clubMm2+clubMm3+clubMm4+clubMm5);
     $('#staff1App-6').text(staff1AppTotal);
     $('#staff2App-6').text(staff2AppTotal);
     $('#staff3App-6').text(staff3AppTotal);
     $('#staff4App-6').text(staff4AppTotal);
     $('#staff5App-6').text(staff5AppTotal);
     $('#staff6App-6').text(staff6AppTotal);
-    var app1Total = (+$('#staff1App-1').text())+(+$('#staff2App-1').text())+(+$('#staff3App-1').text())+(+$('#staff4App-1').text())+(+$('#staff5App-1').text())+(+$('#staff6App-1').text());
-    $('#clubApp-1').text(app1Total);
-    var app2Total = (+$('#staff1App-2').text())+(+$('#staff2App-2').text())+(+$('#staff3App-2').text())+(+$('#staff4App-2').text())+(+$('#staff5App-2').text())+(+$('#staff6App-2').text());
-    $('#clubApp-2').text(app2Total);
-    var app3Total = (+$('#staff1App-3').text())+(+$('#staff2App-3').text())+(+$('#staff3App-3').text())+(+$('#staff4App-3').text())+(+$('#staff5App-3').text())+(+$('#staff6App-3').text());
-    $('#clubApp-3').text(app3Total);
-    var app4Total = (+$('#staff1App-4').text())+(+$('#staff2App-4').text())+(+$('#staff3App-4').text())+(+$('#staff4App-4').text())+(+$('#staff5App-4').text())+(+$('#staff6App-4').text());
-    $('#clubApp-4').text(app4Total);
-    var app5Total = (+$('#staff1App-5').text())+(+$('#staff2App-5').text())+(+$('#staff3App-5').text())+(+$('#staff4App-5').text())+(+$('#staff5App-5').text())+(+$('#staff6App-5').text());
-    $('#clubApp-5').text(app5Total);
-    $('#clubApp-6').text(app1Total+app2Total+app3Total+app4Total+app5Total);
+    var clubApp1 = (+$('#staff1App-1').text())+(+$('#staff2App-1').text())+(+$('#staff3App-1').text())+(+$('#staff4App-1').text())+(+$('#staff5App-1').text())+(+$('#staff6App-1').text());
+    $('#clubApp-1').text(clubApp1);
+    var clubApp2 = (+$('#staff1App-2').text())+(+$('#staff2App-2').text())+(+$('#staff3App-2').text())+(+$('#staff4App-2').text())+(+$('#staff5App-2').text())+(+$('#staff6App-2').text());
+    $('#clubApp-2').text(clubApp2);
+    var clubApp3 = (+$('#staff1App-3').text())+(+$('#staff2App-3').text())+(+$('#staff3App-3').text())+(+$('#staff4App-3').text())+(+$('#staff5App-3').text())+(+$('#staff6App-3').text());
+    $('#clubApp-3').text(clubApp3);
+    var clubApp4 = (+$('#staff1App-4').text())+(+$('#staff2App-4').text())+(+$('#staff3App-4').text())+(+$('#staff4App-4').text())+(+$('#staff5App-4').text())+(+$('#staff6App-4').text());
+    $('#clubApp-4').text(clubApp4);
+    var clubApp5 = (+$('#staff1App-5').text())+(+$('#staff2App-5').text())+(+$('#staff3App-5').text())+(+$('#staff4App-5').text())+(+$('#staff5App-5').text())+(+$('#staff6App-5').text());
+    $('#clubApp-5').text(clubApp5);
+    $('#clubApp-6').text(clubApp1+clubApp2+clubApp3+clubApp4+clubApp5);
     $('#staff1Ns-6').text(staff1NsTotal);
     $('#staff2Ns-6').text(staff2NsTotal);
     $('#staff3Ns-6').text(staff3NsTotal);
     $('#staff4Ns-6').text(staff4NsTotal);
     $('#staff5Ns-6').text(staff5NsTotal);
     $('#staff6Ns-6').text(staff6NsTotal);
-    var ns1Total = (+$('#staff1Ns-1').text())+(+$('#staff2Ns-1').text())+(+$('#staff3Ns-1').text())+(+$('#staff4Ns-1').text())+(+$('#staff5Ns-1').text())+(+$('#staff6Ns-1').text());
-    $('#clubNs-1').text(ns1Total);
-    var ns2Total = (+$('#staff1Ns-2').text())+(+$('#staff2Ns-2').text())+(+$('#staff3Ns-2').text())+(+$('#staff4Ns-2').text())+(+$('#staff5Ns-2').text())+(+$('#staff6Ns-2').text());
-    $('#clubNs-2').text(ns2Total);
-    var ns3Total = (+$('#staff1Ns-3').text())+(+$('#staff2Ns-3').text())+(+$('#staff3Ns-3').text())+(+$('#staff4Ns-3').text())+(+$('#staff5Ns-3').text())+(+$('#staff6Ns-3').text());
-    $('#clubNs-3').text(ns3Total);
-    var ns4Total = (+$('#staff1Ns-4').text())+(+$('#staff2Ns-4').text())+(+$('#staff3Ns-4').text())+(+$('#staff4Ns-4').text())+(+$('#staff5Ns-4').text())+(+$('#staff6Ns-4').text());
-    $('#clubNs-4').text(ns4Total);
-    var ns5Total = (+$('#staff1Ns-5').text())+(+$('#staff2Ns-5').text())+(+$('#staff3Ns-5').text())+(+$('#staff4Ns-5').text())+(+$('#staff5Ns-5').text())+(+$('#staff6Ns-5').text());
-    $('#clubNs-5').text(ns5Total);
-    $('#clubNs-6').text(ns1Total+ns2Total+ns3Total+ns4Total+ns5Total);
+    var clubNs1 = (+$('#staff1Ns-1').text())+(+$('#staff2Ns-1').text())+(+$('#staff3Ns-1').text())+(+$('#staff4Ns-1').text())+(+$('#staff5Ns-1').text())+(+$('#staff6Ns-1').text());
+    $('#clubNs-1').text(clubNs1);
+    var clubNs2 = (+$('#staff1Ns-2').text())+(+$('#staff2Ns-2').text())+(+$('#staff3Ns-2').text())+(+$('#staff4Ns-2').text())+(+$('#staff5Ns-2').text())+(+$('#staff6Ns-2').text());
+    $('#clubNs-2').text(clubNs2);
+    var clubNs3 = (+$('#staff1Ns-3').text())+(+$('#staff2Ns-3').text())+(+$('#staff3Ns-3').text())+(+$('#staff4Ns-3').text())+(+$('#staff5Ns-3').text())+(+$('#staff6Ns-3').text());
+    $('#clubNs-3').text(clubNs3);
+    var clubNs4 = (+$('#staff1Ns-4').text())+(+$('#staff2Ns-4').text())+(+$('#staff3Ns-4').text())+(+$('#staff4Ns-4').text())+(+$('#staff5Ns-4').text())+(+$('#staff6Ns-4').text());
+    $('#clubNs-4').text(clubNs4);
+    var clubNs5 = (+$('#staff1Ns-5').text())+(+$('#staff2Ns-5').text())+(+$('#staff3Ns-5').text())+(+$('#staff4Ns-5').text())+(+$('#staff5Ns-5').text())+(+$('#staff6Ns-5').text());
+    $('#clubNs-5').text(clubNs5);
+    $('#clubNs-6').text(clubNs1+clubNs2+clubNs3+clubNs4+clubNs5);
     $('#staff1Lx-6').text(staff1LxTotal);
     $('#staff2Lx-6').text(staff2LxTotal);
     $('#staff3Lx-6').text(staff3LxTotal);
     $('#staff4Lx-6').text(staff4LxTotal);
     $('#staff5Lx-6').text(staff5LxTotal);
     $('#staff6Lx-6').text(staff6LxTotal);
-    var lx1Total = (+$('#staff1Lx-1').text())+(+$('#staff2Lx-1').text())+(+$('#staff3Lx-1').text())+(+$('#staff4Lx-1').text())+(+$('#staff5Lx-1').text())+(+$('#staff6Lx-1').text());
-    $('#clubLx-1').text(lx1Total);
-    var lx2Total = (+$('#staff1Lx-2').text())+(+$('#staff2Lx-2').text())+(+$('#staff3Lx-2').text())+(+$('#staff4Lx-2').text())+(+$('#staff5Lx-2').text())+(+$('#staff6Lx-2').text());
-    $('#clubLx-2').text(lx2Total);
-    var lx3Total = (+$('#staff1Lx-3').text())+(+$('#staff2Lx-3').text())+(+$('#staff3Lx-3').text())+(+$('#staff4Lx-3').text())+(+$('#staff5Lx-3').text())+(+$('#staff6Lx-3').text());
-    $('#clubLx-3').text(lx3Total);
-    var lx4Total = (+$('#staff1Lx-4').text())+(+$('#staff2Lx-4').text())+(+$('#staff3Lx-4').text())+(+$('#staff4Lx-4').text())+(+$('#staff5Lx-4').text())+(+$('#staff6Lx-4').text());
-    $('#clubLx-4').text(lx4Total);
-    var lx5Total = (+$('#staff1Lx-5').text())+(+$('#staff2Lx-5').text())+(+$('#staff3Lx-5').text())+(+$('#staff4Lx-5').text())+(+$('#staff5Lx-5').text())+(+$('#staff6Lx-5').text());
-    $('#clubLx-5').text(lx5Total);
-    $('#clubLx-6').text(lx1Total+lx2Total+lx3Total+lx4Total+lx5Total);
+    var clubLx1 = (+$('#staff1Lx-1').text())+(+$('#staff2Lx-1').text())+(+$('#staff3Lx-1').text())+(+$('#staff4Lx-1').text())+(+$('#staff5Lx-1').text())+(+$('#staff6Lx-1').text());
+    $('#clubLx-1').text(clubLx1);
+    var clubLx2 = (+$('#staff1Lx-2').text())+(+$('#staff2Lx-2').text())+(+$('#staff3Lx-2').text())+(+$('#staff4Lx-2').text())+(+$('#staff5Lx-2').text())+(+$('#staff6Lx-2').text());
+    $('#clubLx-2').text(clubLx2);
+    var clubLx3 = (+$('#staff1Lx-3').text())+(+$('#staff2Lx-3').text())+(+$('#staff3Lx-3').text())+(+$('#staff4Lx-3').text())+(+$('#staff5Lx-3').text())+(+$('#staff6Lx-3').text());
+    $('#clubLx-3').text(clubLx3);
+    var clubLx4 = (+$('#staff1Lx-4').text())+(+$('#staff2Lx-4').text())+(+$('#staff3Lx-4').text())+(+$('#staff4Lx-4').text())+(+$('#staff5Lx-4').text())+(+$('#staff6Lx-4').text());
+    $('#clubLx-4').text(clubLx4);
+    var clubLx5 = (+$('#staff1Lx-5').text())+(+$('#staff2Lx-5').text())+(+$('#staff3Lx-5').text())+(+$('#staff4Lx-5').text())+(+$('#staff5Lx-5').text())+(+$('#staff6Lx-5').text());
+    $('#clubLx-5').text(clubLx5);
+    $('#clubLx-6').text(clubLx1+clubLx2+clubLx3+clubLx4+clubLx5);
 
-    var ama = (+$('#clubAch-6').text()) + (+$('#clubAch-6').text()) + (+$('#clubAch-6').text());
+    var ama = (+$('#clubAch-6').text()) + (+$('#clubMm-6').text()) + (+$('#clubApp-6').text());
     if (ama != 0) {
-        var aa = (+$('#clubAch-6').text()) + (+$('#clubAch-6').text());
+        var aa = (+$('#clubAch-6').text()) + (+$('#clubApp-6').text());
         $('#clubAchAppRatio').text((aa*100/ama).toFixed(0) + '%');
     }
     var aman = ama+(+$('#clubNs-6').text());

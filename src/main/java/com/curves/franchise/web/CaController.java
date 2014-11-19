@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class CaController {
     private Logger logger = LoggerFactory.getLogger(CaController.class);
@@ -16,9 +19,25 @@ public class CaController {
     @Autowired
     CaRepository caRepo;
 
+    @RequestMapping(value = "/rest/CA/lastMonth", method = RequestMethod.GET)
+    public Map<String, String> findGoalByYearAndMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
+                                           @AuthenticationPrincipal UserDetails user) {
+        logger.info("==find last month goal== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
+        Map<String, String> mapGoalValue = new HashMap<>(4);
+        Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
+        if (ca != null) {
+            mapGoalValue.put("svcTm6", ""+ca.getSvcTm6());
+            mapGoalValue.put("svcActive6", ""+ca.getSvcActive6());
+            mapGoalValue.put("cmShowRatio6", Math.round(ca.getCmShowRatio6()*100)+"%");
+            mapGoalValue.put("salesRatio6", Math.round(ca.getSalesRatio6()*100)+"%");
+            mapGoalValue.put("nextPlan", ca.getNextPlan());
+        }
+        return mapGoalValue;
+    }
+
     @RequestMapping(value = "/rest/CA", method = RequestMethod.GET)
     public Ca findByUserAndCaYearAndCaMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
-                                           @AuthenticationPrincipal UserDetails user) {
+                                            @AuthenticationPrincipal UserDetails user) {
         logger.info("=== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
         if (ca == null) {
