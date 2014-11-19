@@ -19,8 +19,7 @@ public class CurvesParser {
     Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     File dataFolder = null;
-    List<File> allPJ = new ArrayList<>();
-    List<File> allCA = new ArrayList<>();
+    Map<String, String> invalidSheets = new HashMap<>();
     List<File> allOthers = new ArrayList<>();
     Map<String, Integer> nameId = new HashMap<>();
     int year, month;
@@ -30,18 +29,19 @@ public class CurvesParser {
 
     FormulaEvaluator evaluator = null;
 
-    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, int year, int month, String folder) {
+    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, int year, int month, String dir) {
         this.pjSumRepo = pjSumRepo;
         this.caRepo = caRepo;
         String home = System.getProperty("user.home");
         logger.info("user.home: "+home);
-        home += File.separator + folder.replace("-", File.separator);
+        home += File.separator + dir.replace("-", File.separator);
         logger.info("folder: "+home);
         dataFolder = new File(home);
-//        sortFiles(dataFolder);
+
         buildClubNameIdMap();
+
         this.year = year;
-        this.month = month - 1;
+        this.month = month-1;
     }
 
     public void processAll() {
@@ -51,10 +51,8 @@ public class CurvesParser {
             Workbook wb = null;
             try {
                 wb = WorkbookFactory.create(f);
-
                 clubId = getIdByName(parseChinese(f.getName()));
             } catch (Exception e) {
-                logger.error(">>> OPEN FILE ERROR: "+f);
                 allOthers.add(f);
                 continue;
             }
@@ -66,24 +64,32 @@ public class CurvesParser {
                 String sheetName = sh.getSheetName();
                 try {
                     int rows = sh.getLastRowNum();
-                    int columns = sh.getRow(0).getPhysicalNumberOfCells();
-                    if (rows > 100 && columns < 26) {
-                        allCA.add(f);
-//                        logger.info("--- processing CA ---"+sheetName);
-                        FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    int columns = 0;
+                    try {
+                        columns = sh.getRow(0).getPhysicalNumberOfCells();
+                    } catch (Exception e) {
+                        invalidSheets.put(sheetName, f.getPath());
+                    }
+                    if (rows > 120 && rows < 150 && columns > 10 && columns < 15) {
+                        evaluator = wb.getCreationHelper().createFormulaEvaluator();
                         new CaDataHandler(this).processCA(sh, evaluator, clubId);
-                    } else if (rows < 80 && columns > 30) {
-                        allPJ.add(f);
-//                        logger.info("=== processing PJ ==="+sheetName);
-                        FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    } else if (rows > 40 && rows < 50 && columns < 45 && columns > 35) {
+                        evaluator = wb.getCreationHelper().createFormulaEvaluator();
                         new PjDataHandler(this).processPJ(sh, evaluator, clubId);
                     } else {
-                        allOthers.add(f);
+                        invalidSheets.put(sheetName, f.getPath());
                     }
                 } catch (Exception e) {
                     logger.error(">>> ERROR <<< file: " + f + ", sheet: " + sheetName, e);
                 }
             }
+        }
+        logger.info("=======others================================");
+        for (File f : allOthers) {
+            logger.info("Invalid files: "+f);
+        }
+        for (String s : invalidSheets.keySet()) {
+            logger.info("Invalid sheets: "+invalidSheets.get(s) + " :: "+s);
         }
     }
 

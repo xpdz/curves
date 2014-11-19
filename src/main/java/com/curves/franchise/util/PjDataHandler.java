@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,7 +95,7 @@ public class PjDataHandler {
 
         PjSum pjSumX = cp.pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
         if (pjSumX != null) {
-            BeanUtils.copyProperties(pjSumX, pjSum);
+            pjSum.setId(pjSumX.getId());
         }
         cp.pjSumRepo.save(pjSum);
 

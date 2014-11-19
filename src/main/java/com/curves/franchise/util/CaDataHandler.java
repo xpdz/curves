@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +25,7 @@ public class CaDataHandler {
         this.evaluator = evaluator;
 
         String sheetName = sh.getSheetName();
-        sheetName = sheetName.replaceAll("[\\.-]", "");
+        sheetName = sheetName.replaceAll("[\\/\\.-]", "");
         if (sheetName.startsWith(cp.year+"") && sheetName.endsWith((cp.month+1)+"")) {
         } else {
             try {
@@ -50,7 +49,7 @@ public class CaDataHandler {
 
         Ca cax = cp.caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth());
         if (cax != null) {
-            BeanUtils.copyProperties(cax, ca);
+            ca.setId(cax.getId());
         }
         cp.caRepo.save(ca);
 
