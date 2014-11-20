@@ -192,28 +192,15 @@ function fillSummary(pjSum) {
       )
     );
 
-    $(function () {
-      $('[contenteditable]').tooltipster();
-    })
-    $('td[contenteditable]').focus(function() {
-        var xId = $(this).attr('id');
-        var idx = xId.split('-');
-        var xDate = currentYear+'-'+(currentMonth+1)+'-'+idx[1];
-        var ttl = $('#'+idx[0]+'Title').text();
-        $(this).tooltipster({multiple: true, updateAnimation: false, trigger: 'custom', position: 'top', content: ttl});
-        $(this).tooltipster({multiple: true, updateAnimation: false, trigger: 'custom', position: 'left', content: xDate});
-        $(this).tooltipster('show');
-    });
-
     $('td[contenteditable="true"]').focusout(function() {
         runFormula();
     });
 }
 
 function clearZero() {
-    $('td[contenteditable="true"]').each(function() {
+    $('td[contenteditable]').each(function() {
         var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0.0') {
+        if (valueX === '-1' || valueX === '0' || valueX === '0.0') {
             $(this).text('');
         }
     });

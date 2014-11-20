@@ -1,6 +1,8 @@
 package com.curves.franchise.util;
 
+import com.curves.franchise.domain.Club;
 import com.curves.franchise.repository.CaRepository;
+import com.curves.franchise.repository.ClubRepository;
 import com.curves.franchise.repository.PjSumRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -26,22 +28,26 @@ public class CurvesParser {
 
     CaRepository caRepo;
     PjSumRepository pjSumRepo;
+    ClubRepository clubRepo;
 
     FormulaEvaluator evaluator = null;
 
-    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, int year, int month, String dir) {
+    public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, ClubRepository clubRepo, String dir) {
         this.pjSumRepo = pjSumRepo;
         this.caRepo = caRepo;
+        this.clubRepo = clubRepo;
+        String[] ym = dir.split("-");
+        this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
+        this.month = Integer.parseInt(ym[ym.length - 1].substring(5, 6))-1;
+
         String home = System.getProperty("user.home");
         logger.info("user.home: "+home);
-        home += File.separator + dir.replace("-", File.separator);
-        logger.info("folder: "+home);
-        dataFolder = new File(home);
 
         buildClubNameIdMap();
 
-        this.year = year;
-        this.month = month-1;
+        home += File.separator + dir.replace("-", File.separator);
+        logger.info("folder: "+home);
+        dataFolder = new File(home);
     }
 
     public void processAll() {
@@ -94,7 +100,7 @@ public class CurvesParser {
     }
 
     int getCellIntValue(Sheet sh, int row, int col) {
-        int value = -1;
+        int value = 0;
         try {
             Cell cell = sh.getRow(row).getCell(col);
             if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
@@ -156,19 +162,10 @@ public class CurvesParser {
     }
 
     void buildClubNameIdMap() {
-        File f = new File("C:\\Users\\212307274\\Projects\\Franchise\\doc\\data\\clubInfo.xlsx");
         try {
-            Workbook wb = WorkbookFactory.create(f);
-            for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-                Sheet sh = wb.getSheetAt(i);
-                for (Row row : sh) {
-                    if (row.getRowNum() == 0 || row.getRowNum() > 88) {
-                        continue;
-                    }
-                    int clubId = (int)row.getCell(4).getNumericCellValue();
-                    String clubName = row.getCell(1).getStringCellValue();
-                    nameId.put(clubName, clubId);
-                }
+            Iterable<Club> clubs = clubRepo.findAll();
+            for (Club club : clubs) {
+                nameId.put(club.getName(), club.getClubId());
             }
         } catch (Exception e) {
             logger.error("", e);
