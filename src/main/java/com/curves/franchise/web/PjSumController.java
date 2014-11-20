@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 public class PjSumController {
     private Logger logger = LoggerFactory.getLogger(PjSumController.class);
@@ -30,8 +32,14 @@ public class PjSumController {
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public Long savePJ(@RequestBody PjSum pjSum) {
-        logger.info("--SavePJ--ID:"+pjSum.getId()+", club: "+pjSum.getClubId()+"@"+pjSum.getYear()+"-"+(pjSum.getMonth()+1));
+        logger.info("--SavePJ--clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth());
+        PjSum pjx = pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
+        if (pjx != null) {
+            pjSum.setId(pjx.getId());
+        }
+        pjSum.setLastModified(new Date());
         pjSumRepo.save(pjSum);
+        logger.info("---PJ saved with ID: " + pjSum.getId());
         return pjSum.getId();
     }
 }

@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-var caId = -1;
-
 var today = new Date();
 var thisYear = today.getFullYear();
 var thisMonth = today.getMonth();
@@ -87,7 +85,6 @@ $('td[contenteditable="true"]').focusout(function() {
 });
 
 function fillSheet(ca) {
-    caId = ca.id || -1;
     $('#goalsTm').text(ca.goalsTm);
     $('#goalsExitsRatio').text((+(ca.goalsExitsRatio*100))+'%');
     $('#goalsNewSales').text(ca.goalsNewSales);
@@ -896,8 +893,6 @@ $("#btnSave").click(function() {
 
     var ca = {};
 
-    ca.id = caId;
-
     ca.clubId = +$('#userId').text();
     ca.caYear = thisYear;
     ca.caMonth = thisMonth;
@@ -1676,7 +1671,6 @@ $("#btnSave").click(function() {
         'data': JSON.stringify(ca),
         'dataType': 'json'
     }).done(function(data) {
-        caId = data;
         showAlert("alert-success", "Save successfully.");
     }).fail(function() {
         showAlert("alert-danger", "Save Fail. Please refresh and retry.");

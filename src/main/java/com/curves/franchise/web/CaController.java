@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,8 +50,14 @@ public class CaController {
     @RequestMapping(value = "/rest/CA", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public Long saveCA(@RequestBody Ca ca) {
-        logger.info("--SaveCA--ID:"+ca.getId()+", club: "+ca.getClubId()+" @ "+ca.getCaYear()+"-"+(ca.getCaMonth()+1)+", plan:"+ca.getThisPlan());
+        logger.info("--SaveCA--clubId: "+ca.getClubId()+" caYear: "+ca.getCaYear()+", caMonth: "+ca.getCaMonth());
+        Ca cax = caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth());
+        if (cax != null) {
+            ca.setId(cax.getId());
+        }
+        ca.setLastModified(new Date());
         caRepo.save(ca);
+        logger.info("---CA saved with ID: "+ca.getId());
         return ca.getId();
     }
 }

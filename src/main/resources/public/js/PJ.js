@@ -1,8 +1,5 @@
 $(document).ready(function() {
 
-var pjSumId = -1;
-var pjIds = [];
-
 var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var $tbd = $("#tbd");
 
@@ -60,7 +57,6 @@ function getPJ() {
 }
 
 function fillSheet(pjSum) {
-    pjSumId = pjSum.id || -1;
     $('#newSales').text(pjSum.newSales);
     $('#exits').text(pjSum.exits);
     $('#shiftIn').text(pjSum.shiftIn);
@@ -78,7 +74,6 @@ function fillSheet(pjSum) {
         if ( !pj ) {
             pj = {};
         }
-        pjIds[idx] = pj.id;
         var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
         var d = new Date(pjDay);
         $tbd.append(
@@ -231,7 +226,6 @@ $("#btnSave").click(function() {
     runFormula();
 
     var pjSum = {};
-    pjSum.id = pjSumId;
     pjSum.clubId = +$('#clubId').text();
     pjSum.year = +$('#year').text();
     pjSum.month = +$('#month').text() - 1;
@@ -283,7 +277,6 @@ $("#btnSave").click(function() {
     pjSum.pjSet = [];
     for (var idx = 1; idx <= lastDayOfMonth; idx++) {
         var pj = {};
-        pj.id = pjIds[idx];
         pj.pjDate = new Date(thisYear, thisMonth, idx);
         pj.workingDays = +$('#workingDays-' + idx).text();
         pj.workOuts = +$('#workOuts-' + idx).text();
@@ -330,7 +323,6 @@ $("#btnSave").click(function() {
         'data': JSON.stringify(pjSum),
         'dataType': 'json'
     }).done(function(data) {
-        pjSumId = data;
         showAlert("alert-success", "Save successfully.");
     }).fail(function() {
         showAlert("alert-danger", "Save Fail. Please refresh and retry.");
