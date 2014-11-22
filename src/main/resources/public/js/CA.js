@@ -8,7 +8,8 @@ var currentMonth = thisMonth;
 
 // init user ID / club ID
 $.getJSON("/rest/whoami", function(club) {
-    $('#userId').text(club.clubId);
+    $('#userId').html('<i class="fa fa-user"></i> '+club.clubId);
+    $('body').attr('clubId', club.clubId);
     $('#clubName').text(club.name);
     $('#owner').text(club.owner);
     $('#mgr').text(club.mgr);
@@ -916,8 +917,7 @@ $("#btnSave").click(function() {
     runFormula();
 
     var ca = {};
-
-    ca.clubId = +$('#userId').text();
+    ca.clubId = +$('body').attr('clubId');
     ca.caYear = thisYear;
     ca.caMonth = thisMonth;
 

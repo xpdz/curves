@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -174,31 +176,34 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/benchmarking", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Map<String, Integer>> findBenchmarkingByClubAndYearAndMonth(@RequestParam("clubId") int clubId, @RequestParam("year") int year, @RequestParam("month") int month) {
-        List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC));
-        Map<String, Map<String, Integer>> values = new HashMap<>(10);
+    public Map<String, Map<String, Integer>> findBenchmarking(@AuthenticationPrincipal UserDetails user,
+                                                              @RequestParam("year") int year,
+                                                              @RequestParam("month") int month) {
+        int clubId = Integer.parseInt(user.getUsername());
+        List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
+        Map<String, Map<String, Integer>> valueV = new HashMap<>(10);
         for (Ca ca : cas) {
-            processList(clubId, values, "CmPostFlyer", ca, ca.getCmPostFlyer6());
-            processList(clubId, values, "CmHandFlyer", ca, ca.getCmHandFlyer6());
-            processList(clubId, values, "CmHandFlyerHours", ca, (int)(ca.getCmHandFlyerHours6()*100));
-            processList(clubId, values, "CmOutGp", ca, ca.getCmOutGp6());
-            processList(clubId, values, "CmOutGpHours", ca, (int)(ca.getCmOutGpHours6()*100));
-            processList(clubId, values, "CmCpBox", ca, ca.getCmCpBox6());
-            processList(clubId, values, "CmApoTotal", ca, ca.getCmApoTotal6());
-            processList(clubId, values, "CmFaSum", ca, ca.getCmFaSum6());
-            processList(clubId, values, "SalesAch", ca, ca.getSalesAch6());
-            processList(clubId, values, "SalesRatio", ca, (int) (ca.getSalesRatio6() * 100));
+            processList(clubId, ca.getClubId(), valueV, "CmPostFlyer", ca.getCmPostFlyer6());
+            processList(clubId, ca.getClubId(), valueV, "CmHandFlyer", ca.getCmHandFlyer6());
+            processList(clubId, ca.getClubId(), valueV, "CmHandFlyerHours", (int) (ca.getCmHandFlyerHours6() * 100));
+            processList(clubId, ca.getClubId(), valueV, "CmOutGp", ca.getCmOutGp6());
+            processList(clubId, ca.getClubId(), valueV, "CmOutGpHours", (int) (ca.getCmOutGpHours6() * 100));
+            processList(clubId, ca.getClubId(), valueV, "CmCpBox", ca.getCmCpBox6());
+            processList(clubId, ca.getClubId(), valueV, "CmApoTotal", ca.getCmApoTotal6());
+            processList(clubId, ca.getClubId(), valueV, "CmFaSum", ca.getCmFaSum6());
+            processList(clubId, ca.getClubId(), valueV, "SalesAch", ca.getSalesAch6());
+            processList(clubId, ca.getClubId(), valueV, "SalesRatio", (int) (ca.getSalesRatio6() * 100));
         }
-        return values;
+        return valueV;
     }
 
-    private void processList(int clubId, Map<String, Map<String, Integer>> valueV, String key, Ca ca, int value) {
-        Map<String, Integer> values = valueV.get(key);
+    private void processList(int clubId, int cId, Map<String, Map<String, Integer>> valueV, String item, int value) {
+        Map<String, Integer> values = valueV.get(item);
         if (values == null) {
-            values = new HashMap<>(3);
+            values = new HashMap<>(4);
             values.put("max", value);
             values.put("min", value);
-            valueV.put(key, values);
+            valueV.put(item, values);
         } else {
             int max = values.get("max");
             if (value > max) {
@@ -209,8 +214,8 @@ public class ManagementController {
                 values.put("min", value);
             }
         }
-        if (ca.getClubId() == clubId) {
-            values.put("val", value);
+        if (cId == clubId) {
+            values.put("you", value);
         }
     }
 
