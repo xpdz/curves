@@ -82,6 +82,30 @@ $('.toggleV').click(function() {
 
 $('td[contenteditable="true"]').focusout(function() {
     runFormula();
+}).keydown(function(e) {
+    // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
+    if (e.which == 8 || e.which == 9 || e.which == 13 || e.which == 46 || e.which == 110 || e.which == 190
+        || (e.which >= 35 && e.which <= 40) || (e.which >= 48 && e.which <= 57) || (e.which >= 96 && e.which <= 105)) {
+        switch (e.which) {
+            case 13: // enter
+            case 39: // right
+                $(this).next().focus();
+                break;
+            case 37: // left
+                $(this).prev().focus();
+                break;
+            case 38: // up
+                var thisId = $(this).attr('id').split('-');
+                $(this).closest('tr').prev().find('td[id^='+thisId[0]+']').focus();
+                break;
+            case 40: // down
+                var thisId = $(this).attr('id').split('-');
+                $(this).closest('tr').next().find('td[id^='+thisId[0]+']').focus();
+                break;
+            default: return; // exit this handler for other keys
+        }
+    }
+    e.preventDefault(); // prevent the default action (scroll / move caret)
 });
 
 function fillSheet(ca) {
