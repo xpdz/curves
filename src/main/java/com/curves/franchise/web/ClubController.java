@@ -21,7 +21,8 @@ public class ClubController {
     CaRepository caRepo;
 
     @RequestMapping(value = "/rest/clubs", method = RequestMethod.GET)
-    public Iterable<Club> getClubs() {
+    public Iterable<Club> findAllClubs() {
+        logger.info("---findAllClubs---");
         return clubRepo.findAll();
     }
 }

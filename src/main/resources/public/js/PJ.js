@@ -76,58 +76,58 @@ function fillSheet(pjSum) {
         }
         var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
         var d = new Date(pjDay);
-        $tbd.append(
-          $('<tr/>').append(
-            $('<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>'),
-            $('<td>' + weekdays[d.getDay()] + '</td>'),
-            $('<td>' + idx + '</td>'),
-            $('<td id="workingDays-' + idx + '" contenteditable="true" style="background-color: #FFFF99" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.workingDays + '</td>'),
-            $('<td id="workOuts-' + idx + '" contenteditable="true" style="background-color: #CCFFFF" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.workOuts + '</td>'),
-            $('<td id="newSalesRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.newSalesRevenue + '</td>'),
-            $('<td id="duesDraftsRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.duesDraftsRevenue + '</td>'),
-            $('<td id="productsRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.productsRevenue + '</td>'),
-            $('<td id="otherRevenue-' + idx + '" contenteditable="true" style="background-color: #FFFF99" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.otherRevenue + '</td>'),
-            $('<td id="incomingCalls-' + idx + '" contenteditable="true" style="background-color: #B7DEE8" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.incomingCalls + '</td>'),
-            $('<td id="incomingApo-' + idx + '" contenteditable="true" style="background-color: #B7DEE8" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.incomingApo + '</td>'),
-            $('<td id="outgoingCalls-' + idx + '" contenteditable="true" style="background-color: #B7DEE8" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.outgoingCalls + '</td>'),
-            $('<td id="outgoingApo-' + idx + '" contenteditable="true" style="background-color: #B7DEE8" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.outgoingApo + '</td>'),
-            $('<td id="brOwnRef-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brOwnRef + '</td>'),
-            $('<td id="brOthersRef-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brOthersRef + '</td>'),
-            $('<td id="brandedNewspaper-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedNewspaper + '</td>'),
-            $('<td id="brandedTv-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedTv + '</td>'),
-            $('<td id="brandedInternet-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedInternet + '</td>'),
-            $('<td id="brandedSign-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedSign + '</td>'),
-            $('<td id="brandedMate-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedMate + '</td>'),
-            $('<td id="brandedOthers-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.brandedOthers + '</td>'),
-            $('<td id="agpInDirectMail-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpInDirectMail + '</td>'),
-            $('<td id="agpInMailFlyer-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpInMailFlyer + '</td>'),
-            $('<td id="agpInHandFlyer-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpInHandFlyer + '</td>'),
-            $('<td id="agpInCp-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpInCp + '</td>'),
-            $('<td id="agpOutApoOut-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpOutApoOut + '</td>'),
-            $('<td id="agpOutApoIn-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpOutApoIn + '</td>'),
-            $('<td id="agpOutApoBlog-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpOutApoBlog + '</td>'),
-            $('<td id="agpOutApoBag-' + idx + '" contenteditable="true" style="background-color: #FF99CC" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.agpOutApoBag + '</td>'),
-            $('<td id="fa-' + idx + '" style="background-color: LightGray" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.fa + '</td>'),
-            $('<td id="enrollAch-' + idx + '" contenteditable="true" style="background-color: #CCFFFF" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.enrollAch + '</td>'),
-            $('<td id="enrollMonthly-' + idx + '" contenteditable="true" style="background-color: #CCFFFF" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.enrollMonthly + '</td>'),
-            $('<td id="enrollAllPrepay-' + idx + '" contenteditable="true" style="background-color: #CCFFFF" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.enrollAllPrepay + '</td>'),
-            $('<td id="exits-' + idx + '" contenteditable="true" style="background-color: #CCFFFF" data-container="table" data-toggle="popover" data-placement="top" data-trigger="focus" title="'+pjDay+'">' + pj.exits + '</td>')
-          )
-        );
+        var row =
+         '<tr>' +
+            '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
+            '<td>' + weekdays[d.getDay()] + '</td>' +
+            '<td>' + idx + '</td>' +
+            '<td style="background-color: #FFFF99"><div id="workingDays-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workingDays ||'')+ '</div></td>' +
+            '<td style="background-color: #CCFFFF"><div id="workOuts-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workOuts ||'')+ '</div></td>' +
+            '<td style="background-color: #FFFF99"><div id="newSalesRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.newSalesRevenue ||'')+ '</div></td>' +
+            '<td style="background-color: #FFFF99"><div id="duesDraftsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.duesDraftsRevenue ||'')+ '</div></td>' +
+            '<td style="background-color: #FFFF99"><div id="productsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.productsRevenue ||'')+ '</div></td>' +
+            '<td style="background-color: #FFFF99"><div id="otherRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.otherRevenue ||'')+ '</div></td>' +
+            '<td style="background-color: #B7DEE8"><div id="incomingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingCalls ||'')+ '</div></td>' +
+            '<td style="background-color: #B7DEE8"><div id="incomingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingApo ||'')+ '</div></td>' +
+            '<td style="background-color: #B7DEE8"><div id="outgoingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingCalls ||'')+ '</div></td>' +
+            '<td style="background-color: #B7DEE8"><div id="outgoingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingApo ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brOwnRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOwnRef ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brOthersRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOthersRef ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedNewspaper-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedNewspaper ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedTv-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedTv ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedInternet-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedInternet ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedSign-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedSign ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedMate-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedMate ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="brandedOthers-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedOthers ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpInDirectMail-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInDirectMail ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpInMailFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInMailFlyer ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpInHandFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInHandFlyer ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpInCp-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInCp ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpOutApoOut-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoOut ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpOutApoIn-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoIn ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpOutApoBlog-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBlog ||'')+ '</div></td>' +
+            '<td style="background-color: #FF99CC"><div id="agpOutApoBag-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBag ||'')+ '</div></td>' +
+            '<td style="background-color: LightGray" id="fa-' + idx + '" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.fa||'') + '</td>' +
+            '<td style="background-color: #CCFFFF"><div id="enrollAch-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAch ||'')+ '</div></td>' +
+            '<td style="background-color: #CCFFFF"><div id="enrollMonthly-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollMonthly ||'')+ '</div></td>' +
+            '<td style="background-color: #CCFFFF"><div id="enrollAllPrepay-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAllPrepay ||'')+ '</div></td>' +
+            '<td style="background-color: #CCFFFF"><div id="exits-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.exits ||'')+ '</div></td>' +
+        '</tr>';
+        $tbd.append($(row));
     }
 
     if (currentYear === thisYear && currentMonth === thisMonth) {
         $('#btnSave').prop("disabled", false);
-        $('td[contenteditable]').css('border', '1px dashed green !important');
-        $('td[contenteditable="false"]').prop('contenteditable', true);
+        $('[contenteditable]').css('border', '1px dashed !important');
+        $('[contenteditable="false"]').prop('contenteditable', true);
     } else {
         $('#btnSave').prop("disabled", true);
         $('#btnSave').toggleClass('btn-success btn-default')
-        $('td[contenteditable]').css('border', '1px solid #ddd !important');
-        $('td[contenteditable="true"]').prop('contenteditable', false);
+        $('[contenteditable]').css('border', '1px solid #ddd !important');
+        $('[contenteditable="true"]').prop('contenteditable', false);
     }
-
-    clearZeroAndNaN();
+    clearZero();
+    clearNaN();
 
     fillSummary(pjSum);
 }
@@ -153,50 +153,50 @@ function fillSummary(pjSum) {
     $tbd.append(
       $('<tr style="background-color: LightGray"/>').append(
         $('<td/><td/><td/>'),
-        $('<td id="workingDays" >' + (pjSum.workingDays) + '</td>'),
-        $('<td id="maxWorkOuts" >' + (pjSum.maxWorkOuts) + '</td>'),
-        $('<td id="newSalesRevenue" >' + (pjSum.newSalesRevenue) + '</td>'),
-        $('<td id="duesDraftsRevenue" >' + (pjSum.duesDraftsRevenue) + '</td>'),
-        $('<td id="productsRevenue" >' + (pjSum.productsRevenue) + '</td>'),
-        $('<td id="otherRevenue" >' + (pjSum.otherRevenue) + '</td>'),
-        $('<td id="incomingCalls" >' + (pjSum.incomingCalls) + '</td>'),
-        $('<td id="incomingApo" >' + (pjSum.incomingApo) + '</td>'),
-        $('<td id="outgoingCalls" >' + (pjSum.outgoingCalls) + '</td>'),
-        $('<td id="outgoingApo" >' + (pjSum.outgoingApo) + '</td>'),
-        $('<td id="brOwnRef" >' + (pjSum.brOwnRef) + '</td>'),
-        $('<td id="brOthersRef" >' + (pjSum.brOthersRef) + '</td>'),
-        $('<td id="brandedNewspaper" >' + (pjSum.brandedNewspaper) + '</td>'),
-        $('<td id="brandedTv" >' + (pjSum.brandedTv) + '</td>'),
-        $('<td id="brandedInternet" >' + (pjSum.brandedInternet) + '</td>'),
-        $('<td id="brandedSign" >' + (pjSum.brandedSign) + '</td>'),
-        $('<td id="brandedMate" >' + (pjSum.brandedMate) + '</td>'),
-        $('<td id="brandedOthers" >' + (pjSum.brandedOthers) + '</td>'),
-        $('<td id="agpInDirectMail" >' + (pjSum.agpInDirectMail) + '</td>'),
-        $('<td id="agpInMailFlyer" >' + (pjSum.agpInMailFlyer) + '</td>'),
-        $('<td id="agpInHandFlyer" >' + (pjSum.agpInHandFlyer) + '</td>'),
-        $('<td id="agpInCp" >' + (pjSum.agpInCp) + '</td>'),
-        $('<td id="agpOutApoOut" >' + (pjSum.agpOutApoOut) + '</td>'),
-        $('<td id="agpOutApoIn" >' + (pjSum.agpOutApoIn) + '</td>'),
-        $('<td id="agpOutApoBlog" >' + (pjSum.agpOutApoBlog) + '</td>'),
-        $('<td id="agpOutApoBag" >' + (pjSum.agpOutApoBag) + '</td>'),
-        $('<td id="faSum" >' + (pjSum.faSum) + '</td>'),
-        $('<td id="enrollAch" >' + (pjSum.enrollAch) + '</td>'),
-        $('<td id="enrollMonthly" >' + (pjSum.enrollMonthly) + '</td>'),
-        $('<td id="enrollAllPrepay" >' + (pjSum.enrollAllPrepay) + '</td>'),
-        $('<td id="exits" >' + (pjSum.exits) + '</td>')
+        $('<td id="workingDays">' + (pjSum.workingDays) + '</td>'),
+        $('<td id="maxWorkOuts">' + (pjSum.maxWorkOuts) + '</td>'),
+        $('<td id="newSalesRevenue">' + (pjSum.newSalesRevenue) + '</td>'),
+        $('<td id="duesDraftsRevenue">' + (pjSum.duesDraftsRevenue) + '</td>'),
+        $('<td id="productsRevenue">' + (pjSum.productsRevenue) + '</td>'),
+        $('<td id="otherRevenue">' + (pjSum.otherRevenue) + '</td>'),
+        $('<td id="incomingCalls">' + (pjSum.incomingCalls) + '</td>'),
+        $('<td id="incomingApo">' + (pjSum.incomingApo) + '</td>'),
+        $('<td id="outgoingCalls">' + (pjSum.outgoingCalls) + '</td>'),
+        $('<td id="outgoingApo">' + (pjSum.outgoingApo) + '</td>'),
+        $('<td id="brOwnRef">' + (pjSum.brOwnRef) + '</td>'),
+        $('<td id="brOthersRef">' + (pjSum.brOthersRef) + '</td>'),
+        $('<td id="brandedNewspaper">' + (pjSum.brandedNewspaper) + '</td>'),
+        $('<td id="brandedTv">' + (pjSum.brandedTv) + '</td>'),
+        $('<td id="brandedInternet">' + (pjSum.brandedInternet) + '</td>'),
+        $('<td id="brandedSign">' + (pjSum.brandedSign) + '</td>'),
+        $('<td id="brandedMate">' + (pjSum.brandedMate) + '</td>'),
+        $('<td id="brandedOthers">' + (pjSum.brandedOthers) + '</td>'),
+        $('<td id="agpInDirectMail">' + (pjSum.agpInDirectMail) + '</td>'),
+        $('<td id="agpInMailFlyer">' + (pjSum.agpInMailFlyer) + '</td>'),
+        $('<td id="agpInHandFlyer">' + (pjSum.agpInHandFlyer) + '</td>'),
+        $('<td id="agpInCp">' + (pjSum.agpInCp) + '</td>'),
+        $('<td id="agpOutApoOut">' + (pjSum.agpOutApoOut) + '</td>'),
+        $('<td id="agpOutApoIn">' + (pjSum.agpOutApoIn) + '</td>'),
+        $('<td id="agpOutApoBlog">' + (pjSum.agpOutApoBlog) + '</td>'),
+        $('<td id="agpOutApoBag">' + (pjSum.agpOutApoBag) + '</td>'),
+        $('<td id="faSum">' + (pjSum.faSum) + '</td>'),
+        $('<td id="enrollAch">' + (pjSum.enrollAch) + '</td>'),
+        $('<td id="enrollMonthly">' + (pjSum.enrollMonthly) + '</td>'),
+        $('<td id="enrollAllPrepay">' + (pjSum.enrollAllPrepay) + '</td>'),
+        $('<td id="exits">' + (pjSum.exits) + '</td>')
       )
     );
 
     $(function () {
-      $('[data-toggle="popover"]').popover()
-    })
+      $('[data-toggle="popover"]').popover({viewport: "table", content: function() {
+        var thisId = $(this).attr('id').split('-');
+        return $('#'+thisId[0]+'Title').text();
+      }});
+    });
 
-    $('td[contenteditable="true"]').focusout(function() {
+    $('div[contenteditable="true"]').focusout(function() {
         runFormula();
     }).focusin(function(e) {
-        var thisId = $(this).attr('id').split('-');
-        var colContent = $('#'+thisId[0]+'Title').text();
-        $(this).attr('data-content', colContent);
         $(this).popover('show');
     }).keydown(function(e) {
         // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
@@ -205,18 +205,18 @@ function fillSummary(pjSum) {
             switch (e.which) {
                 case 13: // enter
                 case 39: // right
-                    $(this).next().focus();
+                    $(this).closest('td').next().find('div').focus();
                     break;
                 case 37: // left
-                    $(this).prev().focus();
+                    $(this).closest('td').prev().find('div').focus();
                     break;
                 case 38: // up
                     var thisId = $(this).attr('id').split('-');
-                    $(this).closest('tr').prev().find('td[id^='+thisId[0]+']').focus();
+                    $(this).closest('tr').prev().find('[id^='+thisId[0]+']').focus();
                     break;
                 case 40: // down
                     var thisId = $(this).attr('id').split('-');
-                    $(this).closest('tr').next().find('td[id^='+thisId[0]+']').focus();
+                    $(this).closest('tr').next().find('[id^='+thisId[0]+']').focus();
                     break;
                 default: return; // exit this handler for other keys
             }
@@ -226,7 +226,7 @@ function fillSummary(pjSum) {
 }
 
 function clearZero() {
-    $('td[contenteditable]').each(function() {
+    $('div[contenteditable]').each(function() {
         var valueX = $(this).text();
         if (valueX === '-1' || valueX === '0' || valueX === '0.0') {
             $(this).text('');
@@ -238,15 +238,6 @@ function clearNaN() {
     $('td').each(function() {
         var valueX = $(this).text();
         if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-            $(this).text('');
-        }
-    });
-}
-
-function clearZeroAndNaN() {
-    $('td').each(function() {
-        var valueX = $(this).text();
-        if (valueX === '0' || valueX === '0.0' || valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
             $(this).text('');
         }
     });

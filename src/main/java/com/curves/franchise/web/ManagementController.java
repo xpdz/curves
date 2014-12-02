@@ -44,11 +44,28 @@ public class ManagementController {
     @Autowired
     private CaRepository caRepo;
 
-    @RequestMapping(value = "/rest/goal", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/goal", method = RequestMethod.POST)
+    @ResponseBody
+    public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name, @RequestParam("owner") String owner) {
+        Club club = new Club();
+        club.setClubId(clubId);
+        club.setName(name);
+        club.setOwner(owner);
+        try {
+            clubRepo.save(club);
+        } catch (Exception e) {
+            return null;
+        }
+        return "";
+    }
+
+    @RequestMapping(value = "/rest/goal")
     @ResponseBody
     public Goal findGoal(@RequestParam("year") int year, @RequestParam("month") int month) {
+        logger.info("---findGoal---year: "+year+", month: "+month);
         Goal g = goalRepo.findByGYearAndGMonth(year, month);
         if (g == null) {
+            logger.info("---findGoal--- Goal not found!");
             g = new Goal();
         }
         return g;
@@ -57,7 +74,7 @@ public class ManagementController {
     @RequestMapping(value = "/rest/goal", method = RequestMethod.POST)
     @ResponseBody
     public Long saveGoal(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("item") String item, @RequestParam("value") float value) {
-        logger.info("Save goal, item: "+item+", value: "+value+" @ "+year+"-"+month);
+        logger.info("---saveGoal---item: "+item+", value: "+value+" @ "+year+"-"+month);
         Goal goal = goalRepo.findByGYearAndGMonth(year, month);
         if (goal == null) {
             goal = new Goal();
@@ -105,17 +122,20 @@ public class ManagementController {
             }
         }
         goal = goalRepo.save(goal);
+        logger.info("---saveGoal---completed.");
         return goal.getId();
     }
 
-    @RequestMapping(value = "/rest/rank", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/rank")
     @ResponseBody
     public Map<String, Float> findRank(@RequestParam("item") String item, @RequestParam("year") int year, @RequestParam("month") int month) {
+        logger.info("---findRank---item: "+item+", year: "+year+", month: "+month);
         Iterable<Club> clubs = clubRepo.findAll();
         Map<Integer, String> clubIdNameMap = new HashMap<>();
         for (Club club : clubs) {
             clubIdNameMap.put(club.getClubId(), club.getName());
         }
+        logger.info("---findRank---clubIdNameMap.size: "+clubIdNameMap.size());
         Map<String, Float> values = new LinkedHashMap<>();
         if ("newSalesRevenue".equals(item) || "duesDraftsRevenue".equals(item) ||
              "productsRevenue".equals(item) || "revenue".equals(item)) {
@@ -171,60 +191,482 @@ public class ManagementController {
                 }
             }
         }
+        logger.info("---findRank---values.size: "+values.size());
         return values;
     }
 
-    @RequestMapping(value = "/rest/benchmarking", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/CaAll")
     @ResponseBody
-    public Map<String, Map<String, Integer>> findBenchmarking(@AuthenticationPrincipal UserDetails user,
-                                                              @RequestParam("year") int year,
-                                                              @RequestParam("month") int month) {
-        int clubId = Integer.parseInt(user.getUsername());
-        List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
-        Map<String, Map<String, Integer>> valueV = new HashMap<>(10);
+    public Map<String, Map<String, String>> findCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
+        List<Ca> cas = caRepo.findByCaYearAndCaMonth(caYear, caMonth, new Sort(Sort.Direction.DESC, "clubId"));
+        logger.info("---findCaAll---caYear: " + caYear + ", caMonth: " + caMonth+", size: "+cas.size());
+        Map<String, Map<String, String>> valueV = new HashMap<>(68);
+        if (cas.size() == 0) {
+            return valueV;
+        }
+
+        Iterable<Club> clubs = clubRepo.findAll();
         for (Ca ca : cas) {
-            processList(clubId, ca.getClubId(), valueV, "CmPostFlyer", ca.getCmPostFlyer6());
-            processList(clubId, ca.getClubId(), valueV, "CmHandFlyer", ca.getCmHandFlyer6());
-            processList(clubId, ca.getClubId(), valueV, "CmHandFlyerHours", (int) (ca.getCmHandFlyerHours6() * 100));
-            processList(clubId, ca.getClubId(), valueV, "CmOutGp", ca.getCmOutGp6());
-            processList(clubId, ca.getClubId(), valueV, "CmOutGpHours", (int) (ca.getCmOutGpHours6() * 100));
-            processList(clubId, ca.getClubId(), valueV, "CmCpBox", ca.getCmCpBox6());
-            processList(clubId, ca.getClubId(), valueV, "CmApoTotal", ca.getCmApoTotal6());
-            processList(clubId, ca.getClubId(), valueV, "CmFaSum", ca.getCmFaSum6());
-            processList(clubId, ca.getClubId(), valueV, "SalesAch", ca.getSalesAch6());
-            processList(clubId, ca.getClubId(), valueV, "SalesRatio", (int) (ca.getSalesRatio6() * 100));
+            boolean found = false;
+            Map<String, String> valueX = new HashMap<>(68);
+            for (Club club : clubs) {
+                if (club.getClubId() == ca.getClubId()) {
+                    valueV.put(club.getName(), valueX);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                logger.error(">>> Club ID "+ca.getClubId()+" in CA NOT FOUND in clubs <<<");
+                continue;
+            }
+
+            valueX.put("GoalsTm", "" + ca.getGoalsTm());
+            valueX.put("GoalsExitsRatio", "" + ca.getGoalsExitsRatio());
+            valueX.put("GoalsNewSales", "" + ca.getGoalsNewSales());
+            valueX.put("GoalsAppoints", "" + ca.getGoalsAppoints());
+            valueX.put("SvcTm6", "" + ca.getSvcTm6());
+            valueX.put("SvcHold6", "" + ca.getSvcHold6());
+            valueX.put("SvcActive6", "" + ca.getSvcActive6());
+            valueX.put("SvcHoldRatio6", "" + ca.getSvcHoldRatio6());
+            valueX.put("SvcTotalWo6", "" + ca.getSvcTotalWo6());
+            valueX.put("SvcAvgWo6", "" + ca.getSvcAvgWo6());
+            valueX.put("SvcMaxWo6", "" + ca.getSvcMaxWo6());
+            valueX.put("SvcExits6", "" + ca.getSvcExits6());
+            valueX.put("SvcExitsRatio6", "" + ca.getSvcExitsRatio6());
+            valueX.put("SvcMeasure6", "" + ca.getSvcMeasure6());
+            valueX.put("SvcMeasureRatio6", "" + ca.getSvcMeasureRatio6());
+            valueX.put("Svc12_6", "" + ca.getSvc12_6());
+            valueX.put("Svc8to11_6", "" + ca.getSvc8to11_6());
+            valueX.put("Svc4to7_6", "" + ca.getSvc4to7_6());
+            valueX.put("Svc1to3_6", "" + ca.getSvc1to3_6());
+            valueX.put("Svc0_6", "" + ca.getSvc0_6());
+            valueX.put("CmPostFlyer6", "" + ca.getCmPostFlyer6());
+            valueX.put("CmHandFlyerHours6", "" + ca.getCmHandFlyerHours6());
+            valueX.put("CmOutGpHours6", "" + ca.getCmOutGpHours6());
+            valueX.put("CmCpBox6", "" + ca.getCmCpBox6());
+            valueX.put("CmOutGot6", "" + ca.getCmOutGot6());
+            valueX.put("CmInGot6", "" + ca.getCmInGot6());
+            valueX.put("CmBlogGot6", "" + ca.getCmBlogGot6());
+            valueX.put("CmBagGot6", "" + ca.getCmBagGot6());
+            valueX.put("CmTotalGot6", "" + ca.getCmTotalGot6());
+            valueX.put("CmCallIn6", "" + ca.getCmCallIn6());
+            valueX.put("CmOutGotCall6", "" + ca.getCmOutGotCall6());
+            valueX.put("CmInGotCall6", "" + ca.getCmInGotCall6());
+            valueX.put("CmBlogGotCall6", "" + ca.getCmBlogGotCall6());
+            valueX.put("CmBagGotCall6", "" + ca.getCmBagGotCall6());
+            valueX.put("CmOwnRefs6", "" + ca.getCmOwnRefs6());
+            valueX.put("CmNewspaper6", "" + ca.getCmNewspaper6());
+            valueX.put("CmTv6", "" + ca.getCmTv6());
+            valueX.put("CmInternet6", "" + ca.getCmInternet6());
+            valueX.put("CmSign6", "" + ca.getCmSign6());
+            valueX.put("CmMate6", "" + ca.getCmMate6());
+            valueX.put("CmOthers6", "" + ca.getCmOthers6());
+            valueX.put("CmMailAgpIn6", "" + ca.getCmMailAgpIn6());
+            valueX.put("CmPostFlyerAgpIn6", "" + ca.getCmPostFlyerAgpIn6());
+            valueX.put("CmHandFlyerAgpIn6", "" + ca.getCmHandFlyerAgpIn6());
+            valueX.put("CmCpAgpIn6", "" + ca.getCmCpAgpIn6());
+            valueX.put("CmOutAgpOut6", "" + ca.getCmOutAgpOut6());
+            valueX.put("CmInAgpOut6", "" + ca.getCmInAgpOut6());
+            valueX.put("CmBlogAgpOut6", "" + ca.getCmBlogAgpOut6());
+            valueX.put("CmBagAgpOut6", "" + ca.getCmBagAgpOut6());
+            valueX.put("CmApoTotal6", "" + ca.getCmApoTotal6());
+            valueX.put("CmOutApptRatio6", "" + ca.getCmOutApptRatio6());
+            valueX.put("CmPostPerApo6", "" + ca.getCmPostPerApo6());
+            valueX.put("CmHandPerApo6", "" + ca.getCmHandPerApo6());
+            valueX.put("CmHandHoursPerApo6", "" + ca.getCmHandHoursPerApo6());
+            valueX.put("CmOutGpHoursPerApo6", "" + ca.getCmOutGpHoursPerApo6());
+            valueX.put("CmOutGpPerApo6", "" + ca.getCmOutGpPerApo6());
+            valueX.put("CmBrAgpRatio6", "" + ca.getCmBrAgpRatio6());
+            valueX.put("CmFaSum6", "" + ca.getCmFaSum6());
+            valueX.put("CmShowRatio6", "" + ca.getCmShowRatio6());
+            valueX.put("SalesAch6", "" + ca.getSalesAch6());
+            valueX.put("SalesMonthly6", "" + ca.getSalesMonthly6());
+            valueX.put("SalesAllPrepay6", "" + ca.getSalesAllPrepay6());
+            valueX.put("SalesTotal6", "" + ca.getSalesTotal6());
+            valueX.put("SalesRatio6", "" + ca.getSalesRatio6());
+            valueX.put("SalesAchAppRatio6", "" + ca.getSalesAchAppRatio6());
+
+            Ca lastCa = caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth() - 1);
+            if (lastCa != null) {
+                valueX.put("LastGoalsTm", "" + lastCa.getSvcTm6());
+                valueX.put("LastGoalsActive", "" + lastCa.getSvcActive6());
+                valueX.put("LastGoalsShowRatio", "" + lastCa.getCmShowRatio6());
+                valueX.put("LastGoalsSalesRatio", "" + lastCa.getSalesRatio6());
+            }
         }
         return valueV;
     }
 
-    private void processList(int clubId, int cId, Map<String, Map<String, Integer>> valueV, String item, int value) {
-        Map<String, Integer> values = valueV.get(item);
-        if (values == null) {
-            values = new HashMap<>(4);
-            values.put("max", value);
-            values.put("min", value);
-            valueV.put(item, values);
-        } else {
-            int max = values.get("max");
-            if (value > max) {
-                values.put("max", value);
+    @RequestMapping(value = "/rest/CaAll/stat")
+    @ResponseBody
+    public Map<String, Map<String, String>> findCaAllStat(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
+        logger.info("---findCaAll/stat---caYear: " + caYear + ", caMonth: " + caMonth);
+        return new CaAllHelper().fillItems(caRepo, caYear, caMonth);
+    }
+
+    @RequestMapping(value = "/rest/benchmarking")
+    @ResponseBody
+    public Map<String, Map<String, Float>> findBenchmarking(@AuthenticationPrincipal UserDetails user,
+                                                              @RequestParam("year") int year,
+                                                              @RequestParam("month") int month) {
+        // NOTE: This user isn't 000000, but a logged on franchisee
+        int clubId = Integer.parseInt(user.getUsername());
+        logger.info("---findBenchmarking---clubId: "+clubId+", year: "+year+", month: "+month);
+        Map<String, Map<String, Float>> valueV = new HashMap<>(17);
+        List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
+        List<PjSum> pjs = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
+        if (cas.size() > 0) {
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmPostFlyer6() - ca1.getCmPostFlyer6();
+                }
+            });
+            Map<String, Float> valueX = new HashMap<>(5);
+            valueV.put("cmPostFlyer6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmPostFlyer6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmPostFlyer6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmPostFlyer6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmPostFlyer6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
             }
-            int min = values.get("min");
-            if (value < min) {
-                values.put("min", value);
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmHandFlyer6() - ca1.getCmHandFlyer6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmHandFlyer6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmHandFlyer6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmHandFlyer6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmHandFlyer6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmHandFlyer6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmOutGp6() - ca1.getCmOutGp6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmOutGp6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmOutGp6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmOutGp6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmOutGp6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmOutGp6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return (int)(ca2.getCmHandFlyerHours6()*10 - ca1.getCmHandFlyerHours6()*10);
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmHandFlyerHours6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmHandFlyerHours6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmHandFlyerHours6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmHandFlyerHours6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmHandFlyerHours6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return (int)(ca2.getCmOutGpHours6()*10 - ca1.getCmOutGpHours6()*10);
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmOutGpHours6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmOutGpHours6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmOutGpHours6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmOutGpHours6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmOutGpHours6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmCpBox6() - ca1.getCmCpBox6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmCpBox6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmCpBox6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmCpBox6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmCpBox6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmCpBox6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmInAgpOut6() - ca1.getCmInAgpOut6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmInAgpOut6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmInAgpOut6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmInAgpOut6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmInAgpOut6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmInAgpOut6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmOutAgpOut6() - ca1.getCmOutAgpOut6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmOutAgpOut6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmOutAgpOut6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmOutAgpOut6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmOutAgpOut6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmOutAgpOut6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmApoTotal6() - ca1.getCmApoTotal6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmApoTotal6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmApoTotal6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmApoTotal6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmApoTotal6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmApoTotal6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmFaSum6() - ca1.getCmFaSum6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmFaSum6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmFaSum6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmFaSum6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmFaSum6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmFaSum6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getSalesAch6() - ca1.getSalesAch6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("salesAch6", valueX);
+            valueX.put("max", (float)cas.get(0).getSalesAch6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getSalesAch6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getSalesAch6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getSalesAch6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return ca2.getCmOwnRefs6() - ca1.getCmOwnRefs6();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("cmOwnRefs6", valueX);
+            valueX.put("max", (float)cas.get(0).getCmOwnRefs6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getCmOwnRefs6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getCmOwnRefs6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getCmOwnRefs6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
+            }
+            Collections.sort(cas, new Comparator<Ca>() {
+                @Override
+                public int compare(Ca ca1, Ca ca2) {
+                    return (int)(ca2.getSalesRatio6()*1000 - ca1.getSalesRatio6()*1000);
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("salesRatio6", valueX);
+            valueX.put("max", (float)cas.get(0).getSalesRatio6());
+            valueX.put("mid", (float)cas.get(cas.size() / 2).getSalesRatio6());
+            valueX.put("min", (float)cas.get(cas.size() - 1).getSalesRatio6());
+            for (int i = 0; i < cas.size(); i++) {
+                if (cas.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)cas.get(i).getSalesRatio6());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)cas.size());
+                    break;
+                }
             }
         }
+        if (pjs.size() > 0) {
+            Collections.sort(pjs, new Comparator<PjSum>() {
+                @Override
+                public int compare(PjSum p1, PjSum p2) {
+                    return p2.getNewSalesRevenue() - p1.getNewSalesRevenue();
+                }
+            });
+            Map<String, Float> valueX = new HashMap<>(5);
+            valueV.put("newSalesRevenue", valueX);
+            valueX.put("max", (float)pjs.get(0).getNewSalesRevenue());
+            valueX.put("mid", (float)pjs.get(pjs.size() / 2).getNewSalesRevenue());
+            valueX.put("min", (float)pjs.get(pjs.size() - 1).getNewSalesRevenue());
+            for (int i = 0; i < pjs.size(); i++) {
+                if (pjs.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)pjs.get(i).getNewSalesRevenue());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)pjs.size());
+                    break;
+                }
+            }
+            Collections.sort(pjs, new Comparator<PjSum>() {
+                @Override
+                public int compare(PjSum p1, PjSum p2) {
+                    return p2.getDuesDraftsRevenue() - p1.getDuesDraftsRevenue();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("duesDraftsRevenue", valueX);
+            valueX.put("max", (float)pjs.get(0).getDuesDraftsRevenue());
+            valueX.put("mid", (float)pjs.get(pjs.size() / 2).getDuesDraftsRevenue());
+            valueX.put("min", (float)pjs.get(pjs.size() - 1).getDuesDraftsRevenue());
+            for (int i = 0; i < pjs.size(); i++) {
+                if (pjs.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)pjs.get(i).getDuesDraftsRevenue());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)pjs.size());
+                    break;
+                }
+            }
+            Collections.sort(pjs, new Comparator<PjSum>() {
+                @Override
+                public int compare(PjSum p1, PjSum p2) {
+                    return p2.getRevenue() - p1.getRevenue();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("revenue", valueX);
+            valueX.put("max", (float)pjs.get(0).getRevenue());
+            valueX.put("mid", (float)pjs.get(pjs.size() / 2).getRevenue());
+            valueX.put("min", (float)pjs.get(pjs.size() - 1).getRevenue());
+            for (int i = 0; i < pjs.size(); i++) {
+                if (pjs.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)pjs.get(i).getRevenue());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)pjs.size());
+                    break;
+                }
+            }
+            Collections.sort(pjs, new Comparator<PjSum>() {
+                @Override
+                public int compare(PjSum p1, PjSum p2) {
+                    return p2.getProductsRevenue() - p1.getProductsRevenue();
+                }
+            });
+            valueX = new HashMap<>(5);
+            valueV.put("productsRevenue", valueX);
+            valueX.put("max", (float)pjs.get(0).getProductsRevenue());
+            valueX.put("mid", (float)pjs.get(pjs.size() / 2).getProductsRevenue());
+            valueX.put("min", (float)pjs.get(pjs.size() - 1).getProductsRevenue());
+            for (int i = 0; i < pjs.size(); i++) {
+                if (pjs.get(i).getClubId() == clubId) {
+                    valueX.put("you", (float)pjs.get(i).getProductsRevenue());
+                    valueX.put("rank", (float)i);
+                    valueX.put("total", (float)pjs.size());
+                    break;
+                }
+            }
+        }
+
+        return valueV;
+    }
+
+    private void putValues(int clubId, int cId, float value, Map<String, Float> valueX) {
+        float max = valueX.get("max");
+        if (value > max) {
+            valueX.put("max", value);
+        }
+        float min = valueX.get("min");
+        if (value < min) {
+            valueX.put("min", value);
+        }
         if (cId == clubId) {
-            values.put("you", value);
+            valueX.put("you", value);
         }
     }
 
-    @RequestMapping(value = "/rest/trends", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/trends")
     @ResponseBody
     public Map<String, List<Integer>> findTrendsByClub(@RequestParam("clubId") int clubId,
                                                        @RequestParam("yStart") int yStart, @RequestParam("mStart") int mStart,
                                                        @RequestParam("yEnd") int yEnd, @RequestParam("mEnd") int mEnd) {
-        logger.info("---> trends, clubId: "+clubId+", y1:"+yStart+", y2:"+yEnd+", m1: "+mStart+", m2:"+mEnd);
+        logger.info("---findTrendsByClub---clubId: "+clubId+", start: "+yStart+"-"+mStart+", end: "+yEnd+"-"+mEnd);
         // TODO need to improve performance
         Map<String, List<Integer>> typeValues = new HashMap<>(10);
         List<PjSum> pjSums = pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
@@ -264,36 +706,40 @@ public class ManagementController {
             cmFaSum6.add(ca.getCmFaSum6());
         }
 
+        logger.info("---findTrendsByClub---typeValues.size: "+typeValues.size());
         return typeValues;
     }
 
-    @RequestMapping(value = "/rest/pjSummary", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/pjSummary")
     @ResponseBody
     public List<PjSum> findPjSummaryByClub(@RequestParam("clubId") int clubId,
                                                        @RequestParam("yStart") int yStart, @RequestParam("mStart") int mStart,
                                                        @RequestParam("yEnd") int yEnd, @RequestParam("mEnd") int mEnd) {
 
+        logger.info("---findPjSummaryByClub---clubId: "+clubId+", start: "+yStart+"-"+mStart+", end: "+yEnd+"-"+mEnd);
         return pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
     }
 
-    @RequestMapping(value = "/rest/caSummary", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/caSummary")
     @ResponseBody
     public List<Ca> findCaSummaryByClub(@RequestParam("clubId") int clubId,
                                         @RequestParam("yStart") int yStart, @RequestParam("mStart") int mStart,
                                         @RequestParam("yEnd") int yEnd, @RequestParam("mEnd") int mEnd) {
-
+        logger.info("---findCaSummaryByClub---clubId: "+clubId+", start: "+yStart+"-"+mStart+", end: "+yEnd+"-"+mEnd);
         return caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
     }
 
-    @RequestMapping(value = "/rest/usReport", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/usReport")
     @ResponseBody
     public List<PjSum> findUsReport(@RequestParam("year") int year, @RequestParam("month") int month) {
+        logger.info("---findUsReport---year: "+year+", month: "+month);
         return pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
     }
 
-    @RequestMapping(value = "/rest/US_report_for_Taiwan", method = RequestMethod.GET, produces="application/vnd.ms-excel")
+    @RequestMapping(value = "/rest/US_report_for_Taiwan", produces="application/vnd.ms-excel")
     @ResponseBody
     public FileSystemResource exportUsReport(@RequestParam("year") int year, @RequestParam("month") int month) {
+        logger.info("---exportUsReport---year: "+year+", month: "+month);
         List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
         Workbook wb = new HSSFWorkbook();
         Sheet sh = wb.createSheet();

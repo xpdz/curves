@@ -34,7 +34,7 @@ function getUsReport() {
     $.getJSON("/rest/usReport", {year: currentYear, month: currentMonth}, function(pjSums) {
         for (var idx = 0; idx < pjSums.length; idx++) {
             $('#tbd').append($('<tr/>').append(
-                $('<td>' + currentMonth + '</td>'),
+                $('<td>' + (currentMonth+1) + '</td>'),
                 $('<td>' + currentYear + '</td>'),
                 $('<td>' + pjSums[idx].clubId + '</td>'),
                 $('<td>' + pjSums[idx].maxWorkOuts + '</td>'),

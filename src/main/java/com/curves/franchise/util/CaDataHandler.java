@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class CaDataHandler {
@@ -24,21 +23,6 @@ public class CaDataHandler {
     public void processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
         this.evaluator = evaluator;
 
-        String sheetName = sh.getSheetName();
-        sheetName = sheetName.replaceAll("[\\/\\.-]", "");
-        if (sheetName.startsWith(cp.year+"") && sheetName.endsWith((cp.month+1)+"")) {
-        } else {
-            try {
-                Calendar c = Calendar.getInstance();
-                c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
-                if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
-                    return;
-                }
-            } catch (Exception e) {
-                return;
-            }
-        }
-
         Ca ca = new Ca();
         ca.setLastModified(new Date());
         ca.setClubId(clubId);
@@ -53,7 +37,7 @@ public class CaDataHandler {
         }
         cp.caRepo.save(ca);
 
-        logger.info("*** Saved CA : "+sh.getSheetName() + " ***");
+        logger.info("*** CA Saved *** clubId: "+ca.getClubId()+", caYear: "+ca.getCaYear()+", caMonth: "+ca.getCaMonth());
     }
 
     private void setupCa(Sheet sh, Ca ca) {

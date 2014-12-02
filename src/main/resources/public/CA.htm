@@ -33,6 +33,7 @@
             <ul class="nav navbar-nav">
               <li><a href="PJ.htm">PJ</a></li>
               <li class="active"><a href="#">CA</a></li>
+              <li><a href="benchmarking.htm">Benchmarking</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
@@ -99,7 +100,7 @@
                     <td rowspan="8" style="font-weight: bold"></td>
                     <td>本月在籍會員數目標</td>
                     <td colspan="6" style="font-weight: bold">請填入本月在籍會員目標數   →</td>
-                    <td contenteditable="true" id="goalsTm"></td>
+                    <td><div contenteditable="true" id="goalsTm"></div></td>
                   </tr>
                   <tr>
                     <td>上月在籍會員數</td>
@@ -120,7 +121,7 @@
                   </tr>
                   <tr>
                     <td>預估本月退會率 %</td>
-                    <td contenteditable="true" id="goalsExitsRatio" style="background-color: #FFFF99"></td>
+                    <td style="background-color: #FFFF99"><div contenteditable="true" id="goalsExitsRatio"></div></td>
                   </tr>
                   <tr>
                     <td>用上月成績預測本月所需新銷售數</td>
@@ -156,48 +157,48 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr id="svcTm">
+                  <tr>
                     <td></td>
                     <td style="font-weight: bold">在籍會員數</td>
                     <td></td>
-                    <td contenteditable="true" id="svcTm-1"></td>
-                    <td contenteditable="true" id="svcTm-2"></td>
-                    <td contenteditable="true" id="svcTm-3"></td>
-                    <td contenteditable="true" id="svcTm-4"></td>
-                    <td contenteditable="true" id="svcTm-5"></td>
+                    <td><div contenteditable="true" id="svcTm-1"></div></td>
+                    <td><div contenteditable="true" id="svcTm-2"></div></td>
+                    <td><div contenteditable="true" id="svcTm-3"></div></td>
+                    <td><div contenteditable="true" id="svcTm-4"></div></td>
+                    <td><div contenteditable="true" id="svcTm-5"></div></td>
                     <td style="background-color: #0099FF" contenteditable="true" id="svcTm-6"></td>
                   </tr>
-                  <tr id="svcShift">
+                  <tr>
                     <td></td>
                     <td style="font-weight: bold">移籍(移出為負，移入為正)</td>
                     <td></td>
-                    <td contenteditable="true" id="svcShift-1"></td>
-                    <td contenteditable="true" id="svcShift-2"></td>
-                    <td contenteditable="true" id="svcShift-3"></td>
-                    <td contenteditable="true" id="svcShift-4"></td>
-                    <td contenteditable="true" id="svcShift-5"></td>
+                    <td><div contenteditable="true" id="svcShift-1"></div></td>
+                    <td><div contenteditable="true" id="svcShift-2"></div></td>
+                    <td><div contenteditable="true" id="svcShift-3"></div></td>
+                    <td><div contenteditable="true" id="svcShift-4"></div></td>
+                    <td><div contenteditable="true" id="svcShift-5"></div></td>
                     <td style="background-color: #0099FF" contenteditable="true" id="svcShift-6"></td>
                   </tr>
-                  <tr id="svcHold">
+                  <tr>
                     <td></td>
                     <td style="font-weight: bold">請假會員數</td>
                     <td></td>
-                    <td contenteditable="true" id="svcHold-1"></td>
-                    <td contenteditable="true" id="svcHold-2"></td>
-                    <td contenteditable="true" id="svcHold-3"></td>
-                    <td contenteditable="true" id="svcHold-4"></td>
-                    <td contenteditable="true" id="svcHold-5"></td>
+                    <td><div contenteditable="true" id="svcHold-1"></div></td>
+                    <td><div contenteditable="true" id="svcHold-2"></div></td>
+                    <td><div contenteditable="true" id="svcHold-3"></div></td>
+                    <td><div contenteditable="true" id="svcHold-4"></div></td>
+                    <td><div contenteditable="true" id="svcHold-5"></div></td>
                     <td style="background-color: #0099FF" contenteditable="true" id="svcHold-6"></td>
                   </tr>
-                  <tr id="svcActive">
+                  <tr>
                     <td></td>
                     <td style="font-weight: bold">有效會員數(在籍扣除請假)</td>
                     <td></td>
-                    <td contenteditable="true" id="svcActive-1"></td>
-                    <td contenteditable="true" id="svcActive-2"></td>
-                    <td contenteditable="true" id="svcActive-3"></td>
-                    <td contenteditable="true" id="svcActive-4"></td>
-                    <td contenteditable="true" id="svcActive-5"></td>
+                    <td><div contenteditable="true" id="svcActive-1"></div></td>
+                    <td><div contenteditable="true" id="svcActive-2"></div></td>
+                    <td><div contenteditable="true" id="svcActive-3"></div></td>
+                    <td><div contenteditable="true" id="svcActive-4"></div></td>
+                    <td><div contenteditable="true" id="svcActive-5"></div></td>
                     <td style="background-color: #0099FF" contenteditable="true" id="svcActive-6"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -215,11 +216,11 @@
                     <td style="font-weight: bold">&gt;8 x TAM</td>
                     <td style="font-weight: bold">總WO次數</td>
                     <td id="svcTotalWo-0"><span class="glyphicon glyphicon-star"></span></td>
-                    <td id="svcTotalWo-1" contenteditable="true"></td>
-                    <td id="svcTotalWo-2" contenteditable="true"></td>
-                    <td id="svcTotalWo-3" contenteditable="true"></td>
-                    <td id="svcTotalWo-4" contenteditable="true"></td>
-                    <td id="svcTotalWo-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svcTotalWo-1"></div></td>
+                    <td><div contenteditable="true" id ="svcTotalWo-2"></div></td>
+                    <td><div contenteditable="true" id ="svcTotalWo-3"></div></td>
+                    <td><div contenteditable="true" id ="svcTotalWo-4"></div></td>
+                    <td><div contenteditable="true" id ="svcTotalWo-5"></div></td>
                     <td id="svcTotalWo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -237,22 +238,22 @@
                     <td style="font-weight: bold">&gt;33%TAM</td>
                     <td style="font-weight: bold">每週最高WO日的人數</td>
                     <td></td>
-                    <td id="svcMaxWo-1" contenteditable="true"></td>
-                    <td id="svcMaxWo-2" contenteditable="true"></td>
-                    <td id="svcMaxWo-3" contenteditable="true"></td>
-                    <td id="svcMaxWo-4" contenteditable="true"></td>
-                    <td id="svcMaxWo-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svcMaxWo-1"></div></td>
+                    <td><div contenteditable="true" id ="svcMaxWo-2"></div></td>
+                    <td><div contenteditable="true" id ="svcMaxWo-3"></div></td>
+                    <td><div contenteditable="true" id ="svcMaxWo-4"></div></td>
+                    <td><div contenteditable="true" id ="svcMaxWo-5"></div></td>
                     <td id="svcMaxWo-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">退會</td>
                     <td></td>
-                    <td id="svcExits-1" contenteditable="true"></td>
-                    <td id="svcExits-2" contenteditable="true"></td>
-                    <td id="svcExits-3" contenteditable="true"></td>
-                    <td id="svcExits-4" contenteditable="true"></td>
-                    <td id="svcExits-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svcExits-1"></div></td>
+                    <td><div contenteditable="true" id ="svcExits-2"></div></td>
+                    <td><div contenteditable="true" id ="svcExits-3"></div></td>
+                    <td><div contenteditable="true" id ="svcExits-4"></div></td>
+                    <td><div contenteditable="true" id ="svcExits-5"></div></td>
                     <td id="svcExits-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -270,11 +271,11 @@
                     <td></td>
                     <td style="font-weight: bold">量身數 (含新入會者的量身)</td>
                     <td></td>
-                    <td id="svcMeasure-1" contenteditable="true"></td>
-                    <td id="svcMeasure-2" contenteditable="true"></td>
-                    <td id="svcMeasure-3" contenteditable="true"></td>
-                    <td id="svcMeasure-4" contenteditable="true"></td>
-                    <td id="svcMeasure-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svcMeasure-1"></div></td>
+                    <td><div contenteditable="true" id ="svcMeasure-2"></div></td>
+                    <td><div contenteditable="true" id ="svcMeasure-3"></div></td>
+                    <td><div contenteditable="true" id ="svcMeasure-4"></div></td>
+                    <td><div contenteditable="true" id ="svcMeasure-5"></div></td>
                     <td id="svcMeasure-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
@@ -294,7 +295,7 @@
                     <td id="svc12-0"><span class="glyphicon glyphicon-star"></span></td>
                     <td colspan="3"></td>
                     <td style="font-weight: bold">A</td>
-                    <td id="svc12-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svc12-5"></div></td>
                     <td id="svc12-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
@@ -303,7 +304,7 @@
                     <td id="svc8to11-0"><span class="glyphicon glyphicon-star"></span></td>
                     <td colspan="3"></td>
                     <td style="font-weight: bold">B</td>
-                    <td id="svc8to11-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svc8to11-5"></div></td>
                     <td id="svc8to11-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
@@ -312,7 +313,7 @@
                     <td></td>
                     <td colspan="3"></td>
                     <td style="font-weight: bold">C</td>
-                    <td id="svc4to7-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svc4to7-5"></div></td>
                     <td id="svc4to7-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
@@ -321,7 +322,7 @@
                     <td></td>
                     <td colspan="3"></td>
                     <td style="font-weight: bold">D</td>
-                    <td id="svc1to3-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svc1to3-5"></div></td>
                     <td id="svc1to3-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr>
@@ -330,7 +331,7 @@
                     <td></td>
                     <td colspan="3"></td>
                     <td style="font-weight: bold">E</td>
-                    <td id="svc0-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="svc0-5"></div></td>
                     <td id="svc0-6" style="background-color: LightGray"></td>
                   </tr>
                   <tr style="background-color: #FFCC99">
@@ -433,110 +434,110 @@
                     <td>&gt;5000/mnth</td>
                     <td style="font-weight: bold">信箱傳單投遞張數</td>
                     <td></td>
-                    <td id="cmPostFlyer-1" contenteditable="true"></td>
-                    <td id="cmPostFlyer-2" contenteditable="true"></td>
-                    <td id="cmPostFlyer-3" contenteditable="true"></td>
-                    <td id="cmPostFlyer-4" contenteditable="true"></td>
-                    <td id="cmPostFlyer-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmPostFlyer-1"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyer-2"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyer-3"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyer-4"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyer-5"></div></td>
                     <td id="cmPostFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">員工手發傳單的張數</td>
                     <td></td>
-                    <td id="cmHandFlyer-1" contenteditable="true"></td>
-                    <td id="cmHandFlyer-2" contenteditable="true"></td>
-                    <td id="cmHandFlyer-3" contenteditable="true"></td>
-                    <td id="cmHandFlyer-4" contenteditable="true"></td>
-                    <td id="cmHandFlyer-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmHandFlyer-1"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyer-2"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyer-3"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyer-4"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyer-5"></div></td>
                     <td id="cmHandFlyer-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">員工手發傳單的時數</td>
                     <td></td>
-                    <td id="cmHandFlyerHours-1" contenteditable="true"></td>
-                    <td id="cmHandFlyerHours-2" contenteditable="true"></td>
-                    <td id="cmHandFlyerHours-3" contenteditable="true"></td>
-                    <td id="cmHandFlyerHours-4" contenteditable="true"></td>
-                    <td id="cmHandFlyerHours-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerHours-1"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerHours-2"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerHours-3"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerHours-4"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerHours-5"></div></td>
                     <td id="cmHandFlyerHours-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">店外GP的時數</td>
                     <td></td>
-                    <td id="cmOutGpHours-1" contenteditable="true"></td>
-                    <td id="cmOutGpHours-2" contenteditable="true"></td>
-                    <td id="cmOutGpHours-3" contenteditable="true"></td>
-                    <td id="cmOutGpHours-4" contenteditable="true"></td>
-                    <td id="cmOutGpHours-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOutGpHours-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGpHours-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGpHours-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGpHours-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGpHours-5"></div></td>
                     <td id="cmOutGpHours-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">店外GP的張數</td>
                     <td></td>
-                    <td id="cmOutGp-1" contenteditable="true"></td>
-                    <td id="cmOutGp-2" contenteditable="true"></td>
-                    <td id="cmOutGp-3" contenteditable="true"></td>
-                    <td id="cmOutGp-4" contenteditable="true"></td>
-                    <td id="cmOutGp-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOutGp-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGp-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGp-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGp-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGp-5"></div></td>
                     <td id="cmOutGp-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>&gt;10/mnth</td>
                     <td>CP拜訪、檢查Lead Box的次數</td>
                     <td></td>
-                    <td id="cmCpBox-1" contenteditable="true"></td>
-                    <td id="cmCpBox-2" contenteditable="true"></td>
-                    <td id="cmCpBox-3" contenteditable="true"></td>
-                    <td id="cmCpBox-4" contenteditable="true"></td>
-                    <td id="cmCpBox-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmCpBox-1"></div></td>
+                    <td><div contenteditable="true" id ="cmCpBox-2"></div></td>
+                    <td><div contenteditable="true" id ="cmCpBox-3"></div></td>
+                    <td><div contenteditable="true" id ="cmCpBox-4"></div></td>
+                    <td><div contenteditable="true" id ="cmCpBox-5"></div></td>
                     <td id="cmCpBox-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店外得到的人名與電話</td>
                     <td></td>
-                    <td id="cmOutGot-1" contenteditable="true"></td>
-                    <td id="cmOutGot-2" contenteditable="true"></td>
-                    <td id="cmOutGot-3" contenteditable="true"></td>
-                    <td id="cmOutGot-4" contenteditable="true"></td>
-                    <td id="cmOutGot-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOutGot-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGot-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGot-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGot-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGot-5"></div></td>
                     <td id="cmOutGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店內得到的人名與電話</td>
                     <td></td>
-                    <td id="cmInGot-1" contenteditable="true"></td>
-                    <td id="cmInGot-2" contenteditable="true"></td>
-                    <td id="cmInGot-3" contenteditable="true"></td>
-                    <td id="cmInGot-4" contenteditable="true"></td>
-                    <td id="cmInGot-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmInGot-1"></div></td>
+                    <td><div contenteditable="true" id ="cmInGot-2"></div></td>
+                    <td><div contenteditable="true" id ="cmInGot-3"></div></td>
+                    <td><div contenteditable="true" id ="cmInGot-4"></div></td>
+                    <td><div contenteditable="true" id ="cmInGot-5"></div></td>
                     <td id="cmInGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>Blog or FB得到的人名與電話</td>
                     <td></td>
-                    <td id="cmBlogGot-1" contenteditable="true"></td>
-                    <td id="cmBlogGot-2" contenteditable="true"></td>
-                    <td id="cmBlogGot-3" contenteditable="true"></td>
-                    <td id="cmBlogGot-4" contenteditable="true"></td>
-                    <td id="cmBlogGot-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBlogGot-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGot-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGot-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGot-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGot-5"></div></td>
                     <td id="cmBlogGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從詢問箱得到的人名與電話</td>
                     <td></td>
-                    <td id="cmBagGot-1" contenteditable="true"></td>
-                    <td id="cmBagGot-2" contenteditable="true"></td>
-                    <td id="cmBagGot-3" contenteditable="true"></td>
-                    <td id="cmBagGot-4" contenteditable="true"></td>
-                    <td id="cmBagGot-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBagGot-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGot-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGot-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGot-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGot-5"></div></td>
                     <td id="cmBagGot-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
@@ -557,222 +558,222 @@
                     <td></td>
                     <td>所有來電及來店詢問</td>
                     <td></td>
-                    <td id="cmCallIn-1" contenteditable="true"></td>
-                    <td id="cmCallIn-2" contenteditable="true"></td>
-                    <td id="cmCallIn-3" contenteditable="true"></td>
-                    <td id="cmCallIn-4" contenteditable="true"></td>
-                    <td id="cmCallIn-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmCallIn-1"></div></td>
+                    <td><div contenteditable="true" id ="cmCallIn-2"></div></td>
+                    <td><div contenteditable="true" id ="cmCallIn-3"></div></td>
+                    <td><div contenteditable="true" id ="cmCallIn-4"></div></td>
+                    <td><div contenteditable="true" id ="cmCallIn-5"></div></td>
                     <td id="cmCallIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店外拿到人名打通的電話</td>
                     <td></td>
-                    <td id="cmOutGotCall-1" contenteditable="true"></td>
-                    <td id="cmOutGotCall-2" contenteditable="true"></td>
-                    <td id="cmOutGotCall-3" contenteditable="true"></td>
-                    <td id="cmOutGotCall-4" contenteditable="true"></td>
-                    <td id="cmOutGotCall-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOutGotCall-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGotCall-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGotCall-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGotCall-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOutGotCall-5"></div></td>
                     <td id="cmOutGotCall-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從店內拿到人名打通的電話</td>
                     <td></td>
-                    <td id="cmInGotCall-1" contenteditable="true"></td>
-                    <td id="cmInGotCall-2" contenteditable="true"></td>
-                    <td id="cmInGotCall-3" contenteditable="true"></td>
-                    <td id="cmInGotCall-4" contenteditable="true"></td>
-                    <td id="cmInGotCall-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmInGotCall-1"></div></td>
+                    <td><div contenteditable="true" id ="cmInGotCall-2"></div></td>
+                    <td><div contenteditable="true" id ="cmInGotCall-3"></div></td>
+                    <td><div contenteditable="true" id ="cmInGotCall-4"></div></td>
+                    <td><div contenteditable="true" id ="cmInGotCall-5"></div></td>
                     <td id="cmInGotCall-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從自店Blog or FB拿到人名打通的電話</td>
                     <td></td>
-                    <td id="cmBlogGotCall-1" contenteditable="true"></td>
-                    <td id="cmBlogGotCall-2" contenteditable="true"></td>
-                    <td id="cmBlogGotCall-3" contenteditable="true"></td>
-                    <td id="cmBlogGotCall-4" contenteditable="true"></td>
-                    <td id="cmBlogGotCall-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBlogGotCall-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGotCall-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGotCall-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGotCall-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogGotCall-5"></div></td>
                     <td id="cmBlogGotCall-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td>從詢問箱拿到人名打通的電話</td>
                     <td></td>
-                    <td id="cmBagGotCall-1" contenteditable="true"></td>
-                    <td id="cmBagGotCall-2" contenteditable="true"></td>
-                    <td id="cmBagGotCall-3" contenteditable="true"></td>
-                    <td id="cmBagGotCall-4" contenteditable="true"></td>
-                    <td id="cmBagGotCall-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBagGotCall-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGotCall-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGotCall-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGotCall-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBagGotCall-5"></div></td>
                     <td id="cmBagGotCall-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: yellow; font-weight: bold">
                     <td colspan="9">Appointments 預約來源與預約數</td>
                   </tr>
                   <tr>
-                    <td rowspan="2">SERVICE</td>
+                    <td style="vertical-align: middle" rowspan="2">SERVICE</td>
                     <td>會員介紹 (本店)</td>
                     <td></td>
-                    <td id="cmOwnRefs-1" contenteditable="true"></td>
-                    <td id="cmOwnRefs-2" contenteditable="true"></td>
-                    <td id="cmOwnRefs-3" contenteditable="true"></td>
-                    <td id="cmOwnRefs-4" contenteditable="true"></td>
-                    <td id="cmOwnRefs-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOwnRefs-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOwnRefs-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOwnRefs-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOwnRefs-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOwnRefs-5"></div></td>
                     <td id="cmOwnRefs-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>會員介紹 (他店)</td>
                     <td></td>
-                    <td id="cmOtherRefs-1" contenteditable="true"></td>
-                    <td id="cmOtherRefs-2" contenteditable="true"></td>
-                    <td id="cmOtherRefs-3" contenteditable="true"></td>
-                    <td id="cmOtherRefs-4" contenteditable="true"></td>
-                    <td id="cmOtherRefs-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOtherRefs-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOtherRefs-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOtherRefs-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOtherRefs-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOtherRefs-5"></div></td>
                     <td id="cmOtherRefs-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
-                    <td rowspan="6">BRANDED</td>
+                    <td style="vertical-align: middle" rowspan="6">BRANDED</td>
                     <td>平面媒體</td>
                     <td></td>
-                    <td id="cmNewspaper-1" contenteditable="true"></td>
-                    <td id="cmNewspaper-2" contenteditable="true"></td>
-                    <td id="cmNewspaper-3" contenteditable="true"></td>
-                    <td id="cmNewspaper-4" contenteditable="true"></td>
-                    <td id="cmNewspaper-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmNewspaper-1"></div></td>
+                    <td><div contenteditable="true" id ="cmNewspaper-2"></div></td>
+                    <td><div contenteditable="true" id ="cmNewspaper-3"></div></td>
+                    <td><div contenteditable="true" id ="cmNewspaper-4"></div></td>
+                    <td><div contenteditable="true" id ="cmNewspaper-5"></div></td>
                     <td id="cmNewspaper-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>電視</td>
                     <td></td>
-                    <td id="cmTv-1" contenteditable="true"></td>
-                    <td id="cmTv-2" contenteditable="true"></td>
-                    <td id="cmTv-3" contenteditable="true"></td>
-                    <td id="cmTv-4" contenteditable="true"></td>
-                    <td id="cmTv-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmTv-1"></div></td>
+                    <td><div contenteditable="true" id ="cmTv-2"></div></td>
+                    <td><div contenteditable="true" id ="cmTv-3"></div></td>
+                    <td><div contenteditable="true" id ="cmTv-4"></div></td>
+                    <td><div contenteditable="true" id ="cmTv-5"></div></td>
                     <td id="cmTv-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>網路 (含官網留言)</td>
                     <td></td>
-                    <td id="cmInternet-1" contenteditable="true"></td>
-                    <td id="cmInternet-2" contenteditable="true"></td>
-                    <td id="cmInternet-3" contenteditable="true"></td>
-                    <td id="cmInternet-4" contenteditable="true"></td>
-                    <td id="cmInternet-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmInternet-1"></div></td>
+                    <td><div contenteditable="true" id ="cmInternet-2"></div></td>
+                    <td><div contenteditable="true" id ="cmInternet-3"></div></td>
+                    <td><div contenteditable="true" id ="cmInternet-4"></div></td>
+                    <td><div contenteditable="true" id ="cmInternet-5"></div></td>
                     <td id="cmInternet-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>招牌</td>
                     <td></td>
-                    <td id="cmSign-1" contenteditable="true"></td>
-                    <td id="cmSign-2" contenteditable="true"></td>
-                    <td id="cmSign-3" contenteditable="true"></td>
-                    <td id="cmSign-4" contenteditable="true"></td>
-                    <td id="cmSign-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmSign-1"></div></td>
+                    <td><div contenteditable="true" id ="cmSign-2"></div></td>
+                    <td><div contenteditable="true" id ="cmSign-3"></div></td>
+                    <td><div contenteditable="true" id ="cmSign-4"></div></td>
+                    <td><div contenteditable="true" id ="cmSign-5"></div></td>
                     <td id="cmSign-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>策略夥伴</td>
                     <td></td>
-                    <td id="cmMate-1" contenteditable="true"></td>
-                    <td id="cmMate-2" contenteditable="true"></td>
-                    <td id="cmMate-3" contenteditable="true"></td>
-                    <td id="cmMate-4" contenteditable="true"></td>
-                    <td id="cmMate-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmMate-1"></div></td>
+                    <td><div contenteditable="true" id ="cmMate-2"></div></td>
+                    <td><div contenteditable="true" id ="cmMate-3"></div></td>
+                    <td><div contenteditable="true" id ="cmMate-4"></div></td>
+                    <td><div contenteditable="true" id ="cmMate-5"></div></td>
                     <td id="cmMate-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>其它</td>
                     <td></td>
-                    <td id="cmOthers-1" contenteditable="true"></td>
-                    <td id="cmOthers-2" contenteditable="true"></td>
-                    <td id="cmOthers-3" contenteditable="true"></td>
-                    <td id="cmOthers-4" contenteditable="true"></td>
-                    <td id="cmOthers-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOthers-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOthers-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOthers-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOthers-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOthers-5"></div></td>
                     <td id="cmOthers-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
-                    <td rowspan="4">AGP<br>Incoming<br>Calls</td>
+                    <td style="vertical-align: middle" rowspan="4">AGP<br>Incoming<br>Calls</td>
                     <td>直效信函 (買名單)</td>
                     <td></td>
-                    <td id="cmMailAgpIn-1" contenteditable="true"></td>
-                    <td id="cmMailAgpIn-2" contenteditable="true"></td>
-                    <td id="cmMailAgpIn-3" contenteditable="true"></td>
-                    <td id="cmMailAgpIn-4" contenteditable="true"></td>
-                    <td id="cmMailAgpIn-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmMailAgpIn-1"></div></td>
+                    <td><div contenteditable="true" id ="cmMailAgpIn-2"></div></td>
+                    <td><div contenteditable="true" id ="cmMailAgpIn-3"></div></td>
+                    <td><div contenteditable="true" id ="cmMailAgpIn-4"></div></td>
+                    <td><div contenteditable="true" id ="cmMailAgpIn-5"></div></td>
                     <td id="cmMailAgpIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>信箱傳單</td>
                     <td></td>
-                    <td id="cmPostFlyerAgpIn-1" contenteditable="true"></td>
-                    <td id="cmPostFlyerAgpIn-2" contenteditable="true"></td>
-                    <td id="cmPostFlyerAgpIn-3" contenteditable="true"></td>
-                    <td id="cmPostFlyerAgpIn-4" contenteditable="true"></td>
-                    <td id="cmPostFlyerAgpIn-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmPostFlyerAgpIn-1"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyerAgpIn-2"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyerAgpIn-3"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyerAgpIn-4"></div></td>
+                    <td><div contenteditable="true" id ="cmPostFlyerAgpIn-5"></div></td>
                     <td id="cmPostFlyerAgpIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>手發傳單</td>
                     <td></td>
-                    <td id="cmHandFlyerAgpIn-1" contenteditable="true"></td>
-                    <td id="cmHandFlyerAgpIn-2" contenteditable="true"></td>
-                    <td id="cmHandFlyerAgpIn-3" contenteditable="true"></td>
-                    <td id="cmHandFlyerAgpIn-4" contenteditable="true"></td>
-                    <td id="cmHandFlyerAgpIn-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerAgpIn-1"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerAgpIn-2"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerAgpIn-3"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerAgpIn-4"></div></td>
+                    <td><div contenteditable="true" id ="cmHandFlyerAgpIn-5"></div></td>
                     <td id="cmHandFlyerAgpIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>CP介紹</td>
                     <td></td>
-                    <td id="cmCpAgpIn-1" contenteditable="true"></td>
-                    <td id="cmCpAgpIn-2" contenteditable="true"></td>
-                    <td id="cmCpAgpIn-3" contenteditable="true"></td>
-                    <td id="cmCpAgpIn-4" contenteditable="true"></td>
-                    <td id="cmCpAgpIn-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmCpAgpIn-1"></div></td>
+                    <td><div contenteditable="true" id ="cmCpAgpIn-2"></div></td>
+                    <td><div contenteditable="true" id ="cmCpAgpIn-3"></div></td>
+                    <td><div contenteditable="true" id ="cmCpAgpIn-4"></div></td>
+                    <td><div contenteditable="true" id ="cmCpAgpIn-5"></div></td>
                     <td id="cmCpAgpIn-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
-                    <td rowspan="4">AGP<br>Outgoing<br>Calls</td>
+                    <td style="vertical-align: middle" rowspan="4">AGP<br>Outgoing<br>Calls</td>
                     <td>從店外得到的人名的APO數</td>
                     <td></td>
-                    <td id="cmOutAgpOut-1" contenteditable="true"></td>
-                    <td id="cmOutAgpOut-2" contenteditable="true"></td>
-                    <td id="cmOutAgpOut-3" contenteditable="true"></td>
-                    <td id="cmOutAgpOut-4" contenteditable="true"></td>
-                    <td id="cmOutAgpOut-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmOutAgpOut-1"></div></td>
+                    <td><div contenteditable="true" id ="cmOutAgpOut-2"></div></td>
+                    <td><div contenteditable="true" id ="cmOutAgpOut-3"></div></td>
+                    <td><div contenteditable="true" id ="cmOutAgpOut-4"></div></td>
+                    <td><div contenteditable="true" id ="cmOutAgpOut-5"></div></td>
                     <td id="cmOutAgpOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從店內得到的人名的APO數</td>
                     <td></td>
-                    <td id="cmInAgpOut-1" contenteditable="true"></td>
-                    <td id="cmInAgpOut-2" contenteditable="true"></td>
-                    <td id="cmInAgpOut-3" contenteditable="true"></td>
-                    <td id="cmInAgpOut-4" contenteditable="true"></td>
-                    <td id="cmInAgpOut-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmInAgpOut-1"></div></td>
+                    <td><div contenteditable="true" id ="cmInAgpOut-2"></div></td>
+                    <td><div contenteditable="true" id ="cmInAgpOut-3"></div></td>
+                    <td><div contenteditable="true" id ="cmInAgpOut-4"></div></td>
+                    <td><div contenteditable="true" id ="cmInAgpOut-5"></div></td>
                     <td id="cmInAgpOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從Blog or FB得到的人名的APO數</td>
                     <td></td>
-                    <td id="cmBlogAgpOut-1" contenteditable="true"></td>
-                    <td id="cmBlogAgpOut-2" contenteditable="true"></td>
-                    <td id="cmBlogAgpOut-3" contenteditable="true"></td>
-                    <td id="cmBlogAgpOut-4" contenteditable="true"></td>
-                    <td id="cmBlogAgpOut-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBlogAgpOut-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogAgpOut-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogAgpOut-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogAgpOut-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBlogAgpOut-5"></div></td>
                     <td id="cmBlogAgpOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>從詢問箱得到的人名的APO</td>
                     <td></td>
-                    <td id="cmBagAgpOut-1" contenteditable="true"></td>
-                    <td id="cmBagAgpOut-2" contenteditable="true"></td>
-                    <td id="cmBagAgpOut-3" contenteditable="true"></td>
-                    <td id="cmBagAgpOut-4" contenteditable="true"></td>
-                    <td id="cmBagAgpOut-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmBagAgpOut-1"></div></td>
+                    <td><div contenteditable="true" id ="cmBagAgpOut-2"></div></td>
+                    <td><div contenteditable="true" id ="cmBagAgpOut-3"></div></td>
+                    <td><div contenteditable="true" id ="cmBagAgpOut-4"></div></td>
+                    <td><div contenteditable="true" id ="cmBagAgpOut-5"></div></td>
                     <td id="cmBagAgpOut-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -849,11 +850,11 @@
                     <td style="background-color: #FF99CC"></td>
                     <td style="background-color: #FF99CC; font-weight: bold">TOG人數(全部做FA人次)</td>
                     <td style="background-color: #FF99CC"></td>
-                    <td id="cmFaSum-1" contenteditable="true"></td>
-                    <td id="cmFaSum-2" contenteditable="true"></td>
-                    <td id="cmFaSum-3" contenteditable="true"></td>
-                    <td id="cmFaSum-4" contenteditable="true"></td>
-                    <td id="cmFaSum-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id ="cmFaSum-1"></div></td>
+                    <td><div contenteditable="true" id ="cmFaSum-2"></div></td>
+                    <td><div contenteditable="true" id ="cmFaSum-3"></div></td>
+                    <td><div contenteditable="true" id ="cmFaSum-4"></div></td>
+                    <td><div contenteditable="true" id ="cmFaSum-5"></div></td>
                     <td id="cmFaSum-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -922,33 +923,33 @@
                     <td></td>
                     <td>扣款入會數</td>
                     <td></td>
-                    <td id="salesAch-1" contenteditable="true"></td>
-                    <td id="salesAch-2" contenteditable="true"></td>
-                    <td id="salesAch-3" contenteditable="true"></td>
-                    <td id="salesAch-4" contenteditable="true"></td>
-                    <td id="salesAch-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="salesAch-1"></div></td>
+                    <td><div contenteditable="true" id="salesAch-2"></div></td>
+                    <td><div contenteditable="true" id="salesAch-3"></div></td>
+                    <td><div contenteditable="true" id="salesAch-4"></div></td>
+                    <td><div contenteditable="true" id="salesAch-5"></div></td>
                     <td id="salesAch-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>月繳或季繳入會數</td>
                     <td></td>
-                    <td id="salesMonthly-1" contenteditable="true"></td>
-                    <td id="salesMonthly-2" contenteditable="true"></td>
-                    <td id="salesMonthly-3" contenteditable="true"></td>
-                    <td id="salesMonthly-4" contenteditable="true"></td>
-                    <td id="salesMonthly-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="salesMonthly-1"></div></td>
+                    <td><div contenteditable="true" id="salesMonthly-2"></div></td>
+                    <td><div contenteditable="true" id="salesMonthly-3"></div></td>
+                    <td><div contenteditable="true" id="salesMonthly-4"></div></td>
+                    <td><div contenteditable="true" id="salesMonthly-5"></div></td>
                     <td id="salesMonthly-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td>年繳入會數</td>
                     <td></td>
-                    <td id="salesAllPrepay-1" contenteditable="true"></td>
-                    <td id="salesAllPrepay-2" contenteditable="true"></td>
-                    <td id="salesAllPrepay-3" contenteditable="true"></td>
-                    <td id="salesAllPrepay-4" contenteditable="true"></td>
-                    <td id="salesAllPrepay-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="salesAllPrepay-1"></div></td>
+                    <td><div contenteditable="true" id="salesAllPrepay-2"></div></td>
+                    <td><div contenteditable="true" id="salesAllPrepay-3"></div></td>
+                    <td><div contenteditable="true" id="salesAllPrepay-4"></div></td>
+                    <td><div contenteditable="true" id="salesAllPrepay-5"></div></td>
                     <td id="salesAllPrepay-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: lightGray">
@@ -1296,309 +1297,309 @@
                     <td id="clubLx-6"></td>
                   </tr>
                   <tr>
-                    <td id="staff1" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff1"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td style="font-weight: bold">ACH</td>
-                    <td id="staff1Ach-1" contenteditable="true"></td>
-                    <td id="staff1Ach-2" contenteditable="true"></td>
-                    <td id="staff1Ach-3" contenteditable="true"></td>
-                    <td id="staff1Ach-4" contenteditable="true"></td>
-                    <td id="staff1Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff1Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff1Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff1Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff1Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff1Ach-5"></div></td>
                     <td id="staff1Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff1SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff1Mm-1" contenteditable="true"></td>
-                    <td id="staff1Mm-2" contenteditable="true"></td>
-                    <td id="staff1Mm-3" contenteditable="true"></td>
-                    <td id="staff1Mm-4" contenteditable="true"></td>
-                    <td id="staff1Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff1Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff1Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff1Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff1Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff1Mm-5"></div></td>
                     <td id="staff1Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff1App-1" contenteditable="true"></td>
-                    <td id="staff1App-2" contenteditable="true"></td>
-                    <td id="staff1App-3" contenteditable="true"></td>
-                    <td id="staff1App-4" contenteditable="true"></td>
-                    <td id="staff1App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff1App-1"></div></td>
+                    <td><div contenteditable="true" id="staff1App-2"></div></td>
+                    <td><div contenteditable="true" id="staff1App-3"></div></td>
+                    <td><div contenteditable="true" id="staff1App-4"></div></td>
+                    <td><div contenteditable="true" id="staff1App-5"></div></td>
                     <td id="staff1App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff1AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff1Ns-1" contenteditable="true"></td>
-                    <td id="staff1Ns-2" contenteditable="true"></td>
-                    <td id="staff1Ns-3" contenteditable="true"></td>
-                    <td id="staff1Ns-4" contenteditable="true"></td>
-                    <td id="staff1Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff1Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff1Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff1Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff1Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff1Ns-5"></div></td>
                     <td id="staff1Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff1Lx-1" contenteditable="true"></td>
-                    <td id="staff1Lx-2" contenteditable="true"></td>
-                    <td id="staff1Lx-3" contenteditable="true"></td>
-                    <td id="staff1Lx-4" contenteditable="true"></td>
-                    <td id="staff1Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff1Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff1Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff1Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff1Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff1Lx-5"></div></td>
                     <td id="staff1Lx-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
-                    <td id="staff2" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff2"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td>ACH</td>
-                    <td id="staff2Ach-1" contenteditable="true"></td>
-                    <td id="staff2Ach-2" contenteditable="true"></td>
-                    <td id="staff2Ach-3" contenteditable="true"></td>
-                    <td id="staff2Ach-4" contenteditable="true"></td>
-                    <td id="staff2Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff2Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff2Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff2Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff2Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff2Ach-5"></div></td>
                     <td id="staff2Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff2SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff2Mm-1" contenteditable="true"></td>
-                    <td id="staff2Mm-2" contenteditable="true"></td>
-                    <td id="staff2Mm-3" contenteditable="true"></td>
-                    <td id="staff2Mm-4" contenteditable="true"></td>
-                    <td id="staff2Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff2Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff2Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff2Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff2Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff2Mm-5"></div></td>
                     <td id="staff2Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff2App-1" contenteditable="true"></td>
-                    <td id="staff2App-2" contenteditable="true"></td>
-                    <td id="staff2App-3" contenteditable="true"></td>
-                    <td id="staff2App-4" contenteditable="true"></td>
-                    <td id="staff2App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff2App-1"></div></td>
+                    <td><div contenteditable="true" id="staff2App-2"></div></td>
+                    <td><div contenteditable="true" id="staff2App-3"></div></td>
+                    <td><div contenteditable="true" id="staff2App-4"></div></td>
+                    <td><div contenteditable="true" id="staff2App-5"></div></td>
                     <td id="staff2App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff2AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff2Ns-1" contenteditable="true"></td>
-                    <td id="staff2Ns-2" contenteditable="true"></td>
-                    <td id="staff2Ns-3" contenteditable="true"></td>
-                    <td id="staff2Ns-4" contenteditable="true"></td>
-                    <td id="staff2Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff2Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff2Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff2Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff2Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff2Ns-5"></div></td>
                     <td id="staff2Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff2Lx-1" contenteditable="true"></td>
-                    <td id="staff2Lx-2" contenteditable="true"></td>
-                    <td id="staff2Lx-3" contenteditable="true"></td>
-                    <td id="staff2Lx-4" contenteditable="true"></td>
-                    <td id="staff2Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff2Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff2Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff2Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff2Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff2Lx-5"></div></td>
                     <td id="staff2Lx-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
-                    <td id="staff3" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff3"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td style="font-weight: bold">ACH</td>
-                    <td id="staff3Ach-1" contenteditable="true"></td>
-                    <td id="staff3Ach-2" contenteditable="true"></td>
-                    <td id="staff3Ach-3" contenteditable="true"></td>
-                    <td id="staff3Ach-4" contenteditable="true"></td>
-                    <td id="staff3Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff3Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff3Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff3Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff3Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff3Ach-5"></div></td>
                     <td id="staff3Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff3SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff3Mm-1" contenteditable="true"></td>
-                    <td id="staff3Mm-2" contenteditable="true"></td>
-                    <td id="staff3Mm-3" contenteditable="true"></td>
-                    <td id="staff3Mm-4" contenteditable="true"></td>
-                    <td id="staff3Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff3Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff3Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff3Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff3Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff3Mm-5"></div></td>
                     <td id="staff3Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff3App-1" contenteditable="true"></td>
-                    <td id="staff3App-2" contenteditable="true"></td>
-                    <td id="staff3App-3" contenteditable="true"></td>
-                    <td id="staff3App-4" contenteditable="true"></td>
-                    <td id="staff3App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff3App-1"></div></td>
+                    <td><div contenteditable="true" id="staff3App-2"></div></td>
+                    <td><div contenteditable="true" id="staff3App-3"></div></td>
+                    <td><div contenteditable="true" id="staff3App-4"></div></td>
+                    <td><div contenteditable="true" id="staff3App-5"></div></td>
                     <td id="staff3App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff3AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff3Ns-1" contenteditable="true"></td>
-                    <td id="staff3Ns-2" contenteditable="true"></td>
-                    <td id="staff3Ns-3" contenteditable="true"></td>
-                    <td id="staff3Ns-4" contenteditable="true"></td>
-                    <td id="staff3Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff3Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff3Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff3Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff3Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff3Ns-5"></div></td>
                     <td id="staff3Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff3Lx-1" contenteditable="true"></td>
-                    <td id="staff3Lx-2" contenteditable="true"></td>
-                    <td id="staff3Lx-3" contenteditable="true"></td>
-                    <td id="staff3Lx-4" contenteditable="true"></td>
-                    <td id="staff3Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff3Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff3Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff3Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff3Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff3Lx-5"></div></td>
                     <td id="staff3Lx-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
-                    <td id="staff4" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff4"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td style="font-weight: bold">ACH</td>
-                    <td id="staff4Ach-1" contenteditable="true"></td>
-                    <td id="staff4Ach-2" contenteditable="true"></td>
-                    <td id="staff4Ach-3" contenteditable="true"></td>
-                    <td id="staff4Ach-4" contenteditable="true"></td>
-                    <td id="staff4Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff4Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff4Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff4Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff4Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff4Ach-5"></div></td>
                     <td id="staff4Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff4SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff4Mm-1" contenteditable="true"></td>
-                    <td id="staff4Mm-2" contenteditable="true"></td>
-                    <td id="staff4Mm-3" contenteditable="true"></td>
-                    <td id="staff4Mm-4" contenteditable="true"></td>
-                    <td id="staff4Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff4Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff4Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff4Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff4Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff4Mm-5"></div></td>
                     <td id="staff4Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff4App-1" contenteditable="true"></td>
-                    <td id="staff4App-2" contenteditable="true"></td>
-                    <td id="staff4App-3" contenteditable="true"></td>
-                    <td id="staff4App-4" contenteditable="true"></td>
-                    <td id="staff4App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff4App-1"></div></td>
+                    <td><div contenteditable="true" id="staff4App-2"></div></td>
+                    <td><div contenteditable="true" id="staff4App-3"></div></td>
+                    <td><div contenteditable="true" id="staff4App-4"></div></td>
+                    <td><div contenteditable="true" id="staff4App-5"></div></td>
                     <td id="staff4App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff4AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff4Ns-1" contenteditable="true"></td>
-                    <td id="staff4Ns-2" contenteditable="true"></td>
-                    <td id="staff4Ns-3" contenteditable="true"></td>
-                    <td id="staff4Ns-4" contenteditable="true"></td>
-                    <td id="staff4Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff4Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff4Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff4Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff4Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff4Ns-5"></div></td>
                     <td id="staff4Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff4Lx-1" contenteditable="true"></td>
-                    <td id="staff4Lx-2" contenteditable="true"></td>
-                    <td id="staff4Lx-3" contenteditable="true"></td>
-                    <td id="staff4Lx-4" contenteditable="true"></td>
-                    <td id="staff4Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff4Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff4Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff4Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff4Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff4Lx-5"></div></td>
                     <td id="staff4Lx-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
-                    <td id="staff5" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff5"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td style="font-weight: bold">ACH</td>
-                    <td id="staff5Ach-1" contenteditable="true"></td>
-                    <td id="staff5Ach-2" contenteditable="true"></td>
-                    <td id="staff5Ach-3" contenteditable="true"></td>
-                    <td id="staff5Ach-4" contenteditable="true"></td>
-                    <td id="staff5Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff5Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff5Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff5Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff5Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff5Ach-5"></div></td>
                     <td id="staff5Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff5SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff5Mm-1" contenteditable="true"></td>
-                    <td id="staff5Mm-2" contenteditable="true"></td>
-                    <td id="staff5Mm-3" contenteditable="true"></td>
-                    <td id="staff5Mm-4" contenteditable="true"></td>
-                    <td id="staff5Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff5Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff5Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff5Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff5Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff5Mm-5"></div></td>
                     <td id="staff5Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff5App-1" contenteditable="true"></td>
-                    <td id="staff5App-2" contenteditable="true"></td>
-                    <td id="staff5App-3" contenteditable="true"></td>
-                    <td id="staff5App-4" contenteditable="true"></td>
-                    <td id="staff5App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff5App-1"></div></td>
+                    <td><div contenteditable="true" id="staff5App-2"></div></td>
+                    <td><div contenteditable="true" id="staff5App-3"></div></td>
+                    <td><div contenteditable="true" id="staff5App-4"></div></td>
+                    <td><div contenteditable="true" id="staff5App-5"></div></td>
                     <td id="staff5App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td id="staff5AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff5Ns-1" contenteditable="true"></td>
-                    <td id="staff5Ns-2" contenteditable="true"></td>
-                    <td id="staff5Ns-3" contenteditable="true"></td>
-                    <td id="staff5Ns-4" contenteditable="true"></td>
-                    <td id="staff5Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff5Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff5Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff5Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff5Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff5Ns-5"></div></td>
                     <td id="staff5Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff5Lx-1" contenteditable="true"></td>
-                    <td id="staff5Lx-2" contenteditable="true"></td>
-                    <td id="staff5Lx-3" contenteditable="true"></td>
-                    <td id="staff5Lx-4" contenteditable="true"></td>
-                    <td id="staff5Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff5Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff5Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff5Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff5Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff5Lx-5"></div></td>
                     <td id="staff5Lx-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
-                    <td id="staff6" rowspan="5" contenteditable="true"></td>
+                    <td style="vertical-align: middle" rowspan="5"><div contenteditable="true" id="staff6"></div></td>
                     <td style="font-weight: bold; color: blue">結案率</td>
                     <td style="font-weight: bold">ACH</td>
-                    <td id="staff6Ach-1" contenteditable="true"></td>
-                    <td id="staff6Ach-2" contenteditable="true"></td>
-                    <td id="staff6Ach-3" contenteditable="true"></td>
-                    <td id="staff6Ach-4" contenteditable="true"></td>
-                    <td id="staff6Ach-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff6Ach-1"></div></td>
+                    <td><div contenteditable="true" id="staff6Ach-2"></div></td>
+                    <td><div contenteditable="true" id="staff6Ach-3"></div></td>
+                    <td><div contenteditable="true" id="staff6Ach-4"></div></td>
+                    <td><div contenteditable="true" id="staff6Ach-5"></div></td>
                     <td id="staff6Ach-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff6SalesRatio"></td>
                     <td style="font-weight: bold">MM</td>
-                    <td id="staff6Mm-1" contenteditable="true"></td>
-                    <td id="staff6Mm-2" contenteditable="true"></td>
-                    <td id="staff6Mm-3" contenteditable="true"></td>
-                    <td id="staff6Mm-4" contenteditable="true"></td>
-                    <td id="staff6Mm-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff6Mm-1"></div></td>
+                    <td><div contenteditable="true" id="staff6Mm-2"></div></td>
+                    <td><div contenteditable="true" id="staff6Mm-3"></div></td>
+                    <td><div contenteditable="true" id="staff6Mm-4"></div></td>
+                    <td><div contenteditable="true" id="staff6Mm-5"></div></td>
                     <td id="staff6Mm-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td>扣款或年繳比率</td>
                     <td style="font-weight: bold">APP</td>
-                    <td id="staff6App-1" contenteditable="true"></td>
-                    <td id="staff6App-2" contenteditable="true"></td>
-                    <td id="staff6App-3" contenteditable="true"></td>
-                    <td id="staff6App-4" contenteditable="true"></td>
-                    <td id="staff6App-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff6App-1"></div></td>
+                    <td><div contenteditable="true" id="staff6App-2"></div></td>
+                    <td><div contenteditable="true" id="staff6App-3"></div></td>
+                    <td><div contenteditable="true" id="staff6App-4"></div></td>
+                    <td><div contenteditable="true" id="staff6App-5"></div></td>
                     <td id="staff6App-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td id="staff6AchAppRatio"></td>
                     <td style="font-weight: bold">NS</td>
-                    <td id="staff6Ns-1" contenteditable="true"></td>
-                    <td id="staff6Ns-2" contenteditable="true"></td>
-                    <td id="staff6Ns-3" contenteditable="true"></td>
-                    <td id="staff6Ns-4" contenteditable="true"></td>
-                    <td id="staff6Ns-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff6Ns-1"></div></td>
+                    <td><div contenteditable="true" id="staff6Ns-2"></div></td>
+                    <td><div contenteditable="true" id="staff6Ns-3"></div></td>
+                    <td><div contenteditable="true" id="staff6Ns-4"></div></td>
+                    <td><div contenteditable="true" id="staff6Ns-5"></div></td>
                     <td id="staff6Ns-6" style="background-color: lightGray"></td>
                   </tr>
                   <tr style="background-color: #CCFFFF">
                     <td></td>
                     <td style="font-weight: bold">L</td>
-                    <td id="staff6Lx-1" contenteditable="true"></td>
-                    <td id="staff6Lx-2" contenteditable="true"></td>
-                    <td id="staff6Lx-3" contenteditable="true"></td>
-                    <td id="staff6Lx-4" contenteditable="true"></td>
-                    <td id="staff6Lx-5" contenteditable="true"></td>
+                    <td><div contenteditable="true" id="staff6Lx-1"></div></td>
+                    <td><div contenteditable="true" id="staff6Lx-2"></div></td>
+                    <td><div contenteditable="true" id="staff6Lx-3"></div></td>
+                    <td><div contenteditable="true" id="staff6Lx-4"></div></td>
+                    <td><div contenteditable="true" id="staff6Lx-5"></div></td>
                     <td id="staff6Lx-6" style="background-color: lightGray"></td>
                   </tr>
                 </tbody>

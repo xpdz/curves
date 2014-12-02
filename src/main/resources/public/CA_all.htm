@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>CA Summary - All Clubs</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Curves</a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="#">Clubs</a></li>
+              <li><a href="us_report.htm">US Report</a></li>
+              <li class="active"><a href="#">CA (All)</a></li>
+              <li><a href="rank.htm">Benchmarking</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="input-group date">
+            <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="alert hide" role="alert"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered table-condensed" style="overflow: scroll;">
+            <thead>
+              <tr style="background-color: #FFC000; font-weight: bold" id="theader">
+                <th colspan="3" style="background-color: black; color: white; width: 680px;">Goals</th>
+                <th style="width: 80px">SUM</th>
+                <th style="width: 80px">AVG</th>
+                <th style="width: 80px">HIGHEST</th>
+                <th style="width: 80px">LOWEST</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="GoalsTm">
+                <td rowspan="8" style="font-weight: bold"></td>
+                <td>Total Membership Goal</td>
+                <td>本月在籍會員數目標</td>
+              </tr>
+              <tr id="LastGoalsTm">
+                <td>TM - Total Membership Last Month</td>
+                <td>上月在籍會員數</td>
+              </tr>
+              <tr id="LastGoalsActive">
+                <td>TAM - Total Active Membership Last Month</td>
+                <td>上月有效會員數</td>
+              </tr>
+              <tr id="LastGoalsShowRatio">
+                <td>Show up % Last Month</td>
+                <td>上月來店率 %</td>
+              </tr>
+              <tr id="LastGoalsSalesRatio">
+                <td>Sales % Last Month</td>
+                <td>上月結案率 %</td>
+              </tr>
+              <tr id="GoalsExitsRatio">
+                <td>Attrition % Projection This Month </td>
+                <td>預估本月退會率 %</td>
+              </tr>
+              <tr id="GoalsNewSales">
+                <td>New Sales Needed This Month</td>
+                <td>用上月成績預測本月所需新銷售數</td>
+              </tr>
+              <tr id="GoalsAppoints">
+                <td>Appointments Needed This Month</td>
+                <td>用上月成績預測本月所需預約數</td>
+              </tr>
+              <tr style="background-color: black; color: white; font-weight: bold">
+                <td></td>
+                <td>Workout / Member Experience</td>
+                <td>服務</td>
+              </tr>
+              <tr id="SvcTm6">
+                <td></td>
+                <td>TM - Total Membership </td>
+                <td style="font-weight: bold">在籍會員數</td>
+              </tr>
+              <tr id="SvcHold6">
+                <td></td>
+                <td>Total Member in hold</td>
+                <td style="font-weight: bold">請假會員數</td>
+              </tr>
+              <tr id="SvcActive6">
+                <td></td>
+                <td>TAM - Total Active Membership (excl. 'Medical hold' or 'Inactive')</td>
+                <td style="font-weight: bold">有效會員數(在籍扣除請假)</td>
+              </tr>
+              <tr id="SvcHoldRatio6">
+                <td style="font-weight: bold">&lt;12%</td>
+                <td>Total Member in hold %</td>
+                <td style="font-weight: bold">會員請假率</td>
+              </tr>
+              <tr id="SvcTotalWo6" style="background-color: #FF99CC">
+                <td style="font-weight: bold">&gt;8 x TAM</td>
+                <td style="font-weight: bold">Total Workouts </td>
+                <td style="font-weight: bold">總WO次數</td>
+              </tr>
+              <tr id="SvcAvgWo6">
+                <td style="font-weight: bold">&gt;2.0</td>
+                <td style="font-weight: bold">Average Workouts/Active Member/wk</td>
+                <td style="font-weight: bold">每人每週WO數</td>
+              </tr>
+              <tr id="SvcMaxWo6">
+                <td style="font-weight: bold">&gt;33%TAM</td>
+                <td style="font-weight: bold">Highest Traffic Day (Monthly %)</td>
+                <td style="font-weight: bold">每週最高WO日的人數</td>
+              </tr>
+              <tr id="SvcExits6">
+                <td></td>
+                <td style="font-weight: bold">Cancellations</td>
+                <td style="font-weight: bold">退會</td>
+              </tr>
+              <tr id="SvcExitsRatio6" style="background-color: #FF99CC">
+                <td style="font-weight: bold">&lt;4%</td>
+                <td style="font-weight: bold">Attrition (less than 4% TM/m or 1%TM/wk)</td>
+                <td style="font-weight: bold">退會率 (退會數/在籍會員數)</td>
+              </tr>
+              <tr id="SvcMeasure6">
+                <td></td>
+                <td style="font-weight: bold">Total Weigh & Measures</td>
+                <td style="font-weight: bold">量身數 (含新入會者的量身)</td>
+              </tr>
+              <tr id="SvcMeasureRatio6" style="background-color: #FF99CC">
+                <td style="font-weight: bold">&gt;60%TAM</td>
+                <td style="font-weight: bold">Weigh & Measure % </td>
+                <td style="font-weight: bold">量身率</td>
+              </tr>
+              <tr id="Svc12_6">
+                <td style="font-weight: bold">30%</td>
+                <td style="font-weight: bold">A:  Members W/O 12+ times/month</td>
+                <td style="font-weight: bold">A.每月來12次以上的有效會員數</td>
+              </tr>
+              <tr id="Svc8to11_6">
+                <td style="font-weight: bold">25%</td>
+                <td style="font-weight: bold">B:  Members W/O 8-11 times/month</td>
+                <td style="font-weight: bold">B.每月來8-11次的有效會員數</td>
+              </tr>
+              <tr id="Svc4to7_6">
+                <td style="font-weight: bold">25%</td>
+                <td style="font-weight: bold">C:  Members W/O 4-7 times/month</td>
+                <td style="font-weight: bold">C.每月來4-7次的有效會員數</td>
+              </tr>
+              <tr id="Svc1to3_6">
+                <td style="font-weight: bold_6">10%</td>
+                <td style="font-weight: bold">D:  Members W/O 1-3 times/month</td>
+                <td style="font-weight: bold">D.每月來3-1次的有效會員數</td>
+              </tr>
+              <tr id="Svc0_6">
+                <td style="font-weight: bold">10%</td>
+                <td style="font-weight: bold">E:  Members W/O 0 times/month</td>
+                <td style="font-weight: bold">E.每月來0次的有效會員數</td>
+              </tr>
+              <tr style="background-color: black; color: white; font-weight: bold">
+                <td></td>
+                <td>Guest Production</td>
+                <td>顧客製造</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="background-color: yellow">Lead Generation</td>
+              </tr>
+              <tr id="CmPostFlyer6">
+                <td>&gt;5000/mnth</td>
+                <td style="font-weight: bold">Flyers Distributed (posted)</td>
+                <td style="font-weight: bold">信箱傳單投遞張數</td>
+              </tr>
+              <tr id="CmHandFlyerHours6">
+                <td></td>
+                <td style="font-weight: bold">Staff Hours of  Flyers</td>
+                <td style="font-weight: bold">員工手發傳單的時數</td>
+              </tr>
+              <tr id="CmOutGpHours6">
+                <td></td>
+                <td style="font-weight: bold">Staff Hours of  Guest Passes-External</td>
+                <td style="font-weight: bold">店外GP的時數</td>
+              </tr>
+              <tr id="CmCpBox6">
+                <td>&gt;10/mnth</td>
+                <td># New/Existing CP Visits/Lead Box Distributed/Checked</td>
+                <td>CP拜訪、檢查Lead Box的次數</td>
+              </tr>
+              <tr id="CmOutGot6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Leads from Guest Passes-External</td>
+                <td>從店外得到的人名與電話</td>
+              </tr>
+              <tr id="CmInGot6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Leads from Guest Passes-Internal</td>
+                <td>從店內得到的人名與電話</td>
+              </tr>
+              <tr id="CmBlogGot6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Leads from On-line Lead Box</td>
+                <td>Blog or FB得到的人名與電話</td>
+              </tr>
+              <tr id="CmBagGot6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Leads from Lead Box</td>
+                <td>從詢問箱得到的人名與電話</td>
+              </tr>
+              <tr id="CmTotalGot6">
+                <td style="background-color: #FF99CC"></td>
+                <td style="background-color: #FF99CC">Total Leads Collected</td>
+                <td style="background-color: #FF99CC; font-weight: bold">得到電話與人名的總數</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="background-color: yellow">Calls</td>
+              </tr>
+              <tr id="CmCallIn6">
+                <td></td>
+                <td>Incoming Calls and Walk-ins</td>
+                <td>所有來電及來店詢問</td>
+              </tr>
+              <tr id="CmOutGotCall6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Outgoing Calls to Leads (External)</td>
+                <td>從店外拿到人名打通的電話</td>
+              </tr>
+              <tr id="CmInGotCall6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Outgoing Calls to Leads (Internal)</td>
+                <td>從店內拿到人名打通的電話</td>
+              </tr>
+              <tr id="CmBlogGotCall6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Outgoing Calls to On-line Lead Box</td>
+                <td>從自店Blog or FB拿到人名打通的電話</td>
+              </tr>
+              <tr id="CmBagGotCall6" style="background-color: #CCFFFF">
+                <td></td>
+                <td>Outgoing Calls to Lead Box</td>
+                <td>從詢問箱拿到人名打通的電話</td>
+              </tr>
+              <tr style="background-color: yellow; font-weight: bold">
+                <td colspan="3">Appointments 預約來源與預約數</td>
+              </tr>
+              <tr id="CmOwnRefs6">
+                <td style="vertical-align: middle">SERVICE</td>
+                <td>Appointments from BRs</td>
+                <td>會員介紹 (本店)</td>
+              </tr>
+              <tr id="CmNewspaper6">
+                <td style="vertical-align: middle" rowspan="6">BRANDED</td>
+                <td>Print Media (News Paper, Magazine...)</td>
+                <td>平面媒體</td>
+              </tr>
+              <tr id="CmTv6">
+                <td>TV</td>
+                <td>電視</td>
+              </tr>
+              <tr id="CmInternet6">
+                <td>Internet</td>
+                <td>網路 (含官網留言)</td>
+              </tr>
+              <tr id="CmSign6">
+                <td>Sign</td>
+                <td>招牌</td>
+              </tr>
+              <tr id="CmMate6">
+                <td>Strategic Partner</td>
+                <td>策略夥伴</td>
+              </tr>
+              <tr id="CmOthers6">
+                <td>Others</td>
+                <td>其它</td>
+              </tr>
+              <tr id="CmMailAgpIn6">
+                <td style="vertical-align: middle" rowspan="4">AGP<br>Incoming<br>Calls</td>
+                <td>Direct Mail</td>
+                <td>直效信函 (買名單)</td>
+              </tr>
+              <tr id="CmPostFlyerAgpIn6">
+                <td>Appointments from Posted</td>
+                <td>信箱傳單</td>
+              </tr>
+              <tr id="CmHandFlyerAgpIn6">
+                <td>Appointments from Handing</td>
+                <td>手發傳單</td>
+              </tr>
+              <tr id="CmCpAgpIn6">
+                <td>Appointments from CP</td>
+                <td>CP介紹</td>
+              </tr>
+              <tr id="CmOutAgpOut6" style="background-color: #CCFFFF6">
+                <td style="vertical-align: middle" rowspan="4">AGP<br>Outgoing<br>Calls</td>
+                <td>Appointments from Guest Passes (External)</td>
+                <td>從店外得到的人名的APO數</td>
+              </tr>
+              <tr id="CmInAgpOut6" style="background-color: #CCFFFF">
+                <td>Appointments from Guest Passes (Internal)</td>
+                <td>從店內得到的人名的APO數</td>
+              </tr>
+              <tr id="CmBlogAgpOut6" style="background-color: #CCFFFF">
+                <td>Appointments from On-line Lead Box</td>
+                <td>從Blog or FB得到的人名的APO數</td>
+              </tr>
+              <tr id="CmBagAgpOut6" style="background-color: #CCFFFF">
+                <td>Appointments from Lead Box</td>
+                <td>從詢問箱得到的人名的APO</td>
+              </tr>
+              <tr id="CmApoTotal6" style="background-color: #FF99CC">
+                <td></td>
+                <td style="font-weight: bold">Total  Appointments</td>
+                <td style="font-weight: bold">APO總數</td>
+              </tr>
+              <tr id="CmInApptRatio6" style="background-color: #FF99CC">
+                <td>100%</td>
+                <td style="font-weight: bold">Appt / Incoming Calls or Walk-ins (Appt ratio)</td>
+                <td style="font-weight: bold">來電或來店 Apo率</td>
+              </tr>
+              <tr id="CmOutApptRatio6">
+                <td>&gt;50%</td>
+                <td>Appt / Outgoing Calls to Leads  (Appt ratio)</td>
+                <td>打出去的電話 APO率</td>
+              </tr>
+              <tr id="CmPostPerApo6">
+                <td style="font-weight: bold; vertical-align: middle" rowspan="6">Analysis</td>
+                <td>Flyer number / Appt. from posted</td>
+                <td>投信箱傳單幾張可獲得一個APO</td>
+              </tr>
+              <tr id="CmHandPerApo6">
+                <td style="font-weight: bold">Flyer number / Appt. (Staff)</td>
+                <td style="font-weight: bold">手發傳單幾張可獲得一個APO</td>
+              </tr>
+              <tr id="CmHandHoursPerApo6">
+                <td style="font-weight: bold">Staff Hours / Appt. (Flyers)</td>
+                <td style="font-weight: bold">手發傳單幾小時可獲得一個APO</td>
+              </tr>
+              <tr id="CmOutGpHoursPerApo6">
+                <td style="font-weight: bold">Staff Hours/ Appt.  (Guest Passes-External)</td>
+                <td style="font-weight: bold">在店外要名單幾小時可獲得一個APO</td>
+              </tr>
+              <tr id="CmOutGpPerApo6">
+                <td style="font-weight: bold">Flyer number / Appt.  (Guest Passes-External)</td>
+                <td style="font-weight: bold">在店外要名單幾張可獲得一個APO</td>
+              </tr>
+              <tr id="CmBrAgpRatio6">
+                <td style="font-weight: bold">BR + AGP % > 75%</td>
+                <td style="font-weight: bold">BR + AGP佔所有預約比率</td>
+              </tr>
+              <tr id="CmFaSum6" style="background-color: #FF99CC">
+                <td></td>
+                <td style="font-weight: bold">TOG's- Total Original Guests (FA's)</td>
+                <td style="font-weight: bold">TOG人數(全部做FA人次)</td>
+              </tr>
+              <tr id="CmShowRatio6" style="background-color: #FF99CC">
+                <td>&gt;80%</td>
+                <td style="font-weight: bold">Show Up rate</td>
+                <td style="font-weight: bold">來店率</td>
+              </tr>
+              <tr style="background-color: black; color: white; font-weight: bold">
+                <td></td>
+                <td>Sales</td>
+                <td>銷售</td>
+              </tr>
+              <tr id="SalesAch6">
+                <td></td>
+                <td>ACH/Monthly Auto Draft </td>
+                <td>扣款入會數</td>
+              </tr>
+              <tr id="SalesMonthly6">
+                <td></td>
+                <td>Month to Month</td>
+                <td>月繳或季繳入會數</td>
+              </tr>
+              <tr id="SalesAllPrepay6">
+                <td></td>
+                <td>Annual Pre-pays</td>
+                <td>年繳入會數</td>
+              </tr>
+              <tr id="SalesTotal6" style="background-color: #FF99CC">
+                <td id="SalesTotalX"></td>
+                <td>Total Sales</td>
+                <td>入會數</td>
+              </tr>
+              <tr id="SalesRatio6" style="background-color: #FF99CC">
+                <td>&gt;>85%</td>
+                <td>Sale % </td>
+                <td>結案率</td>
+              </tr>
+              <tr id="SalesAchAppRatio6" style="background-color: #FF99CC">
+                <td>&gt;>90%</td>
+                <td>ACH + APP %</td>
+                <td>扣款+年繳比率</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+    <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+    <script src="js/CA_all.js"></script>
+  </body>
+</html>

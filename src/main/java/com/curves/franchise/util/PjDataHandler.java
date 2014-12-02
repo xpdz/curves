@@ -29,24 +29,7 @@ public class PjDataHandler {
         this.evaluator = evaluator;
 
         Calendar c = Calendar.getInstance();
-        try {
-            c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
-            if (c.get(Calendar.YEAR) != cp.year || c.get(Calendar.MONTH) != cp.month) {
-                return;
-            }
-        } catch (Exception e) {
-            return;
-        }
-
-        if (clubId == -1) {
-            try {
-                clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
-            } catch (Exception e) {
-                logger.error(">>> CANNOT GET CLUB-ID FROM PJ");
-                return;
-            }
-        }
-
+        c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
         int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
         int sumRowIdx = lastDayOfMonth + 5;
         for (Cell cTest = sh.getRow(sumRowIdx).getCell(3); cTest != null;cTest = sh.getRow(sumRowIdx).getCell(3)) {
@@ -99,7 +82,7 @@ public class PjDataHandler {
         }
         cp.pjSumRepo.save(pjSum);
 
-        logger.info("### Saved PJ : "+sh.getSheetName() + " ###");
+        logger.info("### PJ Saved ### clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth());
     }
 
     private void setupPjSum(Sheet sh, int sumRowIdx, PjSum pjSum) {

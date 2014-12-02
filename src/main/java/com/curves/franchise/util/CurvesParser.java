@@ -38,8 +38,7 @@ public class CurvesParser {
         this.clubRepo = clubRepo;
         String[] ym = dir.split("-");
         this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
-        this.month = Integer.parseInt(ym[ym.length - 1].substring(5, 6))-1;
-
+        this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6))-1;
         String home = System.getProperty("user.home");
         logger.info("user.home: "+home);
 
@@ -72,16 +71,52 @@ public class CurvesParser {
                     int rows = sh.getLastRowNum();
                     int columns = 0;
                     try {
-                        columns = sh.getRow(0).getPhysicalNumberOfCells();
+                        columns = sh.getRow(0).getLastCellNum();
                     } catch (Exception e) {
                         invalidSheets.put(sheetName, f.getPath());
+                        continue;
                     }
-                    if (rows > 120 && rows < 150 && columns > 10 && columns < 15) {
-                        evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                        new CaDataHandler(this).processCA(sh, evaluator, clubId);
+                    if (rows > 150 && rows < 170 && columns > 10 && columns < 15) {
+                        boolean cellDataMatch = false;
+                        try {
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
+                            if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                                cellDataMatch = true;
+                            }
+                        } catch (Exception e) {}
+                        if ( (sheetName.startsWith(year+"") && sheetName.endsWith((month+1)+"")) || cellDataMatch ) {
+                            logger.info("*** Found CA *** sheet: "+sheetName+", clubId: "+clubId);
+                            evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                            new CaDataHandler(this).processCA(sh, evaluator, clubId);
+                        } else {
+                            invalidSheets.put(sheetName, f.getPath());
+                            continue;
+                        }
                     } else if (rows > 40 && rows < 50 && columns < 45 && columns > 35) {
-                        evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                        new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+                        boolean cellDateMath = false;
+                        Calendar c = Calendar.getInstance();
+                        try {
+                            c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                            if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                                cellDateMath = true;
+                            }
+                        } catch (Exception e) {}
+
+                        if (clubId == -1) {
+                            try {
+                                clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
+                            } catch (Exception e) {}
+                        }
+
+                        if (cellDateMath && clubId != -1) {
+                            logger.info("### Found PJ ### sheet: "+sheetName+", clubId: "+clubId);
+                            evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                            new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+                        } else {
+                            invalidSheets.put(sheetName, f.getPath());
+                            continue;
+                        }
                     } else {
                         invalidSheets.put(sheetName, f.getPath());
                     }
@@ -92,10 +127,10 @@ public class CurvesParser {
         }
         logger.info("=======others================================");
         for (File f : allOthers) {
-            logger.info("Invalid files: "+f);
+            logger.info(">>>Invalid files<<<"+f);
         }
         for (String s : invalidSheets.keySet()) {
-            logger.info("Invalid sheets: "+invalidSheets.get(s) + " :: "+s);
+            logger.info("***Invalid sheets***"+s+" --- "+invalidSheets.get(s));
         }
     }
 

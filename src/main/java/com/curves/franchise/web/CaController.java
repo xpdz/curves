@@ -37,11 +37,12 @@ public class CaController {
     }
 
     @RequestMapping(value = "/rest/CA", method = RequestMethod.GET)
-    public Ca findByUserAndCaYearAndCaMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
+    public Ca findCaByUserAndCaYearAndCaMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
                                             @AuthenticationPrincipal UserDetails user) {
-        logger.info("=== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
+        logger.info("---findCA---user: " + user.getUsername() + ", caYear: " + caYear + ", caMonth: " + caMonth);
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
         if (ca == null) {
+            logger.info("---findCA---CA not found!");
             ca = new Ca();
         }
         return ca;
@@ -53,11 +54,12 @@ public class CaController {
         logger.info("--SaveCA--clubId: "+ca.getClubId()+" caYear: "+ca.getCaYear()+", caMonth: "+ca.getCaMonth());
         Ca cax = caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth());
         if (cax != null) {
+            logger.info("---savePJ---update");
             ca.setId(cax.getId());
         }
         ca.setLastModified(new Date());
         caRepo.save(ca);
-        logger.info("---CA saved with ID: "+ca.getId());
+        logger.info("---saveCA---saved with ID: "+ca.getId());
         return ca.getId();
     }
 }

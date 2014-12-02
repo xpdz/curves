@@ -54,7 +54,6 @@ function getCA() {
             $('#goalsLastSalesRatio').text(data['salesRatio6']);
             $('#thisPlan').val(data['nextPlan']);
         }
-
     }).fail(function() {
         showAlert("alert-danger", "Cannot load data. Please refresh and retry.");
     });
@@ -67,10 +66,10 @@ function getCA() {
 
     if (currentYear == thisYear && currentMonth == thisMonth) {
         $('#btnSave').prop("disabled", false);
-        $('td[contenteditable="false"]').prop('contenteditable', true);
+        $('[contenteditable="false"]').prop('contenteditable', true);
     } else {
         $('#btnSave').prop("disabled", true);
-        $('td[contenteditable="true"]').prop('contenteditable', false);
+        $('[contenteditable="true"]').prop('contenteditable', false);
     }
 }
 
@@ -81,27 +80,31 @@ $('.toggleV').click(function() {
     $(this).text(($(this).text().length == 0) ? 'v' : '');
 });
 
-$('td[contenteditable="true"]').focusout(function() {
+$('[contenteditable="true"]').focusout(function() {
     runFormula();
 }).keydown(function(e) {
-    // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
-    if (e.which == 8 || e.which == 9 || e.which == 13 || e.which == 46 || e.which == 110 || e.which == 190
+    var cellId = $(this).attr('id');
+    if (cellId === 'staff1' || cellId === 'staff2' || cellId === 'staff3' || cellId === 'staff4' || cellId === 'staff5' || cellId === 'staff6') {
+        return;
+    }
+    // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,109-KP-subtract,110-KP_Decimal,189-minus,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
+    if (e.which == 8 || e.which == 9 || e.which == 13 || e.which == 46 || e.which == 109 || e.which == 110 || e.which == 189 || e.which == 190
         || (e.which >= 35 && e.which <= 40) || (e.which >= 48 && e.which <= 57) || (e.which >= 96 && e.which <= 105)) {
         switch (e.which) {
             case 13: // enter
             case 39: // right
-                $(this).next().focus();
+                $(this).closest('td').next().find('div').focus();
                 break;
             case 37: // left
-                $(this).prev().focus();
+                $(this).closest('td').prev().find('div').focus();
                 break;
             case 38: // up
                 var thisId = $(this).attr('id').split('-');
-                $(this).closest('tr').prev().find('td[id^='+thisId[0]+']').focus();
+                $(this).closest('tr').prev().find('[id$='+thisId[1]+']').focus();
                 break;
             case 40: // down
                 var thisId = $(this).attr('id').split('-');
-                $(this).closest('tr').next().find('td[id^='+thisId[0]+']').focus();
+                $(this).closest('tr').next().find('[id$='+thisId[1]+']').focus();
                 break;
             default: return; // exit this handler for other keys
         }
@@ -2290,7 +2293,7 @@ function clearNaN() {
 }
 
 function clearZero() {
-    $('td[contenteditable="true"]').each(function() {
+    $('[contenteditable]').each(function() {
         var valueX = $(this).text();
         if (valueX === '0' || valueX === '0.0') {
             $(this).text('');

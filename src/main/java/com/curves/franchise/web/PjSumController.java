@@ -19,11 +19,12 @@ public class PjSumController {
     private PjSumRepository pjSumRepo;
 
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.GET)
-    public PjSum findByUserAndYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month,
+    public PjSum findPJByUserAndYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month,
                                            @AuthenticationPrincipal UserDetails user) {
-        logger.info("=== user: " + user.getUsername() + " get PJ - " + year + "." + (month+1));
+        logger.info("---findPJ---user: " + user.getUsername() + ", year: " + year + ", month: " + month);
         PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(Integer.parseInt(user.getUsername()), year, month);
         if (pjSum == null) {
+            logger.info("---findPJ---PJ not found!");
             pjSum = new PjSum();
         }
         return pjSum;
@@ -32,14 +33,15 @@ public class PjSumController {
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public Long savePJ(@RequestBody PjSum pjSum) {
-        logger.info("--SavePJ--clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth());
+        logger.info("---savePJ---clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth());
         PjSum pjx = pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
         if (pjx != null) {
+            logger.info("---savePJ---update");
             pjSum.setId(pjx.getId());
         }
         pjSum.setLastModified(new Date());
         pjSumRepo.save(pjSum);
-        logger.info("---PJ saved with ID: " + pjSum.getId());
+        logger.info("---savePJ---saved with ID: " + pjSum.getId());
         return pjSum.getId();
     }
 }

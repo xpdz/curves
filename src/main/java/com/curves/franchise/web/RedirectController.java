@@ -34,7 +34,7 @@ public class RedirectController {
 
     @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET, RequestMethod.POST})
     public String loginSuccess(@AuthenticationPrincipal UserDetails user) {
-        logger.info("User: " + user.getUsername() + " logged in.");
+        logger.info("---loginSuccess---user: " + user.getUsername());
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         for (GrantedAuthority auth : authorities) {
             String role = auth.getAuthority();
@@ -64,7 +64,7 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/data", method = RequestMethod.GET)
-    public void processData(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("dir") String dir) throws Exception {
+    public void processData(@RequestParam("dir") String dir) throws Exception {
         new CurvesParser(pjSumRepo, caRepo, clubRepo, dir).processAll();
     }
 }
