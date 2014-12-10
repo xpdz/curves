@@ -37,7 +37,7 @@ public class Goal implements Serializable {
     private int salesAch6;
     private float salesRatio6;
     private int cmOwnRefs6;
-    private int cmOutAgpOut;
+    private int cmOutAgpOut6;
     private int cmInAgpOut6;
 
     public void setId(Long id) {
@@ -116,8 +116,8 @@ public class Goal implements Serializable {
         this.cmOwnRefs6 = cmOwnRefs6;
     }
 
-    public void setCmOutAgpOut(int cmOutAgpOut) {
-        this.cmOutAgpOut = cmOutAgpOut;
+    public void setCmOutAgpOut6(int cmOutAgpOut6) {
+        this.cmOutAgpOut6 = cmOutAgpOut6;
     }
 
     public void setCmInAgpOut6(int cmInAgpOut6) {
@@ -204,8 +204,8 @@ public class Goal implements Serializable {
         return cmOwnRefs6;
     }
 
-    public int getCmOutAgpOut() {
-        return cmOutAgpOut;
+    public int getCmOutAgpOut6() {
+        return cmOutAgpOut6;
     }
 
     public int getCmInAgpOut6() {

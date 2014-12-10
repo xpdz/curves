@@ -20,7 +20,7 @@ public class CaDataHandler {
         this.cp = cp;
     }
 
-    public void processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
+    public boolean processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
         this.evaluator = evaluator;
 
         Ca ca = new Ca();
@@ -38,6 +38,8 @@ public class CaDataHandler {
         cp.caRepo.save(ca);
 
         logger.info("*** CA Saved *** clubId: "+ca.getClubId()+", caYear: "+ca.getCaYear()+", caMonth: "+ca.getCaMonth());
+
+        return true;
     }
 
     private void setupCa(Sheet sh, Ca ca) {
@@ -158,53 +160,53 @@ public class CaDataHandler {
         try {ca.setSvc0_5((int)sh.getRow(28).getCell(8).getNumericCellValue());} catch (Exception e) {}
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(28).getCell(9));ca.setSvc0_6((float)cellValue.getNumberValue());} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(29).getCell(4));ca.setSvc3More1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(29).getCell(5));ca.setSvc3More2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(29).getCell(6));ca.setSvc3More3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(29).getCell(7));ca.setSvc3More4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(29).getCell(8));ca.setSvc3More5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(29).getCell(4));ca.setSvc3More1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(29).getCell(5));ca.setSvc3More2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(29).getCell(6));ca.setSvc3More3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(29).getCell(7));ca.setSvc3More4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(29).getCell(8));ca.setSvc3More5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(30).getCell(4));ca.setSvcInactive1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(30).getCell(5));ca.setSvcInactive2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(30).getCell(6));ca.setSvcInactive3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(30).getCell(7));ca.setSvcInactive4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(30).getCell(8));ca.setSvcInactive5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(30).getCell(4));ca.setSvcInactive1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(30).getCell(5));ca.setSvcInactive2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(30).getCell(6));ca.setSvcInactive3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(30).getCell(7));ca.setSvcInactive4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(30).getCell(8));ca.setSvcInactive5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(31).getCell(4));ca.setSvcFwoReview1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(31).getCell(5));ca.setSvcFwoReview2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(31).getCell(6));ca.setSvcFwoReview3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(31).getCell(7));ca.setSvcFwoReview4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(31).getCell(8));ca.setSvcFwoReview5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(31).getCell(4));ca.setSvcFwoReview1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(31).getCell(5));ca.setSvcFwoReview2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(31).getCell(6));ca.setSvcFwoReview3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(31).getCell(7));ca.setSvcFwoReview4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(31).getCell(8));ca.setSvcFwoReview5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(32).getCell(4));ca.setSvcInterview1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(32).getCell(5));ca.setSvcInterview2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(32).getCell(6));ca.setSvcInterview3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(32).getCell(7));ca.setSvcInterview4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(32).getCell(8));ca.setSvcInterview5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(32).getCell(4));ca.setSvcInterview1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(32).getCell(5));ca.setSvcInterview2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(32).getCell(6));ca.setSvcInterview3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(32).getCell(7));ca.setSvcInterview4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(32).getCell(8));ca.setSvcInterview5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(33).getCell(4));ca.setSvcThanks1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(33).getCell(5));ca.setSvcThanks2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(33).getCell(6));ca.setSvcThanks3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(33).getCell(7));ca.setSvcThanks4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(33).getCell(8));ca.setSvcThanks5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(33).getCell(4));ca.setSvcThanks1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(33).getCell(5));ca.setSvcThanks2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(33).getCell(6));ca.setSvcThanks3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(33).getCell(7));ca.setSvcThanks4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(33).getCell(8));ca.setSvcThanks5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(34).getCell(4));ca.setSvc3C1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(34).getCell(5));ca.setSvc3C2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(34).getCell(6));ca.setSvc3C3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(34).getCell(7));ca.setSvc3C4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(34).getCell(8));ca.setSvc3C5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(34).getCell(4));ca.setSvc3C1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(34).getCell(5));ca.setSvc3C2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(34).getCell(6));ca.setSvc3C3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(34).getCell(7));ca.setSvc3C4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(34).getCell(8));ca.setSvc3C5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(35).getCell(4));ca.setSvcReward1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(35).getCell(5));ca.setSvcReward2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(35).getCell(6));ca.setSvcReward3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(35).getCell(7));ca.setSvcReward4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(35).getCell(8));ca.setSvcReward5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(35).getCell(4));ca.setSvcReward1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(35).getCell(5));ca.setSvcReward2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(35).getCell(6));ca.setSvcReward3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(35).getCell(7));ca.setSvcReward4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(35).getCell(8));ca.setSvcReward5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(36).getCell(4));ca.setSvcLoyal1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(36).getCell(5));ca.setSvcLoyal2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(36).getCell(6));ca.setSvcLoyal3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(36).getCell(7));ca.setSvcLoyal4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(36).getCell(8));ca.setSvcLoyal5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(36).getCell(4));ca.setSvcLoyal1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(36).getCell(5));ca.setSvcLoyal2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(36).getCell(6));ca.setSvcLoyal3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(36).getCell(7));ca.setSvcLoyal4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(36).getCell(8));ca.setSvcLoyal5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
         try {ca.setCmPostFlyer1((int) sh.getRow(39).getCell(4).getNumericCellValue());} catch (Exception e) {}
         try {ca.setCmPostFlyer2((int) sh.getRow(39).getCell(5).getNumericCellValue());} catch (Exception e) {}
@@ -455,23 +457,23 @@ public class CaDataHandler {
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(78).getCell(8));ca.setCmShowRatio5((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(78).getCell(9));ca.setCmShowRatio6((float)cellValue.getNumberValue());} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(79).getCell(4));ca.setCmTraining1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(79).getCell(5));ca.setCmTraining2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(79).getCell(6));ca.setCmTraining3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(79).getCell(7));ca.setCmTraining4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(79).getCell(8));ca.setCmTraining5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(79).getCell(4));ca.setCmTraining1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(79).getCell(5));ca.setCmTraining2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(79).getCell(6));ca.setCmTraining3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(79).getCell(7));ca.setCmTraining4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(79).getCell(8));ca.setCmTraining5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(80).getCell(4));ca.setCmGot3_1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(80).getCell(5));ca.setCmGot3_2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(80).getCell(6));ca.setCmGot3_3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(80).getCell(7));ca.setCmGot3_4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(80).getCell(8));ca.setCmGot3_5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(80).getCell(4));ca.setCmGot3_1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(80).getCell(5));ca.setCmGot3_2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(80).getCell(6));ca.setCmGot3_3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(80).getCell(7));ca.setCmGot3_4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(80).getCell(8));ca.setCmGot3_5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(81).getCell(4));ca.setCmInvitation1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(81).getCell(5));ca.setCmInvitation2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(81).getCell(6));ca.setCmInvitation3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(81).getCell(7));ca.setCmInvitation4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(81).getCell(8));ca.setCmInvitation5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(81).getCell(4));ca.setCmInvitation1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(81).getCell(5));ca.setCmInvitation2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(81).getCell(6));ca.setCmInvitation3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(81).getCell(7));ca.setCmInvitation4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(81).getCell(8));ca.setCmInvitation5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
         try {ca.setSalesAch1((int)sh.getRow(83).getCell(4).getNumericCellValue());} catch (Exception e) {}
         try {ca.setSalesAch2((int)sh.getRow(83).getCell(5).getNumericCellValue());} catch (Exception e) {}
@@ -515,131 +517,131 @@ public class CaDataHandler {
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(88).getCell(8));ca.setSalesAchAppRatio5((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(88).getCell(9));ca.setSalesAchAppRatio6((float)cellValue.getNumberValue());} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(89).getCell(4));ca.setSalesFaReview1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(89).getCell(5));ca.setSalesFaReview2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(89).getCell(6));ca.setSalesFaReview3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(89).getCell(7));ca.setSalesFaReview4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(89).getCell(8));ca.setSalesFaReview5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(89).getCell(4));ca.setSalesFaReview1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(89).getCell(5));ca.setSalesFaReview2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(89).getCell(6));ca.setSalesFaReview3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(89).getCell(7));ca.setSalesFaReview4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(89).getCell(8));ca.setSalesFaReview5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(90).getCell(4));ca.setSalesPriceReview1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(90).getCell(5));ca.setSalesPriceReview2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(90).getCell(6));ca.setSalesPriceReview3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(90).getCell(7));ca.setSalesPriceReview4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(90).getCell(8));ca.setSalesPriceReview5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(90).getCell(4));ca.setSalesPriceReview1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(90).getCell(5));ca.setSalesPriceReview2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(90).getCell(6));ca.setSalesPriceReview3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(90).getCell(7));ca.setSalesPriceReview4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(90).getCell(8));ca.setSalesPriceReview5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(91).getCell(4));ca.setSalesAck1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(91).getCell(5));ca.setSalesAck2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(91).getCell(6));ca.setSalesAck3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(91).getCell(7));ca.setSalesAck4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(91).getCell(8));ca.setSalesAck5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(91).getCell(4));ca.setSalesAck1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(91).getCell(5));ca.setSalesAck2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(91).getCell(6));ca.setSalesAck3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(91).getCell(7));ca.setSalesAck4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(91).getCell(8));ca.setSalesAck5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(92).getCell(4));ca.setSalesTarget1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(92).getCell(5));ca.setSalesTarget2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(92).getCell(6));ca.setSalesTarget3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(92).getCell(7));ca.setSalesTarget4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(92).getCell(8));ca.setSalesTarget5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(92).getCell(4));ca.setSalesTarget1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(92).getCell(5));ca.setSalesTarget2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(92).getCell(6));ca.setSalesTarget3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(92).getCell(7));ca.setSalesTarget4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(92).getCell(8));ca.setSalesTarget5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(93).getCell(4));ca.setSalesMotivation1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(93).getCell(5));ca.setSalesMotivation2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(93).getCell(6));ca.setSalesMotivation3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(93).getCell(7));ca.setSalesMotivation4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(93).getCell(8));ca.setSalesMotivation5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(93).getCell(4));ca.setSalesMotivation1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(93).getCell(5));ca.setSalesMotivation2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(93).getCell(6));ca.setSalesMotivation3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(93).getCell(7));ca.setSalesMotivation4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(93).getCell(8));ca.setSalesMotivation5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(94).getCell(4));ca.setSalesObstacle1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(94).getCell(5));ca.setSalesObstacle2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(94).getCell(6));ca.setSalesObstacle3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(94).getCell(7));ca.setSalesObstacle4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(94).getCell(8));ca.setSalesObstacle5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(94).getCell(4));ca.setSalesObstacle1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(94).getCell(5));ca.setSalesObstacle2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(94).getCell(6));ca.setSalesObstacle3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(94).getCell(7));ca.setSalesObstacle4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(94).getCell(8));ca.setSalesObstacle5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(96).getCell(4));ca.setMgmtMeeting1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(96).getCell(5));ca.setMgmtMeeting2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(96).getCell(6));ca.setMgmtMeeting3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(96).getCell(7));ca.setMgmtMeeting4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(96).getCell(8));ca.setMgmtMeeting5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(96).getCell(4));ca.setMgmtMeeting1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(96).getCell(5));ca.setMgmtMeeting2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(96).getCell(6));ca.setMgmtMeeting3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(96).getCell(7));ca.setMgmtMeeting4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(96).getCell(8));ca.setMgmtMeeting5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(97).getCell(4));ca.setMgmtCa1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(97).getCell(5));ca.setMgmtCa2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(97).getCell(6));ca.setMgmtCa3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(97).getCell(7));ca.setMgmtCa4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(97).getCell(8));ca.setMgmtCa5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(97).getCell(4));ca.setMgmtCa1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(97).getCell(5));ca.setMgmtCa2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(97).getCell(6));ca.setMgmtCa3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(97).getCell(7));ca.setMgmtCa4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(97).getCell(8));ca.setMgmtCa5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(98).getCell(4));ca.setMgmtGp1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(98).getCell(5));ca.setMgmtGp2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(98).getCell(6));ca.setMgmtGp3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(98).getCell(7));ca.setMgmtGp4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(98).getCell(8));ca.setMgmtGp5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(98).getCell(4));ca.setMgmtGp1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(98).getCell(5));ca.setMgmtGp2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(98).getCell(6));ca.setMgmtGp3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(98).getCell(7));ca.setMgmtGp4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(98).getCell(8));ca.setMgmtGp5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(99).getCell(4));ca.setMgmtLearn1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(99).getCell(5));ca.setMgmtLearn2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(99).getCell(6));ca.setMgmtLearn3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(99).getCell(7));ca.setMgmtLearn4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(99).getCell(8));ca.setMgmtLearn5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(99).getCell(4));ca.setMgmtLearn1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(99).getCell(5));ca.setMgmtLearn2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(99).getCell(6));ca.setMgmtLearn3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(99).getCell(7));ca.setMgmtLearn4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(99).getCell(8));ca.setMgmtLearn5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(100).getCell(4));ca.setMgmtSheet1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(100).getCell(5));ca.setMgmtSheet2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(100).getCell(6));ca.setMgmtSheet3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(100).getCell(7));ca.setMgmtSheet4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(100).getCell(8));ca.setMgmtSheet5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(100).getCell(4));ca.setMgmtSheet1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(100).getCell(5));ca.setMgmtSheet2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(100).getCell(6));ca.setMgmtSheet3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(100).getCell(7));ca.setMgmtSheet4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(100).getCell(8));ca.setMgmtSheet5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(101).getCell(4));ca.setMgmtPolicy1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(101).getCell(5));ca.setMgmtPolicy2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(101).getCell(6));ca.setMgmtPolicy3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(101).getCell(7));ca.setMgmtPolicy4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(101).getCell(8));ca.setMgmtPolicy5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(101).getCell(4));ca.setMgmtPolicy1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(101).getCell(5));ca.setMgmtPolicy2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(101).getCell(6));ca.setMgmtPolicy3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(101).getCell(7));ca.setMgmtPolicy4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(101).getCell(8));ca.setMgmtPolicy5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(102).getCell(4));ca.setMgmtCompiantSales1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(102).getCell(5));ca.setMgmtCompiantSales2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(102).getCell(6));ca.setMgmtCompiantSales3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(102).getCell(7));ca.setMgmtCompiantSales4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(102).getCell(8));ca.setMgmtCompiantSales5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(102).getCell(4));ca.setMgmtCompiantSales1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(102).getCell(5));ca.setMgmtCompiantSales2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(102).getCell(6));ca.setMgmtCompiantSales3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(102).getCell(7));ca.setMgmtCompiantSales4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(102).getCell(8));ca.setMgmtCompiantSales5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(103).getCell(4));ca.setMgmtCompiantMethod1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(103).getCell(5));ca.setMgmtCompiantMethod2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(103).getCell(6));ca.setMgmtCompiantMethod3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(103).getCell(7));ca.setMgmtCompiantMethod4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(103).getCell(8));ca.setMgmtCompiantMethod5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(103).getCell(4));ca.setMgmtCompiantMethod1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(103).getCell(5));ca.setMgmtCompiantMethod2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(103).getCell(6));ca.setMgmtCompiantMethod3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(103).getCell(7));ca.setMgmtCompiantMethod4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(103).getCell(8));ca.setMgmtCompiantMethod5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(104).getCell(4));ca.setMgmtCompiantProduct1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(104).getCell(5));ca.setMgmtCompiantProduct2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(104).getCell(6));ca.setMgmtCompiantProduct3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(104).getCell(7));ca.setMgmtCompiantProduct4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(104).getCell(8));ca.setMgmtCompiantProduct5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(104).getCell(4));ca.setMgmtCompiantProduct1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(104).getCell(5));ca.setMgmtCompiantProduct2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(104).getCell(6));ca.setMgmtCompiantProduct3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(104).getCell(7));ca.setMgmtCompiantProduct4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(104).getCell(8));ca.setMgmtCompiantProduct5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(105).getCell(4));ca.setMgmtCompiantAd1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(105).getCell(5));ca.setMgmtCompiantAd2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(105).getCell(6));ca.setMgmtCompiantAd3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(105).getCell(7));ca.setMgmtCompiantAd4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(105).getCell(8));ca.setMgmtCompiantAd5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(105).getCell(4));ca.setMgmtCompiantAd1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(105).getCell(5));ca.setMgmtCompiantAd2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(105).getCell(6));ca.setMgmtCompiantAd3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(105).getCell(7));ca.setMgmtCompiantAd4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(105).getCell(8));ca.setMgmtCompiantAd5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(106).getCell(4));ca.setMgmtTraining1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(106).getCell(5));ca.setMgmtTraining2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(106).getCell(6));ca.setMgmtTraining3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(106).getCell(7));ca.setMgmtTraining4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(106).getCell(8));ca.setMgmtTraining5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(106).getCell(4));ca.setMgmtTraining1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(106).getCell(5));ca.setMgmtTraining2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(106).getCell(6));ca.setMgmtTraining3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(106).getCell(7));ca.setMgmtTraining4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(106).getCell(8));ca.setMgmtTraining5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(107).getCell(4));ca.setMgmtReport1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(107).getCell(5));ca.setMgmtReport2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(107).getCell(6));ca.setMgmtReport3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(107).getCell(7));ca.setMgmtReport4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(107).getCell(8));ca.setMgmtReport5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(107).getCell(4));ca.setMgmtReport1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(107).getCell(5));ca.setMgmtReport2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(107).getCell(6));ca.setMgmtReport3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(107).getCell(7));ca.setMgmtReport4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(107).getCell(8));ca.setMgmtReport5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(108).getCell(4));ca.setMgmtPlan1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(108).getCell(5));ca.setMgmtPlan2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(108).getCell(6));ca.setMgmtPlan3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(108).getCell(7));ca.setMgmtPlan4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(108).getCell(8));ca.setMgmtPlan5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(108).getCell(4));ca.setMgmtPlan1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(108).getCell(5));ca.setMgmtPlan2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(108).getCell(6));ca.setMgmtPlan3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(108).getCell(7));ca.setMgmtPlan4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(108).getCell(8));ca.setMgmtPlan5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(109).getCell(4));ca.setMgmtMaintain1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(109).getCell(5));ca.setMgmtMaintain2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(109).getCell(6));ca.setMgmtMaintain3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(109).getCell(7));ca.setMgmtMaintain4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(109).getCell(8));ca.setMgmtMaintain5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(109).getCell(4));ca.setMgmtMaintain1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(109).getCell(5));ca.setMgmtMaintain2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(109).getCell(6));ca.setMgmtMaintain3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(109).getCell(7));ca.setMgmtMaintain4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(109).getCell(8));ca.setMgmtMaintain5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
-        try {String value = cp.getCellValue(sh.getRow(110).getCell(4));ca.setMgmtFace2Face1(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(110).getCell(5));ca.setMgmtFace2Face2(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(110).getCell(6));ca.setMgmtFace2Face3(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(110).getCell(7));ca.setMgmtFace2Face4(value);} catch (Exception e) {}
-        try {String value = cp.getCellValue(sh.getRow(110).getCell(8));ca.setMgmtFace2Face5(value);} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(110).getCell(4));ca.setMgmtFace2Face1((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(110).getCell(5));ca.setMgmtFace2Face2((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(110).getCell(6));ca.setMgmtFace2Face3((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(110).getCell(7));ca.setMgmtFace2Face4((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
+        try {String value = cp.getCellValue(sh.getRow(110).getCell(8));ca.setMgmtFace2Face5((value != null && value.length() > 0) ? "v" : "");} catch (Exception e) {}
 
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(114).getCell(2));ca.setClubSalesRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
         try {CellValue cellValue = evaluator.evaluate(sh.getRow(116).getCell(2));ca.setClubAchAppRatio((float)cellValue.getNumberValue());} catch (Exception e) {}

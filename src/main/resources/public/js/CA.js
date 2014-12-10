@@ -64,7 +64,7 @@ function getCA() {
         showAlert("alert-danger", "Cannot load data. Please refresh and retry.");
     });
 
-    if (currentYear == thisYear && currentMonth == thisMonth) {
+    if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
         $('#btnSave').prop("disabled", false);
         $('[contenteditable="false"]').prop('contenteditable', true);
     } else {

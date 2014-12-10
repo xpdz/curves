@@ -8,11 +8,9 @@ import com.curves.franchise.repository.CaRepository;
 import com.curves.franchise.repository.ClubRepository;
 import com.curves.franchise.repository.GoalRepository;
 import com.curves.franchise.repository.PjSumRepository;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @RestController
@@ -44,7 +40,7 @@ public class ManagementController {
     @Autowired
     private CaRepository caRepo;
 
-    @RequestMapping(value = "/rest/goal", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
     @ResponseBody
     public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name, @RequestParam("owner") String owner) {
         Club club = new Club();
@@ -81,7 +77,7 @@ public class ManagementController {
             goal.setgYear(year);
             goal.setgMonth(month);
         }
-        if ("newSalesRevenue".equals(item) || "duesDraftRevenue".equals(item) ||
+        if ("newSalesRevenue".equals(item) || "duesDraftsRevenue".equals(item) ||
                 "productsRevenue".equals(item) || "revenue".equals(item)) {
             if ("newSalesRevenue".equals(item)) {
                 goal.setNewSalesRevenue((int)value);
@@ -115,8 +111,8 @@ public class ManagementController {
                 goal.setSalesRatio6(value);
             } else if ("cmOwnRefs6".equals(item)) {
                 goal.setCmOwnRefs6((int)value);
-            } else if ("cmOutAgpOut".equals(item)) {
-                goal.setCmOutAgpOut((int)value);
+            } else if ("cmOutAgpOut6".equals(item)) {
+                goal.setCmOutAgpOut6((int)value);
             } else if ("cmInAgpOut6".equals(item)) {
                 goal.setCmInAgpOut6((int)value);
             }
@@ -184,7 +180,7 @@ public class ManagementController {
                     values.put(clubName, ca.getSalesRatio6());
                 } else if ("cmOwnRefs6".equals(item)) {
                     values.put(clubName, (float)ca.getCmOwnRefs6());
-                } else if ("cmOutAgpOut".equals(item)) {
+                } else if ("cmOutAgpOut6".equals(item)) {
                     values.put(clubName, (float)ca.getCmOutAgpOut6());
                 } else if ("cmInAgpOut6".equals(item)) {
                     values.put(clubName, (float)ca.getCmInAgpOut6());
@@ -198,111 +194,118 @@ public class ManagementController {
     @RequestMapping(value = "/rest/CaAll")
     @ResponseBody
     public Map<String, Map<String, String>> findCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
-        List<Ca> cas = caRepo.findByCaYearAndCaMonth(caYear, caMonth, new Sort(Sort.Direction.DESC, "clubId"));
-        logger.info("---findCaAll---caYear: " + caYear + ", caMonth: " + caMonth+", size: "+cas.size());
-        Map<String, Map<String, String>> valueV = new HashMap<>(68);
-        if (cas.size() == 0) {
-            return valueV;
-        }
-
-        Iterable<Club> clubs = clubRepo.findAll();
-        for (Ca ca : cas) {
-            boolean found = false;
-            Map<String, String> valueX = new HashMap<>(68);
-            for (Club club : clubs) {
-                if (club.getClubId() == ca.getClubId()) {
-                    valueV.put(club.getName(), valueX);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                logger.error(">>> Club ID "+ca.getClubId()+" in CA NOT FOUND in clubs <<<");
-                continue;
-            }
-
-            valueX.put("GoalsTm", "" + ca.getGoalsTm());
-            valueX.put("GoalsExitsRatio", "" + ca.getGoalsExitsRatio());
-            valueX.put("GoalsNewSales", "" + ca.getGoalsNewSales());
-            valueX.put("GoalsAppoints", "" + ca.getGoalsAppoints());
-            valueX.put("SvcTm6", "" + ca.getSvcTm6());
-            valueX.put("SvcHold6", "" + ca.getSvcHold6());
-            valueX.put("SvcActive6", "" + ca.getSvcActive6());
-            valueX.put("SvcHoldRatio6", "" + ca.getSvcHoldRatio6());
-            valueX.put("SvcTotalWo6", "" + ca.getSvcTotalWo6());
-            valueX.put("SvcAvgWo6", "" + ca.getSvcAvgWo6());
-            valueX.put("SvcMaxWo6", "" + ca.getSvcMaxWo6());
-            valueX.put("SvcExits6", "" + ca.getSvcExits6());
-            valueX.put("SvcExitsRatio6", "" + ca.getSvcExitsRatio6());
-            valueX.put("SvcMeasure6", "" + ca.getSvcMeasure6());
-            valueX.put("SvcMeasureRatio6", "" + ca.getSvcMeasureRatio6());
-            valueX.put("Svc12_6", "" + ca.getSvc12_6());
-            valueX.put("Svc8to11_6", "" + ca.getSvc8to11_6());
-            valueX.put("Svc4to7_6", "" + ca.getSvc4to7_6());
-            valueX.put("Svc1to3_6", "" + ca.getSvc1to3_6());
-            valueX.put("Svc0_6", "" + ca.getSvc0_6());
-            valueX.put("CmPostFlyer6", "" + ca.getCmPostFlyer6());
-            valueX.put("CmHandFlyerHours6", "" + ca.getCmHandFlyerHours6());
-            valueX.put("CmOutGpHours6", "" + ca.getCmOutGpHours6());
-            valueX.put("CmCpBox6", "" + ca.getCmCpBox6());
-            valueX.put("CmOutGot6", "" + ca.getCmOutGot6());
-            valueX.put("CmInGot6", "" + ca.getCmInGot6());
-            valueX.put("CmBlogGot6", "" + ca.getCmBlogGot6());
-            valueX.put("CmBagGot6", "" + ca.getCmBagGot6());
-            valueX.put("CmTotalGot6", "" + ca.getCmTotalGot6());
-            valueX.put("CmCallIn6", "" + ca.getCmCallIn6());
-            valueX.put("CmOutGotCall6", "" + ca.getCmOutGotCall6());
-            valueX.put("CmInGotCall6", "" + ca.getCmInGotCall6());
-            valueX.put("CmBlogGotCall6", "" + ca.getCmBlogGotCall6());
-            valueX.put("CmBagGotCall6", "" + ca.getCmBagGotCall6());
-            valueX.put("CmOwnRefs6", "" + ca.getCmOwnRefs6());
-            valueX.put("CmNewspaper6", "" + ca.getCmNewspaper6());
-            valueX.put("CmTv6", "" + ca.getCmTv6());
-            valueX.put("CmInternet6", "" + ca.getCmInternet6());
-            valueX.put("CmSign6", "" + ca.getCmSign6());
-            valueX.put("CmMate6", "" + ca.getCmMate6());
-            valueX.put("CmOthers6", "" + ca.getCmOthers6());
-            valueX.put("CmMailAgpIn6", "" + ca.getCmMailAgpIn6());
-            valueX.put("CmPostFlyerAgpIn6", "" + ca.getCmPostFlyerAgpIn6());
-            valueX.put("CmHandFlyerAgpIn6", "" + ca.getCmHandFlyerAgpIn6());
-            valueX.put("CmCpAgpIn6", "" + ca.getCmCpAgpIn6());
-            valueX.put("CmOutAgpOut6", "" + ca.getCmOutAgpOut6());
-            valueX.put("CmInAgpOut6", "" + ca.getCmInAgpOut6());
-            valueX.put("CmBlogAgpOut6", "" + ca.getCmBlogAgpOut6());
-            valueX.put("CmBagAgpOut6", "" + ca.getCmBagAgpOut6());
-            valueX.put("CmApoTotal6", "" + ca.getCmApoTotal6());
-            valueX.put("CmOutApptRatio6", "" + ca.getCmOutApptRatio6());
-            valueX.put("CmPostPerApo6", "" + ca.getCmPostPerApo6());
-            valueX.put("CmHandPerApo6", "" + ca.getCmHandPerApo6());
-            valueX.put("CmHandHoursPerApo6", "" + ca.getCmHandHoursPerApo6());
-            valueX.put("CmOutGpHoursPerApo6", "" + ca.getCmOutGpHoursPerApo6());
-            valueX.put("CmOutGpPerApo6", "" + ca.getCmOutGpPerApo6());
-            valueX.put("CmBrAgpRatio6", "" + ca.getCmBrAgpRatio6());
-            valueX.put("CmFaSum6", "" + ca.getCmFaSum6());
-            valueX.put("CmShowRatio6", "" + ca.getCmShowRatio6());
-            valueX.put("SalesAch6", "" + ca.getSalesAch6());
-            valueX.put("SalesMonthly6", "" + ca.getSalesMonthly6());
-            valueX.put("SalesAllPrepay6", "" + ca.getSalesAllPrepay6());
-            valueX.put("SalesTotal6", "" + ca.getSalesTotal6());
-            valueX.put("SalesRatio6", "" + ca.getSalesRatio6());
-            valueX.put("SalesAchAppRatio6", "" + ca.getSalesAchAppRatio6());
-
-            Ca lastCa = caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth() - 1);
-            if (lastCa != null) {
-                valueX.put("LastGoalsTm", "" + lastCa.getSvcTm6());
-                valueX.put("LastGoalsActive", "" + lastCa.getSvcActive6());
-                valueX.put("LastGoalsShowRatio", "" + lastCa.getCmShowRatio6());
-                valueX.put("LastGoalsSalesRatio", "" + lastCa.getSalesRatio6());
-            }
-        }
-        return valueV;
+        logger.info("---findCaAll---caYear: " + caYear + ", caMonth: " + caMonth);
+        return new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
     }
 
     @RequestMapping(value = "/rest/CaAll/stat")
     @ResponseBody
     public Map<String, Map<String, String>> findCaAllStat(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
         logger.info("---findCaAll/stat---caYear: " + caYear + ", caMonth: " + caMonth);
-        return new CaAllHelper().fillItems(caRepo, caYear, caMonth);
+        return new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
+    }
+
+    @RequestMapping(value = "/rest/CaAll/CA_overall", produces="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @ResponseBody
+    public FileSystemResource exportCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
+        logger.info("---exportCaAll---caYear: " + caYear + ", caMonth: " + caMonth);
+        Workbook wb = null;
+        String fdl = System.getProperty("user.home") + File.separator + "curves_data";
+        File template = new File(fdl + File.separator + "CA_Summary_Sheet_ALL_Clubs.xlsx");
+        File target = null;
+        try {
+            target = File.createTempFile("CA_Summary_Sheet_ALL_Clubs", "xlsx");
+            FileUtils.copyFile(template, target);
+            wb = WorkbookFactory.create(new FileInputStream(target));
+        } catch (Exception e) {
+            logger.error("", e);
+            return null;
+        }
+
+        Sheet sh = wb.getSheetAt(0);
+
+        Map<String, Map<String, String>> itemStatMap = new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
+        Map<String, Map<String, String>> clubMap = new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
+        Set<String> keyItem = itemStatMap.keySet();
+        int rowIdx = 1;
+        for (String item : keyItem) {
+            Map<String, String> statMap = itemStatMap.get(item);
+            Row row = sh.getRow(rowIdx);
+            row.createCell(3, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("sum")));
+            row.createCell(4, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("avg")));
+            row.createCell(5, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("highest")));
+            row.createCell(6, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("lowest")));
+            rowIdx++;
+            if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
+                rowIdx = creatBlankCell4Sum(sh, rowIdx);
+            } else if (rowIdx == 26) {
+                rowIdx = creatBlankCell4Sum(sh, rowIdx);
+                rowIdx = creatBlankCell4Sum(sh, rowIdx);
+            }
+        }
+
+        int clubCellIdx = 7;
+        Set<String> keyClubs = clubMap.keySet();
+        for (String clubName : keyClubs) {
+            Row row = sh.getRow(0);
+            Cell cell = row.createCell(clubCellIdx, Cell.CELL_TYPE_STRING);
+            cell.setCellValue(clubName);
+            cell.setCellStyle(row.getCell(3).getCellStyle());
+
+            Map<String, String> itemMap = clubMap.get(clubName);
+            Set<String> items = itemMap.keySet();
+            rowIdx = 1;
+            for (String item : items) {
+                row = sh.getRow(rowIdx);
+                row.createCell(clubCellIdx, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, itemMap.get(item)));
+                rowIdx++;
+                if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
+                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
+                } else if (rowIdx == 26) {
+                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
+                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
+                }
+            }
+            clubCellIdx++;
+        }
+
+        try {
+            OutputStream fos = new FileOutputStream(target);
+            wb.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            logger.error("", e);
+        }
+        return new FileSystemResource(target);
+    }
+
+    private String formatValue(String item, String v) {
+        float value = Float.parseFloat(v);
+        if (item.endsWith("Ratio")) {
+            return (int) (value * 100) + "%";
+        } else if (item.equals("SvcAvgWo6") || item.equals("SvcMaxWo6") || item.equals("SvcMaxWo6")
+                || item.equals("Svc12_6") || item.equals("Svc8to11_6") || item.equals("Svc4to7_6")
+                || item.equals("Svc1to3_6") || item.equals("Svc0_6") || item.equals("CmHandFlyerHours6")
+                || item.equals("CmOutGpHours6") || item.equals("CmHandHoursPerApo6") || item.equals("CmOutGpHoursPerApo6")) {
+            return new DecimalFormat("#.0").format(value);
+        } else {
+            return (int) (value) + "";
+        }
+    }
+
+    private int createBlankCell4Club(Sheet sh, int rowIdx, int clubCellIdx) {
+        Row row = sh.getRow(rowIdx);
+        row.createCell(clubCellIdx, Cell.CELL_TYPE_BLANK);
+        return rowIdx+1;
+    }
+
+    private int creatBlankCell4Sum(Sheet sh, int rowIdx) {
+        Row row = sh.getRow(rowIdx);
+        row.createCell(3, Cell.CELL_TYPE_BLANK);
+        row.createCell(4, Cell.CELL_TYPE_BLANK);
+        row.createCell(5, Cell.CELL_TYPE_BLANK);
+        row.createCell(6, Cell.CELL_TYPE_BLANK);
+        return rowIdx+1;
     }
 
     @RequestMapping(value = "/rest/benchmarking")

@@ -37,9 +37,9 @@ dependencies {
 
     compile 'commons-io:commons-io:2.4'
 
-    compile group: 'org.apache.poi', name: 'poi', version: '3.10.1'
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.10.1'
-    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.10.1'
+    compile group: 'org.apache.poi', name: 'poi', version: '3.11-beta3'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11-beta3'
+    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.11-beta3'
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")

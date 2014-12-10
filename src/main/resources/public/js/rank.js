@@ -58,7 +58,7 @@ function showAlert(alertClass, msg) {
 
 function getGoal() {
     $.getJSON("/rest/goal", {year: currentYear, month: currentMonth}, function(goal) {
-        $('#thisGoal').val(formatValue(goal[item]));
+        $('#thisGoal').val(formatValue(goal[item] || 0));
     }).fail(function() {
         showAlert("alert-danger", "Cannot find goal. Please refresh and retry.");
     });
@@ -77,7 +77,7 @@ function getRank() {
                 $('<td>' + value + '</td>')
             ));
         });
-        $('#avgRank').text(formatValue(amount/counter));
+        $('#avgRank').text(formatValue(amount/counter || 0));
     }).fail(function() {
         showAlert("alert-danger", "Cannot find data. Please refresh and retry.");
     });

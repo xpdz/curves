@@ -23,6 +23,10 @@ $('.input-group.date').datepicker().on('changeDate', function(ev) {
     getCaAll();
 });
 
+$('#btnExport').click(function() {
+    window.location = "rest/CaAll/CA_overall?caYear="+currentYear+"&caMonth="+currentMonth;
+});
+
 // init CA page
 getCaAll();
 
@@ -42,10 +46,10 @@ function getCaAll() {
             if ( !data.hasOwnProperty(item) ) {
                 continue;
             }
-            $('#'+item).append('<td>'+formatValue(item, data[item]['sum'])+'</td>')
-                        .append('<td>'+formatValue(item, data[item]['avg'])+'</td>')
-                        .append('<td>'+formatValue(item, data[item]['highest'])+'</td>')
-                        .append('<td>'+formatValue(item, data[item]['lowest'])+'</td>');
+            $('#'+item).append('<td>'+formatValue(item, data[item].sum)+'</td>')
+                        .append('<td>'+formatValue(item, data[item].avg)+'</td>')
+                        .append('<td>'+formatValue(item, data[item].highest)+'</td>')
+                        .append('<td>'+formatValue(item, data[item].lowest)+'</td>');
         }
     }).fail(function() {
         showAlert("alert-danger", "Cannot load data. Please refresh and retry.");

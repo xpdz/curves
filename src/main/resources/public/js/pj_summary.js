@@ -6,7 +6,7 @@ $('#userId').html('<i class="fa fa-user"></i> 000000');
 
 (function($) {
     $.QueryString = (function(a) {
-        if (a == "") return {};
+        if (a === "") return {};
         var b = {};
         for (var i = 0; i < a.length; ++i)
         {
@@ -15,12 +15,12 @@ $('#userId').html('<i class="fa fa-user"></i> 000000');
             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
         }
         return b;
-    })(window.location.search.substr(1).split('&'))
+    })(window.location.search.substr(1).split('&'));
 })(jQuery);
 
-var clubId = $.QueryString["clubId"],
-    clubName = $.QueryString["clubName"],
-    clubOwner = $.QueryString["clubOwner"];
+var clubId = $.QueryString.clubId,
+    clubName = $.QueryString.clubName,
+    clubOwner = $.QueryString.clubOwner;
 $('#clubName').text(clubName);
 $('#clubOwner').text(clubOwner);
 

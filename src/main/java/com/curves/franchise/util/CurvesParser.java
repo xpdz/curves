@@ -20,11 +20,11 @@ public class CurvesParser {
 
     Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    File dataFolder = null;
     Map<String, String> invalidSheets = new HashMap<>();
     List<File> allOthers = new ArrayList<>();
     Map<String, Integer> nameId = new HashMap<>();
     int year, month;
+    String dir = null;
 
     CaRepository caRepo;
     PjSumRepository pjSumRepo;
@@ -36,23 +36,72 @@ public class CurvesParser {
         this.pjSumRepo = pjSumRepo;
         this.caRepo = caRepo;
         this.clubRepo = clubRepo;
-        String[] ym = dir.split("-");
-        this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
-        this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6))-1;
-        String home = System.getProperty("user.home");
-        logger.info("user.home: "+home);
-
-        buildClubNameIdMap();
-
-        home += File.separator + dir.replace("-", File.separator);
-        logger.info("folder: "+home);
-        dataFolder = new File(home);
+        this.dir = dir;
     }
 
-    public void processAll() {
-        Collection<File> allFiles = FileUtils.listFiles(dataFolder, null, true);
-        int clubId = -1;
+    public void process() {
+        buildClubNameIdMap();
+
+        String home = System.getProperty("user.home");
+        String fdl = home + File.separator + "curves_data";
+        logger.info("user.home + curves data folder: " + fdl);
+        if ("ALL".equals(dir)) {
+            // ?dir=ALL
+            for (int y = 2011; y < 2015; y++) {
+                this.year = y;
+                for (int m = 0; m < 12; m++) {
+                    this.month = m;
+                    String folder = fdl + File.separator + y + File.separator + y + (m < 9 ? "0" + (m+1) : (m+1));
+                    logger.info("---ALL enter folder---"+folder);
+                    processWorkbooks(FileUtils.listFiles(new File(folder), null, true));
+                }
+            }
+        } else if (dir.equals("TEST")) {
+            fdl += File.separator + "test";
+            // ?dir=TEST
+            String[] ym = dir.split("-");
+            this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
+            this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
+            for (int y = 2011; y < 2015; y++) {
+                this.year = y;
+                for (int m = 0; m < 12; m++) {
+                    this.month = m;
+                    logger.info("---TEST enter folder---"+fdl);
+                    processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
+                }
+            }
+        } else if (dir.startsWith("TEST")) {
+            fdl += File.separator + "test";
+            // ?dir=TEST-201310
+            String[] ym = dir.split("-");
+            this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
+            this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
+            logger.info("---TEST-XXXXXX enter folder---"+fdl);
+            processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
+        } else {
+            // ?dir=201408
+            String[] ym = dir.split("-");
+            String y = ym[ym.length - 1].substring(0, 4);
+            String m = ym[ym.length - 1].substring(4, 6);
+            this.year = Integer.parseInt(y);
+            this.month = Integer.parseInt(m) - 1;
+            fdl += File.separator + y + File.separator + y + m;
+            logger.info("---XXXXXX enter folder---"+fdl);
+            processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
+        }
+
+        logger.info("=======others================================");
+        for (File f : allOthers) {
+            logger.info(">>>Invalid files<<<"+f);
+        }
+        for (String s : invalidSheets.keySet()) {
+            logger.info("***Invalid sheets***"+s+" --- "+invalidSheets.get(s));
+        }
+    }
+
+    private void processWorkbooks(Collection<File> allFiles) {
         for (File f : allFiles) {
+            int clubId = -1;
             Workbook wb = null;
             try {
                 wb = WorkbookFactory.create(f);
@@ -66,72 +115,85 @@ public class CurvesParser {
 
             for (int i = 0; i < wb.getNumberOfSheets(); i++) {
                 Sheet sh = wb.getSheetAt(i);
-                String sheetName = sh.getSheetName();
-                try {
-                    int rows = sh.getLastRowNum();
-                    int columns = 0;
-                    try {
-                        columns = sh.getRow(0).getLastCellNum();
-                    } catch (Exception e) {
-                        invalidSheets.put(sheetName, f.getPath());
-                        continue;
-                    }
-                    if (rows > 150 && rows < 170 && columns > 10 && columns < 15) {
-                        boolean cellDataMatch = false;
-                        try {
-                            Calendar c = Calendar.getInstance();
-                            c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
-                            if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
-                                cellDataMatch = true;
-                            }
-                        } catch (Exception e) {}
-                        if ( (sheetName.startsWith(year+"") && sheetName.endsWith((month+1)+"")) || cellDataMatch ) {
-                            logger.info("*** Found CA *** sheet: "+sheetName+", clubId: "+clubId);
-                            evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                            new CaDataHandler(this).processCA(sh, evaluator, clubId);
-                        } else {
-                            invalidSheets.put(sheetName, f.getPath());
-                            continue;
-                        }
-                    } else if (rows > 40 && rows < 50 && columns < 45 && columns > 35) {
-                        boolean cellDateMath = false;
-                        Calendar c = Calendar.getInstance();
-                        try {
-                            c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
-                            if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
-                                cellDateMath = true;
-                            }
-                        } catch (Exception e) {}
-
-                        if (clubId == -1) {
-                            try {
-                                clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
-                            } catch (Exception e) {}
-                        }
-
-                        if (cellDateMath && clubId != -1) {
-                            logger.info("### Found PJ ### sheet: "+sheetName+", clubId: "+clubId);
-                            evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                            new PjDataHandler(this).processPJ(sh, evaluator, clubId);
-                        } else {
-                            invalidSheets.put(sheetName, f.getPath());
-                            continue;
-                        }
-                    } else {
-                        invalidSheets.put(sheetName, f.getPath());
-                    }
-                } catch (Exception e) {
-                    logger.error(">>> ERROR <<< file: " + f + ", sheet: " + sheetName, e);
+                if (processSheets(f, clubId, wb, sh)) {
+                    break;
                 }
             }
+            try {
+                wb.close();
+            } catch (Exception e) {
+            }
         }
-        logger.info("=======others================================");
-        for (File f : allOthers) {
-            logger.info(">>>Invalid files<<<"+f);
+    }
+
+    private boolean processSheets(File f, int clubId, Workbook wb, Sheet sh) {
+        String sheetName = sh.getSheetName();
+        int rows = sh.getLastRowNum();
+        if (rows <= 0) {
+            return false;
         }
-        for (String s : invalidSheets.keySet()) {
-            logger.info("***Invalid sheets***"+s+" --- "+invalidSheets.get(s));
+        try {
+            int columns = sh.getRow(0).getLastCellNum();
+            if (rows > 150 && rows < 170 && columns > 10 && columns < 15) {
+                if (clubId == -1) {
+                    String clubName = sh.getRow(0).getCell(2).getStringCellValue();
+                    clubId = getIdByName(clubName);
+                }
+                if (clubId == -1) {
+                    invalidSheets.put(sheetName, f.getPath());
+                    return false;
+                }
+                boolean bTimeMatch = false;
+                try {
+                    int yIdx = sheetName.indexOf("" + year);
+                    if (yIdx != -1) {
+                        int mIdx = sheetName.substring(yIdx).indexOf("" + (month + 1));
+                        if (mIdx != -1) {
+                            bTimeMatch  = true;
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                }
+                if (!bTimeMatch) {
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
+                    if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                        bTimeMatch = true;
+                    }
+                }
+                if (bTimeMatch) {
+                    logger.info("*** Found CA *** sheet: " + sheetName + ", clubId: " + clubId);
+                    evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    return new CaDataHandler(this).processCA(sh, evaluator, clubId);
+                } else {
+                    invalidSheets.put(sheetName, f.getPath());
+                }
+            } else if (rows > 38 && rows < 50 && columns < 45 && columns > 35) {
+                boolean bTimeMatch = false;
+                Calendar c = Calendar.getInstance();
+                c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                    bTimeMatch = true;
+                }
+
+                if (clubId == -1) {
+                    clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
+                }
+
+                if (bTimeMatch && clubId != -1) {
+                    logger.info("### Found PJ ### sheet: "+sheetName+", clubId: "+clubId);
+                    evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    return new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+                } else {
+                    invalidSheets.put(sheetName, f.getPath());
+                }
+            } else {
+                invalidSheets.put(sheetName, f.getPath());
+            }
+        } catch (Exception e) {
+            logger.error(">>> ERROR <<< file: " + f + ", sheet: " + sheetName, e);
         }
+        return false;
     }
 
     int getCellIntValue(Sheet sh, int row, int col) {

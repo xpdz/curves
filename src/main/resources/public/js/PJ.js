@@ -116,13 +116,13 @@ function fillSheet(pjSum) {
         $tbd.append($(row));
     }
 
-    if (currentYear === thisYear && currentMonth === thisMonth) {
+    if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
         $('#btnSave').prop("disabled", false);
         $('[contenteditable]').css('border', '1px dashed !important');
         $('[contenteditable="false"]').prop('contenteditable', true);
     } else {
         $('#btnSave').prop("disabled", true);
-        $('#btnSave').toggleClass('btn-success btn-default')
+        $('#btnSave').toggleClass('btn-success btn-default');
         $('[contenteditable]').css('border', '1px solid #ddd !important');
         $('[contenteditable="true"]').prop('contenteditable', false);
     }
@@ -196,7 +196,7 @@ function fillSummary(pjSum) {
 
     $('div[contenteditable="true"]').focusout(function() {
         runFormula();
-    }).focusin(function(e) {
+    }).focusin(function() {
         $(this).popover('show');
     }).keydown(function(e) {
         // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
@@ -346,7 +346,7 @@ $("#btnSave").click(function() {
         'url': "/rest/PJ",
         'data': JSON.stringify(pjSum),
         'dataType': 'json'
-    }).done(function(data) {
+    }).done(function() {
         showAlert("alert-success", "Save successfully.");
     }).fail(function() {
         showAlert("alert-danger", "Save Fail. Please refresh and retry.");
@@ -441,12 +441,12 @@ function runFormula() {
     $('#exits').text(exits);
     $('#increment').text(newSales-exits+Number($('#shiftIn').text())-Number($('#shiftOut').text()));
     $('#revenue').text(newSalesRevenue+duesDraftsRevenue+productsRevenue+otherRevenue);
-    if (faSum != 0) {
+    if (faSum !== 0) {
         $('#salesRatio').text((newSales*100/faSum).toFixed(0) + "%");
     }
 
     var enrolled = Number($('#enrolled').text());
-    if (enrolled != 0) {
+    if (enrolled !== 0) {
         $('#exitRatio').text((exits*100/enrolled).toFixed(1) + "%");
         var leaves = Number($('#leaves').text());
         $('#leaveRatio').text((leaves*100/enrolled).toFixed(1) + "%");

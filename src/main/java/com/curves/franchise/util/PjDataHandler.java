@@ -25,15 +25,16 @@ public class PjDataHandler {
         this.cp = cp;
     }
 
-    public void processPJ(Sheet sh, FormulaEvaluator evaluator, int clubId) {
+    public boolean processPJ(Sheet sh, FormulaEvaluator evaluator, int clubId) {
         this.evaluator = evaluator;
 
         Calendar c = Calendar.getInstance();
         c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
         int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int sumRowIdx = lastDayOfMonth + 5;
-        for (Cell cTest = sh.getRow(sumRowIdx).getCell(3); cTest != null;cTest = sh.getRow(sumRowIdx).getCell(3)) {
-            if (sumRowIdx > 45 || Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
+        int sumRowIdx = 20;
+        while (sumRowIdx < 45) {
+            Cell cTest = sh.getRow(sumRowIdx).getCell(38);
+            if (Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
                 break;
             }
             sumRowIdx++;
@@ -82,20 +83,22 @@ public class PjDataHandler {
         }
         cp.pjSumRepo.save(pjSum);
 
-        logger.info("### PJ Saved ### clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth());
+        logger.info("### PJ Saved ### clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
+
+        return true;
     }
 
     private void setupPjSum(Sheet sh, int sumRowIdx, PjSum pjSum) {
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(3));pjSum.setWorkingDays((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(3));pjSum.setWorkingDays((float) cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setMaxWorkOuts(cp.getCellIntValue(sh, sumRowIdx, 4));} catch (Exception e) {}
         try {pjSum.setNewSalesRevenue(cp.getCellIntValue(sh, sumRowIdx, 5));} catch (Exception e) {}
         try {pjSum.setDuesDraftsRevenue(cp.getCellIntValue(sh, sumRowIdx, 6));} catch (Exception e) {}
         try {pjSum.setProductsRevenue(cp.getCellIntValue(sh, sumRowIdx, 7));} catch (Exception e) {}
         try {pjSum.setRevenue(cp.getCellIntValue(sh, sumRowIdx, 8));} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(9));pjSum.setExitRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(10));pjSum.setLeaveRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(9));pjSum.setExitRatio((float) cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(10));pjSum.setLeaveRatio((float) cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setNewSales(cp.getCellIntValue(sh, sumRowIdx, 11));} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(12));pjSum.setSalesRatio((float)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(12));pjSum.setSalesRatio((float) cellValue.getNumberValue());} catch (Exception e) {}
         try {pjSum.setBrOwnRef(cp.getCellIntValue(sh, sumRowIdx, 13));} catch (Exception e) {}
         try {pjSum.setBrOthersRef(cp.getCellIntValue(sh, sumRowIdx, 14));} catch (Exception e) {}
         try {pjSum.setBrandedTv(cp.getCellIntValue(sh, sumRowIdx, 15));} catch (Exception e) {}

@@ -34,7 +34,7 @@ function getBenchmarking() {
     $.getJSON("/rest/benchmarking", {year: currentYear, month: currentMonth}, function(respData) {
         for (var key in respData) {
             if (respData.hasOwnProperty(key)) {
-                var you = respData[key]['you'], max = respData[key]['max'], mid = respData[key]['mid'], min = respData[key]['min']
+                var you = respData[key].you, max = respData[key].max, mid = respData[key].mid, min = respData[key].min,
                     maxMid = mid + (max - mid) / 2, midMin = min + (mid - min) / 2;
                 $('#'+key+'-1').text(formatValue(key, max));
                 $('#'+key+'-5').text(formatValue(key, mid));
@@ -64,7 +64,7 @@ function getBenchmarking() {
                 }
                 $divYou.text(formatValue(key, you));
                 $divYou.addClass('you');
-                $('#'+key).text(respData[key]['rank'] + '/' + respData[key]['total']);
+                $('#'+key).text(respData[key].rank + '/' + respData[key].total);
             }
         }
     }).fail(function() {

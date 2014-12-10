@@ -65,6 +65,6 @@ public class RedirectController {
 
     @RequestMapping(value = "/rest/data", method = RequestMethod.GET)
     public void processData(@RequestParam("dir") String dir) throws Exception {
-        new CurvesParser(pjSumRepo, caRepo, clubRepo, dir).processAll();
+        new CurvesParser(pjSumRepo, caRepo, clubRepo, dir).process();
     }
 }
