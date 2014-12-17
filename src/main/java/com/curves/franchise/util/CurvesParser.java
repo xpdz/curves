@@ -59,9 +59,6 @@ public class CurvesParser {
         } else if (dir.equals("TEST")) {
             fdl += File.separator + "test";
             // ?dir=TEST
-            String[] ym = dir.split("-");
-            this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
-            this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
             for (int y = 2011; y < 2015; y++) {
                 this.year = y;
                 for (int m = 0; m < 12; m++) {
@@ -152,14 +149,14 @@ public class CurvesParser {
                             bTimeMatch  = true;
                         }
                     }
-                } catch (NumberFormatException e) {
-                }
-                if (!bTimeMatch) {
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
-                    if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
-                        bTimeMatch = true;
+                    if (!bTimeMatch) {
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
+                        if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                            bTimeMatch = true;
+                        }
                     }
+                } catch (Exception e) {
                 }
                 if (bTimeMatch) {
                     logger.info("*** Found CA *** sheet: " + sheetName + ", clubId: " + clubId);
@@ -180,7 +177,7 @@ public class CurvesParser {
                     clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
                 }
 
-                if (bTimeMatch && clubId != -1) {
+                if (bTimeMatch && clubId > 0) {
                     logger.info("### Found PJ ### sheet: "+sheetName+", clubId: "+clubId);
                     evaluator = wb.getCreationHelper().createFormulaEvaluator();
                     return new PjDataHandler(this).processPJ(sh, evaluator, clubId);

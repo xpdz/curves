@@ -32,6 +32,7 @@ getBenchmarking();
 
 function getBenchmarking() {
     $.getJSON("/rest/benchmarking", {year: currentYear, month: currentMonth}, function(respData) {
+        $('td div').removeClass('you').html('&nbsp;');
         for (var key in respData) {
             if (respData.hasOwnProperty(key)) {
                 var you = respData[key].you, max = respData[key].max, mid = respData[key].mid, min = respData[key].min,
@@ -39,7 +40,7 @@ function getBenchmarking() {
                 $('#'+key+'-1').text(formatValue(key, max));
                 $('#'+key+'-5').text(formatValue(key, mid));
                 $('#'+key+'-9').text(formatValue(key, min));
-                if ( !you ) {
+                if ( you == undefined) {
                     continue;
                 }
                 var $divYou;
@@ -73,9 +74,9 @@ function getBenchmarking() {
 }
 
 function formatValue(item, value) {
-    if (item === 'salesRatio6') {
+    if (item === 'SalesRatio6') {
         return (value*100).toFixed(0)+'%';
-    } else if (item === 'cmHandFlyerHours6' || item === 'cmOutGpHours6') {
+    } else if (item === 'CmHandFlyerHours6' || item === 'CmOutGpHours6') {
         return value.toFixed(1);
     } else {
         return value.toFixed(0);

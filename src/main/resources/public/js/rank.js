@@ -39,7 +39,7 @@ $('#btnSave').click(function() {
         });
 });
 
-$('a').click(function() {
+$('a[href="#"]').click(function() {
     item = $(this).attr('id');
     $('#itemTitle').text($(this).text());
     getGoal();

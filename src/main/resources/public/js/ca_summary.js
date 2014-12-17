@@ -61,6 +61,10 @@ $('#btnLoad').click(function() {
     getCaSummary();
 });
 
+$('#btnExport').click(function() {
+    window.location = "rest/CA_summary?clubId="+clubId+"&yStart="+yStart+"&yEnd="+yEnd+"&mStart="+mStart+"&mEnd="+mEnd;
+});
+
 // init CA page
 getCaSummary();
 
@@ -85,6 +89,7 @@ function getCaSummary() {
 function fillSheet(cas) {
     for (var i = 1; i <= cas.length; i++) {
         var ca = cas[i-1];
+        console.log("----"+ca.svcHoldRatio6+", "+ca.salesAchAppRatio6);
         $('th[name="mth'+i+'"]').text(ca.caYear+'-'+(ca.caMonth+1));
         $('#svcTm-'+i).text(ca.svcTm6);
         $('#svcShift-'+i).text(ca.svcShift6);
@@ -139,11 +144,6 @@ function fillSheet(cas) {
         $('#cmApoTotal-'+i).text(ca.cmApoTotal6);
         $('#cmInApptRatio-'+i).text((ca.cmInApptRatio6*100).toFixed(0)+'%');
         $('#cmOutApptRatio-'+i).text((ca.cmOutApptRatio6*100).toFixed(0)+'%');
-        $('#cmPostPerApo-'+i).text(ca.cmPostPerApo6);
-        $('#cmHandPerApo-'+i).text(ca.cmHandPerApo6);
-        $('#cmHandHoursPerApo-'+i).text(ca.cmHandHoursPerApo6.toFixed(1));
-        $('#cmOutGpHoursPerApo-'+i).text(ca.cmOutGpHoursPerApo6.toFixed(1));
-        $('#cmOutGpPerApo-'+i).text(ca.cmOutGpPerApo6);
         $('#cmBrAgpRatio-'+i).text((ca.cmBrAgpRatio6*100).toFixed(0)+'%');
         $('#cmFaSum-'+i).text(ca.cmFaSum6);
         $('#cmShowRatio-'+i).text((ca.cmShowRatio6*100).toFixed(0)+'%');

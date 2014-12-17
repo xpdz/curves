@@ -62,6 +62,10 @@ $('#btnLoad').click(function() {
     getPjSummary();
 });
 
+$('#btnExport').click(function() {
+    window.location = "rest/PJ_summary?clubId="+clubId+"&yStart="+yStart+"&yEnd="+yEnd+"&mStart="+mStart+"&mEnd="+mEnd;
+});
+
 // init CA page
 getPjSummary();
 
@@ -86,39 +90,13 @@ function getPjSummary() {
 function fillSheet(pjs) {
     $tbd.empty();
     var t1=0,t2=0,t3=0,t4=0,t5=0,t6=0,t7=0,t8=0,t9=0,t10=0,t11=0,t12=0,t13=0,t14=0,t15=0,t16=0,t17=0,t18=0,t19=0,t20=0,t21=0,t22=0;
-    for (var i = 1; i <= pjs.length; i++) {
-        var pj = pjs[i-1];
+    for (var i = 0; i < pjs.length; i++) {
+        var pj = pjs[i];
         t1 += pj.newSales; t2 += pj.exits; t3 += pj.shiftIn; t4 += pj.shiftOut; t5 += pj.increment; t6 += pj.revenue;
         t7 += pj.enrolled; t8 += pj.leaves; t9 += pj.valids; t10 += pj.salesRatio; t11 += pj.exitRatio;
         t12 += pj.leaveRatio; t13 += pj.maxWorkOuts; t14 += pj.newSalesRevenue; t15 += pj.duesDraftsRevenue;
         t16 += pj.productsRevenue; t17 += pj.otherRevenue; t18 += pj.faSum; t19 += pj.enrollAch;
         t20 += pj.enrollMonthly; t21 += pj.enrollAllPrepay; t22 += pj.exits;
-        $tbd.append($('<tr/>').append(
-            $('<td>' + pj.year + '</td>'),
-            $('<td>' + (pj.month+1) + '</td>'),
-            $('<td>' + pj.newSales + '</td>'),
-            $('<td>' + pj.exits + '</td>'),
-            $('<td>' + pj.shiftIn + '</td>'),
-            $('<td>' + pj.shiftOut + '</td>'),
-            $('<td>' + pj.increment + '</td>'),
-            $('<td>' + pj.revenue + '</td>'),
-            $('<td>' + pj.enrolled + '</td>'),
-            $('<td>' + pj.leaves + '</td>'),
-            $('<td>' + pj.valids + '</td>'),
-            $('<td>' + (pj.salesRatio*100).toFixed(0) + '%</td>'),
-            $('<td>' + (pj.exitRatio*100).toFixed(0) + '%</td>'),
-            $('<td>' + (pj.leaveRatio*100).toFixed(0) + '%</td>'),
-            $('<td>' + pj.maxWorkOuts + '</td>'),
-            $('<td>' + pj.newSalesRevenue + '</td>'),
-            $('<td>' + pj.duesDraftsRevenue + '</td>'),
-            $('<td>' + pj.productsRevenue + '</td>'),
-            $('<td>' + pj.otherRevenue + '</td>'),
-            $('<td>' + pj.faSum + '</td>'),
-            $('<td>' + pj.enrollAch + '</td>'),
-            $('<td>' + pj.enrollMonthly + '</td>'),
-            $('<td>' + pj.enrollAllPrepay + '</td>'),
-            $('<td>' + pj.exits + '</td>')
-        ));
     }
     $tbd.append($('<tr style="background-color: lightGray"/>').append(
         $('<td colspan="2">AVG</td>'),
@@ -170,6 +148,35 @@ function fillSheet(pjs) {
         $('<td>' + t21 + '</td>'),
         $('<td>' + t22 + '</td>')
     ));
+    for (var i = 0; i < pjs.length; i++) {
+        var pj = pjs[i];
+        $tbd.append($('<tr/>').append(
+            $('<td>' + pj.year + '</td>'),
+            $('<td>' + (pj.month+1) + '</td>'),
+            $('<td>' + pj.newSales + '</td>'),
+            $('<td>' + pj.exits + '</td>'),
+            $('<td>' + pj.shiftIn + '</td>'),
+            $('<td>' + pj.shiftOut + '</td>'),
+            $('<td>' + pj.increment + '</td>'),
+            $('<td>' + pj.revenue + '</td>'),
+            $('<td>' + pj.enrolled + '</td>'),
+            $('<td>' + pj.leaves + '</td>'),
+            $('<td>' + pj.valids + '</td>'),
+            $('<td>' + (pj.salesRatio*100).toFixed(0) + '%</td>'),
+            $('<td>' + (pj.exitRatio*100).toFixed(0) + '%</td>'),
+            $('<td>' + (pj.leaveRatio*100).toFixed(0) + '%</td>'),
+            $('<td>' + pj.maxWorkOuts + '</td>'),
+            $('<td>' + pj.newSalesRevenue + '</td>'),
+            $('<td>' + pj.duesDraftsRevenue + '</td>'),
+            $('<td>' + pj.productsRevenue + '</td>'),
+            $('<td>' + pj.otherRevenue + '</td>'),
+            $('<td>' + pj.faSum + '</td>'),
+            $('<td>' + pj.enrollAch + '</td>'),
+            $('<td>' + pj.enrollMonthly + '</td>'),
+            $('<td>' + pj.enrollAllPrepay + '</td>'),
+            $('<td>' + pj.exits + '</td>')
+        ));
+    }
 }
 
 });
