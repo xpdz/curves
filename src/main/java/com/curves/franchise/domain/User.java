@@ -2,18 +2,20 @@ package com.curves.franchise.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "users")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private int username;
+    private String username;
     private String password;
     private boolean enabled;
 
-    public void setUsername(int username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -29,7 +31,7 @@ public class User implements Serializable {
         return serialVersionUID;
     }
 
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
 

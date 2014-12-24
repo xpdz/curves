@@ -1,6 +1,5 @@
 package com.curves.franchise.web;
 
-import com.curves.franchise.domain.Club;
 import com.curves.franchise.repository.CaRepository;
 import com.curves.franchise.repository.ClubRepository;
 import com.curves.franchise.repository.PjSumRepository;
@@ -47,17 +46,20 @@ public class RedirectController {
         return "redirect:index.htm";
     }
 
-    @RequestMapping(value = "/showTrends")
+    @RequestMapping("/showTrends")
     public String showTrends(@RequestParam("clubId") int clubId) {
         return "redirect:trends.htm?clubId=" + clubId;
     }
 
     @RequestMapping("/rest/whoami")
-    public @ResponseBody Club whoAmI(@AuthenticationPrincipal UserDetails user) {
-        return clubRepo.findOne(Integer.parseInt(user.getUsername()));
+    @ResponseBody
+    public String whoAmI(@AuthenticationPrincipal UserDetails user) {
+        logger.info("----whoAmI----"+user.getUsername());
+        return user.getUsername();
     }
 
     @RequestMapping("/errorMsg")
+    @ResponseBody
     public String loginError() {
         logger.info("----YJY----error");
         return "error";

@@ -60,7 +60,12 @@
             <li class="active"><a href="#">Benchmarking</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+            <li class="dropdown active">
+              <a href="#" class="dropdown-toggle" id="userId" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" id="btnChangePassword">Change Password</a></li>
+              </ul>
+            </li>
             <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
           </ul>
         </div>
@@ -68,13 +73,13 @@
     </nav>
 
     <div class="row">
+      <div class="alert hide" role="alert" id="alertMain"></div>
+    </div>
+    <div class="row">
       <div class="col-md-2">
         <div class="input-group date">
           <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="alert hide" role="alert"></div>
       </div>
     </div>
     <div class="row">
@@ -103,7 +108,7 @@
         </thead>
         <tbody>
         <tr>
-          <td style="text-decoration: underline; font-weight: bold">Best</td>
+          <td style="text-decoration: underline; font-weight: bold">每月KPI的最大值</td>
            <td><div class="bmw" id="CmPostFlyer6-1">&nbsp;</div></td>
            <td><div class="bmw" id ="CmHandFlyer6-1">&nbsp;</div></td>
            <td><div class="bmw" id ="CmOutGp6-1">&nbsp;</div></td>
@@ -183,7 +188,7 @@
            <td><div id="SalesRatio6-4">&nbsp;</div></td>
         </tr>
         <tr>
-          <td style="text-decoration: underline; font-weight: bold">Median</td>
+          <td style="text-decoration: underline; font-weight: bold">高均標 (前3級的平均值)</td>
            <td><div class="bmw" id ="CmPostFlyer6-5">&nbsp;</div></td>
            <td><div class="bmw" id ="CmHandFlyer6-5">&nbsp;</div></td>
            <td><div class="bmw" id ="CmOutGp6-5">&nbsp;</div></td>
@@ -283,7 +288,7 @@
            <td><div class="bmw" id ="SalesRatio6-9">&nbsp;</div></td>
         </tr>
         <tr style="border: 1px solid !important">
-          <td style="border: none; font-weight: bold; color: #6600CC">Rank</td>
+          <td style="border: none; font-weight: bold; color: #6600CC">平均標與自店級數 (10個為1級，1級為最高、10級最低)</td>
            <td style="border: 1px solid !important; font-weight: bold; color: #6600CC"><div id="CmPostFlyer6">&nbsp;</div></td>
            <td style="border: 1px solid !important; font-weight: bold; color: #6600CC"><div id="CmHandFlyer6">&nbsp;</div></td>
            <td style="border: 1px solid !important; font-weight: bold; color: #6600CC"><div id="CmOutGp6">&nbsp;</div></td>
@@ -306,11 +311,40 @@
       </table>
     </div>
 
+    <div class="modal fade" id="dlgPassword" tabindex="-1" role="dialog" aria-labelledby="passwdLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" data-toggle="modal" data-target="#dlgPassword">Password</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="alert hide" role="alert" id="alertPasswd"></div>
+            </div>
+            <form role="form">
+              <div class="form-group">
+                <label for="passwd1">New Password</label>
+                <input type="password" class="form-control" id="passwd1" placeholder="New Password">
+              </div>
+              <div class="form-group">
+                <label for="passwd2">Password Again</label>
+                <input type="password" class="form-control" id="passwd2" placeholder="Password Again">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="btnSave2">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <script src="js/jquery-2.1.1.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
     <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
-		<script src="js/site.js"></script>
     <script src="js/benchmarking.js"></script>
   </div>
   </body>

@@ -52,7 +52,7 @@ public class CurvesParser {
                 for (int m = 0; m < 12; m++) {
                     this.month = m;
                     String folder = fdl + File.separator + y + File.separator + y + (m < 9 ? "0" + (m+1) : (m+1));
-                    logger.info("---ALL enter folder---"+folder);
+                    logger.info("---ALL "+y+"-"+(m+1)+" enter folder---"+folder);
                     processWorkbooks(FileUtils.listFiles(new File(folder), null, true));
                 }
             }
@@ -63,7 +63,7 @@ public class CurvesParser {
                 this.year = y;
                 for (int m = 0; m < 12; m++) {
                     this.month = m;
-                    logger.info("---TEST enter folder---"+fdl);
+                    logger.info("---TEST "+y+"-"+(m+1)+" enter folder---"+fdl+"");
                     processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
                 }
             }
@@ -73,7 +73,7 @@ public class CurvesParser {
             String[] ym = dir.split("-");
             this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
             this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
-            logger.info("---TEST-XXXXXX enter folder---"+fdl);
+            logger.info("---TEST-"+ym[ym.length - 1]+" enter folder---"+fdl);
             processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
         } else {
             // ?dir=201408
@@ -83,7 +83,7 @@ public class CurvesParser {
             this.year = Integer.parseInt(y);
             this.month = Integer.parseInt(m) - 1;
             fdl += File.separator + y + File.separator + y + m;
-            logger.info("---XXXXXX enter folder---"+fdl);
+            logger.info("---"+ym[ym.length - 1]+" enter folder---"+fdl);
             processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
         }
 
@@ -128,6 +128,8 @@ public class CurvesParser {
         int rows = sh.getLastRowNum();
         if (rows <= 0) {
             return false;
+        } else if (rows == 65535) {
+            rows = 45;
         }
         try {
             int columns = sh.getRow(0).getLastCellNum();

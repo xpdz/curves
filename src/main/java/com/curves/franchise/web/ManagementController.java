@@ -1,13 +1,7 @@
 package com.curves.franchise.web;
 
-import com.curves.franchise.domain.Ca;
-import com.curves.franchise.domain.Club;
-import com.curves.franchise.domain.Goal;
-import com.curves.franchise.domain.PjSum;
-import com.curves.franchise.repository.CaRepository;
-import com.curves.franchise.repository.ClubRepository;
-import com.curves.franchise.repository.GoalRepository;
-import com.curves.franchise.repository.PjSumRepository;
+import com.curves.franchise.domain.*;
+import com.curves.franchise.repository.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -34,6 +28,9 @@ public class ManagementController {
     private ClubRepository clubRepo;
 
     @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
     private GoalRepository goalRepo;
 
     @Autowired
@@ -45,15 +42,36 @@ public class ManagementController {
     @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
     @ResponseBody
     public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name, @RequestParam("owner") String owner) {
+        logger.info("---saveUser---clubId: "+clubId+", name: "+name+", owner: "+owner);
         Club club = new Club();
         club.setClubId(clubId);
         club.setName(name);
         club.setOwner(owner);
+
+        User user = new User();
+        user.setUsername("" + clubId);
+        user.setPassword("" + clubId);
+        user.setEnabled(true);
+
         try {
             clubRepo.save(club);
+            userRepo.save(user);
         } catch (Exception e) {
             return null;
         }
+        return "";
+    }
+
+    @RequestMapping(value = "/rest/changePassword", method = RequestMethod.POST)
+    @ResponseBody
+    public String changePassword(@RequestParam("clubId") String clubId, @RequestParam("password") String password) {
+        logger.info("---changePassword---clubId: "+clubId);
+        User user = userRepo.findByUsername(clubId);
+        if (user == null) {
+            return null;
+        }
+        user.setPassword(password);
+        userRepo.save(user);
         return "";
     }
 

@@ -36,12 +36,20 @@
               <li class="active"><a href="#">Benchmarking</a></li>
 			      </ul>
 			      <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#" id="userId"><i class="fa fa-user"></i></a></li>
+              <li class="dropdown active">
+                <a href="#" class="dropdown-toggle" id="userId" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#" id="btnChangePassword">Change Password</a></li>
+                </ul>
+              </li>
               <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
 			      </ul>
 			    </div><!-- /.navbar-collapse -->
 			  </div><!-- /.container-fluid -->
 			</nav>
+      <div class="row">
+        <div class="alert hide" role="alert" id="alertMain"></div>
+      </div>
       <div class="row">
         <div class="col-md-2">
           <div class="input-group date">
@@ -56,23 +64,23 @@
               <span class="sr-only">信箱傳單投遞張數</span>
             </button>
             <ul class="dropdown-menu" role="menu">
-              <li><a href= "#" id="cmPostFlyer6">信箱傳單投遞張數</a></li>
-              <li><a href= "#" id="cmHandFlyer6">員工手發傳單的張數</a></li>
-              <li><a href= "#" id="cmOutGp6">店外GP的張数</a></li>
-              <li><a href= "#" id="cmHandFlyerHours6">員工手發傳單的時數</a></li>
-              <li><a href= "#" id="cmOutGpHours6">店外GP的时数</a></li>
-              <li><a href= "#" id="cmCpBox6">CP拜訪、檢查Lead Box的次數</a></li>
-              <li><a href= "#" id="cmApoTotal6">APO總數</a></li>
-              <li><a href= "#" id="cmFaSum6">TOG人數(全部做FA人次)</a></li>
-              <li><a href= "#" id="salesAch6">入會數</a></li>
-              <li><a href= "#" id="salesRatio6">結案率</a></li>
-              <li><a href= "#" id="newSalesRevenue">新銷售營收</a></li>
-              <li><a href= "#" id="duesDraftsRevenue">月費收入</a></li>
-              <li><a href= "#" id="productsRevenue">商品</a></li>
-              <li><a href= "#" id="revenue">本月總營收</a></li>
-              <li><a href= "#" id="cmOwnRefs6">會員介紹 (本店)</a></li>
-              <li><a href= "#" id="cmOutAgpOut6">從店外得到的人名的APO數</a></li>
-              <li><a href= "#" id="cmInAgpOut6">從店內得到的人名的APO數</a></li>
+              <li><a href= "#" name="cmPostFlyer6">信箱傳單投遞張數</a></li>
+              <li><a href= "#" name="cmHandFlyer6">員工手發傳單的張數</a></li>
+              <li><a href= "#" name="cmOutGp6">店外GP的張数</a></li>
+              <li><a href= "#" name="cmHandFlyerHours6">員工手發傳單的時數</a></li>
+              <li><a href= "#" name="cmOutGpHours6">店外GP的时数</a></li>
+              <li><a href= "#" name="cmCpBox6">CP拜訪、檢查Lead Box的次數</a></li>
+              <li><a href= "#" name="cmApoTotal6">APO總數</a></li>
+              <li><a href= "#" name="cmFaSum6">TOG人數(全部做FA人次)</a></li>
+              <li><a href= "#" name="salesAch6">入會數</a></li>
+              <li><a href= "#" name="salesRatio6">結案率</a></li>
+              <li><a href= "#" name="newSalesRevenue">新銷售營收</a></li>
+              <li><a href= "#" name="duesDraftsRevenue">月費收入</a></li>
+              <li><a href= "#" name="productsRevenue">商品</a></li>
+              <li><a href= "#" name="revenue">本月總營收</a></li>
+              <li><a href= "#" name="cmOwnRefs6">會員介紹 (本店)</a></li>
+              <li><a href= "#" name="cmOutAgpOut6">從店外得到的人名的APO數</a></li>
+              <li><a href= "#" name="cmInAgpOut6">從店內得到的人名的APO數</a></li>
             </ul>
           </div>
         </div>
@@ -84,9 +92,6 @@
         </div>
         <div class="col-md-2">
           <h4>Average : <span class="label label-default" id="avgRank"></span></h4>
-        </div>
-        <div class="col-md-3">
-          <div class="alert hide" role="alert"></div>
         </div>
       </div>
 			<div class="row">
@@ -105,12 +110,40 @@
 			</div>
 		</div>
 
+    <div class="modal fade" id="dlgPassword" tabindex="-1" role="dialog" aria-labelledby="passwdLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" data-toggle="modal" data-target="#dlgPassword">Password</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="alert hide" role="alert" id="alertPasswd"></div>
+            </div>
+            <form role="form">
+              <div class="form-group">
+                <label for="passwd1">New Password</label>
+                <input type="password" class="form-control" id="passwd1" placeholder="New Password">
+              </div>
+              <div class="form-group">
+                <label for="passwd2">Password Again</label>
+                <input type="password" class="form-control" id="passwd2" placeholder="Password Again">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="btnSave2">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <script src="js/jquery-2.1.1.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
     <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
-		<script src="js/site.js"></script>
     <script src="js/rank.js"></script>
 	</body>
 </html>

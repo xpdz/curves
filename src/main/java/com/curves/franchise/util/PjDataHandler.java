@@ -2,10 +2,7 @@ package com.curves.franchise.util;
 
 import com.curves.franchise.domain.Pj;
 import com.curves.franchise.domain.PjSum;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +28,16 @@ public class PjDataHandler {
         Calendar c = Calendar.getInstance();
         c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
         int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int sumRowIdx = 20;
-        while (sumRowIdx < 45) {
-            Cell cTest = sh.getRow(sumRowIdx).getCell(38);
-            if (Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
-                break;
+        int sumRowIdx = 45;
+        while (sumRowIdx > 20) {
+            Row row = sh.getRow(sumRowIdx);
+            if (row != null) {
+                Cell cTest = row.getCell(38);
+                if (cTest != null && Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
+                    break;
+                }
             }
-            sumRowIdx++;
+            sumRowIdx--;
         }
 
         PjSum pjSum = new PjSum();
