@@ -31,6 +31,9 @@ public class ManagementController {
     private UserRepository userRepo;
 
     @Autowired
+    private AuthoritiesRepository authoritiesRepo;
+
+    @Autowired
     private GoalRepository goalRepo;
 
     @Autowired
@@ -50,12 +53,17 @@ public class ManagementController {
 
         User user = new User();
         user.setUsername("" + clubId);
-        user.setPassword("" + clubId);
+        user.setPassword(new BCryptPasswordEncoder(8).encode("" + clubId));
         user.setEnabled(true);
+
+        Authorities authorities = new Authorities();
+        authorities.setUsername("" + clubId);
+        authorities.setAuthority("ROLE_USER");
 
         try {
             clubRepo.save(club);
             userRepo.save(user);
+            authoritiesRepo.save(authorities);
         } catch (Exception e) {
             return null;
         }
@@ -70,14 +78,14 @@ public class ManagementController {
         if (user == null) {
             return null;
         }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
         user.setPassword(encoder.encode(password));
         userRepo.save(user);
         return "";
     }
 
     @RequestMapping(value = "/rest/reset_password")
-    public void processPassword(@RequestParam("clubId") String clubId) throws Exception {
+    public void resetPassword(@RequestParam("clubId") String clubId) throws Exception {
         logger.info("Request reset password! user: "+clubId);
         User user = userRepo.findByUsername(clubId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);

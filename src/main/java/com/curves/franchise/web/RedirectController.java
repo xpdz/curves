@@ -14,10 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -39,8 +36,8 @@ public class RedirectController {
 
     @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET, RequestMethod.POST})
     public String loginSuccess(@AuthenticationPrincipal UserDetails user) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
-        logger.info("---loginSuccess---user: " + user.getUsername()+","+encoder.encode("1"));
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+        logger.info("---loginSuccess---user: " + user.getUsername());
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         for (GrantedAuthority auth : authorities) {
             String role = auth.getAuthority();
@@ -78,13 +75,22 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/password")
-    public void processPassword() throws Exception {
+    public void resetPassword4All() throws Exception {
         Iterable<User> users = userRepo.findAll();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
         for (User user : users) {
-            user.setPassword(encoder.encode(user.getPassword()));
+            user.setPassword(encoder.encode(user.getUsername()));
             logger.info("encrypt user: "+user.getUsername()+" with password: "+user.getPassword());
             userRepo.save(user);
         }
+    }
+
+    @RequestMapping(value = "/rest/password/{userId}")
+    public void resetPassword4User(@PathVariable String userId) throws Exception {
+        User user = userRepo.findByUsername(userId);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+        user.setPassword(encoder.encode(user.getUsername()));
+        logger.info("encrypt user: "+user.getUsername()+" with password: "+user.getPassword());
+        userRepo.save(user);
     }
 }
