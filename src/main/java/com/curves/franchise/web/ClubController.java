@@ -26,6 +26,7 @@ public class ClubController {
     @RequestMapping("/rest/clubs/{clubId}")
     @ResponseBody
     public Club getClub(@PathVariable int clubId, @AuthenticationPrincipal UserDetails user) {
+        logger.info("---getClub---"+clubId+", user: "+user.getUsername());
         return clubRepo.findOne(clubId == -1 ? Integer.parseInt(user.getUsername()) : clubId);
     }
 

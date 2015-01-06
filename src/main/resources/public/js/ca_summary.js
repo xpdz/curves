@@ -3,9 +3,9 @@ $(document).ready(function() {
     var clubId = $.QueryString.clubId,
         clubName = $.QueryString.clubName,
         clubOwner = $.QueryString.clubOwner;
-    $('th[name="clubId"').text(clubId);
-    $('th[name="clubName"').text(clubName);
-    $('th[name="clubOwner"').text(clubOwner);
+    $('th[name="clubId"]').text(clubId);
+    $('th[name="clubName"]').text(clubName);
+    $('th[name="clubOwner"]').text(clubOwner);
 
     var today = new Date();
     var dt = new Date(today.getFullYear(), today.getMonth()-1, 1);

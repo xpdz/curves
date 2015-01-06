@@ -62,10 +62,18 @@ $(document).ready(function() {
     });
 
     function formatValue(item, value) {
-      if (item.indexOf('Ratio') != -1) {
-        return (value*100).toFixed(0)+'%';
+      if (item.indexOf('Ratio') != -1 || item === 'SvcMaxWo6' || item === 'Svc12_6'
+       || item === 'Svc8to11_6' || item === 'Svc4to7_6' || item === 'Svc1to3_6' || item === 'Svc0_6') {
+        if (item.indexOf('ExitsRatio') != -1 || item.indexOf('HoldRatio') != -1) {
+          return (value*100).toFixed(1)+'%';
+        } else {
+          return (value*100).toFixed(0)+'%';
+        }
+      } else if (item === 'SvcAvgWo6' || item === 'CmHandFlyerHours6' || item === 'CmOutGpHours6'
+       || item === 'CmHandHoursPerApo6' || item === 'CmOutGpHoursPerApo6') {
+        return value.toFixed(1);
       } else {
-        return Number(value).toFixed(0);
+        return value.toFixed(0);
       }
     }
   });

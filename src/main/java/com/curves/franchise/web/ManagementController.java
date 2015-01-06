@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.*;
 
 @RestController
@@ -70,9 +70,19 @@ public class ManagementController {
         if (user == null) {
             return null;
         }
-        user.setPassword(password);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+        user.setPassword(encoder.encode(password));
         userRepo.save(user);
         return "";
+    }
+
+    @RequestMapping(value = "/rest/reset_password")
+    public void processPassword(@RequestParam("clubId") String clubId) throws Exception {
+        logger.info("Request reset password! user: "+clubId);
+        User user = userRepo.findByUsername(clubId);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
+        user.setPassword(encoder.encode(clubId));
+        userRepo.save(user);
     }
 
     @RequestMapping(value = "/rest/goal")
@@ -213,14 +223,14 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/CaAll")
     @ResponseBody
-    public Map<String, Map<String, String>> findCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
+    public Map<String, Map<String, Number>> findCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
         logger.info("---findCaAll---caYear: " + caYear + ", caMonth: " + caMonth);
         return new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
     }
 
     @RequestMapping(value = "/rest/CaAll/stat")
     @ResponseBody
-    public Map<String, Map<String, String>> findCaAllStat(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
+    public Map<String, Map<String, Number>> findCaAllStat(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
         logger.info("---findCaAll/stat---caYear: " + caYear + ", caMonth: " + caMonth);
         return new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
     }
@@ -243,18 +253,22 @@ public class ManagementController {
         }
 
         Sheet sh = wb.getSheetAt(0);
+        CellStyle cellStyle0 = wb.createCellStyle();
+        cellStyle0.setDataFormat((short)9);
+        CellStyle cellStyle1 = wb.createCellStyle();
+        cellStyle1.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
 
-        Map<String, Map<String, String>> itemStatMap = new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
-        Map<String, Map<String, String>> clubMap = new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
+        Map<String, Map<String, Number>> itemStatMap = new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
+        Map<String, Map<String, Number>> clubMap = new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
         Set<String> keyItem = itemStatMap.keySet();
         int rowIdx = 1;
         for (String item : keyItem) {
-            Map<String, String> statMap = itemStatMap.get(item);
+            Map<String, Number> statMap = itemStatMap.get(item);
             Row row = sh.getRow(rowIdx);
-            row.createCell(3, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("sum")));
-            row.createCell(4, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("avg")));
-            row.createCell(5, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("highest")));
-            row.createCell(6, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, statMap.get("lowest")));
+            formatValue(wb, row.createCell(3), item, statMap.get("sum"));
+            formatValue(wb, row.createCell(4), item, statMap.get("avg"));
+            formatValue(wb, row.createCell(5), item, statMap.get("highest"));
+            formatValue(wb, row.createCell(6), item, statMap.get("lowest"));
             rowIdx++;
             if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
                 rowIdx = creatBlankCell4Sum(sh, rowIdx);
@@ -268,16 +282,16 @@ public class ManagementController {
         Set<String> keyClubs = clubMap.keySet();
         for (String clubName : keyClubs) {
             Row row = sh.getRow(0);
-            Cell cell = row.createCell(clubCellIdx, Cell.CELL_TYPE_STRING);
+            Cell cell = row.createCell(clubCellIdx);
             cell.setCellValue(clubName);
             cell.setCellStyle(row.getCell(3).getCellStyle());
 
-            Map<String, String> itemMap = clubMap.get(clubName);
+            Map<String, Number> itemMap = clubMap.get(clubName);
             Set<String> items = itemMap.keySet();
             rowIdx = 1;
             for (String item : items) {
                 row = sh.getRow(rowIdx);
-                row.createCell(clubCellIdx, Cell.CELL_TYPE_STRING).setCellValue(formatValue(item, itemMap.get(item)));
+                formatValue(wb, row.createCell(clubCellIdx), item, itemMap.get(item));
                 rowIdx++;
                 if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
                     rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
@@ -299,17 +313,27 @@ public class ManagementController {
         return new FileSystemResource(target);
     }
 
-    private String formatValue(String item, String v) {
-        float value = Float.parseFloat(v);
-        if (item.endsWith("Ratio")) {
-            return (int) (value * 100) + "%";
-        } else if (item.equals("SvcAvgWo6") || item.equals("SvcMaxWo6") || item.equals("SvcMaxWo6")
+    private void formatValue(Workbook wb, Cell cell, String item, Number v) {
+        float value = v.floatValue();
+        if (item.indexOf("Ratio") != -1 || item.equals("SvcMaxWo6")) {
+            if (item.indexOf("ExitsRatio") != -1 || item.indexOf("HoldRatio") != -1) {
+                CellStyle cellStyle = wb.createCellStyle();
+                cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+                cell.setCellStyle(cellStyle);
+            } else {
+                CellStyle cellStyle = wb.createCellStyle();
+                cellStyle.setDataFormat((short)9);
+                cell.setCellStyle(cellStyle);
+            }
+            cell.setCellValue(v.doubleValue());
+        }
+        if (item.equals("SvcAvgWo6")
                 || item.equals("Svc12_6") || item.equals("Svc8to11_6") || item.equals("Svc4to7_6")
                 || item.equals("Svc1to3_6") || item.equals("Svc0_6") || item.equals("CmHandFlyerHours6")
                 || item.equals("CmOutGpHours6") || item.equals("CmHandHoursPerApo6") || item.equals("CmOutGpHoursPerApo6")) {
-            return new DecimalFormat("#.0").format(value);
+            cell.setCellValue(new BigDecimal(v.floatValue()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue());
         } else {
-            return (int) (value) + "";
+            cell.setCellValue(v.intValue());
         }
     }
 
@@ -394,11 +418,14 @@ public class ManagementController {
             valueX.put("max", (Number)xMethod.invoke(cas.get(0)));
             valueX.put("mid", (Number)xMethod.invoke(cas.get(cas.size() / 2)));
             valueX.put("min", (Number)xMethod.invoke(cas.get(cas.size() - 1)));
+            int factor = 10;
+            if (cas.size() < 10) {
+                factor = 1;
+            }
             for (int i = 0; i < cas.size(); i++) {
                 if (cas.get(i).getClubId() == clubId) {
                     valueX.put("you", (Number)xMethod.invoke(cas.get(i)));
-                    valueX.put("rank", i);
-                    valueX.put("total", cas.size());
+                    valueX.put("rank", 1 + i * factor / cas.size());
                     break;
                 }
             }
@@ -426,10 +453,14 @@ public class ManagementController {
             valueX.put("max", (Number)xMethod.invoke(pjSums.get(0)));
             valueX.put("mid", (Number)xMethod.invoke(pjSums.get(pjSums.size() / 2)));
             valueX.put("min", (Number)xMethod.invoke(pjSums.get(pjSums.size() - 1)));
+            int factor = 10;
+            if (pjSums.size() < 10) {
+                factor = 1;
+            }
             for (int i = 0; i < pjSums.size(); i++) {
                 if (pjSums.get(i).getClubId() == clubId) {
                     valueX.put("you", (Number)xMethod.invoke(pjSums.get(i)));
-                    valueX.put("rank", i);
+                    valueX.put("rank", 1 + i * factor / pjSums.size());
                     valueX.put("total", pjSums.size());
                     break;
                 }
@@ -534,15 +565,22 @@ public class ManagementController {
             row.createCell(8).setCellValue(pjSums.get(i).getEnrolled());
             row.createCell(9).setCellValue(pjSums.get(i).getLeaves());
             row.createCell(10).setCellValue(pjSums.get(i).getValids());
-            float v = pjSums.get(i).getSalesRatio()*100;
-            v = new BigDecimal(v).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(11).setCellValue(v+"%");
-            v = pjSums.get(i).getExitRatio()*100;
-            v = new BigDecimal(v).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(12).setCellValue(v+"%");
-            v = pjSums.get(i).getLeaveRatio()*100;
-            v = new BigDecimal(v).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(13).setCellValue(v+"%");
+            float v = pjSums.get(i).getSalesRatio();
+            Cell cell = row.createCell(11);
+            cell.setCellValue(v);
+            CellStyle cellStyle = wb.createCellStyle();
+            cellStyle.setDataFormat((short)9);
+            cell.setCellStyle(cellStyle);
+            v = pjSums.get(i).getExitRatio();
+            cell = row.createCell(12);
+            cell.setCellValue(v);
+            cellStyle = wb.createCellStyle();
+            cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+            cell.setCellStyle(cellStyle);
+            v = pjSums.get(i).getLeaveRatio();
+            cell = row.createCell(13);
+            cell.setCellValue(v);
+            cell.setCellStyle(cellStyle);
             row.createCell(14).setCellValue(pjSums.get(i).getMaxWorkOuts());
             row.createCell(15).setCellValue(pjSums.get(i).getNewSalesRevenue());
             row.createCell(16).setCellValue(pjSums.get(i).getDuesDraftsRevenue());
@@ -603,6 +641,11 @@ public class ManagementController {
         sh.getRow(0).getCell(0).setCellValue(club.getName());
         sh.getRow(1).getCell(0).setCellValue(club.getOwner());
 
+        CellStyle cellStyle0 = wb.createCellStyle();
+        cellStyle0.setDataFormat((short)9);
+        CellStyle cellStyle1 = wb.createCellStyle();
+        cellStyle1.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+
         for (int i = 0; i < cas.size(); i++) {
             Ca ca = cas.get(i);
             Row row = sh.getRow(0);
@@ -614,26 +657,30 @@ public class ManagementController {
             row = sh.getRow(15);
             row.createCell(i+2).setCellValue(ca.getSvcActive6());
             row = sh.getRow(16);
-            float v = new BigDecimal(ca.getSvcHoldRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            Cell cell = row.createCell(i + 2);
+            cell.setCellValue(ca.getSvcHoldRatio6());
+            cell.setCellStyle(cellStyle1);
             row = sh.getRow(17);
             row.createCell(i+2).setCellValue(ca.getSvcTotalWo6());
             row = sh.getRow(18);
-            v = new BigDecimal(ca.getSvcAvgWo6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            float v = new BigDecimal(ca.getSvcAvgWo6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
             row.createCell(i+2).setCellValue(v);
             row = sh.getRow(19);
-            v = new BigDecimal(ca.getSvcMaxWo6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getSvcMaxWo6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(20);
             row.createCell(i+2).setCellValue(ca.getSvcExits6());
             row = sh.getRow(21);
-            v = new BigDecimal(ca.getSvcExitsRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getSvcExitsRatio6());
+            cell.setCellStyle(cellStyle1);
             row = sh.getRow(22);
             row.createCell(i+2).setCellValue(ca.getSvcMeasure6());
             row = sh.getRow(23);
-            v = new BigDecimal(ca.getSvcMeasureRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getSvcMeasureRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(24);
             v = new BigDecimal(ca.getSvc12_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
             row.createCell(i+2).setCellValue(v);
@@ -710,19 +757,23 @@ public class ManagementController {
             row = sh.getRow(70);
             row.createCell(i+2).setCellValue(ca.getCmApoTotal6());
             row = sh.getRow(71);
-            v = new BigDecimal(ca.getCmInApptRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getCmInApptRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(72);
-            v = new BigDecimal(ca.getCmOutApptRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getCmOutApptRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(76);
-            v = new BigDecimal(ca.getCmBrAgpRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getCmBrAgpRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(77);
             row.createCell(i+2).setCellValue(ca.getCmFaSum6());
             row = sh.getRow(78);
-            v = new BigDecimal(ca.getCmShowRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getCmShowRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(83);
             row.createCell(i+2).setCellValue(ca.getSalesAch6());
             row = sh.getRow(84);
@@ -732,11 +783,13 @@ public class ManagementController {
             row = sh.getRow(86);
             row.createCell(i+2).setCellValue(ca.getSalesTotal6());
             row = sh.getRow(87);
-            v = new BigDecimal(ca.getSalesRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getSalesRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(88);
-            v = new BigDecimal(ca.getSalesAchAppRatio6()*100).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v+"%");
+            cell = row.createCell(i+2);
+            cell.setCellValue(ca.getSalesAchAppRatio6());
+            cell.setCellStyle(cellStyle0);
             row = sh.getRow(113);
             row.createCell(i+2).setCellValue(ca.getClubAch6());
             row = sh.getRow(114);
@@ -829,7 +882,7 @@ public class ManagementController {
         cell = row.createCell(17);
         cell.setCellValue(pjSum.getOutgoingApo());
         cell = row.createCell(18);
-        cell.setCellValue(pjSum.getBrOthersRef()+pjSum.getAgpOutApoIn());
+        cell.setCellValue(pjSum.getBrOwnRef()+pjSum.getAgpOutApoIn());
         cell = row.createCell(19);
         cell.setCellValue(pjSum.getBrandedNewspaper());
         cell = row.createCell(20);

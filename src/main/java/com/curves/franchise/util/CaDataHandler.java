@@ -115,7 +115,7 @@ public class CaDataHandler {
         try {ca.setSvcMaxWo3((int)sh.getRow(19).getCell(6).getNumericCellValue());} catch (Exception e) {}
         try {ca.setSvcMaxWo4((int)sh.getRow(19).getCell(7).getNumericCellValue());} catch (Exception e) {}
         try {ca.setSvcMaxWo5((int)sh.getRow(19).getCell(8).getNumericCellValue());} catch (Exception e) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(19).getCell(9));ca.setSvcMaxWo6((int)cellValue.getNumberValue());} catch (Exception e) {}
+        try {CellValue cellValue = evaluator.evaluate(sh.getRow(19).getCell(9));ca.setSvcMaxWo6((float)cellValue.getNumberValue());} catch (Exception e) {}
 
         try {ca.setSvcExits1((int)sh.getRow(20).getCell(4).getNumericCellValue());} catch (Exception e) {}
         try {ca.setSvcExits2((int)sh.getRow(20).getCell(5).getNumericCellValue());} catch (Exception e) {}

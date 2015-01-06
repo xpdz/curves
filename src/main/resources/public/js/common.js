@@ -68,6 +68,7 @@ var forceNumber = function(editable) {
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
+        $('#clubId').text(userId); // for PJ page
         $('body').attr('userId', userId);
     }).fail(function(data) {
         showAlert("alert-danger", "Cannot find club info. Please refresh and retry.");

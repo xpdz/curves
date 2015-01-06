@@ -1,12 +1,12 @@
 $(document).ready(function() {
   $.getScript('js/common.js', function() {
     var today = new Date();
-    var dt = new Date(today.getFullYear(), today.getMonth()-1, 1);
-    var yEnd = dt.getFullYear();
-    var mEnd = dt.getMonth();
-    dt.setMonth(mEnd - 5);
-    var yStart = dt.getFullYear();
-    var mStart = dt.getMonth();
+    var tmpDate = new Date(today.getFullYear(), today.getMonth()-1, 1);
+    var yEnd = tmpDate.getFullYear();
+    var mEnd = tmpDate.getMonth();
+    tmpDate.setMonth(mEnd - 5);
+    var yStart = tmpDate.getFullYear();
+    var mStart = tmpDate.getMonth();
 
     // init date picker
     $('#x1Date').val(yStart + '-' + (mStart+1));
@@ -81,7 +81,7 @@ $(document).ready(function() {
     getTrends();
     function getTrends() {
         var dt = new Date(yStart, mStart, 1);
-        for (var i = 0; dt.getMonth() <= mEnd; i++) {
+        for (var i = 0; (dt.getFullYear() <= yEnd && dt.getMonth() <= mEnd); i++) {
             lineData.labels[i] = dt.getFullYear()+'-'+(dt.getMonth()+1);
             dt.setMonth(dt.getMonth() + 1);
         }

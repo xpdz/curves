@@ -30,7 +30,7 @@ public class CaAllHelper {
             sumCmFaSum6 = 0, sumCmShowRatio6 = 0, sumSalesAch6 = 0, sumSalesMonthly6 = 0, sumSalesAllPrepay6 = 0,
             sumSalesTotal6 = 0, sumSalesRatio6 = 0, sumSalesAchAppRatio6 = 0;
 
-    public Map<String, Map<String, String>> fillCaAllStat(CaRepository caRepo, int year, int month) {
+    public Map<String, Map<String, Number>> fillCaAllStat(CaRepository caRepo, int year, int month) {
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
         if (cas.size() == 0) {
             return new HashMap<>(0);
@@ -64,7 +64,7 @@ public class CaAllHelper {
         }
 
         // reflection - fill each item with sum/avg/high/low values
-        Map<String, Map<String, String>> valueV = new LinkedHashMap<>(69);
+        Map<String, Map<String, Number>> valueV = new LinkedHashMap<>(69);
         for (Field field : fields) {
             String fieldName = field.getName();
             if (fieldName.startsWith("sum")) {
@@ -79,9 +79,9 @@ public class CaAllHelper {
         return valueV;
     }
 
-    private void fillOne(List<Ca> cas, Map<String, Map<String, String>> valueV, Field sumField) {
+    private void fillOne(List<Ca> cas, Map<String, Map<String, Number>> valueV, Field sumField) {
         String item = sumField.getName().substring(3);
-        Map<String, String> valueX = new HashMap<>(4);
+        Map<String, Number> valueX = new HashMap<>(4);
         try {
             String methodName = null;
             // handle last month data as special;
@@ -114,10 +114,10 @@ public class CaAllHelper {
 
             // fill sum/avg/high/low
             Number sumFieldValue = (Number)sumField.get(this);
-            valueX.put("highest", "" + xMethod.invoke(cas.get(0)));
-            valueX.put("lowest", "" + xMethod.invoke(cas.get(cas.size() - 1)));
-            valueX.put("sum", "" + sumFieldValue);
-            valueX.put("avg", "" + sumFieldValue.floatValue()/cas.size());
+            valueX.put("highest", (Number)xMethod.invoke(cas.get(0)));
+            valueX.put("lowest", (Number)xMethod.invoke(cas.get(cas.size() - 1)));
+            valueX.put("sum", sumFieldValue);
+            valueX.put("avg", sumFieldValue.floatValue()/cas.size());
 
             valueV.put(item, valueX);
         } catch (Exception e) {
@@ -125,9 +125,9 @@ public class CaAllHelper {
         }
     }
 
-    public Map<String, Map<String, String>> fillCaAllClubs(CaRepository caRepo, ClubRepository clubRepo, int caYear, int caMonth) {
+    public Map<String, Map<String, Number>> fillCaAllClubs(CaRepository caRepo, ClubRepository clubRepo, int caYear, int caMonth) {
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(caYear, caMonth, new Sort(Sort.Direction.DESC, "clubId"));
-        Map<String, Map<String, String>> valueV = new HashMap<>(100);
+        Map<String, Map<String, Number>> valueV = new HashMap<>(100);
         if (cas.size() == 0) {
             return valueV;
         }
@@ -135,7 +135,7 @@ public class CaAllHelper {
         Iterable<Club> clubs = clubRepo.findAll();
         for (Ca ca : cas) {
             boolean found = false;
-            Map<String, String> valueX = new LinkedHashMap<>(69);
+            Map<String, Number> valueX = new LinkedHashMap<>(69);
             for (Club club : clubs) {
                 if (club.getClubId() == ca.getClubId()) {
                     valueV.put(club.getName(), valueX);
@@ -148,82 +148,82 @@ public class CaAllHelper {
                 continue;
             }
 
-            valueX.put("GoalsTm", "" + ca.getGoalsTm());
+            valueX.put("GoalsTm", ca.getGoalsTm());
             Ca lastCa = caRepo.findByClubIdAndCaYearAndCaMonth(ca.getClubId(), ca.getCaYear(), ca.getCaMonth() - 1);
             if (lastCa != null) {
-                valueX.put("LastGoalsTm", "" + lastCa.getSvcTm6());
-                valueX.put("LastGoalsActive", "" + lastCa.getSvcActive6());
-                valueX.put("LastGoalsShowRatio", "" + lastCa.getCmShowRatio6());
-                valueX.put("LastGoalsSalesRatio", "" + lastCa.getSalesRatio6());
+                valueX.put("LastGoalsTm", lastCa.getSvcTm6());
+                valueX.put("LastGoalsActive", lastCa.getSvcActive6());
+                valueX.put("LastGoalsShowRatio", lastCa.getCmShowRatio6());
+                valueX.put("LastGoalsSalesRatio", lastCa.getSalesRatio6());
             } else {
-                valueX.put("LastGoalsTm", "0");
-                valueX.put("LastGoalsActive", "0");
-                valueX.put("LastGoalsShowRatio", "0");
-                valueX.put("LastGoalsSalesRatio", "0");
+                valueX.put("LastGoalsTm", 0);
+                valueX.put("LastGoalsActive", 0);
+                valueX.put("LastGoalsShowRatio", 0);
+                valueX.put("LastGoalsSalesRatio", 0);
             }
-            valueX.put("GoalsExitsRatio", "" + ca.getGoalsExitsRatio());
-            valueX.put("GoalsNewSales", "" + ca.getGoalsNewSales());
-            valueX.put("GoalsAppoints", "" + ca.getGoalsAppoints());
-            valueX.put("SvcTm6", "" + ca.getSvcTm6());
-            valueX.put("SvcHold6", "" + ca.getSvcHold6());
-            valueX.put("SvcActive6", "" + ca.getSvcActive6());
-            valueX.put("SvcHoldRatio6", "" + ca.getSvcHoldRatio6());
-            valueX.put("SvcTotalWo6", "" + ca.getSvcTotalWo6());
-            valueX.put("SvcAvgWo6", "" + ca.getSvcAvgWo6());
-            valueX.put("SvcMaxWo6", "" + ca.getSvcMaxWo6());
-            valueX.put("SvcExits6", "" + ca.getSvcExits6());
-            valueX.put("SvcExitsRatio6", "" + ca.getSvcExitsRatio6());
-            valueX.put("SvcMeasure6", "" + ca.getSvcMeasure6());
-            valueX.put("SvcMeasureRatio6", "" + ca.getSvcMeasureRatio6());
-            valueX.put("Svc12_6", "" + ca.getSvc12_6());
-            valueX.put("Svc8to11_6", "" + ca.getSvc8to11_6());
-            valueX.put("Svc4to7_6", "" + ca.getSvc4to7_6());
-            valueX.put("Svc1to3_6", "" + ca.getSvc1to3_6());
-            valueX.put("Svc0_6", "" + ca.getSvc0_6());
-            valueX.put("CmPostFlyer6", "" + ca.getCmPostFlyer6());
-            valueX.put("CmHandFlyerHours6", "" + ca.getCmHandFlyerHours6());
-            valueX.put("CmOutGpHours6", "" + ca.getCmOutGpHours6());
-            valueX.put("CmCpBox6", "" + ca.getCmCpBox6());
-            valueX.put("CmOutGot6", "" + ca.getCmOutGot6());
-            valueX.put("CmInGot6", "" + ca.getCmInGot6());
-            valueX.put("CmBlogGot6", "" + ca.getCmBlogGot6());
-            valueX.put("CmBagGot6", "" + ca.getCmBagGot6());
-            valueX.put("CmTotalGot6", "" + ca.getCmTotalGot6());
-            valueX.put("CmCallIn6", "" + ca.getCmCallIn6());
-            valueX.put("CmOutGotCall6", "" + ca.getCmOutGotCall6());
-            valueX.put("CmInGotCall6", "" + ca.getCmInGotCall6());
-            valueX.put("CmBlogGotCall6", "" + ca.getCmBlogGotCall6());
-            valueX.put("CmBagGotCall6", "" + ca.getCmBagGotCall6());
-            valueX.put("CmOwnRefs6", "" + ca.getCmOwnRefs6());
-            valueX.put("CmNewspaper6", "" + ca.getCmNewspaper6());
-            valueX.put("CmTv6", "" + ca.getCmTv6());
-            valueX.put("CmInternet6", "" + ca.getCmInternet6());
-            valueX.put("CmSign6", "" + ca.getCmSign6());
-            valueX.put("CmMate6", "" + ca.getCmMate6());
-            valueX.put("CmOthers6", "" + ca.getCmOthers6());
-            valueX.put("CmMailAgpIn6", "" + ca.getCmMailAgpIn6());
-            valueX.put("CmPostFlyerAgpIn6", "" + ca.getCmPostFlyerAgpIn6());
-            valueX.put("CmHandFlyerAgpIn6", "" + ca.getCmHandFlyerAgpIn6());
-            valueX.put("CmCpAgpIn6", "" + ca.getCmCpAgpIn6());
-            valueX.put("CmOutAgpOut6", "" + ca.getCmOutAgpOut6());
-            valueX.put("CmInAgpOut6", "" + ca.getCmInAgpOut6());
-            valueX.put("CmBlogAgpOut6", "" + ca.getCmBlogAgpOut6());
-            valueX.put("CmBagAgpOut6", "" + ca.getCmBagAgpOut6());
-            valueX.put("CmApoTotal6", "" + ca.getCmApoTotal6());
-            valueX.put("CmInApptRatio6", "" + ca.getCmInApptRatio6());
-            valueX.put("CmOutApptRatio6", "" + ca.getCmOutApptRatio6());
-            valueX.put("CmPostPerApo6", "" + ca.getCmPostPerApo6());
-            valueX.put("CmHandHoursPerApo6", "" + ca.getCmHandHoursPerApo6());
-            valueX.put("CmOutGpHoursPerApo6", "" + ca.getCmOutGpHoursPerApo6());
-            valueX.put("CmBrAgpRatio6", "" + ca.getCmBrAgpRatio6());
-            valueX.put("CmFaSum6", "" + ca.getCmFaSum6());
-            valueX.put("CmShowRatio6", "" + ca.getCmShowRatio6());
-            valueX.put("SalesAch6", "" + ca.getSalesAch6());
-            valueX.put("SalesMonthly6", "" + ca.getSalesMonthly6());
-            valueX.put("SalesAllPrepay6", "" + ca.getSalesAllPrepay6());
-            valueX.put("SalesTotal6", "" + ca.getSalesTotal6());
-            valueX.put("SalesRatio6", "" + ca.getSalesRatio6());
-            valueX.put("SalesAchAppRatio6", "" + ca.getSalesAchAppRatio6());
+            valueX.put("GoalsExitsRatio", ca.getGoalsExitsRatio());
+            valueX.put("GoalsNewSales", ca.getGoalsNewSales());
+            valueX.put("GoalsAppoints", ca.getGoalsAppoints());
+            valueX.put("SvcTm6", ca.getSvcTm6());
+            valueX.put("SvcHold6", ca.getSvcHold6());
+            valueX.put("SvcActive6", ca.getSvcActive6());
+            valueX.put("SvcHoldRatio6", ca.getSvcHoldRatio6());
+            valueX.put("SvcTotalWo6", ca.getSvcTotalWo6());
+            valueX.put("SvcAvgWo6", ca.getSvcAvgWo6());
+            valueX.put("SvcMaxWo6", ca.getSvcMaxWo6());
+            valueX.put("SvcExits6", ca.getSvcExits6());
+            valueX.put("SvcExitsRatio6", ca.getSvcExitsRatio6());
+            valueX.put("SvcMeasure6", ca.getSvcMeasure6());
+            valueX.put("SvcMeasureRatio6", ca.getSvcMeasureRatio6());
+            valueX.put("Svc12_6", ca.getSvc12_6());
+            valueX.put("Svc8to11_6", ca.getSvc8to11_6());
+            valueX.put("Svc4to7_6", ca.getSvc4to7_6());
+            valueX.put("Svc1to3_6", ca.getSvc1to3_6());
+            valueX.put("Svc0_6", ca.getSvc0_6());
+            valueX.put("CmPostFlyer6", ca.getCmPostFlyer6());
+            valueX.put("CmHandFlyerHours6", ca.getCmHandFlyerHours6());
+            valueX.put("CmOutGpHours6", ca.getCmOutGpHours6());
+            valueX.put("CmCpBox6", ca.getCmCpBox6());
+            valueX.put("CmOutGot6", ca.getCmOutGot6());
+            valueX.put("CmInGot6", ca.getCmInGot6());
+            valueX.put("CmBlogGot6", ca.getCmBlogGot6());
+            valueX.put("CmBagGot6", ca.getCmBagGot6());
+            valueX.put("CmTotalGot6", ca.getCmTotalGot6());
+            valueX.put("CmCallIn6", ca.getCmCallIn6());
+            valueX.put("CmOutGotCall6", ca.getCmOutGotCall6());
+            valueX.put("CmInGotCall6", ca.getCmInGotCall6());
+            valueX.put("CmBlogGotCall6", ca.getCmBlogGotCall6());
+            valueX.put("CmBagGotCall6", ca.getCmBagGotCall6());
+            valueX.put("CmOwnRefs6", ca.getCmOwnRefs6());
+            valueX.put("CmNewspaper6", ca.getCmNewspaper6());
+            valueX.put("CmTv6", ca.getCmTv6());
+            valueX.put("CmInternet6", ca.getCmInternet6());
+            valueX.put("CmSign6", ca.getCmSign6());
+            valueX.put("CmMate6", ca.getCmMate6());
+            valueX.put("CmOthers6", ca.getCmOthers6());
+            valueX.put("CmMailAgpIn6", ca.getCmMailAgpIn6());
+            valueX.put("CmPostFlyerAgpIn6", ca.getCmPostFlyerAgpIn6());
+            valueX.put("CmHandFlyerAgpIn6", ca.getCmHandFlyerAgpIn6());
+            valueX.put("CmCpAgpIn6", ca.getCmCpAgpIn6());
+            valueX.put("CmOutAgpOut6", ca.getCmOutAgpOut6());
+            valueX.put("CmInAgpOut6", ca.getCmInAgpOut6());
+            valueX.put("CmBlogAgpOut6", ca.getCmBlogAgpOut6());
+            valueX.put("CmBagAgpOut6", ca.getCmBagAgpOut6());
+            valueX.put("CmApoTotal6", ca.getCmApoTotal6());
+            valueX.put("CmInApptRatio6", ca.getCmInApptRatio6());
+            valueX.put("CmOutApptRatio6", ca.getCmOutApptRatio6());
+            valueX.put("CmPostPerApo6", ca.getCmPostPerApo6());
+            valueX.put("CmHandHoursPerApo6", ca.getCmHandHoursPerApo6());
+            valueX.put("CmOutGpHoursPerApo6", ca.getCmOutGpHoursPerApo6());
+            valueX.put("CmBrAgpRatio6", ca.getCmBrAgpRatio6());
+            valueX.put("CmFaSum6", ca.getCmFaSum6());
+            valueX.put("CmShowRatio6", ca.getCmShowRatio6());
+            valueX.put("SalesAch6", ca.getSalesAch6());
+            valueX.put("SalesMonthly6", ca.getSalesMonthly6());
+            valueX.put("SalesAllPrepay6", ca.getSalesAllPrepay6());
+            valueX.put("SalesTotal6", ca.getSalesTotal6());
+            valueX.put("SalesRatio6", ca.getSalesRatio6());
+            valueX.put("SalesAchAppRatio6", ca.getSalesAchAppRatio6());
         }
         return valueV;
     }

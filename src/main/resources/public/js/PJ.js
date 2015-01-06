@@ -41,8 +41,6 @@ $(document).ready(function() {
         });
     }
 
-    $('#clubId').text(userId);
-
     getPJ();
     function getPJ() {
         $tbd.empty();
@@ -57,64 +55,64 @@ $(document).ready(function() {
     }
 
     function fillSheet(pjSum) {
-        $('#newSales').text(pjSum.newSales);
-        $('#exits').text(pjSum.exits);
-        $('#shiftIn').text(pjSum.shiftIn);
-        $('#shiftOut').text(pjSum.shiftIn);
-        $('#increment').text(pjSum.increment);
-        $('#revenue').text(pjSum.revenue);
-        $('#enrolled').text(pjSum.enrolled);
-        $('#leaves').text(pjSum.leaves);
-        $('#valids').text(pjSum.valids);
-        $('#salesRatio').text((pjSum.salesRatio*100).toFixed(0)+'%');
-        $('#exitRatio').text((pjSum.exitRatio*100).toFixed(1)+'%');
-        $('#leaveRatio').text((pjSum.leaveRatio*100).toFixed(1)+'%');
-        for (var idx = 1; idx <= lastDayOfMonth; idx++) {
-            var pj = pjSum.pjSet[idx-1];
-            if ( !pj ) {
-                pj = {};
-            }
-            var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
-            var d = new Date(pjDay);
-            var row =
-             '<tr>' +
-                '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
-                '<td>' + weekdays[d.getDay()] + '</td>' +
-                '<td>' + idx + '</td>' +
-                '<td style="background-color: #FFFF99"><div id="workingDays-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workingDays ||'')+ '</div></td>' +
-                '<td style="background-color: #CCFFFF"><div id="workOuts-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workOuts ||'')+ '</div></td>' +
-                '<td style="background-color: #FFFF99"><div id="newSalesRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.newSalesRevenue ||'')+ '</div></td>' +
-                '<td style="background-color: #FFFF99"><div id="duesDraftsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.duesDraftsRevenue ||'')+ '</div></td>' +
-                '<td style="background-color: #FFFF99"><div id="productsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.productsRevenue ||'')+ '</div></td>' +
-                '<td style="background-color: #FFFF99"><div id="otherRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.otherRevenue ||'')+ '</div></td>' +
-                '<td style="background-color: #B7DEE8"><div id="incomingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingCalls ||'')+ '</div></td>' +
-                '<td style="background-color: #B7DEE8"><div id="incomingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingApo ||'')+ '</div></td>' +
-                '<td style="background-color: #B7DEE8"><div id="outgoingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingCalls ||'')+ '</div></td>' +
-                '<td style="background-color: #B7DEE8"><div id="outgoingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingApo ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brOwnRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOwnRef ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brOthersRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOthersRef ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedNewspaper-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedNewspaper ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedTv-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedTv ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedInternet-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedInternet ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedSign-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedSign ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedMate-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedMate ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="brandedOthers-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedOthers ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpInDirectMail-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInDirectMail ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpInMailFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInMailFlyer ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpInHandFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInHandFlyer ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpInCp-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInCp ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpOutApoOut-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoOut ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpOutApoIn-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoIn ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpOutApoBlog-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBlog ||'')+ '</div></td>' +
-                '<td style="background-color: #FF99CC"><div id="agpOutApoBag-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBag ||'')+ '</div></td>' +
-                '<td style="background-color: LightGray" id="fa-' + idx + '" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.fa||'') + '</td>' +
-                '<td style="background-color: #CCFFFF"><div id="enrollAch-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAch ||'')+ '</div></td>' +
-                '<td style="background-color: #CCFFFF"><div id="enrollMonthly-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollMonthly ||'')+ '</div></td>' +
-                '<td style="background-color: #CCFFFF"><div id="enrollAllPrepay-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAllPrepay ||'')+ '</div></td>' +
-                '<td style="background-color: #CCFFFF"><div id="exits-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.exits ||'')+ '</div></td>' +
-            '</tr>';
-            $tbd.append($(row));
-        }
+      $('#newSales').text(pjSum.newSales);
+      $('#exits').text(pjSum.exits);
+      $('#shiftIn').text(pjSum.shiftIn);
+      $('#shiftOut').text(pjSum.shiftIn);
+      $('#increment').text(pjSum.increment);
+      $('#revenue').text(pjSum.revenue);
+      $('#enrolled').text(pjSum.enrolled);
+      $('#leaves').text(pjSum.leaves);
+      $('#valids').text(pjSum.valids);
+      $('#salesRatio').text((pjSum.salesRatio*100).toFixed(0)+'%');
+      $('#exitRatio').text((pjSum.exitRatio*100).toFixed(1)+'%');
+      $('#leaveRatio').text((pjSum.leaveRatio*100).toFixed(1)+'%');
+      for (var idx = 1; idx <= lastDayOfMonth; idx++) {
+          var pj = pjSum.pjSet[idx-1];
+          if ( !pj ) {
+              pj = {};
+          }
+          var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
+          var d = new Date(pjDay);
+          var row =
+           '<tr>' +
+              '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
+              '<td>' + weekdays[d.getDay()] + '</td>' +
+              '<td>' + idx + '</td>' +
+              '<td style="background-color: #FFFF99"><div id="workingDays-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workingDays ||'')+ '</div></td>' +
+              '<td style="background-color: #CCFFFF"><div id="workOuts-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workOuts ||'')+ '</div></td>' +
+              '<td style="background-color: #FFFF99"><div id="newSalesRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.newSalesRevenue ||'')+ '</div></td>' +
+              '<td style="background-color: #FFFF99"><div id="duesDraftsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.duesDraftsRevenue ||'')+ '</div></td>' +
+              '<td style="background-color: #FFFF99"><div id="productsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.productsRevenue ||'')+ '</div></td>' +
+              '<td style="background-color: #FFFF99"><div id="otherRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.otherRevenue ||'')+ '</div></td>' +
+              '<td style="background-color: #B7DEE8"><div id="incomingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingCalls ||'')+ '</div></td>' +
+              '<td style="background-color: #B7DEE8"><div id="incomingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingApo ||'')+ '</div></td>' +
+              '<td style="background-color: #B7DEE8"><div id="outgoingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingCalls ||'')+ '</div></td>' +
+              '<td style="background-color: #B7DEE8"><div id="outgoingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.outgoingApo ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brOwnRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOwnRef ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brOthersRef-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brOthersRef ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedNewspaper-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedNewspaper ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedTv-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedTv ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedInternet-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedInternet ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedSign-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedSign ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedMate-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedMate ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="brandedOthers-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.brandedOthers ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpInDirectMail-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInDirectMail ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpInMailFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInMailFlyer ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpInHandFlyer-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInHandFlyer ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpInCp-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpInCp ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpOutApoOut-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoOut ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpOutApoIn-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoIn ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpOutApoBlog-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBlog ||'')+ '</div></td>' +
+              '<td style="background-color: #FF99CC"><div id="agpOutApoBag-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.agpOutApoBag ||'')+ '</div></td>' +
+              '<td style="background-color: LightGray" id="fa-' + idx + '" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.fa||'') + '</td>' +
+              '<td style="background-color: #CCFFFF"><div id="enrollAch-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAch ||'')+ '</div></td>' +
+              '<td style="background-color: #CCFFFF"><div id="enrollMonthly-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollMonthly ||'')+ '</div></td>' +
+              '<td style="background-color: #CCFFFF"><div id="enrollAllPrepay-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.enrollAllPrepay ||'')+ '</div></td>' +
+              '<td style="background-color: #CCFFFF"><div id="exits-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.exits ||'')+ '</div></td>' +
+          '</tr>';
+          $tbd.append($(row));
+      }
 
         if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
             $('#btnSave').prop("disabled", false);
@@ -122,7 +120,6 @@ $(document).ready(function() {
             $('[contenteditable="false"]').prop('contenteditable', true);
         } else {
             $('#btnSave').prop("disabled", true);
-            $('#btnSave').toggleClass('btn-success btn-default');
             $('[contenteditable]').css('border', '1px solid #ddd !important');
             $('[contenteditable="true"]').prop('contenteditable', false);
         }
