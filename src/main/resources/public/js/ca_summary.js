@@ -63,8 +63,11 @@ $(document).ready(function() {
             var ca = cas[i-1];
             $('th[name="mth'+i+'"]').text(ca.caYear+'-'+(ca.caMonth+1));
             $('#svcTm-'+i).text(ca.svcTm6);
-            $('#svcShift-'+i).text(ca.svcShift6);
+            $('#svcShiftOut-'+i).text(ca.svcShiftOut6);
+            $('#svcShiftIn-'+i).text(ca.svcShiftIn6);
             $('#svcHold-'+i).text(ca.svcHold6);
+            $('#svcShiftOut-'+i).text(ca.svcShiftOut6);
+            $('#svcShiftIn-'+i).text(ca.svcShiftIn6);
             $('#svcActive-'+i).text(ca.svcActive6);
             $('#svcHoldRatio-'+i).text((ca.svcHoldRatio6*100).toFixed(1)+'%');
             $('#svcTotalWo-'+i).text(ca.svcTotalWo6);

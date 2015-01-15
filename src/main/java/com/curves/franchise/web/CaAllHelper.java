@@ -16,11 +16,11 @@ public class CaAllHelper {
     private Logger logger = LoggerFactory.getLogger(CaAllHelper.class);
 
     float sumGoalsTm = 0, sumLastGoalsTm = 0, sumLastGoalsActive = 0, sumLastGoalsShowRatio = 0, sumLastGoalsSalesRatio = 0,
-            sumGoalsExitsRatio = 0, sumGoalsNewSales = 0, sumGoalsAppoints = 0, sumSvcTm6 = 0, sumSvcHold6 = 0,
+            sumGoalsExitsRatio = 0, sumGoalsNewSales = 0, sumGoalsAppoints = 0, sumSvcTm6 = 0, sumSvcShiftOut6 = 0, sumSvcShiftIn6 = 0, sumSvcHold6 = 0,
             sumSvcActive6 = 0, sumSvcHoldRatio6 = 0, sumSvcTotalWo6 = 0, sumSvcAvgWo6 = 0, sumSvcMaxWo6 = 0,
             sumSvcExits6 = 0, sumSvcExitsRatio6 = 0, sumSvcMeasure6 = 0, sumSvcMeasureRatio6 = 0, sumSvc12_6 = 0,
             sumSvc8to11_6 = 0, sumSvc4to7_6 = 0, sumSvc1to3_6 = 0, sumSvc0_6 = 0, sumCmPostFlyer6 = 0,
-            sumCmHandFlyerHours6 = 0, sumCmOutGpHours6 = 0, sumCmCpBox6 = 0, sumCmOutGot6 = 0, sumCmInGot6 = 0,
+            sumCmHandFlyer6 = 0, sumCmHandFlyerHours6 = 0, sumCmOutGpHours6 = 0, sumCmOutGp6 = 0, sumCmCpBox6 = 0, sumCmOutGot6 = 0, sumCmInGot6 = 0,
             sumCmBlogGot6 = 0, sumCmBagGot6 = 0, sumCmTotalGot6 = 0, sumCmCallIn6 = 0, sumCmOutGotCall6 = 0,
             sumCmInGotCall6 = 0, sumCmBlogGotCall6 = 0, sumCmBagGotCall6 = 0, sumCmOwnRefs6 = 0, sumCmNewspaper6 = 0,
             sumCmTv6 = 0, sumCmInternet6 = 0, sumCmSign6 = 0, sumCmMate6 = 0, sumCmOthers6 = 0, sumCmMailAgpIn6 = 0,
@@ -165,6 +165,8 @@ public class CaAllHelper {
             valueX.put("GoalsNewSales", ca.getGoalsNewSales());
             valueX.put("GoalsAppoints", ca.getGoalsAppoints());
             valueX.put("SvcTm6", ca.getSvcTm6());
+            valueX.put("SvcShiftOut6", ca.getSvcShiftOut6());
+            valueX.put("SvcShiftIn6", ca.getSvcShiftIn6());
             valueX.put("SvcHold6", ca.getSvcHold6());
             valueX.put("SvcActive6", ca.getSvcActive6());
             valueX.put("SvcHoldRatio6", ca.getSvcHoldRatio6());
@@ -181,8 +183,10 @@ public class CaAllHelper {
             valueX.put("Svc1to3_6", ca.getSvc1to3_6());
             valueX.put("Svc0_6", ca.getSvc0_6());
             valueX.put("CmPostFlyer6", ca.getCmPostFlyer6());
+            valueX.put("CmHandFlyer6", ca.getCmHandFlyer6());
             valueX.put("CmHandFlyerHours6", ca.getCmHandFlyerHours6());
             valueX.put("CmOutGpHours6", ca.getCmOutGpHours6());
+            valueX.put("CmOutGp6", ca.getCmOutGp6());
             valueX.put("CmCpBox6", ca.getCmCpBox6());
             valueX.put("CmOutGot6", ca.getCmOutGot6());
             valueX.put("CmInGot6", ca.getCmInGot6());

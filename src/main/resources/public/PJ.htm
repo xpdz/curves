@@ -67,10 +67,21 @@
     <div class="col-md-1">
       <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
     </div>
+    <div class="col-md-1">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          Export <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#" id="btnExportThis">Export This Month</a></li>
+          <li><a href="#" id="btnExportMulti">Export Multi-Months</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <table class="table table-bordered table-condensed" style="overflow:scroll; width: 2680px">
+      <table class="table table-bordered table-condensed" style="overflow:scroll; width: 2760px">
         <thead>
           <tr>
             <th style="color: red">加盟店編號</th>
@@ -133,6 +144,7 @@
             <th style="width: 80px" id="newSalesRevenueTitle">新銷售營收<br>New Sales</th>
             <th style="width: 80px" id="duesDraftsRevenueTitle">月費收入<br>Dues & Drafts</th>
             <th style="width: 80px" id="productsRevenueTitle">商品<br>Product</th>
+            <th style="width: 80px" id="wheyProteinRevenueTitle">乳清蛋白<br>Product</th>
             <th style="width: 80px" id="otherRevenueTitle">租櫃等<br>其他收入<br>Others</th>
             <th style="width: 80px" id="incomingCallsTitle">來電與來店<br>Incoming Calls</th>
             <th style="width: 60px" id="incomingApoTitle">APO</th>
@@ -193,6 +205,33 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary" id="btnSave2">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="dlgExport" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" data-toggle="modal" data-target="#dlgExport">Export</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-10">
+            <div class="input-daterange input-group" id="datepicker">
+              <span class="input-group-addon">From</span>
+              <input type="text" class="input-sm form-control" id="x1Date" />
+              <span class="input-group-addon">To</span>
+              <input type="text" class="input-sm form-control" id="x2Date" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btnExportMonths">Export</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

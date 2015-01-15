@@ -261,10 +261,6 @@ public class ManagementController {
         }
 
         Sheet sh = wb.getSheetAt(0);
-        CellStyle cellStyle0 = wb.createCellStyle();
-        cellStyle0.setDataFormat((short)9);
-        CellStyle cellStyle1 = wb.createCellStyle();
-        cellStyle1.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
 
         Map<String, Map<String, Number>> itemStatMap = new CaAllHelper().fillCaAllStat(caRepo, caYear, caMonth);
         Map<String, Map<String, Number>> clubMap = new CaAllHelper().fillCaAllClubs(caRepo, clubRepo, caYear, caMonth);
@@ -278,11 +274,10 @@ public class ManagementController {
             formatValue(wb, row.createCell(5), item, statMap.get("highest"));
             formatValue(wb, row.createCell(6), item, statMap.get("lowest"));
             rowIdx++;
-            if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
-                rowIdx = creatBlankCell4Sum(sh, rowIdx);
-            } else if (rowIdx == 26) {
-                rowIdx = creatBlankCell4Sum(sh, rowIdx);
-                rowIdx = creatBlankCell4Sum(sh, rowIdx);
+            if (rowIdx == 9 || rowIdx == 41 || rowIdx == 47 || rowIdx == 72) {
+                rowIdx++;
+            } else if (rowIdx == 28) {
+                rowIdx += 2;
             }
         }
 
@@ -301,11 +296,10 @@ public class ManagementController {
                 row = sh.getRow(rowIdx);
                 formatValue(wb, row.createCell(clubCellIdx), item, itemMap.get(item));
                 rowIdx++;
-                if (rowIdx == 9 || rowIdx == 37 || rowIdx == 43 || rowIdx == 68) {
-                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
-                } else if (rowIdx == 26) {
-                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
-                    rowIdx = createBlankCell4Club(sh, rowIdx, clubCellIdx);
+                if (rowIdx == 9 || rowIdx == 41 || rowIdx == 47 || rowIdx == 72) {
+                    rowIdx++;
+                } else if (rowIdx == 28) {
+                    rowIdx += 2;
                 }
             }
             clubCellIdx++;
@@ -322,42 +316,28 @@ public class ManagementController {
     }
 
     private void formatValue(Workbook wb, Cell cell, String item, Number v) {
-        float value = v.floatValue();
-        if (item.indexOf("Ratio") != -1 || item.equals("SvcMaxWo6")) {
+        if (item.indexOf("Ratio") != -1) {
             if (item.indexOf("ExitsRatio") != -1 || item.indexOf("HoldRatio") != -1) {
                 CellStyle cellStyle = wb.createCellStyle();
                 cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
                 cell.setCellStyle(cellStyle);
             } else {
                 CellStyle cellStyle = wb.createCellStyle();
-                cellStyle.setDataFormat((short)9);
+                cellStyle.setDataFormat((short) 9);
                 cell.setCellStyle(cellStyle);
             }
             cell.setCellValue(v.doubleValue());
-        }
-        if (item.equals("SvcAvgWo6")
+        } else if (item.equals("SvcMaxWo6") || item.equals("SvcAvgWo6")
                 || item.equals("Svc12_6") || item.equals("Svc8to11_6") || item.equals("Svc4to7_6")
                 || item.equals("Svc1to3_6") || item.equals("Svc0_6") || item.equals("CmHandFlyerHours6")
                 || item.equals("CmOutGpHours6") || item.equals("CmHandHoursPerApo6") || item.equals("CmOutGpHoursPerApo6")) {
-            cell.setCellValue(new BigDecimal(v.floatValue()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue());
+            CellStyle cellStyle = wb.createCellStyle();
+            cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0"));
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue(v.doubleValue());
         } else {
             cell.setCellValue(v.intValue());
         }
-    }
-
-    private int createBlankCell4Club(Sheet sh, int rowIdx, int clubCellIdx) {
-        Row row = sh.getRow(rowIdx);
-        row.createCell(clubCellIdx, Cell.CELL_TYPE_BLANK);
-        return rowIdx+1;
-    }
-
-    private int creatBlankCell4Sum(Sheet sh, int rowIdx) {
-        Row row = sh.getRow(rowIdx);
-        row.createCell(3, Cell.CELL_TYPE_BLANK);
-        row.createCell(4, Cell.CELL_TYPE_BLANK);
-        row.createCell(5, Cell.CELL_TYPE_BLANK);
-        row.createCell(6, Cell.CELL_TYPE_BLANK);
-        return rowIdx+1;
     }
 
     @RequestMapping(value = "/rest/benchmarking")
@@ -593,12 +573,13 @@ public class ManagementController {
             row.createCell(15).setCellValue(pjSums.get(i).getNewSalesRevenue());
             row.createCell(16).setCellValue(pjSums.get(i).getDuesDraftsRevenue());
             row.createCell(17).setCellValue(pjSums.get(i).getProductsRevenue());
-            row.createCell(18).setCellValue(pjSums.get(i).getOtherRevenue());
-            row.createCell(19).setCellValue(pjSums.get(i).getFaSum());
-            row.createCell(20).setCellValue(pjSums.get(i).getEnrollAch());
-            row.createCell(21).setCellValue(pjSums.get(i).getEnrollMonthly());
-            row.createCell(22).setCellValue(pjSums.get(i).getEnrollAllPrepay());
-            row.createCell(23).setCellValue(pjSums.get(i).getExits());
+            row.createCell(18).setCellValue(pjSums.get(i).getWheyProteinRevenue());
+            row.createCell(19).setCellValue(pjSums.get(i).getOtherRevenue());
+            row.createCell(20).setCellValue(pjSums.get(i).getFaSum());
+            row.createCell(21).setCellValue(pjSums.get(i).getEnrollAch());
+            row.createCell(22).setCellValue(pjSums.get(i).getEnrollMonthly());
+            row.createCell(23).setCellValue(pjSums.get(i).getEnrollAllPrepay());
+            row.createCell(24).setCellValue(pjSums.get(i).getExits());
         }
 
         wb.getCreationHelper().createFormulaEvaluator().evaluateAll();
@@ -655,159 +636,104 @@ public class ManagementController {
         cellStyle1.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
 
         for (int i = 0; i < cas.size(); i++) {
+            int idx = i + 2;
             Ca ca = cas.get(i);
-            Row row = sh.getRow(0);
-            row.createCell(i+2).setCellValue(ca.getCaYear()+"-"+(ca.getCaMonth()+1));
-            row = sh.getRow(13);
-            row.createCell(i+2).setCellValue(ca.getSvcTm6());
-            row = sh.getRow(14);
-            row.createCell(i+2).setCellValue(ca.getSvcHold6());
-            row = sh.getRow(15);
-            row.createCell(i+2).setCellValue(ca.getSvcActive6());
-            row = sh.getRow(16);
-            Cell cell = row.createCell(i + 2);
+            sh.getRow(0).createCell(idx).setCellValue(ca.getCaYear() + "-" + (ca.getCaMonth() + 1));
+            sh.getRow(13).createCell(idx).setCellValue(ca.getSvcTm6());
+            sh.getRow(14).createCell(idx).setCellValue(ca.getSvcShiftOut6());
+            sh.getRow(15).createCell(idx).setCellValue(ca.getSvcShiftIn6());
+            sh.getRow(16).createCell(idx).setCellValue(ca.getSvcHold6());
+            sh.getRow(17).createCell(idx).setCellValue(ca.getSvcActive6());
+            Cell cell = sh.getRow(18).createCell(i + 2);
             cell.setCellValue(ca.getSvcHoldRatio6());
             cell.setCellStyle(cellStyle1);
-            row = sh.getRow(17);
-            row.createCell(i+2).setCellValue(ca.getSvcTotalWo6());
-            row = sh.getRow(18);
-            float v = new BigDecimal(ca.getSvcAvgWo6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(19);
-            cell = row.createCell(i+2);
+            sh.getRow(19).createCell(idx).setCellValue(ca.getSvcTotalWo6());
+            float v = BigDecimal.valueOf(ca.getSvcAvgWo6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(20).createCell(idx).setCellValue(v);
+            cell = sh.getRow(21).createCell(idx);
             cell.setCellValue(ca.getSvcMaxWo6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(20);
-            row.createCell(i+2).setCellValue(ca.getSvcExits6());
-            row = sh.getRow(21);
-            cell = row.createCell(i+2);
+            sh.getRow(22).createCell(idx).setCellValue(ca.getSvcExits6());
+            cell = sh.getRow(23).createCell(idx);
             cell.setCellValue(ca.getSvcExitsRatio6());
             cell.setCellStyle(cellStyle1);
-            row = sh.getRow(22);
-            row.createCell(i+2).setCellValue(ca.getSvcMeasure6());
-            row = sh.getRow(23);
-            cell = row.createCell(i+2);
+            sh.getRow(24).createCell(idx).setCellValue(ca.getSvcMeasure6());
+            cell = sh.getRow(25).createCell(idx);
             cell.setCellValue(ca.getSvcMeasureRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(24);
-            v = new BigDecimal(ca.getSvc12_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(25);
-            v = new BigDecimal(ca.getSvc8to11_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(26);
-            v = new BigDecimal(ca.getSvc4to7_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(27);
-            v = new BigDecimal(ca.getSvc1to3_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(28);
-            v = new BigDecimal(ca.getSvc0_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(39);
-            row.createCell(i+2).setCellValue(ca.getCmPostFlyer6());
-            row = sh.getRow(40);
-            v = new BigDecimal(ca.getCmHandFlyerHours6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(41);
-            v = new BigDecimal(ca.getCmOutGpHours6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
-            row.createCell(i+2).setCellValue(v);
-            row = sh.getRow(42);
-            row.createCell(i+2).setCellValue(ca.getCmCpBox6());
-            row = sh.getRow(43);
-            row.createCell(i+2).setCellValue(ca.getCmOutGot6());
-            row = sh.getRow(44);
-            row.createCell(i+2).setCellValue(ca.getCmInGot6());
-            row = sh.getRow(45);
-            row.createCell(i+2).setCellValue(ca.getCmBlogGot6());
-            row = sh.getRow(47);
-            row.createCell(i+2).setCellValue(ca.getCmTotalGot6());
-            row = sh.getRow(49);
-            row.createCell(i+2).setCellValue(ca.getCmCallIn6());
-            row = sh.getRow(50);
-            row.createCell(i+2).setCellValue(ca.getCmOutGotCall6());
-            row = sh.getRow(51);
-            row.createCell(i+2).setCellValue(ca.getCmInGotCall6());
-            row = sh.getRow(52);
-            row.createCell(i+2).setCellValue(ca.getCmBlogGotCall6());
-            row = sh.getRow(53);
-            row.createCell(i+2).setCellValue(ca.getCmBagGotCall6());
-            row = sh.getRow(55);
-            row.createCell(i+2).setCellValue(ca.getCmOwnRefs6());
-            row = sh.getRow(56);
-            row.createCell(i+2).setCellValue(ca.getCmNewspaper6());
-            row = sh.getRow(57);
-            row.createCell(i+2).setCellValue(ca.getCmTv6());
-            row = sh.getRow(58);
-            row.createCell(i+2).setCellValue(ca.getCmInternet6());
-            row = sh.getRow(59);
-            row.createCell(i+2).setCellValue(ca.getCmSign6());
-            row = sh.getRow(60);
-            row.createCell(i+2).setCellValue(ca.getCmMate6());
-            row = sh.getRow(61);
-            row.createCell(i+2).setCellValue(ca.getCmOthers6());
-            row = sh.getRow(62);
-            row.createCell(i+2).setCellValue(ca.getCmMailAgpIn6());
-            row = sh.getRow(63);
-            row.createCell(i+2).setCellValue(ca.getCmPostFlyerAgpIn6());
-            row = sh.getRow(64);
-            row.createCell(i+2).setCellValue(ca.getCmHandFlyerAgpIn6());
-            row = sh.getRow(65);
-            row.createCell(i+2).setCellValue(ca.getCmCpAgpIn6());
-            row = sh.getRow(66);
-            row.createCell(i+2).setCellValue(ca.getCmOutAgpOut6());
-            row = sh.getRow(67);
-            row.createCell(i+2).setCellValue(ca.getCmInAgpOut6());
-            row = sh.getRow(68);
-            row.createCell(i+2).setCellValue(ca.getCmBlogAgpOut6());
-            row = sh.getRow(69);
-            row.createCell(i+2).setCellValue(ca.getCmBagAgpOut6());
-            row = sh.getRow(70);
-            row.createCell(i+2).setCellValue(ca.getCmApoTotal6());
-            row = sh.getRow(71);
-            cell = row.createCell(i+2);
+            v = BigDecimal.valueOf(ca.getSvc12_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(26).createCell(idx).setCellValue(v);
+            v = BigDecimal.valueOf(ca.getSvc8to11_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(27).createCell(idx).setCellValue(v);
+            v = BigDecimal.valueOf(ca.getSvc4to7_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(28).createCell(idx).setCellValue(v);
+            v = BigDecimal.valueOf(ca.getSvc1to3_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(29).createCell(idx).setCellValue(v);
+            v = BigDecimal.valueOf(ca.getSvc0_6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(30).createCell(idx).setCellValue(v);
+            sh.getRow(41).createCell(idx).setCellValue(ca.getCmPostFlyer6());
+            sh.getRow(42).createCell(idx).setCellValue(ca.getCmHandFlyer6());
+            v = BigDecimal.valueOf(ca.getCmHandFlyerHours6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(43).createCell(idx).setCellValue(v);
+            v = BigDecimal.valueOf(ca.getCmOutGpHours6()).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
+            sh.getRow(44).createCell(idx).setCellValue(v);
+            sh.getRow(45).createCell(idx).setCellValue(ca.getCmOutGp6());
+            sh.getRow(46).createCell(idx).setCellValue(ca.getCmCpBox6());
+            sh.getRow(47).createCell(idx).setCellValue(ca.getCmOutGot6());
+            sh.getRow(48).createCell(idx).setCellValue(ca.getCmInGot6());
+            sh.getRow(49).createCell(idx).setCellValue(ca.getCmBlogGot6());
+            sh.getRow(50).createCell(idx).setCellValue(ca.getCmBagGot6());
+            sh.getRow(51).createCell(idx).setCellValue(ca.getCmTotalGot6());
+            sh.getRow(53).createCell(idx).setCellValue(ca.getCmCallIn6());
+            sh.getRow(54).createCell(idx).setCellValue(ca.getCmOutGotCall6());
+            sh.getRow(55).createCell(idx).setCellValue(ca.getCmInGotCall6());
+            sh.getRow(56).createCell(idx).setCellValue(ca.getCmBlogGotCall6());
+            sh.getRow(57).createCell(idx).setCellValue(ca.getCmBagGotCall6());
+            sh.getRow(59).createCell(idx).setCellValue(ca.getCmOwnRefs6());
+            sh.getRow(60).createCell(idx).setCellValue(ca.getCmOtherRefs6());
+            sh.getRow(61).createCell(idx).setCellValue(ca.getCmNewspaper6());
+            sh.getRow(62).createCell(idx).setCellValue(ca.getCmTv6());
+            sh.getRow(63).createCell(idx).setCellValue(ca.getCmInternet6());
+            sh.getRow(64).createCell(idx).setCellValue(ca.getCmSign6());
+            sh.getRow(65).createCell(idx).setCellValue(ca.getCmMate6());
+            sh.getRow(66).createCell(idx).setCellValue(ca.getCmOthers6());
+            sh.getRow(67).createCell(idx).setCellValue(ca.getCmMailAgpIn6());
+            sh.getRow(68).createCell(idx).setCellValue(ca.getCmPostFlyerAgpIn6());
+            sh.getRow(69).createCell(idx).setCellValue(ca.getCmHandFlyerAgpIn6());
+            sh.getRow(70).createCell(idx).setCellValue(ca.getCmCpAgpIn6());
+            sh.getRow(71).createCell(idx).setCellValue(ca.getCmOutAgpOut6());
+            sh.getRow(72).createCell(idx).setCellValue(ca.getCmInAgpOut6());
+            sh.getRow(73).createCell(idx).setCellValue(ca.getCmBlogAgpOut6());
+            sh.getRow(74).createCell(idx).setCellValue(ca.getCmBagAgpOut6());
+            sh.getRow(75).createCell(idx).setCellValue(ca.getCmApoTotal6());
+            cell = sh.getRow(76).createCell(idx);
             cell.setCellValue(ca.getCmInApptRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(72);
-            cell = row.createCell(i+2);
+            cell = sh.getRow(77).createCell(idx);
             cell.setCellValue(ca.getCmOutApptRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(76);
-            cell = row.createCell(i+2);
+            cell = sh.getRow(81).createCell(idx);
             cell.setCellValue(ca.getCmBrAgpRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(77);
-            row.createCell(i+2).setCellValue(ca.getCmFaSum6());
-            row = sh.getRow(78);
-            cell = row.createCell(i+2);
+            sh.getRow(82).createCell(idx).setCellValue(ca.getCmFaSum6());
+            cell = sh.getRow(83).createCell(idx);
             cell.setCellValue(ca.getCmShowRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(83);
-            row.createCell(i+2).setCellValue(ca.getSalesAch6());
-            row = sh.getRow(84);
-            row.createCell(i+2).setCellValue(ca.getSalesMonthly6());
-            row = sh.getRow(85);
-            row.createCell(i+2).setCellValue(ca.getSalesAllPrepay6());
-            row = sh.getRow(86);
-            row.createCell(i+2).setCellValue(ca.getSalesTotal6());
-            row = sh.getRow(87);
-            cell = row.createCell(i+2);
+            sh.getRow(88).createCell(idx).setCellValue(ca.getSalesAch6());
+            sh.getRow(89).createCell(idx).setCellValue(ca.getSalesMonthly6());
+            sh.getRow(90).createCell(idx).setCellValue(ca.getSalesAllPrepay6());
+            sh.getRow(91).createCell(idx).setCellValue(ca.getSalesTotal6());
+            cell = sh.getRow(92).createCell(idx);
             cell.setCellValue(ca.getSalesRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(88);
-            cell = row.createCell(i+2);
+            cell = sh.getRow(93).createCell(idx);
             cell.setCellValue(ca.getSalesAchAppRatio6());
             cell.setCellStyle(cellStyle0);
-            row = sh.getRow(113);
-            row.createCell(i+2).setCellValue(ca.getClubAch6());
-            row = sh.getRow(114);
-            row.createCell(i+2).setCellValue(ca.getClubMm6());
-            row = sh.getRow(115);
-            row.createCell(i+2).setCellValue(ca.getClubApp6());
-            row = sh.getRow(116);
-            row.createCell(i+2).setCellValue(ca.getClubNs6());
-            row = sh.getRow(117);
-            row.createCell(i+2).setCellValue(ca.getClubLx6());
+            sh.getRow(118).createCell(idx).setCellValue(ca.getClubAch6());
+            sh.getRow(119).createCell(idx).setCellValue(ca.getClubMm6());
+            sh.getRow(120).createCell(idx).setCellValue(ca.getClubApp6());
+            sh.getRow(121).createCell(idx).setCellValue(ca.getClubNs6());
+            sh.getRow(122).createCell(idx).setCellValue(ca.getClubLx6());
         }
 
         try {

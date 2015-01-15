@@ -61,6 +61,17 @@
         <div class="col-md-1">
           <button id="btnSave" type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save </button>
         </div>
+        <div class="col-md-1">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              Export <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" id="btnExportThis">Export This Month</a></li>
+              <li><a href="#" id="btnExportMulti">Export Multi-Months</a></li>
+            </ul>
+          </div>
+        </div>
         <div class="col-md-2">
           <h4>Club：<span class="label label-default" id="clubName"></span></h4>
         </div>
@@ -175,14 +186,25 @@
                   </tr>
                   <tr>
                     <td></td>
-                    <td style="font-weight: bold">移籍(移出為負，移入為正)</td>
+                    <td style="font-weight: bold">移出為負</td>
                     <td></td>
-                    <td><div contenteditable="true" id="svcShift-1"></div></td>
-                    <td><div contenteditable="true" id="svcShift-2"></div></td>
-                    <td><div contenteditable="true" id="svcShift-3"></div></td>
-                    <td><div contenteditable="true" id="svcShift-4"></div></td>
-                    <td><div contenteditable="true" id="svcShift-5"></div></td>
-                    <td style="background-color: #0099FF" contenteditable="true" id="svcShift-6"></td>
+                    <td><div contenteditable="true" id="svcShiftOut-1"></div></td>
+                    <td><div contenteditable="true" id="svcShiftOut-2"></div></td>
+                    <td><div contenteditable="true" id="svcShiftOut-3"></div></td>
+                    <td><div contenteditable="true" id="svcShiftOut-4"></div></td>
+                    <td><div contenteditable="true" id="svcShiftOut-5"></div></td>
+                    <td style="background-color: #0099FF" contenteditable="true" id="svcShiftOut-6"></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td style="font-weight: bold">移入為正</td>
+                    <td></td>
+                    <td><div contenteditable="true" id="svcShiftIn-1"></div></td>
+                    <td><div contenteditable="true" id="svcShiftIn-2"></div></td>
+                    <td><div contenteditable="true" id="svcShiftIn-3"></div></td>
+                    <td><div contenteditable="true" id="svcShiftIn-4"></div></td>
+                    <td><div contenteditable="true" id="svcShiftIn-5"></div></td>
+                    <td style="background-color: #0099FF" contenteditable="true" id="svcShiftIn-6"></td>
                   </tr>
                   <tr>
                     <td></td>
@@ -446,17 +468,17 @@
                     <td><div contenteditable="true" id ="cmPostFlyer-5"></div></td>
                     <td id="cmPostFlyer-6" style="background-color: lightGray"></td>
                   </tr>
-                  <tr>
-                    <td></td>
-                    <td style="font-weight: bold">員工手發傳單的張數</td>
-                    <td></td>
-                    <td><div contenteditable="true" id ="cmHandFlyer-1"></div></td>
-                    <td><div contenteditable="true" id ="cmHandFlyer-2"></div></td>
-                    <td><div contenteditable="true" id ="cmHandFlyer-3"></div></td>
-                    <td><div contenteditable="true" id ="cmHandFlyer-4"></div></td>
-                    <td><div contenteditable="true" id ="cmHandFlyer-5"></div></td>
-                    <td id="cmHandFlyer-6" style="background-color: lightGray"></td>
-                  </tr>
+                  <!--<tr>-->
+                    <!--<td></td>-->
+                    <!--<td style="font-weight: bold">員工手發傳單的張數</td>-->
+                    <!--<td></td>-->
+                    <!--<td><div contenteditable="true" id ="cmHandFlyer-1"></div></td>-->
+                    <!--<td><div contenteditable="true" id ="cmHandFlyer-2"></div></td>-->
+                    <!--<td><div contenteditable="true" id ="cmHandFlyer-3"></div></td>-->
+                    <!--<td><div contenteditable="true" id ="cmHandFlyer-4"></div></td>-->
+                    <!--<td><div contenteditable="true" id ="cmHandFlyer-5"></div></td>-->
+                    <!--<td id="cmHandFlyer-6" style="background-color: lightGray"></td>-->
+                  <!--</tr>-->
                   <tr>
                     <td></td>
                     <td style="font-weight: bold">員工手發傳單的時數</td>
@@ -1647,6 +1669,33 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-primary" id="btnSave2">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="dlgExport" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" data-toggle="modal" data-target="#dlgExport">Export</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-10">
+                <div class="input-daterange input-group" id="datepicker">
+                  <span class="input-group-addon">From</span>
+                  <input type="text" class="input-sm form-control" id="x1Date" />
+                  <span class="input-group-addon">To</span>
+                  <input type="text" class="input-sm form-control" id="x2Date" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="btnExportMonths">Export</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

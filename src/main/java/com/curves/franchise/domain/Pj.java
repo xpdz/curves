@@ -23,6 +23,7 @@ public class Pj implements Serializable {
     private int newSalesRevenue;
     private int productsRevenue;
     private int duesDraftsRevenue;
+    private int wheyProteinRevenue;
     private int otherRevenue; // not present in old fmt
     private int incomingCalls;
     private int incomingApo;
@@ -83,6 +84,10 @@ public class Pj implements Serializable {
 
     public void setDuesDraftsRevenue(int duesDraftsRevenue) {
         this.duesDraftsRevenue = duesDraftsRevenue;
+    }
+
+    public void setWheyProteinRevenue(int wheyProteinRevenue) {
+        this.wheyProteinRevenue = wheyProteinRevenue;
     }
 
     public void setOtherRevenue(int otherRevenue) {
@@ -223,6 +228,10 @@ public class Pj implements Serializable {
 
     public int getDuesDraftsRevenue() {
         return duesDraftsRevenue;
+    }
+
+    public int getWheyProteinRevenue() {
+        return wheyProteinRevenue;
     }
 
     public int getOtherRevenue() {

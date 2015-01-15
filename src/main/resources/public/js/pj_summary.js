@@ -60,14 +60,14 @@ $(document).ready(function() {
 
     function fillSheet(pjs) {
         $tbd.empty();
-        var t1=0,t2=0,t3=0,t4=0,t5=0,t6=0,t7=0,t8=0,t9=0,t10=0,t11=0,t12=0,t13=0,t14=0,t15=0,t16=0,t17=0,t18=0,t19=0,t20=0,t21=0,t22=0;
+        var t1=0,t2=0,t3=0,t4=0,t5=0,t6=0,t7=0,t8=0,t9=0,t10=0,t11=0,t12=0,t13=0,t14=0,t15=0,t16=0,t17=0,t18=0,t19=0,t20=0,t21=0,t22=0,t23=0;
         for (var i = 0; i < pjs.length; i++) {
             var pj = pjs[i];
             t1 += pj.newSales; t2 += pj.exits; t3 += pj.shiftIn; t4 += pj.shiftOut; t5 += pj.increment; t6 += pj.revenue;
             t7 += pj.enrolled; t8 += pj.leaves; t9 += pj.valids; t10 += pj.salesRatio; t11 += pj.exitRatio;
             t12 += pj.leaveRatio; t13 += pj.maxWorkOuts; t14 += pj.newSalesRevenue; t15 += pj.duesDraftsRevenue;
             t16 += pj.productsRevenue; t17 += pj.otherRevenue; t18 += pj.faSum; t19 += pj.enrollAch;
-            t20 += pj.enrollMonthly; t21 += pj.enrollAllPrepay; t22 += pj.exits;
+            t20 += pj.enrollMonthly; t21 += pj.enrollAllPrepay; t22 += pj.exits, t23 += pj.wheyProteinRevenue;
         }
         $tbd.append($('<tr style="background-color: lightGray"/>').append(
             $('<td colspan="2">AVG</td>'),
@@ -140,6 +140,7 @@ $(document).ready(function() {
                 $('<td>' + pj.newSalesRevenue + '</td>'),
                 $('<td>' + pj.duesDraftsRevenue + '</td>'),
                 $('<td>' + pj.productsRevenue + '</td>'),
+                $('<td>' + pj.wheyProteinRevenue + '</td>'),
                 $('<td>' + pj.otherRevenue + '</td>'),
                 $('<td>' + pj.faSum + '</td>'),
                 $('<td>' + pj.enrollAch + '</td>'),

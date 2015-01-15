@@ -45,6 +45,7 @@ public class PjSum implements Serializable {
     private int newSalesRevenue;
     private int duesDraftsRevenue;
     private int productsRevenue;
+    private int wheyProteinRevenue;
     private int otherRevenue;
     private int incomingCalls;
     private int incomingApo;
@@ -165,6 +166,10 @@ public class PjSum implements Serializable {
 
     public void setProductsRevenue(int productsRevenue) {
         this.productsRevenue = productsRevenue;
+    }
+
+    public void setWheyProteinRevenue(int wheyProteinRevenue) {
+        this.wheyProteinRevenue = wheyProteinRevenue;
     }
 
     public void setOtherRevenue(int otherRevenue) {
@@ -357,6 +362,10 @@ public class PjSum implements Serializable {
 
     public int getProductsRevenue() {
         return productsRevenue;
+    }
+
+    public int getWheyProteinRevenue() {
+        return wheyProteinRevenue;
     }
 
     public int getOtherRevenue() {

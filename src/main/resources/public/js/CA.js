@@ -21,6 +21,50 @@ $(document).ready(function() {
         getCA();
     });
 
+    var tmpDate = new Date(today.getFullYear(), today.getMonth()-1, 1);
+    var yEnd = tmpDate.getFullYear();
+    var mEnd = tmpDate.getMonth();
+    tmpDate.setMonth(mEnd - 5);
+    var yStart = tmpDate.getFullYear();
+    var mStart = tmpDate.getMonth();
+
+    // init date picker
+    $('#x1Date').val(yStart + '-' + (mStart+1));
+    $('#x1Date').datepicker({
+        minViewMode: 1,
+        autoclose: true,
+        format: "yyyy-mm",
+        language: "zh-TW",
+        todayHighlight: true
+    });
+    $('#x1Date').datepicker().on('changeDate', function(ev) {
+        yStart = ev.date.getFullYear();
+        mStart = ev.date.getMonth();
+    });
+    $('#x2Date').val(yEnd + '-' + (mEnd+1));
+    $('#x2Date').datepicker({
+        minViewMode: 1,
+        autoclose: true,
+        format: "yyyy-mm",
+        language: "zh-TW",
+        todayHighlight: true
+    });
+    $('#x2Date').datepicker().on('changeDate', function(ev) {
+        yEnd = ev.date.getFullYear();
+        mEnd = ev.date.getMonth();
+    });
+
+    $('#btnExportThis').click(function() {
+      window.location = "/rest/CA/export?yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
+    });
+    $('#btnExportMulti').click(function() {
+      $('#dlgExport').modal({});
+    });
+    $('#btnExportMonths').click(function() {
+      $('#dlgExport').modal('hide');
+      window.location = "/rest/CA/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
+    });
+
     function clearNaN() {
         $('td').each(function() {
             var valueX = $(this).text();
@@ -119,7 +163,7 @@ $(document).ready(function() {
 
     function fillSheet(ca) {
         $('#goalsTm').text(ca.goalsTm);
-        $('#goalsExitsRatio').text((+(ca.goalsExitsRatio*100))+'%');
+        $('#goalsExitsRatio').text((ca.goalsExitsRatio*100).toFixed(1)+'%');
         $('#goalsNewSales').text(ca.goalsNewSales);
         $('#salesTotalX').text(ca.goalsNewSales);
         $('#goalsAppoints').text(ca.goalsAppoints);
@@ -131,12 +175,18 @@ $(document).ready(function() {
         $('#svcTm-4').text(ca.svcTm4);
         $('#svcTm-5').text(ca.svcTm5);
         $('#svcTm-6').text(ca.svcTm6);
-        $('#svcShift-1').text(ca.svcShift1);
-        $('#svcShift-2').text(ca.svcShift2);
-        $('#svcShift-3').text(ca.svcShift3);
-        $('#svcShift-4').text(ca.svcShift4);
-        $('#svcShift-5').text(ca.svcShift5);
-        $('#svcShift-6').text(ca.svcShift6);
+        $('#svcShiftOut-1').text(ca.svcShiftOut1);
+        $('#svcShiftOut-2').text(ca.svcShiftOut2);
+        $('#svcShiftOut-3').text(ca.svcShiftOut3);
+        $('#svcShiftOut-4').text(ca.svcShiftOut4);
+        $('#svcShiftOut-5').text(ca.svcShiftOut5);
+        $('#svcShiftOut-6').text(ca.svcShiftOut6);
+        $('#svcShiftIn-1').text(ca.svcShiftIn1);
+        $('#svcShiftIn-2').text(ca.svcShiftIn2);
+        $('#svcShiftIn-3').text(ca.svcShiftIn3);
+        $('#svcShiftIn-4').text(ca.svcShiftIn4);
+        $('#svcShiftIn-5').text(ca.svcShiftIn5);
+        $('#svcShiftIn-6').text(ca.svcShiftIn6);
         $('#svcHold-1').text(ca.svcHold1);
         $('#svcHold-2').text(ca.svcHold2);
         $('#svcHold-3').text(ca.svcHold3);
@@ -483,10 +533,10 @@ $(document).ready(function() {
         $('#cmOutApptRatio-5').text((ca.cmOutApptRatio5*100).toFixed(0)+'%');
         $('#cmOutApptRatio-6').text((ca.cmOutApptRatio6*100).toFixed(0)+'%');
         $('#cmPostPerApo-6').text(ca.cmPostPerApo6);
-        $('#cmHandPerApo-6').text(ca.cmHandPerApo6);
+//        $('#cmHandPerApo-6').text(ca.cmHandPerApo6);
         $('#cmHandHoursPerApo-6').text(ca.cmHandHoursPerApo6.toFixed(1));
         $('#cmOutGpHoursPerApo-6').text(ca.cmOutGpHoursPerApo6.toFixed(1));
-        $('#cmOutGpPerApo-6').text(ca.cmOutGpPerApo6);
+//        $('#cmOutGpPerApo-6').text(ca.cmOutGpPerApo6);
         if (ca.cmBrAgpRatio6 > 0.75) {
             $('#cmBrAgpRatio-0').css('color', 'red');
         }
@@ -944,12 +994,18 @@ $(document).ready(function() {
         ca.svcTm4 = +$('#svcTm-4').text();
         ca.svcTm5 = +$('#svcTm-5').text();
         ca.svcTm6 = +$('#svcTm-6').text();
-        ca.svcShift1 = +$('#svcShift-1').text();
-        ca.svcShift2 = +$('#svcShift-2').text();
-        ca.svcShift3 = +$('#svcShift-3').text();
-        ca.svcShift4 = +$('#svcShift-4').text();
-        ca.svcShift5 = +$('#svcShift-5').text();
-        ca.svcShift6 = +$('#svcShift-6').text();
+        ca.svcShiftOut1 = +$('#svcShiftOut-1').text();
+        ca.svcShiftOut2 = +$('#svcShiftOut-2').text();
+        ca.svcShiftOut3 = +$('#svcShiftOut-3').text();
+        ca.svcShiftOut4 = +$('#svcShiftOut-4').text();
+        ca.svcShiftOut5 = +$('#svcShiftOut-5').text();
+        ca.svcShiftOut6 = +$('#svcShiftOut-6').text();
+        ca.svcShiftIn1 = +$('#svcShiftIn-1').text();
+        ca.svcShiftIn2 = +$('#svcShiftIn-2').text();
+        ca.svcShiftIn3 = +$('#svcShiftIn-3').text();
+        ca.svcShiftIn4 = +$('#svcShiftIn-4').text();
+        ca.svcShiftIn5 = +$('#svcShiftIn-5').text();
+        ca.svcShiftIn6 = +$('#svcShiftIn-6').text();
         ca.svcHold1 = +$('#svcHold-1').text();
         ca.svcHold2 = +$('#svcHold-2').text();
         ca.svcHold3 = +$('#svcHold-3').text();
@@ -1272,10 +1328,10 @@ $(document).ready(function() {
         ca.cmOutApptRatio5 = parseFloat($('#cmOutApptRatio-5').text())/100;
         ca.cmOutApptRatio6 = parseFloat($('#cmOutApptRatio-6').text())/100;
         ca.cmPostPerApo6 = +$('#cmPostPerApo-6').text();
-        ca.cmHandPerApo6 = +$('#cmHandPerApo-6').text();
+//        ca.cmHandPerApo6 = +$('#cmHandPerApo-6').text();
         ca.cmHandHoursPerApo6 = +$('#cmHandHoursPerApo-6').text();
         ca.cmOutGpHoursPerApo6 = parseFloat($('#cmOutGpHoursPerApo-6').text());
-        ca.cmOutGpPerApo6 = +$('#cmOutGpPerApo-6').text();
+//        ca.cmOutGpPerApo6 = +$('#cmOutGpPerApo-6').text();
         ca.cmBrAgpRatio1 = parseFloat($('#cmBrAgpRatio-1').text())/100;
         ca.cmBrAgpRatio2 = parseFloat($('#cmBrAgpRatio-2').text())/100;
         ca.cmBrAgpRatio3 = parseFloat($('#cmBrAgpRatio-3').text())/100;

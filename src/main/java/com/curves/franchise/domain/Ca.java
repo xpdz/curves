@@ -33,7 +33,8 @@ public class Ca implements Serializable {
 
     // service
     private int svcTm1, svcTm2, svcTm3, svcTm4, svcTm5, svcTm6;
-    private int svcShift1, svcShift2, svcShift3, svcShift4, svcShift5, svcShift6;
+    private int svcShiftOut1, svcShiftOut2, svcShiftOut3, svcShiftOut4, svcShiftOut5, svcShiftOut6;
+    private int svcShiftIn1, svcShiftIn2, svcShiftIn3, svcShiftIn4, svcShiftIn5, svcShiftIn6;
     private int svcHold1, svcHold2, svcHold3, svcHold4, svcHold5, svcHold6;
     private int svcActive1, svcActive2, svcActive3, svcActive4, svcActive5, svcActive6;
     private float svcHoldRatio1, svcHoldRatio2, svcHoldRatio3, svcHoldRatio4, svcHoldRatio5, svcHoldRatio6;
@@ -292,28 +293,52 @@ public class Ca implements Serializable {
         this.svcTm6 = svcTm6;
     }
 
-    public void setSvcShift1(int svcShift1) {
-        this.svcShift1 = svcShift1;
+    public void setSvcShiftOut1(int svcShiftOut1) {
+        this.svcShiftOut1 = svcShiftOut1;
     }
 
-    public void setSvcShift2(int svcShift2) {
-        this.svcShift2 = svcShift2;
+    public void setSvcShiftOut2(int svcShiftOut2) {
+        this.svcShiftOut2 = svcShiftOut2;
     }
 
-    public void setSvcShift3(int svcShift3) {
-        this.svcShift3 = svcShift3;
+    public void setSvcShiftOut3(int svcShiftOut3) {
+        this.svcShiftOut3 = svcShiftOut3;
     }
 
-    public void setSvcShift4(int svcShift4) {
-        this.svcShift4 = svcShift4;
+    public void setSvcShiftOut4(int svcShiftOut4) {
+        this.svcShiftOut4 = svcShiftOut4;
     }
 
-    public void setSvcShift5(int svcShift5) {
-        this.svcShift5 = svcShift5;
+    public void setSvcShiftOut5(int svcShiftOut5) {
+        this.svcShiftOut5 = svcShiftOut5;
     }
 
-    public void setSvcShift6(int svcShift6) {
-        this.svcShift6 = svcShift6;
+    public void setSvcShiftOut6(int svcShiftOut6) {
+        this.svcShiftOut6 = svcShiftOut6;
+    }
+
+    public void setSvcShiftIn1(int svcShiftIn1) {
+        this.svcShiftIn1 = svcShiftIn1;
+    }
+
+    public void setSvcShiftIn2(int svcShiftIn2) {
+        this.svcShiftIn2 = svcShiftIn2;
+    }
+
+    public void setSvcShiftIn3(int svcShiftIn3) {
+        this.svcShiftIn3 = svcShiftIn3;
+    }
+
+    public void setSvcShiftIn4(int svcShiftIn4) {
+        this.svcShiftIn4 = svcShiftIn4;
+    }
+
+    public void setSvcShiftIn5(int svcShiftIn5) {
+        this.svcShiftIn5 = svcShiftIn5;
+    }
+
+    public void setSvcShiftIn6(int svcShiftIn6) {
+        this.svcShiftIn6 = svcShiftIn6;
     }
 
     public void setSvcHold1(int svcHold1) {
@@ -3312,28 +3337,52 @@ public class Ca implements Serializable {
         return svcTm6;
     }
 
-    public int getSvcShift1() {
-        return svcShift1;
+    public int getSvcShiftIn1() {
+        return svcShiftIn1;
     }
 
-    public int getSvcShift2() {
-        return svcShift2;
+    public int getSvcShiftIn2() {
+        return svcShiftIn2;
     }
 
-    public int getSvcShift3() {
-        return svcShift3;
+    public int getSvcShiftIn3() {
+        return svcShiftIn3;
     }
 
-    public int getSvcShift4() {
-        return svcShift4;
+    public int getSvcShiftIn4() {
+        return svcShiftIn4;
     }
 
-    public int getSvcShift5() {
-        return svcShift5;
+    public int getSvcShiftIn5() {
+        return svcShiftIn5;
     }
 
-    public int getSvcShift6() {
-        return svcShift6;
+    public int getSvcShiftIn6() {
+        return svcShiftIn6;
+    }
+
+    public int getSvcShiftOut1() {
+        return svcShiftOut1;
+    }
+
+    public int getSvcShiftOut2() {
+        return svcShiftOut2;
+    }
+
+    public int getSvcShiftOut3() {
+        return svcShiftOut3;
+    }
+
+    public int getSvcShiftOut4() {
+        return svcShiftOut4;
+    }
+
+    public int getSvcShiftOut5() {
+        return svcShiftOut5;
+    }
+
+    public int getSvcShiftOut6() {
+        return svcShiftOut6;
     }
 
     public int getSvcHold1() {

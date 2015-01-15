@@ -23,6 +23,52 @@ $(document).ready(function() {
         getPJ();
     });
 
+    var tmpDate = new Date(today.getFullYear(), today.getMonth()-1, 1);
+    var yEnd = tmpDate.getFullYear();
+    var mEnd = tmpDate.getMonth();
+    tmpDate.setMonth(mEnd - 5);
+    var yStart = tmpDate.getFullYear();
+    var mStart = tmpDate.getMonth();
+
+    // init date picker
+    $('#x1Date').val(yStart + '-' + (mStart+1));
+    $('#x1Date').datepicker({
+        minViewMode: 1,
+        autoclose: true,
+        format: "yyyy-mm",
+        language: "zh-TW",
+        todayHighlight: true
+    });
+    $('#x1Date').datepicker().on('changeDate', function(ev) {
+        yStart = ev.date.getFullYear();
+        mStart = ev.date.getMonth();
+    });
+    $('#x2Date').val(yEnd + '-' + (mEnd+1));
+    $('#x2Date').datepicker({
+        minViewMode: 1,
+        autoclose: true,
+        format: "yyyy-mm",
+        language: "zh-TW",
+        todayHighlight: true
+    });
+    $('#x2Date').datepicker().on('changeDate', function(ev) {
+        yEnd = ev.date.getFullYear();
+        mEnd = ev.date.getMonth();
+    });
+
+    $('#btnExportThis').click(function() {
+    console.log("----"+yStart);
+      window.location = "/rest/PJ/export?yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
+    });
+    $('#btnExportMulti').click(function() {
+    console.log("--22--"+yStart);
+      $('#dlgExport').modal({});
+    });
+    $('#btnExportMonths').click(function() {
+      $('#dlgExport').modal('hide');
+      window.location = "/rest/PJ/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
+    });
+
     function clearZero() {
         $('div[contenteditable]').each(function() {
             var valueX = $(this).text();
@@ -84,6 +130,7 @@ $(document).ready(function() {
               '<td style="background-color: #FFFF99"><div id="newSalesRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.newSalesRevenue ||'')+ '</div></td>' +
               '<td style="background-color: #FFFF99"><div id="duesDraftsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.duesDraftsRevenue ||'')+ '</div></td>' +
               '<td style="background-color: #FFFF99"><div id="productsRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.productsRevenue ||'')+ '</div></td>' +
+              '<td style="background-color: #FFFF99"><div id="wheyProteinRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.wheyProteinRevenue ||'')+ '</div></td>' +
               '<td style="background-color: #FFFF99"><div id="otherRevenue-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.otherRevenue ||'')+ '</div></td>' +
               '<td style="background-color: #B7DEE8"><div id="incomingCalls-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingCalls ||'')+ '</div></td>' +
               '<td style="background-color: #B7DEE8"><div id="incomingApo-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.incomingApo ||'')+ '</div></td>' +
@@ -155,6 +202,7 @@ $(document).ready(function() {
             $('<td id="newSalesRevenue">' + (pjSum.newSalesRevenue) + '</td>'),
             $('<td id="duesDraftsRevenue">' + (pjSum.duesDraftsRevenue) + '</td>'),
             $('<td id="productsRevenue">' + (pjSum.productsRevenue) + '</td>'),
+            $('<td id="wheyProteinRevenue">' + (pjSum.wheyProteinRevenue) + '</td>'),
             $('<td id="otherRevenue">' + (pjSum.otherRevenue) + '</td>'),
             $('<td id="incomingCalls">' + (pjSum.incomingCalls) + '</td>'),
             $('<td id="incomingApo">' + (pjSum.incomingApo) + '</td>'),
@@ -250,6 +298,7 @@ $(document).ready(function() {
         pjSum.newSalesRevenue = +$('#newSalesRevenue').text();
         pjSum.duesDraftsRevenue = +$('#duesDraftsRevenue').text();
         pjSum.productsRevenue = +$('#productsRevenue').text();
+        pjSum.wheyProteinRevenue = +$('#wheyProteinRevenue').text();
         pjSum.otherRevenue = +$('#otherRevenue').text();
         pjSum.incomingCalls = +$('#incomingCalls').text();
         pjSum.incomingApo = +$('#incomingApo').text();
@@ -286,6 +335,7 @@ $(document).ready(function() {
             pj.newSalesRevenue = +$('#newSalesRevenue-' + idx).text();
             pj.duesDraftsRevenue = +$('#duesDraftsRevenue-' + idx).text();
             pj.productsRevenue = +$('#productsRevenue-' + idx).text();
+            pj.wheyProteinRevenue = +$('#wheyProteinRevenue-' + idx).text();
             pj.otherRevenue = +$('#otherRevenue-' + idx).text();
             pj.incomingCalls = +$('#incomingCalls-' + idx).text();
             pj.incomingApo = +$('#incomingApo-' + idx).text();
@@ -333,7 +383,7 @@ $(document).ready(function() {
     });
 
     function runFormula() {
-        var workingDays = 0, workOuts = 0, newSalesRevenue = 0, duesDraftsRevenue = 0, productsRevenue = 0, otherRevenue = 0, incomingCalls = 0, incomingApo = 0,
+        var workingDays = 0, workOuts = 0, newSalesRevenue = 0, duesDraftsRevenue = 0, productsRevenue = 0, wheyProteinRevenue = 0, otherRevenue = 0, incomingCalls = 0, incomingApo = 0,
             outgoingCalls = 0, outgoingApo = 0, brOwnRef = 0, brOthersRef = 0, brandedNewspaper = 0, brandedTv = 0, brandedInternet = 0, brandedSign = 0,
             brandedMate = 0, brandedOthers = 0, agpInDirectMail = 0, agpInMailFlyer = 0, agpInHandFlyer = 0, agpInCp = 0, agpOutApoOut = 0, agpOutApoIn = 0,
             agpOutApoBlog = 0, agpOutApoBag = 0, faSum = 0, enrollAch = 0, enrollMonthly = 0, enrollAllPrepay = 0, exits = 0;
@@ -354,6 +404,7 @@ $(document).ready(function() {
             newSalesRevenue += Number($('#newSalesRevenue-' + idx).text());
             duesDraftsRevenue += Number($('#duesDraftsRevenue-' + idx).text());
             productsRevenue += Number($('#productsRevenue-' + idx).text());
+            wheyProteinRevenue += Number($('#wheyProteinRevenue-' + idx).text());
             otherRevenue += Number($('#otherRevenue-' + idx).text());
             incomingCalls += Number($('#incomingCalls-' + idx).text());
             incomingApo += Number($('#incomingApo-' + idx).text());
@@ -386,6 +437,7 @@ $(document).ready(function() {
         $('#newSalesRevenue').text(newSalesRevenue);
         $('#duesDraftsRevenue').text(duesDraftsRevenue);
         $('#productsRevenue').text(productsRevenue);
+        $('#wheyProteinRevenue').text(wheyProteinRevenue);
         $('#otherRevenue').text(otherRevenue);
         $('#incomingCalls').text(incomingCalls);
         $('#incomingApo').text(incomingApo);
@@ -417,7 +469,7 @@ $(document).ready(function() {
         $('#newSales').text(newSales);
         $('#exits').text(exits);
         $('#increment').text(newSales-exits+Number($('#shiftIn').text())-Number($('#shiftOut').text()));
-        $('#revenue').text(newSalesRevenue+duesDraftsRevenue+productsRevenue+otherRevenue);
+        $('#revenue').text(newSalesRevenue+duesDraftsRevenue+productsRevenue+wheyProteinRevenue+otherRevenue);
         if (faSum !== 0) {
             $('#salesRatio').text((newSales*100/faSum).toFixed(0) + "%");
         }
