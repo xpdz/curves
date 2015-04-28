@@ -5,7 +5,7 @@ buildscript {
         maven { url "http://repo.spring.io/libs-release" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
     }
 }
 
@@ -33,13 +33,13 @@ configurations {
 }
 
 dependencies {
-    runtime("mysql:mysql-connector-java:5.1.33")
+    runtime("mysql:mysql-connector-java:5.1.35")
 
     compile 'commons-io:commons-io:2.4'
 
-    compile group: 'org.apache.poi', name: 'poi', version: '3.11-beta3'
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11-beta3'
-    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.11-beta3'
+    compile group: 'org.apache.poi', name: 'poi', version: '3.11'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.11'
+    compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.11'
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
@@ -54,5 +54,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+    gradleVersion = '2.3'
 }
