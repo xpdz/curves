@@ -8,6 +8,7 @@ $(document).ready(function() {
             $('<td>' + clubs[i].clubId + '</td>'),
             $('<td>' + clubs[i].name + '</td>'),
             $('<td>' + clubs[i].owner + '</td>'),
+            $('<td>' + clubs[i].openDate + '</td>'),
             $('<td><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">PJ</a></td>'),
             $('<td><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">CA</a></td>'),
             $('<td><a class="btn btn-primary" href="trends.htm?clubId='+clubs[i].clubId+'"><i class="fa fa-line-chart"></i> Trends</a></td>'),
