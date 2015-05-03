@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html lang="en" class="ie6 ielt7 ielt8 ielt9"><![endif]--><!--[if IE 7 ]><html lang="en" class="ie7 ielt8 ielt9"><![endif]--><!--[if IE 8 ]><html lang="en" class="ie8 ielt9"><![endif]--><!--[if IE 9 ]><html lang="en" class="ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en"><!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<title>Trends</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+		<link href="css/site.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	</head>
+	<body>
+		<div class="container-fluid" style="overflow: auto">
+			<nav class="navbar navbar-default" role="navigation">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#">Curves</a>
+			    </div>
+
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+		          <li><a href="management.htm">Clubs</a></li>
+              <li><a href="us_report.htm">US Report</a></li>
+              <li><a href="CA_all.htm">CA (All)</a></li>
+              <li><a href="rank.htm">Benchmarking</a></li>
+			      </ul>
+			      <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown active">
+                <a href="#" class="dropdown-toggle" id="userId" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#" id="btnChangePassword">Change Password</a></li>
+                </ul>
+              </li>
+              <li><a href="index.htm">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+
+      <div class="row">
+        <div class="alert hide" role="alert" id="alertMain"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="input-daterange input-group" id="datepicker">
+            <span class="input-group-addon">From</span>
+            <input type="text" class="input-sm form-control" id="x1Date" />
+            <span class="input-group-addon">To</span>
+            <input type="text" class="input-sm form-control" id="x2Date" />
+          </div>
+        </div>
+        <div class="col-md-1">
+          <button id="btnLoad" type="button" class="btn btn-success"> Load Data </button>
+        </div>
+      </div>
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <canvas id="chartNewSales" width="540" height="400"></canvas>
+          <h4>新銷售</h4>
+        </div>
+        <div class="col-md-6">
+          <canvas id="chartProductsRevenue" width="540" height="400"></canvas>
+          <h4>商品收入</h4>
+        </div>
+      </div>
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <canvas id="chartBrOwnRef" width="540" height="400"></canvas>
+          <h4>會員介紹</h4>
+        </div>
+        <div class="col-md-6">
+          <canvas id="chartFaSum" width="540" height="400"></canvas>
+          <h4>FA總數</h4>
+        </div>
+      </div>
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <canvas id="chartSvcTotalWo" width="540" height="400"></canvas>
+          <h4>總WO次數</h4>
+        </div>
+        <div class="col-md-6">
+          <canvas id="chartCmTotalGot" width="540" height="400"></canvas>
+          <h4>得到電話與人名的總數</h4>
+        </div>
+      </div>
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <canvas id="chartCmInApptRatio" width="540" height="400"></canvas>
+          <h4>Apo率 %</h4>
+        </div>
+        <div class="col-md-6">
+          <canvas id="chartCmFaSum" width="540" height="400"></canvas>
+          <h4>TOG人數</h4>
+        </div>
+      </div>
+      <div class="row" align="center">
+        <div class="col-md-6">
+          <canvas id="chartExitsRatio" width="540" height="400"></canvas>
+          <h4>退會率 %</h4>
+        </div>
+        <div class="col-md-6">
+          <canvas id="chartSalesRatio" width="540" height="400"></canvas>
+          <h4>結案率 %</h4>
+        </div>
+      </div>
+		</div>
+
+    <div class="modal fade" id="dlgPassword" tabindex="-1" role="dialog" aria-labelledby="passwdLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" data-toggle="modal" data-target="#dlgPassword">Password</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="alert hide" role="alert" id="alertPasswd"></div>
+            </div>
+            <form role="form">
+              <div class="form-group">
+                <label for="passwd1">New Password</label>
+                <input type="password" class="form-control" id="passwd1" placeholder="New Password">
+              </div>
+              <div class="form-group">
+                <label for="passwd2">Password Again</label>
+                <input type="password" class="form-control" id="passwd2" placeholder="Password Again">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="btnSave2">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+    <script src="js/bootstrap-datepicker.zh-TW.js" charset="UTF-8"></script>
+    <script src="js/trends.js"></script>
+	</body>
+</html>

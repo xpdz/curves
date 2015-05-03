@@ -42,13 +42,15 @@ public class ManagementController {
     @Autowired
     private CaRepository caRepo;
 
-    @RequestMapping(value = "/rest/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/users", method = RequestMethod.POST)
     @ResponseBody
-    public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name, @RequestParam("owner") String owner) {
-        logger.info("---saveUser---clubId: "+clubId+", name: "+name+", owner: "+owner);
+    public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name,
+                           @RequestParam("openDate") Date openDate, @RequestParam("owner") String owner) {
+        logger.info("---saveUser---clubId: "+clubId+", name: "+name+", openDate: "+openDate+", owner: "+owner);
         Club club = new Club();
         club.setClubId(clubId);
         club.setName(name);
+        club.setOpenDate(openDate);
         club.setOwner(owner);
 
         User user = new User();
@@ -316,8 +318,8 @@ public class ManagementController {
     }
 
     private void formatValue(Workbook wb, Cell cell, String item, Number v) {
-        if (item.indexOf("Ratio") != -1) {
-            if (item.indexOf("ExitsRatio") != -1 || item.indexOf("HoldRatio") != -1) {
+        if (item.contains("Ratio")) {
+            if (item.contains("ExitsRatio") || item.contains("HoldRatio")) {
                 CellStyle cellStyle = wb.createCellStyle();
                 cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
                 cell.setCellStyle(cellStyle);
@@ -327,9 +329,13 @@ public class ManagementController {
                 cell.setCellStyle(cellStyle);
             }
             cell.setCellValue(v.doubleValue());
-        } else if (item.equals("SvcMaxWo6") || item.equals("SvcAvgWo6")
-                || item.equals("Svc12_6") || item.equals("Svc8to11_6") || item.equals("Svc4to7_6")
-                || item.equals("Svc1to3_6") || item.equals("Svc0_6") || item.equals("CmHandFlyerHours6")
+        } else if (item.equals("Svc12_6") || item.equals("Svc8to11_6") || item.equals("Svc4to7_6")
+                || item.equals("Svc1to3_6") || item.equals("Svc0_6")) {
+            CellStyle cellStyle = wb.createCellStyle();
+            cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.00%"));
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue(v.doubleValue());
+        } else if (item.equals("SvcMaxWo6") || item.equals("SvcAvgWo6") || item.equals("CmHandFlyerHours6")
                 || item.equals("CmOutGpHours6") || item.equals("CmHandHoursPerApo6") || item.equals("CmOutGpHoursPerApo6")) {
             CellStyle cellStyle = wb.createCellStyle();
             cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0"));
