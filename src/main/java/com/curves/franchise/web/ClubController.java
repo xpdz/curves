@@ -55,16 +55,11 @@ public class ClubController {
                 String name = row.getCell(0).getStringCellValue();
                 String owner = row.getCell(1).getStringCellValue();
                 Date date = row.getCell(2).getDateCellValue();
-                logger.info("===update club===name: "+name+", owner: "+owner+", date: "+date);
-                while (clubs.iterator().hasNext()) {
-                    Club club = clubs.iterator().next();
-                    if (club.getName().equals(name)) {
-                        club.setOpenDate(date);
-                        club.setOwnerEn(owner);
-                        clubRepo.save(club);
-                        logger.info("Got & saved!");
-                        break;
-                    }
+                logger.info("===update club===name: " + name + ", owner: " + owner + ", date: " + date);
+                Club club = clubRepo.findByName(name);
+                if (club == null) {
+                    logger.info("===update club=== " + name + " NOT FOUND!!!");
+                    continue;
                 }
             }
             try {
