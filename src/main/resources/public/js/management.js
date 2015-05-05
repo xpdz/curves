@@ -4,11 +4,12 @@ $(document).ready(function() {
       $.getJSON("/rest/clubs", function(clubs) {
         var $tbd = $('#tbd');
         for (var i = 0; i < clubs.length; i++) {
+          var openDay = new Date(clubs[i].openDate);
           $tbd.append($('<tr/>').append(
             $('<td>' + clubs[i].clubId + '</td>'),
             $('<td>' + clubs[i].name + '</td>'),
             $('<td>' + clubs[i].owner + '</td>'),
-            $('<td>' + clubs[i].openDate + '</td>'),
+            $('<td>' + openDay.toLocaleDateString() + '</td>'),
             $('<td><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">PJ</a></td>'),
             $('<td><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">CA</a></td>'),
             $('<td><a class="btn btn-primary" href="trends.htm?clubId='+clubs[i].clubId+'"><i class="fa fa-line-chart"></i> Trends</a></td>'),
@@ -31,7 +32,8 @@ $(document).ready(function() {
     })();
 
     $('#btnSave1').click(function() {
-        var clubId = $('#newClubId').val(), name = $('#newClubName').val(), owner = $('#newClubOwner').val();
+        var clubId = $('#newClubId').val(), name = $('#newClubName').val(),
+         openDate = $('#newClubOpenDate').val(), owner = $('#newClubOwner').val();
         var hasError = false;
         if ( !clubId || !name || !owner) {
             showAlert("#alertAcct", "alert-danger", "All fields must be filled.");
@@ -41,7 +43,7 @@ $(document).ready(function() {
         $(this).prop("disabled", true);
 
         $.post("/rest/users", {
-            clubId: clubId, name: name, owner: owner
+            clubId: clubId, name: name, openDate: openDate, owner: owner
         }).done(function() {
             showAlert("#alertAcct", "alert-success", "Save successfully.");
         }).fail(function() {

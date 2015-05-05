@@ -42,9 +42,8 @@ public class ClubController {
 
     @RequestMapping(value = "/rest/club/date/update")
     public void updateClub() throws Exception {
-        Workbook wb = null;
+        Workbook wb;
         try {
-            Iterable<Club> clubs = clubRepo.findAll();
             String home = System.getProperty("user.home");
             String file = home + File.separator + "curves_data" + File.separator + "Workbook3.xlsx";
             logger.info("file: " + file);
@@ -61,6 +60,9 @@ public class ClubController {
                     logger.info("===update club=== " + name + " NOT FOUND!!!");
                     continue;
                 }
+                club.setOpenDate(date);
+                club.setOwnerEn(owner);
+                clubRepo.save(club);
             }
             try {
                 wb.close();
