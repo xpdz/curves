@@ -68,8 +68,8 @@ var forceNumber = function(editable) {
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
-        $('#clubId').text(userId); // for PJ page
-        $('body').attr('userId', userId);
+        $('#clubId').text($.QueryString.clubId ? $.QueryString.clubId : userId); // for PJ page
+        $('body').attr('clubId', $.QueryString.clubId ? $.QueryString.clubId : userId); // for CA page
     }).fail(function(data) {
         showAlert("alert-danger", "Cannot find club info. Please refresh and retry.");
     });

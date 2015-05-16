@@ -1,5 +1,9 @@
 $(document).ready(function() {
   $.getScript('js/common.js', function() {
+    if ($.QueryString.clubId && $.QueryString.clubId != $('body').attr('clubId')) {
+      $('ul[data-curves="club"]').hide();
+      $('ul[data-curves="mgmt"]').show();
+    }
     var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var $tbd = $("#tbd");
 

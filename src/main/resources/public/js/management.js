@@ -10,9 +10,9 @@ $(document).ready(function() {
             $('<td>' + clubs[i].name + '</td>'),
             $('<td>' + clubs[i].owner + '</td>'),
             $('<td>' + openDay.toLocaleDateString() + '</td>'),
-            $('<td><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">PJ</a></td>'),
-            $('<td><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">CA</a></td>'),
-            $('<td><a class="btn btn-primary" href="trends.htm?clubId='+clubs[i].clubId+'"><i class="fa fa-line-chart"></i> Trends</a></td>'),
+            $('<td><a class="btn btn-info" href="pj.htm?clubId='+clubs[i].clubId+'">PJ</a><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">Summary</a></td>'),
+            $('<td><a class="btn btn-info" href="ca.htm?clubId='+clubs[i].clubId+'">CA</a><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs[i].clubId+'&amp;clubName='+clubs[i].name+'&amp;clubOwner='+clubs[i].owner+'">Summary</a></td>'),
+            $('<td><a class="btn btn-primary" href="trends.htm?clubId='+clubs[i].clubId+'"> <i class="fa fa-line-chart"></i> </a></td>'),
             $('<td><a class="btn btn-danger" href="#" name="btnResetPassword" clubId="'+clubs[i].clubId+'">Reset Password</a></td>')
           ));
         }

@@ -1,5 +1,11 @@
 $(document).ready(function() {
   $.getScript('js/common.js', function() {
+    var clubId = $('body').attr('clubId');
+    if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
+      clubId = $.QueryString.clubId;
+      $('ul[data-curves="club"]').hide();
+      $('ul[data-curves="mgmt"]').show();
+    }
     var today = new Date();
     var thisYear = today.getFullYear();
     var thisMonth = today.getMonth();
@@ -83,9 +89,7 @@ $(document).ready(function() {
         });
     }
 
-    // the clubId -1 is just a placeholder, because it's hard to get the login user id at here
-    // the server side will handle it
-    $.getJSON("/rest/clubs/-1", function(club) {
+    $.getJSON("/rest/clubs/"+clubId, function(club) {
       $('#clubName').text(club.name);
       $('#owner').text(club.owner);
       $('#mgr').text(club.mgr);
@@ -975,7 +979,7 @@ $(document).ready(function() {
         runFormula();
 
         var ca = {};
-        ca.clubId = +$('body').attr('userId');
+        ca.clubId = +clubId;
         ca.caYear = thisYear;
         ca.caMonth = thisMonth;
 
