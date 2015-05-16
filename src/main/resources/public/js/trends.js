@@ -36,7 +36,8 @@ $(document).ready(function() {
 
     var chartOption = {
         animation: false,
-        bezierCurve: false
+        bezierCurve: false,
+        scaleBeginAtZero: true
     };
     var lineData = {
         labels: [],
@@ -55,6 +56,15 @@ $(document).ready(function() {
 
     $('#btnLoad').click(function() {
         getTrends();
+    });
+
+    $('a[download]').click(function() {
+      var imgFile = $(this).attr('download');
+      var canvasId = 'chart' + $(this).attr('id').substring(7);
+      var dataUrl = document.getElementById(canvasId).toDataURL('image/png');
+      dataUrl = dataUrl.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+      dataUrl = dataUrl.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=' + imgFile);
+      $(this).attr('href', dataUrl);
     });
 
     var ctx = $("#chartNewSales").get(0).getContext("2d");
