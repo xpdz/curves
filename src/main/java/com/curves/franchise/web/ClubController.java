@@ -59,20 +59,31 @@ public class ClubController {
                     logger.info("===row-["+i+"] in file, name: " + name + ", owner: " + owner + ", clubId: " + clubId + ", date: " + openDate);
                     Club club = clubRepo.findOne(clubId);
                     if (club == null) {
-                        logger.info("===update club=== " + name + " NOT FOUND!!!");
+                        logger.info("===update club=== " + clubId + " NOT FOUND!!!");
                         continue;
                     }
+
                     logger.info("===club in dB, name: " + club.getName() + ", owner: " + club.getOwner() + ", date: " + club.getOpenDate());
+
+                    if (!name.equals(club.getName())) {
+                        logger.info("===update club xzy=== name not equal");
+                    }
+                    if (!openDate.equals(club.getOpenDate())) {
+                        logger.info("===update club xzy=== date not equal");
+                    }
+                    if (!owner.equals(club.getOwner())) {
+                        logger.info("===update club xzy=== owner not equal");
+                    }
                     club.setOpenDate(openDate);
                     club.setOwnerEn(owner);
                     clubRepo.save(club);
                 } catch (Exception e) {
-                    logger.info("===row-["+i+"] NEW, name: " + name + ", owner: " + owner + ", date: " + openDate);
+                    logger.info("==ERROR==row-["+i+"] NEW, name: " + name + ", owner: " + owner + ", date: " + openDate);
                     Club club = new Club();
                     club.setName(name);
                     club.setOwner(owner);
                     club.setOpenDate(openDate);
-                    club.setClubId(888888);
+                    club.setClubId(666666);
                     clubRepo.save(club);
                 }
             }
