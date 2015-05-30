@@ -49,7 +49,7 @@ public class ClubController {
             logger.info("file: " + file);
             wb = WorkbookFactory.create(new File(file));
             Sheet sh = wb.getSheetAt(0);
-            for (int i = 1; i < 92; i++) {
+            for (int i = 1; i < 91; i++) {
                 Row row = sh.getRow(i);
                 String name = row.getCell(1).getStringCellValue();
                 String owner = row.getCell(2).getStringCellValue();
@@ -59,8 +59,7 @@ public class ClubController {
                     logger.info("===row-["+i+"] in file, name: " + name + ", owner: " + owner + ", clubId: " + clubId + ", date: " + openDate);
                     Club club = clubRepo.findOne(clubId);
                     if (club == null) {
-                        logger.info("===update club=== " + clubId + " NOT FOUND!!!");
-                        continue;
+                        throw new Exception();
                     }
 
                     logger.info("===club in dB, name: " + club.getName() + ", owner: " + club.getOwner() + ", date: " + club.getOpenDate());
@@ -78,12 +77,13 @@ public class ClubController {
                     club.setOwnerEn(owner);
                     clubRepo.save(club);
                 } catch (Exception e) {
-                    logger.info("==ERROR==row-["+i+"] NEW, name: " + name + ", owner: " + owner + ", date: " + openDate);
+                    int clubId = (int)row.getCell(4).getNumericCellValue();
+                    logger.info("==create new club==row-["+i+"], clubId: "+clubId+", name: " + name + ", owner: " + owner + ", date: " + openDate);
                     Club club = new Club();
                     club.setName(name);
                     club.setOwner(owner);
                     club.setOpenDate(openDate);
-                    club.setClubId(666666);
+                    club.setClubId(clubId);
                     clubRepo.save(club);
                 }
             }
