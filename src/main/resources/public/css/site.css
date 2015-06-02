@@ -65,3 +65,7 @@ h1 {padding-bottom:0.2em;}
 td { text-align:center; font-size: 75%; }
 th { text-align:center; font-size: 75%; }
 [contenteditable='true'] {padding: 1px; border: 1px dashed !important;}
+
+.top-buffer { margin-top:20px; }
+
+.cursor-pointer {cursor: pointer;}

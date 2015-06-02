@@ -10,6 +10,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +39,12 @@ public class ClubController {
     }
 
     @RequestMapping(value = "/rest/clubs")
-    public Iterable<Club> findAllClubs() {
-        logger.info("---findAllClubs---");
-        return clubRepo.findAll();
+    public Page<Club> findClubs(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                @RequestParam(value = "sort_by", required = false, defaultValue = "clubId") String sortBy,
+                                @RequestParam(value = "sort_asc", required = false, defaultValue = "true") Boolean isAsc) {
+        logger.info("---findClubs---page: "+page+", sort_by: "+sortBy+", sort_asc: "+isAsc);
+        Pageable pageable = new PageRequest(page - 1, 10, isAsc ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        return clubRepo.findAll(pageable);
     }
 
     @RequestMapping(value = "/rest/club/check_and_update")
