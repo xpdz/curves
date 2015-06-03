@@ -3,9 +3,9 @@ $(document).ready(function() {
     var clubId = $.QueryString.clubId,
         clubName = $.QueryString.clubName,
         clubOwner = $.QueryString.clubOwner;
-    $('th[name="clubId"]').text(clubId);
-    $('th[name="clubName"]').text(clubName);
-    $('th[name="clubOwner"]').text(clubOwner);
+    $('th[data-name="clubId"]').text(clubId);
+    $('th[data-name="clubName"]').text(clubName);
+    $('th[data-name="clubOwner"]').text(clubOwner);
 
     var today = new Date();
     var dt = new Date(today.getFullYear(), today.getMonth()-1, 1);
@@ -61,7 +61,7 @@ $(document).ready(function() {
     function fillSheet(cas) {
         for (var i = 1; i <= cas.length; i++) {
             var ca = cas[i-1];
-            $('th[name="mth'+i+'"]').text(ca.caYear+'-'+(ca.caMonth+1));
+            $('th[data-name="mth'+i+'"]').text(ca.caYear+'-'+(ca.caMonth+1));
             $('#svcTm-'+i).text(ca.svcTm6);
             $('#svcShiftOut-'+i).text(ca.svcShiftOut6);
             $('#svcShiftIn-'+i).text(ca.svcShiftIn6);
