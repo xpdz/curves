@@ -31,9 +31,6 @@ public class ManagementController {
     private UserRepository userRepo;
 
     @Autowired
-    private AuthoritiesRepository authoritiesRepo;
-
-    @Autowired
     private GoalRepository goalRepo;
 
     @Autowired
@@ -41,36 +38,6 @@ public class ManagementController {
 
     @Autowired
     private CaRepository caRepo;
-
-    @RequestMapping(value = "/rest/users", method = RequestMethod.POST)
-    @ResponseBody
-    public String saveUser(@RequestParam("clubId") int clubId, @RequestParam("name") String name,
-                           @RequestParam("openDate") Date openDate, @RequestParam("owner") String owner) {
-        logger.info("---saveUser---clubId: "+clubId+", name: "+name+", openDate: "+openDate+", owner: "+owner);
-        Club club = new Club();
-        club.setClubId(clubId);
-        club.setName(name);
-        club.setOpenDate(openDate);
-        club.setOwner(owner);
-
-        User user = new User();
-        user.setUsername("" + clubId);
-        user.setPassword(new BCryptPasswordEncoder(8).encode("" + clubId));
-        user.setEnabled(true);
-
-        Authorities authorities = new Authorities();
-        authorities.setUsername("" + clubId);
-        authorities.setAuthority("ROLE_USER");
-
-        try {
-            clubRepo.save(club);
-            userRepo.save(user);
-            authoritiesRepo.save(authorities);
-        } catch (Exception e) {
-            return null;
-        }
-        return "";
-    }
 
     @RequestMapping(value = "/rest/changePassword", method = RequestMethod.POST)
     @ResponseBody

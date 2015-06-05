@@ -1,8 +1,11 @@
 package com.curves.franchise.web;
 
+import com.curves.franchise.domain.Authorities;
 import com.curves.franchise.domain.Club;
-import com.curves.franchise.repository.CaRepository;
+import com.curves.franchise.domain.User;
+import com.curves.franchise.repository.AuthoritiesRepository;
 import com.curves.franchise.repository.ClubRepository;
+import com.curves.franchise.repository.UserRepository;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +33,40 @@ public class ClubController {
     ClubRepository clubRepo;
 
     @Autowired
-    CaRepository caRepo;
+    private UserRepository userRepo;
+
+    @Autowired
+    private AuthoritiesRepository authoritiesRepo;
+
+    @RequestMapping(value = "/rest/clubs", method = RequestMethod.POST)
+    @ResponseBody
+    public String saveUser(@RequestParam Integer clubId, @RequestParam String name, @RequestParam Date openDate, @RequestParam String owner) {
+        logger.info("---saveUser---clubId: "+clubId+", name: "+name
+                +", openDate: "+openDate+", owner: "+owner);
+        Club club = new Club();
+        club.setClubId(clubId);
+        club.setName(name);
+        club.setOpenDate(openDate);
+        club.setOwner(owner);
+
+        User user = new User();
+        user.setUsername(clubId.toString());
+        user.setPassword(new BCryptPasswordEncoder(8).encode(clubId.toString()));
+        user.setEnabled(true);
+
+        Authorities authorities = new Authorities();
+        authorities.setUsername(clubId.toString());
+        authorities.setAuthority("ROLE_USER");
+
+        try {
+            clubRepo.save(club);
+            userRepo.save(user);
+            authoritiesRepo.save(authorities);
+        } catch (Exception e) {
+            return null;
+        }
+        return "save success";
+    }
 
     @RequestMapping("/rest/clubs/{clubId}")
     @ResponseBody
@@ -38,7 +75,7 @@ public class ClubController {
         return clubRepo.findOne(clubId == -1 ? Integer.parseInt(user.getUsername()) : clubId);
     }
 
-    @RequestMapping(value = "/rest/clubs")
+    @RequestMapping(value = "/rest/clubs", method = RequestMethod.GET)
     public Page<Club> findClubs(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                 @RequestParam(value = "sort_by", required = false, defaultValue = "clubId") String sortBy,
                                 @RequestParam(value = "sort_asc", required = false, defaultValue = "true") Boolean isAsc) {
