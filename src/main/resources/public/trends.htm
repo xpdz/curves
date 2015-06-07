@@ -29,13 +29,19 @@
 
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			      <ul class="nav navbar-nav">
-		          <li><a href="management.htm">Clubs</a></li>
+			      <ul class="nav navbar-nav" data-curves="club">
+              <li><a href="PJ.htm">PJ</a></li>
+              <li><a href="#">CA</a></li>
+              <li class="active"><a href="trends.htm">Trends</a></li>
+              <li><a href="benchmarking.htm">Benchmarking</a></li>
+			      </ul>
+            <ul class="nav navbar-nav" style="display: none;" data-curves="mgmt">
+              <li class="active"><a href="management.htm">Clubs</a></li>
               <li><a href="us_report.htm">US Report</a></li>
               <li><a href="PJ_all.htm">PJ (All)</a></li>
               <li><a href="CA_all.htm">CA (All)</a></li>
               <li><a href="rank.htm">Ranking</a></li>
-			      </ul>
+            </ul>
 			      <ul class="nav navbar-nav navbar-right">
               <li class="dropdown active">
                 <a href="#" class="dropdown-toggle" id="userId" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> <span class="caret"></span></a>
@@ -73,7 +79,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                新銷售 <a id="btnSaveNewSales" href="#" download="新銷售.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                新銷售 <a id="btnSaveNewSales" href="#" download="新銷售.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -85,7 +91,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                商品收入 <a id="btnSaveProductsRevenue" href="#" download="商品收入.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                商品收入 <a id="btnSaveProductsRevenue" href="#" download="商品收入.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -99,7 +105,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                會員介紹 <a id="btnSaveBrOwnRef" href="#" download="會員介紹.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                會員介紹 <a id="btnSaveBrOwnRef" href="#" download="會員介紹.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -111,7 +117,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                FA總數 <a id="btnSaveFaSum" href="#" download="FA總數.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                FA總數 <a id="btnSaveFaSum" href="#" download="FA總數.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -125,7 +131,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                總WO次數 <a id="btnSaveSvcTotalWo" href="#" download="總WO次數.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                總WO次數 <a id="btnSaveSvcTotalWo" href="#" download="總WO次數.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -137,7 +143,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                得到電話與人名的總數 <a id="btnSaveCmTotalGot" href="#" download="得到電話與人名的總數.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                得到電話與人名的總數 <a id="btnSaveCmTotalGot" href="#" download="得到電話與人名的總數.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -151,7 +157,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                Apo率 % <a id="btnSaveCmInApptRatio" href="#" download="Apo率.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                Apo率 % <a id="btnSaveCmInApptRatio" href="#" download="Apo率.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -163,7 +169,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                TOG人數 <a id="btnSaveCmFaSum" href="#" download="TOG人數.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                TOG人數 <a id="btnSaveCmFaSum" href="#" download="TOG人數.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -177,7 +183,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                退會率 % <a id="btnSaveExitsRatio" href="#" download="退會率.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                退會率 % <a id="btnSaveExitsRatio" href="#" download="退會率.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>
@@ -189,7 +195,7 @@
             </div>
             <div class="panel-footer">
               <h4>
-                結案率 % <a id="btnSaveSalesRatio" href="#" download="結案率.png" role="button" class="btn btn-default"><i class="fa fa-floppy-o"></i> Save </a>
+                結案率 % <a id="btnSaveSalesRatio" href="#" download="結案率.png" role="button" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save </a>
               </h4>
             </div>
           </div>

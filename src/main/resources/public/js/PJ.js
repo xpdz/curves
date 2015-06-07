@@ -3,13 +3,13 @@ $(document).ready(function() {
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
-        $('#clubId').text($.QueryString.clubId ? $.QueryString.clubId : userId); // for PJ page
-        $('body').attr('clubId', $.QueryString.clubId ? $.QueryString.clubId : userId); // for CA page
-
-        if ($.QueryString.clubId && $.QueryString.clubId != $('body').attr('clubId')) {
+        var clubId = userId;
+        if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
+          clubId = $.QueryString.clubId;
           $('ul[data-curves="club"]').hide();
           $('ul[data-curves="mgmt"]').show();
         }
+
         var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         var $tbd = $("#tbd");
 

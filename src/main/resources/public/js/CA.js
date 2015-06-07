@@ -3,8 +3,12 @@ $(document).ready(function() {
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
-        $('#clubId').text($.QueryString.clubId ? $.QueryString.clubId : userId); // for PJ page
-        $('body').attr('clubId', $.QueryString.clubId ? $.QueryString.clubId : userId); // for CA page
+        var clubId = userId;
+        if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
+          clubId = $.QueryString.clubId;
+          $('ul[data-curves="club"]').hide();
+          $('ul[data-curves="mgmt"]').show();
+        }
 
         var today = new Date();
         var thisYear = today.getFullYear();
@@ -89,12 +93,6 @@ $(document).ready(function() {
             });
         }
 
-        var clubId = $('body').attr('clubId');
-        if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
-          clubId = $.QueryString.clubId;
-          $('ul[data-curves="club"]').hide();
-          $('ul[data-curves="mgmt"]').show();
-        }
         $.getJSON("/rest/clubs/"+clubId, function(club) {
           $('#clubName').text(club.name);
           $('#owner').text(club.owner);
