@@ -20,7 +20,7 @@ $(document).ready(function() {
     $('.input-group.date').datepicker().on('changeDate', function(ev) {
         currentYear = ev.date.getFullYear();
         currentMonth = ev.date.getMonth();
-        getRank();
+        getBenchmark();
     });
 
     $('#btnSave').click(function() {
@@ -38,7 +38,7 @@ $(document).ready(function() {
         item = $(this).attr('name');
         $('#itemTitle').text($(this).text());
         getGoal();
-        getRank();
+        getBenchmark();
     });
 
     getGoal()
@@ -50,10 +50,10 @@ $(document).ready(function() {
         });
     }
 
-    getRank();
-    function getRank() {
+    getBenchmark();
+    function getBenchmark() {
         $('#tbd').empty();
-        $.getJSON("/rest/rank", {item: item, year: currentYear, month: currentMonth}, function(rank) {
+        $.getJSON("/rest/benchmarking", {item: item, year: currentYear, month: currentMonth}, function(rank) {
             var amount = 0, counter = 0;
             $.each(rank, function(key, value) {
                 amount += value;
@@ -76,6 +76,8 @@ $(document).ready(function() {
         } else if (item === 'cmHandFlyerHours6' || item === 'cmOutGpHours6') {
             return value.toFixed(1);
         } else {
+        console.log(typeof(value));
+        console.log((value));
             return value.toFixed(0);
         }
     }

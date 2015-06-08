@@ -129,16 +129,16 @@ public class ManagementController {
         return goal.getId();
     }
 
-    @RequestMapping(value = "/rest/rank")
+    @RequestMapping(value = "/rest/benchmarking")
     @ResponseBody
     public Map<String, Float> findRank(@RequestParam("item") String item, @RequestParam("year") int year, @RequestParam("month") int month) {
-        logger.info("---findRank---item: "+item+", year: "+year+", month: "+month);
+        logger.info("---findBenchmarking---item: "+item+", year: "+year+", month: "+month);
         Iterable<Club> clubs = clubRepo.findAll();
         Map<Integer, String> clubIdNameMap = new HashMap<>();
         for (Club club : clubs) {
             clubIdNameMap.put(club.getClubId(), club.getName());
         }
-        logger.info("---findRank---clubIdNameMap.size: "+clubIdNameMap.size());
+        logger.info("---findBenchmarking---clubIdNameMap.size: "+clubIdNameMap.size());
         Map<String, Float> values = new LinkedHashMap<>();
         if ("newSalesRevenue".equals(item) || "duesDraftsRevenue".equals(item) ||
              "productsRevenue".equals(item) || "revenue".equals(item)) {
@@ -194,7 +194,7 @@ public class ManagementController {
                 }
             }
         }
-        logger.info("---findRank---values.size: "+values.size());
+        logger.info("---findBenchmarking---values.size: "+values.size());
         return values;
     }
 
@@ -313,14 +313,14 @@ public class ManagementController {
         }
     }
 
-    @RequestMapping(value = "/rest/benchmarking")
+    @RequestMapping(value = "/rest/ranking")
     @ResponseBody
-    public Map<String, Map<String, Number>> findBenchmarking(@AuthenticationPrincipal UserDetails user,
+    public Map<String, Map<String, Number>> findRanking(@AuthenticationPrincipal UserDetails user,
                                                               @RequestParam("year") int year,
                                                               @RequestParam("month") int month) {
         // NOTE: This user isn't 000000, but a logged on franchisee
         int clubId = Integer.parseInt(user.getUsername());
-        logger.info("---findBenchmarking---clubId: " + clubId + ", year: " + year + ", month: " + month);
+        logger.info("---findRanking---clubId: " + clubId + ", year: " + year + ", month: " + month);
         Map<String, Map<String, Number>> valueV = new HashMap<>(17);
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));
         List<PjSum> pjs = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));

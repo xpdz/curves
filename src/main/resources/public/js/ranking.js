@@ -33,7 +33,7 @@ $(document).ready(function() {
 
     getBenchmarking();
     function getBenchmarking() {
-      $.getJSON("/rest/benchmarking", {year: currentYear, month: currentMonth}, function(respData) {
+      $.getJSON("/rest/ranking", {year: currentYear, month: currentMonth}, function(respData) {
         $('td div').removeClass('you').html('&nbsp;');
         for (var key in respData) {
           if (respData.hasOwnProperty(key)) {
