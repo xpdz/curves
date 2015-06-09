@@ -69,7 +69,9 @@ public class CaAllHelper {
             String fieldName = field.getName();
             if (fieldName.startsWith("sum")) {
                 if (fieldName.startsWith("sumLast")) {
-                    fillOne(lastCas, valueV, field);
+                    if (lastCas.size() > 0) {
+                        fillOne(lastCas, valueV, field);
+                    }
                 } else {
                     fillOne(cas, valueV, field);
                 }
@@ -114,10 +116,12 @@ public class CaAllHelper {
 
             // fill sum/avg/high/low
             Number sumFieldValue = (Number)sumField.get(this);
-            valueX.put("highest", (Number)xMethod.invoke(cas.get(0)));
-            valueX.put("lowest", (Number)xMethod.invoke(cas.get(cas.size() - 1)));
-            valueX.put("sum", sumFieldValue);
-            valueX.put("avg", sumFieldValue.floatValue()/cas.size());
+            if (cas.size() > 0) {
+                valueX.put("highest", (Number)xMethod.invoke(cas.get(0)));
+                valueX.put("lowest", (Number)xMethod.invoke(cas.get(cas.size() - 1)));
+                valueX.put("sum", sumFieldValue);
+                valueX.put("avg", sumFieldValue.floatValue()/cas.size());
+            }
 
             valueV.put(item, valueX);
         } catch (Exception e) {
