@@ -67,11 +67,9 @@ $(document).ready(function() {
         });
 
         $('#btnExportThis').click(function() {
-        console.log("----"+yStart);
           window.location = "/rest/PJ/export?yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
         });
         $('#btnExportMulti').click(function() {
-        console.log("--22--"+yStart);
           $('#dlgExport').modal({});
         });
         $('#btnExportMonths').click(function() {
