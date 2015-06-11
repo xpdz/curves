@@ -71,7 +71,7 @@ $(document).ready(function() {
     }
 
     $('#btnExport').click(function() {
-        window.location = "rest/CaAll/CA_overall?caYear="+currentYear+"&caMonth="+currentMonth;
+        window.location = "rest/CaAll/export?caYear="+currentYear+"&caMonth="+currentMonth;
     });
 
     function formatValue(item, value) {
