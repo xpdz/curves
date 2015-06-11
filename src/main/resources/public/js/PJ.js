@@ -23,6 +23,7 @@ $(document).ready(function() {
         $('.input-group.date').datepicker({
             minViewMode: 1,
             autoclose: true,
+            orientation: "top",
             format: "yyyy-mm",
             language: "zh-TW",
             todayHighlight: true
@@ -45,6 +46,7 @@ $(document).ready(function() {
         $('#x1Date').datepicker({
             minViewMode: 1,
             autoclose: true,
+            orientation: "top",
             format: "yyyy-mm",
             language: "zh-TW",
             todayHighlight: true
@@ -57,6 +59,7 @@ $(document).ready(function() {
         $('#x2Date').datepicker({
             minViewMode: 1,
             autoclose: true,
+            orientation: "top",
             format: "yyyy-mm",
             language: "zh-TW",
             todayHighlight: true

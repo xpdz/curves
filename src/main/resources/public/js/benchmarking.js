@@ -13,6 +13,7 @@ $(document).ready(function() {
     $('.input-group.date').datepicker({
         minViewMode: 1,
         autoclose: true,
+        orientation: "top",
         format: "yyyy-mm",
         language: "zh-TW",
         todayHighlight: true

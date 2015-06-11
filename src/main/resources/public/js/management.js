@@ -5,6 +5,7 @@ $(document).ready(function() {
     $('#newClubOpenDate').val(today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate());
     $('.input-group.date').datepicker({
         autoclose: true,
+        orientation: "top",
         format: "yyyy-mm-dd",
         language: "zh-TW",
         todayHighlight: true
