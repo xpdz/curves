@@ -55,6 +55,7 @@ $(document).ready(function() {
     function getPjSummary() {
         $.getJSON("/rest/pjSummary", {clubId: clubId, yStart: yStart, yEnd: yEnd, mStart: mStart, mEnd: mEnd}, function(pjs) {
             fillSheet(pjs);
+            clearNaN();
         }).fail(function() {
             showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
         });

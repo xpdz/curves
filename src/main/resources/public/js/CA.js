@@ -78,24 +78,6 @@ $(document).ready(function() {
           window.location = "/rest/CA/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
         });
 
-        function clearNaN() {
-            $('td').each(function() {
-                var valueX = $(this).text();
-                if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-                    $(this).text('');
-                }
-            });
-        }
-
-        function clearZero() {
-            $('[contenteditable]').each(function() {
-                var valueX = $(this).text();
-                if (valueX === '0' || valueX === '0.0') {
-                    $(this).text('');
-                }
-            });
-        }
-
         $.getJSON("/rest/clubs/"+clubId, function(club) {
           $('#clubName').text(club.name);
           $('#owner').text(club.owner);

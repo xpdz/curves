@@ -80,24 +80,6 @@ $(document).ready(function() {
           window.location = "/rest/PJ/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
         });
 
-        function clearZero() {
-            $('div[contenteditable]').each(function() {
-                var valueX = $(this).text();
-                if (valueX === '-1' || valueX === '0' || valueX === '0.0') {
-                    $(this).text('');
-                }
-            });
-        }
-
-        function clearNaN() {
-            $('td').each(function() {
-                var valueX = $(this).text();
-                if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-                    $(this).text('');
-                }
-            });
-        }
-
         getPJ();
         function getPJ() {
             $tbd.empty();

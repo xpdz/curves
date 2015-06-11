@@ -1,55 +1,3 @@
-function showAlert(alertId, alertClass, msg) {
-    var $alertDiv = $(alertId)
-    $alertDiv.removeClass('hide');
-    $alertDiv.addClass(alertClass);
-    $alertDiv.text(msg);
-    setTimeout(function() {
-        $alertDiv.addClass('hide');
-        $alertDiv.removeClass(alertClass);
-    }, 5000);
-}
-
-var toggleEditable = function() {
-    if (currentYear === thisYear && currentMonth === thisMonth) {
-        $('#btnSave').prop("disabled", false);
-        $('td[contenteditable]').css('border', '1px dashed green !important');
-        $('td[contenteditable="false"]').prop('contenteditable', true);
-    } else {
-        $('#btnSave').prop("disabled", true);
-        $('#btnSave').toggleClass('btn-success btn-default')
-        $('td[contenteditable]').css('border', '1px solid #ddd !important');
-        $('td[contenteditable="true"]').prop('contenteditable', false);
-    }
-}
-
-var forceNumber = function(editable) {
-    editable.keydown(function(e) {
-        // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
-        if (e.which == 8 || e.which == 9 || e.which == 13 || e.which == 46 || e.which == 110 || e.which == 190
-            || (e.which >= 35 && e.which <= 40) || (e.which >= 48 && e.which <= 57) || (e.which >= 96 && e.which <= 105)) {
-            switch (e.which) {
-                case 13: // enter
-                case 39: // right
-                    $(this).next().focus();
-                    break;
-                case 37: // left
-                    $(this).prev().focus();
-                    break;
-                case 38: // up
-                    var thisId = $(this).attr('id').split('-');
-                    $(this).closest('tr').prev().find('td[id^='+thisId[0]+']').focus();
-                    break;
-                case 40: // down
-                    var thisId = $(this).attr('id').split('-');
-                    $(this).closest('tr').next().find('td[id^='+thisId[0]+']').focus();
-                    break;
-                default: return; // exit this handler for other keys
-            }
-        }
-        e.preventDefault(); // prevent the default action (scroll / move caret)
-    });
-}
-
 ;(function($) {
     $.QueryString = (function(a) {
         if (a === "") return {};
@@ -104,3 +52,73 @@ var forceNumber = function(editable) {
         $(this).prop("disabled", false);
     });
 })();
+
+function showAlert(alertId, alertClass, msg) {
+    var $alertDiv = $(alertId)
+    $alertDiv.removeClass('hide');
+    $alertDiv.addClass(alertClass);
+    $alertDiv.text(msg);
+    setTimeout(function() {
+        $alertDiv.addClass('hide');
+        $alertDiv.removeClass(alertClass);
+    }, 5000);
+}
+
+function clearZero() {
+    $('div[contenteditable]').each(function() {
+        var valueX = $(this).text();
+        if (valueX === '-1' || valueX === '0' || valueX === '0.0') {
+            $(this).text('');
+        }
+    });
+}
+
+function clearNaN() {
+    $('td').each(function() {
+        var valueX = $(this).text();
+        if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
+            $(this).text('');
+        }
+    });
+}
+
+var toggleEditable = function() {
+    if (currentYear === thisYear && currentMonth === thisMonth) {
+        $('#btnSave').prop("disabled", false);
+        $('td[contenteditable]').css('border', '1px dashed green !important');
+        $('td[contenteditable="false"]').prop('contenteditable', true);
+    } else {
+        $('#btnSave').prop("disabled", true);
+        $('#btnSave').toggleClass('btn-success btn-default')
+        $('td[contenteditable]').css('border', '1px solid #ddd !important');
+        $('td[contenteditable="true"]').prop('contenteditable', false);
+    }
+}
+
+var forceNumber = function(editable) {
+    editable.keydown(function(e) {
+        // keyCode: 8-BackSpace,9-Tab,13-Enter,46-Delete,110-KP_Decimal,190-period colon,35-40:Home-End-ArrowKey,48-57:0-9,96-105:KP-0-9
+        if (e.which == 8 || e.which == 9 || e.which == 13 || e.which == 46 || e.which == 110 || e.which == 190
+            || (e.which >= 35 && e.which <= 40) || (e.which >= 48 && e.which <= 57) || (e.which >= 96 && e.which <= 105)) {
+            switch (e.which) {
+                case 13: // enter
+                case 39: // right
+                    $(this).next().focus();
+                    break;
+                case 37: // left
+                    $(this).prev().focus();
+                    break;
+                case 38: // up
+                    var thisId = $(this).attr('id').split('-');
+                    $(this).closest('tr').prev().find('td[id^='+thisId[0]+']').focus();
+                    break;
+                case 40: // down
+                    var thisId = $(this).attr('id').split('-');
+                    $(this).closest('tr').next().find('td[id^='+thisId[0]+']').focus();
+                    break;
+                default: return; // exit this handler for other keys
+            }
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+}

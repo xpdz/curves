@@ -32,15 +32,6 @@ $(document).ready(function() {
           window.location = "/rest/PJ_All/export?year=" + currentYear + "&month=" + currentMonth;
         });
 
-        function clearNaN() {
-            $('td').each(function() {
-                var valueX = $(this).text();
-                if (valueX === 'undefined' || valueX === 'NaN' || valueX === 'NaN%' || valueX === 'Infinity%') {
-                    $(this).text('');
-                }
-            });
-        }
-
         getPJ_all();
         function getPJ_all() {
             $tbd.empty();
