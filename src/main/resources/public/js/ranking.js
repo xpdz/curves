@@ -38,32 +38,32 @@ $(document).ready(function() {
         $('td div').removeClass('you').html('&nbsp;');
         for (var key in respData) {
           if (respData.hasOwnProperty(key)) {
-            var you = respData[key].you, max = respData[key].max, mid = respData[key].mid, min = respData[key].min,
-                maxMid = mid + (max - mid) / 2, midMin = min + (mid - min) / 2;
+            var you = respData[key].you, max = respData[key].max, halfHigh = respData[key].halfHigh,
+             mid = respData[key].mid, maxHalfHigh = halfHigh + (max - halfHigh) / 2, halfHighMid = mid + (halfHigh - mid) / 2;
             $('#'+key+'-1').text(formatValue(key, max));
-            $('#'+key+'-5').text(formatValue(key, mid));
-            $('#'+key+'-9').text(formatValue(key, min));
+            $('#'+key+'-5').text(formatValue(key, halfHigh));
+            $('#'+key+'-9').text(formatValue(key, mid));
             if ( you == undefined) {
               continue;
             }
             var $divYou;
             if (you === max) {
               $divYou = $('#'+key+'-1');
-            } else if (you === mid) {
+            } else if (you === halfHigh) {
               $divYou = $('#'+key+'-5');
-            } else if (you === min) {
+            } else if (you === mid) {
               $divYou = $('#'+key+'-9');
-            } else if (you === maxMid) {
+            } else if (you === maxHalfHigh) {
               $divYou = $('#'+key+'-3');
-            } else if (you === midMin) {
+            } else if (you === halfHighMid) {
               $divYou = $('#'+key+'-7');
-            } else if (you > maxMid && you < max) {
+            } else if (you > maxHalfHigh && you < max) {
               $divYou = $('#'+key+'-2');
-            } else if (you < maxMid && you > mid) {
+            } else if (you < maxHalfHigh && you > halfHigh) {
               $divYou = $('#'+key+'-4');
-            } else if (you > midMin && you < mid) {
+            } else if (you > halfHighMid && you < halfHigh) {
               $divYou = $('#'+key+'-6');
-            } else if (you < midMin && you > min) {
+            } else if (you < halfHighMid && you > mid) {
               $divYou = $('#'+key+'-8');
             }
             $divYou.text(formatValue(key, you));

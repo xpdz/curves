@@ -532,13 +532,22 @@ public class ManagementController {
             if (cas.size() < 10) {
                 factor = 1;
             }
+            double halfHigh = 0.0;
+            boolean bFoundYou = false;
             for (int i = 0; i < cas.size(); i++) {
+                Number n = (Number)xMethod.invoke(cas.get(i));
                 if (cas.get(i).getClubId() == clubId) {
-                    valueX.put("you", (Number)xMethod.invoke(cas.get(i)));
+                    valueX.put("you", n);
                     valueX.put("rank", 1 + i * factor / cas.size());
+                    bFoundYou = true;
+                }
+                if (i < cas.size()/2) {
+                    halfHigh += n.doubleValue();
+                } else if (bFoundYou) {
                     break;
                 }
             }
+            valueX.put("halfHigh", halfHigh / cas.size() / 2);
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -567,14 +576,22 @@ public class ManagementController {
             if (pjSums.size() < 10) {
                 factor = 1;
             }
+            double halfHigh = 0.0;
+            boolean bFoundYou = false;
             for (int i = 0; i < pjSums.size(); i++) {
+                Number n = (Number)xMethod.invoke(pjSums.get(i));
                 if (pjSums.get(i).getClubId() == clubId) {
-                    valueX.put("you", (Number)xMethod.invoke(pjSums.get(i)));
+                    valueX.put("you", n);
                     valueX.put("rank", 1 + i * factor / pjSums.size());
-                    valueX.put("total", pjSums.size());
+                    bFoundYou = true;
+                }
+                if (i < pjSums.size()/2) {
+                    halfHigh += n.doubleValue();
+                } else if (bFoundYou) {
                     break;
                 }
             }
+            valueX.put("halfHigh", halfHigh / pjSums.size() / 2);
         } catch (Exception e) {
             logger.error("", e);
         }
