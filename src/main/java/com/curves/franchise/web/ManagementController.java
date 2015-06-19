@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -464,11 +462,7 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/ranking")
     @ResponseBody
-    public Map<String, Map<String, Number>> findRanking(@AuthenticationPrincipal UserDetails user,
-                                                              @RequestParam("year") int year,
-                                                              @RequestParam("month") int month) {
-        // NOTE: This user isn't 000000, but a logged on franchisee
-        int clubId = Integer.parseInt(user.getUsername());
+    public Map<String, Map<String, Number>> findRanking(@RequestParam int clubId, @RequestParam int year, @RequestParam int month) {
         logger.info("---findRanking---clubId: " + clubId + ", year: " + year + ", month: " + month);
         Map<String, Map<String, Number>> valueV = new HashMap<>(17);
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, "clubId"));

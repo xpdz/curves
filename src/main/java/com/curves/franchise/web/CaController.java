@@ -34,9 +34,10 @@ public class CaController {
     ClubRepository clubRepo;
 
     @RequestMapping(value = "/rest/CA/lastMonth", method = RequestMethod.GET)
-    public Map<String, String> findGoalByYearAndMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
-                                           @AuthenticationPrincipal UserDetails user) {
-        logger.info("==find last month goal== user: " + user.getUsername() + " get CA - " + caYear + "." + (caMonth+1));
+    public Map<String, String> findGoalByYearAndMonth(@RequestParam int clubId, @RequestParam int caYear,
+                                                      @RequestParam int caMonth, @AuthenticationPrincipal UserDetails user) {
+        logger.info("==find last month goal== user: " + user.getUsername() + ", clubId: " + clubId
+                + ", year-month: " + caYear + "." + (caMonth+1));
         Map<String, String> mapGoalValue = new HashMap<>(4);
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
         if (ca != null) {
@@ -50,10 +51,11 @@ public class CaController {
     }
 
     @RequestMapping(value = "/rest/CA", method = RequestMethod.GET)
-    public Ca findCaByUserAndCaYearAndCaMonth(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth,
-                                            @AuthenticationPrincipal UserDetails user) {
-        logger.info("---findCA---user: " + user.getUsername() + ", caYear: " + caYear + ", caMonth: " + caMonth);
-        Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
+    public Ca findCaByUserAndCaYearAndCaMonth(@RequestParam int clubId, @RequestParam int caYear,
+                                              @RequestParam int caMonth, @AuthenticationPrincipal UserDetails user) {
+        logger.info("---findCA---user: " + user.getUsername() + ", clubId: " + clubId
+                + ", caYear: " + caYear + ", caMonth: " + caMonth);
+        Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(clubId, caYear, caMonth);
         if (ca == null) {
             logger.info("---findCA---CA not found!");
             ca = new Ca();
@@ -62,10 +64,11 @@ public class CaController {
     }
 
     @RequestMapping(value = "/rest/CA/export", produces="application/vnd.ms-excel")
-    public FileSystemResource exportCa(@RequestParam("yStart") int yStart, @RequestParam("yEnd") int yEnd,
-                                       @RequestParam("mStart") int mStart, @RequestParam("mEnd") int mEnd,
+    public FileSystemResource exportCa(@RequestParam int clubId, @RequestParam int yStart, @RequestParam int yEnd,
+                                       @RequestParam int mStart, @RequestParam int mEnd,
                                       @AuthenticationPrincipal UserDetails user) {
-        logger.info("---exportCA---user: " + user.getUsername() + ", yStart: " + yStart + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
+        logger.info("---exportCA---user: " + user.getUsername() + ", clubId; " + clubId + ", yStart: " + yStart
+                + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
         Club club = clubRepo.findOne(Integer.parseInt(user.getUsername()));
         List<Ca> cas = caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(Integer.parseInt(user.getUsername()),
                 yStart, yEnd, mStart, mEnd);

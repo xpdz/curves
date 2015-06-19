@@ -3,7 +3,12 @@ $(document).ready(function() {
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
       $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
-      var clubId = userId;
+        var clubId = userId;
+        if (userId.charAt(0) === '0') {
+          // user is coach, not club, hide PJ
+          clubId = '1' + userId.substring(1);
+          $('a[href="PJ.htm"]:parent').hide();
+        }
       if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
         clubId = $.QueryString.clubId;
         $('ul[data-curves="club"]').hide();

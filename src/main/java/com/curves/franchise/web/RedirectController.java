@@ -45,6 +45,8 @@ public class RedirectController {
                 return "redirect:/management.htm";
             } else if ("ROLE_USER".equals(role)) {
                 return "redirect:/PJ.htm";
+            } else if ("ROLE_COACH".equals(role)) {
+                return "redirect:/CA.htm";
             }
         }
         return "redirect:index.htm";

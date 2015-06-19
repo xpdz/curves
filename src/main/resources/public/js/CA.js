@@ -4,6 +4,12 @@ $(document).ready(function() {
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
         var clubId = userId;
+        if (userId.charAt(0) === '0') {
+          // user is coach, not club, hide PJ
+          clubId = '1' + userId.substring(1);
+          $('a[href="PJ.htm"]:parent').hide();
+        }
+
         if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
           clubId = $.QueryString.clubId;
           $('ul[data-curves="club"]').hide();
@@ -68,14 +74,14 @@ $(document).ready(function() {
         });
 
         $('#btnExportThis').click(function() {
-          window.location = "/rest/CA/export?yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
+          window.location = "/rest/CA/export?clubId=" + clubId + "&yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
         });
         $('#btnExportMulti').click(function() {
           $('#dlgExport').modal({});
         });
         $('#btnExportMonths').click(function() {
           $('#dlgExport').modal('hide');
-          window.location = "/rest/CA/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
+          window.location = "/rest/CA/export?clubId=" + clubId + "&yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
         });
 
         $.getJSON("/rest/clubs/"+clubId, function(club) {
@@ -86,9 +92,9 @@ $(document).ready(function() {
           showAlert("#alertMain", "alert-danger", "Cannot find club info. Please refresh and retry.");
         });
 
-        getCA();
-        function getCA() {
-            $.getJSON("/rest/CA/lastMonth", {caYear: currentYear, caMonth: (currentMonth-1)}, function(data) {
+        var getCA;
+        (getCA = function() {
+            $.getJSON("/rest/CA/lastMonth", {clubId: clubId, caYear: currentYear, caMonth: (currentMonth-1)}, function(data) {
                 if (data['svcTm6']) {
                     $('#goalsLastTm').text(data['svcTm6']);
                     $('#goalsLastActive').text(data['svcActive6']);
@@ -100,7 +106,7 @@ $(document).ready(function() {
                 showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
             });
 
-            $.getJSON("/rest/CA", {caYear: currentYear, caMonth: currentMonth}, function(ca) {
+            $.getJSON("/rest/CA", {clubId: clubId, caYear: currentYear, caMonth: currentMonth}, function(ca) {
                 fillSheet(ca);
             }).fail(function() {
                 showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
@@ -113,7 +119,7 @@ $(document).ready(function() {
                 $('#btnSave').prop("disabled", true);
                 $('[contenteditable="true"]').prop('contenteditable', false);
             }
-        }
+        })();
 
         $('.toggleV').click(function() {
             if (currentYear != thisYear || currentMonth != thisMonth) {
