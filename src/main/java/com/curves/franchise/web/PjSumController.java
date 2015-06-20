@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 public class PjSumController {
-    private Logger logger = LoggerFactory.getLogger(PjSumController.class);
+    private final Logger logger = LoggerFactory.getLogger(PjSumController.class);
 
     @Autowired
     private PjSumRepository pjSumRepo;
@@ -48,10 +48,10 @@ public class PjSumController {
         logger.info("---exportPJ---user: " + user.getUsername() + ", yStart: " + yStart + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
         List<PjSum> pjSums = pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(Integer.parseInt(user.getUsername()),
                 yStart, yEnd, mStart, mEnd);
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "PJ-template.xls");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("PJ-export", "xls");
             FileUtils.copyFile(template, target);

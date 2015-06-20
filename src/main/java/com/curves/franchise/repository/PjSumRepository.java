@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PjSumRepository extends JpaRepository<PjSum, Integer> {
-    public PjSum findByClubIdAndYearAndMonth(int clubId, int year, int month);
-    public List<PjSum> findByClubIdAndYearBetweenAndMonthBetween(int clubId, int yStart, int yEnd, int mStart, int mEnd);
-    public List<PjSum> findByYearAndMonth(int year, int month, Sort sort);
+    PjSum findByClubIdAndYearAndMonth(int clubId, int year, int month);
+    List<PjSum> findByClubIdAndYearBetweenAndMonthBetween(int clubId, int yStart, int yEnd, int mStart, int mEnd);
+    List<PjSum> findByYearAndMonth(int year, int month, Sort sort);
 }

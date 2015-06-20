@@ -12,10 +12,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class CaAllHelper {
-    private Logger logger = LoggerFactory.getLogger(CaAllHelper.class);
+class CaAllHelper {
+    private final Logger logger = LoggerFactory.getLogger(CaAllHelper.class);
 
-    float sumGoalsTm = 0, sumLastGoalsTm = 0, sumLastGoalsActive = 0, sumLastGoalsShowRatio = 0, sumLastGoalsSalesRatio = 0,
+    private float sumGoalsTm = 0, sumLastGoalsTm = 0, sumLastGoalsActive = 0, sumLastGoalsShowRatio = 0, sumLastGoalsSalesRatio = 0,
             sumGoalsExitsRatio = 0, sumGoalsNewSales = 0, sumGoalsAppoints = 0, sumSvcTm6 = 0, sumSvcShiftOut6 = 0, sumSvcShiftIn6 = 0, sumSvcHold6 = 0,
             sumSvcActive6 = 0, sumSvcHoldRatio6 = 0, sumSvcTotalWo6 = 0, sumSvcAvgWo6 = 0, sumSvcMaxWo6 = 0,
             sumSvcExits6 = 0, sumSvcExitsRatio6 = 0, sumSvcMeasure6 = 0, sumSvcMeasureRatio6 = 0, sumSvc12_6 = 0,
@@ -85,18 +85,24 @@ public class CaAllHelper {
         String item = sumField.getName().substring(3);
         Map<String, Number> valueX = new HashMap<>(4);
         try {
-            String methodName = null;
+            String methodName;
             // handle last month data as special;
-            if (item.equals("LastGoalsTm")) {
-                methodName = "getSvcTm6";
-            } else if (item.equals("LastGoalsActive")) {
-                methodName = "getSvcActive6";
-            } else if (item.equals("LastGoalsShowRatio")) {
-                methodName = "getCmShowRatio6";
-            } else if (item.equals("LastGoalsSalesRatio")) {
-                methodName = "getSalesRatio6";
-            } else {
-                methodName = "get" + item;
+            switch (item) {
+                case "LastGoalsTm":
+                    methodName = "getSvcTm6";
+                    break;
+                case "LastGoalsActive":
+                    methodName = "getSvcActive6";
+                    break;
+                case "LastGoalsShowRatio":
+                    methodName = "getCmShowRatio6";
+                    break;
+                case "LastGoalsSalesRatio":
+                    methodName = "getSalesRatio6";
+                    break;
+                default:
+                    methodName = "get" + item;
+                    break;
             }
             // get realted method
             final Method xMethod = Ca.class.getDeclaredMethod(methodName);

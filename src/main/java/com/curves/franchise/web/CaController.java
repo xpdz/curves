@@ -25,13 +25,13 @@ import java.util.Map;
 
 @RestController
 public class CaController {
-    private Logger logger = LoggerFactory.getLogger(CaController.class);
+    private final Logger logger = LoggerFactory.getLogger(CaController.class);
 
     @Autowired
-    CaRepository caRepo;
+    private CaRepository caRepo;
 
     @Autowired
-    ClubRepository clubRepo;
+    private ClubRepository clubRepo;
 
     @RequestMapping(value = "/rest/CA/lastMonth", method = RequestMethod.GET)
     public Map<String, String> findGoalByYearAndMonth(@RequestParam int clubId, @RequestParam int caYear,
@@ -72,10 +72,10 @@ public class CaController {
         Club club = clubRepo.findOne(Integer.parseInt(user.getUsername()));
         List<Ca> cas = caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(Integer.parseInt(user.getUsername()),
                 yStart, yEnd, mStart, mEnd);
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "CA-template.xls");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("CA-export", "xls");
             FileUtils.copyFile(template, target);

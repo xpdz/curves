@@ -20,7 +20,7 @@ import java.util.*;
 
 @RestController
 public class ManagementController {
-    private Logger logger = LoggerFactory.getLogger(ManagementController.class);
+    private final Logger logger = LoggerFactory.getLogger(ManagementController.class);
 
     @Autowired
     private ClubRepository clubRepo;
@@ -52,7 +52,7 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "/rest/reset_password")
-    public void resetPassword(@RequestParam("clubId") String clubId) throws Exception {
+    public void resetPassword(@RequestParam("clubId") String clubId) {
         logger.info("Request reset password! user: "+clubId);
         User user = userRepo.findByUsername(clubId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
@@ -201,10 +201,10 @@ public class ManagementController {
     public FileSystemResource exportPjAll(@RequestParam("year") int year, @RequestParam("month") int month) {
         logger.info("---exportPjAll---year: " + year + ", month: " + month);
         List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "PJ_Summary_Sheet_ALL_Clubs.xlsx");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("PJ_Summary_Sheet_ALL_Clubs", "xlsx");
             FileUtils.copyFile(template, target);
@@ -363,10 +363,10 @@ public class ManagementController {
     @ResponseBody
     public FileSystemResource exportCaAll(@RequestParam("caYear") int caYear, @RequestParam("caMonth") int caMonth) {
         logger.info("---exportCaAll---caYear: " + caYear + ", caMonth: " + caMonth);
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "CA_Summary_Sheet_ALL_Clubs.xlsx");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("CA_Summary_Sheet_ALL_Clubs", "xlsx");
             FileUtils.copyFile(template, target);
@@ -658,10 +658,10 @@ public class ManagementController {
 
         logger.info("---exportPjSummaryByClub---clubId: "+clubId+", start: "+yStart+"-"+mStart+", end: "+yEnd+"-"+mEnd);
         List<PjSum> pjSums = pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "PJ_summary.xlsx");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("PJ_summary", "xlsx");
             FileUtils.copyFile(template, target);
@@ -744,10 +744,10 @@ public class ManagementController {
 
         logger.info("---exportCaSummaryByClub---clubId: "+clubId+", start: "+yStart+"-"+mStart+", end: "+yEnd+"-"+mEnd);
         List<Ca> cas = caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
-        Workbook wb = null;
+        Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "CA_summary.xlsx");
-        File target = null;
+        File target;
         try {
             target = File.createTempFile("CA_summary", "xlsx");
             FileUtils.copyFile(template, target);
@@ -908,6 +908,7 @@ public class ManagementController {
         } catch (IOException e) {
             logger.error("", e);
         }
+        assert tmp != null;
         return new FileSystemResource(tmp);
     }
 

@@ -27,10 +27,10 @@ import java.util.Date;
 
 @RestController
 public class ClubController {
-    private Logger logger = LoggerFactory.getLogger(ClubController.class);
+    private final Logger logger = LoggerFactory.getLogger(ClubController.class);
 
     @Autowired
-    ClubRepository clubRepo;
+    private ClubRepository clubRepo;
 
     @Autowired
     private UserRepository userRepo;
@@ -85,7 +85,7 @@ public class ClubController {
     }
 
     @RequestMapping(value = "/rest/club/check_and_update")
-    public void updateClub() throws Exception {
+    public void updateClub() {
         Workbook wb;
         try {
             String home = System.getProperty("user.home");

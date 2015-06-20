@@ -16,21 +16,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CurvesParser {
-    private Logger logger = LoggerFactory.getLogger(CurvesParser.class);
+    private final Logger logger = LoggerFactory.getLogger(CurvesParser.class);
 
-    Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Map<String, String> invalidSheets = new HashMap<>();
-    List<File> allOthers = new ArrayList<>();
-    Map<String, Integer> nameId = new HashMap<>();
+    private final Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private final Map<String, String> invalidSheets = new HashMap<>();
+    private final List<File> allOthers = new ArrayList<>();
+    private final Map<String, Integer> nameId = new HashMap<>();
     int year, month;
-    String dir = null;
+    private String dir = null;
 
-    CaRepository caRepo;
-    PjSumRepository pjSumRepo;
-    ClubRepository clubRepo;
+    final CaRepository caRepo;
+    final PjSumRepository pjSumRepo;
+    private final ClubRepository clubRepo;
 
-    FormulaEvaluator evaluator = null;
+    private FormulaEvaluator evaluator = null;
 
     public CurvesParser(PjSumRepository pjSumRepo, CaRepository caRepo, ClubRepository clubRepo, String dir) {
         this.pjSumRepo = pjSumRepo;
@@ -98,8 +98,8 @@ public class CurvesParser {
 
     private void processWorkbooks(Collection<File> allFiles) {
         for (File f : allFiles) {
-            int clubId = -1;
-            Workbook wb = null;
+            int clubId;
+            Workbook wb;
             try {
                 wb = WorkbookFactory.create(f);
                 clubId = getIdByName(parseChinese(f.getName()));
@@ -118,7 +118,7 @@ public class CurvesParser {
             }
             try {
                 wb.close();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -158,7 +158,7 @@ public class CurvesParser {
                             bTimeMatch = true;
                         }
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 if (bTimeMatch) {
                     logger.info("*** Found CA *** sheet: " + sheetName + ", clubId: " + clubId);
@@ -205,12 +205,12 @@ public class CurvesParser {
             } else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 value = (int)cell.getNumericCellValue();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return value;
     }
 
-    String parseChinese(String s) {
+    private String parseChinese(String s) {
         Matcher mat = chinesePattern.matcher(s);
         if (mat.find()) {
             return mat.group(0);
@@ -257,7 +257,7 @@ public class CurvesParser {
         }
     }
 
-    void buildClubNameIdMap() {
+    private void buildClubNameIdMap() {
         try {
             Iterable<Club> clubs = clubRepo.findAll();
             for (Club club : clubs) {
@@ -268,7 +268,7 @@ public class CurvesParser {
         }
     }
 
-    int getIdByName(String clubName) {
+    private int getIdByName(String clubName) {
         Set<String> keys = nameId.keySet();
         for (String key : keys) {
             if (key.contains(clubName)) {

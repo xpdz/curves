@@ -22,7 +22,7 @@ public class PjSum implements Serializable {
     @OneToMany(fetch= FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "pj_sum_id", referencedColumnName="id")
     @RestResource(exported = false)
-    private List<Pj> pjSet = new ArrayList<Pj>(35);
+    private List<Pj> pjSet = new ArrayList<>(35);
 
     private int clubId;
     private int year; // 2014, 2013, ...
@@ -80,7 +80,7 @@ public class PjSum implements Serializable {
         this.id = id;
     }
 
-    public void setValids(int valid) {
+    public void setValids(int valids) {
         this.valids = valids;
     }
 

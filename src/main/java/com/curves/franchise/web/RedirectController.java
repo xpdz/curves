@@ -20,13 +20,13 @@ import java.util.Collection;
 
 @Controller
 public class RedirectController {
-    private Logger logger = LoggerFactory.getLogger(RedirectController.class);
+    private final Logger logger = LoggerFactory.getLogger(RedirectController.class);
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    ClubRepository clubRepo;
+    private ClubRepository clubRepo;
 
     @Autowired
     private CaRepository caRepo;
@@ -36,7 +36,6 @@ public class RedirectController {
 
     @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET, RequestMethod.POST})
     public String loginSuccess(@AuthenticationPrincipal UserDetails user) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
         logger.info("---loginSuccess---user: " + user.getUsername());
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
         for (GrantedAuthority auth : authorities) {
@@ -72,12 +71,12 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/data")
-    public void processData(@RequestParam("dir") String dir) throws Exception {
+    public void processData(@RequestParam("dir") String dir) {
         new CurvesParser(pjSumRepo, caRepo, clubRepo, dir).process();
     }
 
     @RequestMapping(value = "/rest/password")
-    public void resetPassword4All() throws Exception {
+    public void resetPassword4All() {
         Iterable<User> users = userRepo.findAll();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
         for (User user : users) {
@@ -88,7 +87,7 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/password/{userId}")
-    public void resetPassword4User(@PathVariable String userId) throws Exception {
+    public void resetPassword4User(@PathVariable String userId) {
         User user = userRepo.findByUsername(userId);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(8);
         user.setPassword(encoder.encode(user.getUsername()));

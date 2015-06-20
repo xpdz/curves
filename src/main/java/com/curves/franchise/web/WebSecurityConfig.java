@@ -1,7 +1,6 @@
 package com.curves.franchise.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,12 +12,9 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebMvcSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
-
-    @Autowired
-    private SecurityProperties security;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
