@@ -636,7 +636,7 @@ public class ManagementController {
             cmFaSum6.add(ca.getCmFaSum6());
         }
 
-        logger.info("---findTrendsByClub---typeValues.size: "+typeValues.size());
+        logger.info("---findTrendsByClub---CAs.size="+cas.size()+", PjSums.size="+pjSums.size());
         return typeValues;
     }
 
