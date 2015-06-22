@@ -4,10 +4,15 @@ $(document).ready(function() {
     $.get("/rest/whoami", function(userId) {
       $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
       var clubId = userId;
-      if (userId.charAt(0) === '0') {
-        // user is coach, not club, hide PJ
+      var isCoach = userId.charAt(0) === '0';
+      if (isCoach) {
+        // user is coach, not club, hide PJ page, revenue info on ranking page
         clubId = '1' + userId.substring(1);
         $('a[href="PJ.htm"]:parent').hide();
+        $('table').css('width', '1420px');
+        $('[colspan="17"]').attr('colspan', '13');
+        $('th[id*="Revenue"]').remove();
+        $('td:has(div[id*="Revenue"])').remove();
       }
 
       var today = new Date();
@@ -47,6 +52,11 @@ $(document).ready(function() {
         $.getJSON("/rest/ranking", {clubId: clubId, year: currentYear, month: currentMonth}, function(respData) {
           $('td div').removeClass('you').html('&nbsp;');
           for (var key in respData) {
+            // hide revenue info for coaches
+            if (isCoach && key.indexOf('Revenue') != -1) {
+              continue;
+            }
+
             if (respData.hasOwnProperty(key)) {
               var you = respData[key].you, max = respData[key].max, halfHigh = respData[key].halfHigh,
                mid = respData[key].mid, maxHalfHigh = halfHigh + (max - halfHigh) / 2, halfHighMid = mid + (halfHigh - mid) / 2;
