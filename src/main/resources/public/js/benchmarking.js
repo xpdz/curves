@@ -77,8 +77,6 @@ $(document).ready(function() {
         } else if (item === 'cmHandFlyerHours6' || item === 'cmOutGpHours6') {
             return value.toFixed(1);
         } else {
-        console.log(typeof(value));
-        console.log((value));
             return value.toFixed(0);
         }
     }
