@@ -23,7 +23,9 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class ClubController {
@@ -82,6 +84,27 @@ public class ClubController {
         logger.info("---findClubs---page: "+page+", sort_by: "+sortBy+", sort_asc: "+isAsc);
         Pageable pageable = new PageRequest(page - 1, 10, isAsc ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
         return clubRepo.findAll(pageable);
+    }
+
+    @RequestMapping(value = "/rest/users/init_coaches")
+    public void initCoaches() {
+        List<Club> clubs = clubRepo.findAll();
+        List<User> users = new ArrayList<>(clubs.size());
+        List<Authorities> auths = new ArrayList<>(clubs.size());
+        for (Club club : clubs) {
+            String clubId = String.valueOf(club.getClubId());
+            User u = new User();
+            u.setUsername("0" + clubId.substring(1));
+            u.setPassword(new BCryptPasswordEncoder(8).encode(u.getUsername()));
+            u.setEnabled(true);
+            users.add(u);
+            Authorities authorities = new Authorities();
+            authorities.setUsername(u.getUsername());
+            authorities.setAuthority("ROLE_COACH");
+            auths.add(authorities);
+        }
+        userRepo.save(users);
+        authoritiesRepo.save(auths);
     }
 
     @RequestMapping(value = "/rest/club/check_and_update")
