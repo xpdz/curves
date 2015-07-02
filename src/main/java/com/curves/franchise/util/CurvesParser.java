@@ -6,6 +6,7 @@ import com.curves.franchise.repository.ClubRepository;
 import com.curves.franchise.repository.PjSumRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,13 +109,10 @@ public class CurvesParser {
                 continue;
             }
 
-            logger.info("--- open file ---"+f);
+            logger.info("--- open file: "+f);
 
             for (int i = 0; i < wb.getNumberOfSheets(); i++) {
-                Sheet sh = wb.getSheetAt(i);
-                if (processSheets(f, clubId, wb, sh)) {
-                    break;
-                }
+                processSheets(f, clubId, wb, wb.getSheetAt(i));
             }
             try {
                 wb.close();
@@ -123,24 +121,37 @@ public class CurvesParser {
         }
     }
 
-    private boolean processSheets(File f, int clubId, Workbook wb, Sheet sh) {
+    private void processSheets(File f, int clubId, Workbook wb, Sheet sh) {
         String sheetName = sh.getSheetName();
-        int rows = sh.getLastRowNum();
-        if (rows <= 0) {
-            return false;
-        } else if (rows == 65535) {
-            rows = 45;
-        }
         try {
-            int columns = sh.getRow(0).getLastCellNum();
-            if (rows > 150 && rows < 170 && columns > 10 && columns < 15) {
+            if (checkPJorCA(sh, "L6", "Z6", "APO", "CP")) {
+                logger.info("*** found PJ on sheet: " + sheetName);
+
+                boolean bTimeMatch = false;
+                Calendar c = Calendar.getInstance();
+                c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
+                    bTimeMatch = true;
+                }
+
+                if (clubId == -1) {
+                    clubId = (int) sh.getRow(1).getCell(0).getNumericCellValue();
+                }
+                if (bTimeMatch && clubId > 0) {
+                    evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+                } else {
+                    logger.error("*** PJ time mismatch, or clubId "+clubId+" invalid.");
+                }
+            } else if (checkPJorCA(sh, "D4", "J4", "Wk", "Monthly")) {
+                logger.info("*** found CA on sheet: " + sheetName);
                 if (clubId == -1) {
                     String clubName = sh.getRow(0).getCell(2).getStringCellValue();
                     clubId = getIdByName(clubName);
                 }
                 if (clubId == -1) {
-                    invalidSheets.put(sheetName, f.getPath());
-                    return false;
+                    logger.error("*** invalid CA clubId: " + clubId);
+                    return;
                 }
                 boolean bTimeMatch = false;
                 try {
@@ -148,7 +159,7 @@ public class CurvesParser {
                     if (yIdx != -1) {
                         int mIdx = sheetName.substring(yIdx).indexOf("" + (month + 1));
                         if (mIdx != -1) {
-                            bTimeMatch  = true;
+                            bTimeMatch = true;
                         }
                     }
                     if (!bTimeMatch) {
@@ -161,38 +172,35 @@ public class CurvesParser {
                 } catch (Exception ignored) {
                 }
                 if (bTimeMatch) {
-                    logger.info("*** Found CA *** sheet: " + sheetName + ", clubId: " + clubId);
                     evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                    return new CaDataHandler(this).processCA(sh, evaluator, clubId);
+                    new CaDataHandler(this).processCA(sh, evaluator, clubId);
                 } else {
-                    invalidSheets.put(sheetName, f.getPath());
-                }
-            } else if (rows > 38 && rows < 50 && columns < 45 && columns > 35) {
-                boolean bTimeMatch = false;
-                Calendar c = Calendar.getInstance();
-                c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
-                if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
-                    bTimeMatch = true;
-                }
-
-                if (clubId == -1) {
-                    clubId = (int)sh.getRow(1).getCell(0).getNumericCellValue();
-                }
-
-                if (bTimeMatch && clubId > 0) {
-                    logger.info("### Found PJ ### sheet: "+sheetName+", clubId: "+clubId);
-                    evaluator = wb.getCreationHelper().createFormulaEvaluator();
-                    return new PjDataHandler(this).processPJ(sh, evaluator, clubId);
-                } else {
-                    invalidSheets.put(sheetName, f.getPath());
+                    logger.error("*** CA time mismatch.");
                 }
             } else {
-                invalidSheets.put(sheetName, f.getPath());
+                logger.info("*** non PJ/CA on sheet: " + sheetName);
             }
         } catch (Exception e) {
-            logger.error(">>> ERROR <<< file: " + f + ", sheet: " + sheetName, e);
+            logger.error(">>> ERROR Sheet: " + sheetName, e);
         }
-        return false;
+    }
+
+    private boolean checkPJorCA(Sheet sh, String cell1, String cell2, String value1, String value2) {
+        CellReference ref1 = new CellReference(cell1);
+        CellReference ref2 = new CellReference(cell2);
+        Row r1 = sh.getRow(ref1.getRow());
+        Row r2 = sh.getRow(ref2.getRow());
+        if (r1 == null || r2 == null) {
+            return false;
+        }
+        Cell c1 = r1.getCell(ref1.getCol());
+        Cell c2 = r1.getCell(ref2.getCol());
+        if (c1 == null || c2 == null) {
+            return false;
+        }
+        String v1 = c1.getStringCellValue();
+        String v2 = c2.getStringCellValue();
+        return value1.equals(v1) && value2.equals(v2);
     }
 
     int getCellIntValue(Sheet sh, int row, int col) {
