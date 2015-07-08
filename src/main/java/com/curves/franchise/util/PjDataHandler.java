@@ -2,7 +2,10 @@ package com.curves.franchise.util;
 
 import com.curves.franchise.domain.Pj;
 import com.curves.franchise.domain.PjSum;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +18,7 @@ class PjDataHandler {
     private final Logger logger = LoggerFactory.getLogger(PjDataHandler.class);
 
     private final CurvesParser cp;
-
+    private int version = 2015;
     private FormulaEvaluator evaluator = null;
 
     public PjDataHandler(CurvesParser cp){
@@ -24,33 +27,181 @@ class PjDataHandler {
 
     public boolean processPJ(Sheet sh, FormulaEvaluator evaluator, int clubId) {
         this.evaluator = evaluator;
+        setVersion(sh);
+        if (version == -1) {
+            logger.error("Cannot determine PJ version !!!");
+            return false;
+        }
 
         Calendar c = Calendar.getInstance();
         c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
         int lastDayOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int sumRowIdx = 45;
-        while (sumRowIdx > 20) {
+        int sumRowIdx = 30;
+        for (; sumRowIdx < 45; sumRowIdx++) {
             Row row = sh.getRow(sumRowIdx);
             if (row != null) {
-                Cell cTest = row.getCell(38);
+                Cell cTest = row.getCell(34);
                 if (cTest != null && Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
                     break;
                 }
             }
-            sumRowIdx--;
         }
+
 
         PjSum pjSum = new PjSum();
         pjSum.setLastModified(new Date());
         pjSum.setClubId(clubId);
         pjSum.setYear(cp.year);
         pjSum.setMonth(cp.month);
-        pjSum.setEnrolled(cp.getCellIntValue(sh, 1, 3));
-        pjSum.setLeaves(cp.getCellIntValue(sh, 1, 4));
-        pjSum.setValids(cp.getCellIntValue(sh, 1, 5));
-        pjSum.setExits(cp.getCellIntValue(sh, 1, 6));
+        switch (version) {
+            case 2012:
+                setupPjSum2012(sh, sumRowIdx, pjSum);
+                break;
+            case 2015:
+                setupPjSum2015(sh, sumRowIdx, pjSum);
+                break;
+        }
 
-        setupPjSum(sh, sumRowIdx, pjSum);
+        PjSum pjSumX = cp.pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
+        if (pjSumX != null) {
+            pjSum.setId(pjSumX.getId());
+        }
+        cp.pjSumRepo.save(pjSum);
+
+        logger.info("<== PJ Saved. clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
+        logger.info("");
+
+        return true;
+    }
+
+    private void setVersion(Sheet sh) {
+        try {
+            if ("APO".equals(sh.getRow(3).getCell(23).getStringCellValue())) {
+                version = 2012;
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if ("APO".equals(sh.getRow(5).getCell(11).getStringCellValue())) {
+                version = 2015;
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if ("Monthly".equals(sh.getRow(110).getCell(0).getStringCellValue())) {
+                version = 2015;
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void setupPjSum2015(Sheet sh, int sumRowIdx, PjSum pjSum) {
+        pjSum.setNewSales((int)cp.getNumberValue(sh, 1, 4));
+        pjSum.setExits((int)cp.getNumberValue(sh, 1, 5));
+        pjSum.setIncrement((int)cp.getNumberValue(sh, 1, 8));
+        pjSum.setRevenue((int)cp.getNumberValue(sh, 3, 0));
+        pjSum.setEnrolled((int)cp.getNumberValue(sh, 3, 1));
+        pjSum.setLeaves((int)cp.getNumberValue(sh, 3, 2));
+        pjSum.setValids((int)cp.getNumberValue(sh, 3, 3));
+        pjSum.setSalesRatio((float) cp.getNumberValue(sh, 3, 4));
+        pjSum.setExitRatio((float) cp.getNumberValue(sh, 3, 5));
+        pjSum.setLeaveRatio((float) cp.getNumberValue(sh, 3, 6));
+        pjSum.setWorkingDays((int) cp.getNumberValue(sh, sumRowIdx+1, 3));
+        pjSum.setMaxWorkOuts((int) cp.getNumberValue(sh, sumRowIdx+1, 4));
+        pjSum.setNewSalesRevenue((int) cp.getNumberValue(sh, sumRowIdx, 5));
+        pjSum.setDuesDraftsRevenue((int) cp.getNumberValue(sh, sumRowIdx, 6));
+        pjSum.setProductsRevenue((int) cp.getNumberValue(sh, sumRowIdx, 7));
+        pjSum.setWheyProteinRevenue((int) cp.getNumberValue(sh, sumRowIdx, 8));
+        pjSum.setOtherRevenue((int) cp.getNumberValue(sh, sumRowIdx, 9));
+        pjSum.setIncomingCalls((int) cp.getNumberValue(sh, sumRowIdx, 10));
+        pjSum.setIncomingApo((int) cp.getNumberValue(sh, sumRowIdx, 11));
+        pjSum.setOutgoingCalls((int) cp.getNumberValue(sh, sumRowIdx, 12));
+        pjSum.setOutgoingApo((int) cp.getNumberValue(sh, sumRowIdx, 13));
+        pjSum.setBrOwnRef((int) cp.getNumberValue(sh, sumRowIdx, 14));
+        pjSum.setBrOthersRef((int) cp.getNumberValue(sh, sumRowIdx, 15));
+        pjSum.setBrandedNewspaper((int) cp.getNumberValue(sh, sumRowIdx, 16));
+        pjSum.setBrandedTv((int) cp.getNumberValue(sh, sumRowIdx, 17));
+        pjSum.setBrandedInternet((int) cp.getNumberValue(sh, sumRowIdx, 18));
+        pjSum.setBrandedSign((int) cp.getNumberValue(sh, sumRowIdx, 19));
+        pjSum.setBrandedMate((int) cp.getNumberValue(sh, sumRowIdx, 20));
+        pjSum.setBrandedOthers((int) cp.getNumberValue(sh, sumRowIdx, 21));
+        pjSum.setAgpInDirectMail((int) cp.getNumberValue(sh, sumRowIdx, 22));
+        pjSum.setAgpInMailFlyer((int) cp.getNumberValue(sh, sumRowIdx, 23));
+        pjSum.setAgpInHandFlyer((int) cp.getNumberValue(sh, sumRowIdx, 24));
+        pjSum.setAgpInCp((int) cp.getNumberValue(sh, sumRowIdx, 25));
+        pjSum.setAgpOutApoOut((int) cp.getNumberValue(sh, sumRowIdx, 26));
+        pjSum.setAgpOutApoIn((int) cp.getNumberValue(sh, sumRowIdx, 27));
+        pjSum.setAgpOutApoBlog((int) cp.getNumberValue(sh, sumRowIdx, 28));
+        pjSum.setAgpOutApoBag((int) cp.getNumberValue(sh, sumRowIdx, 29));
+        pjSum.setFaSum((int) cp.getNumberValue(sh, sumRowIdx, 30));
+        pjSum.setEnrollAch((int) cp.getNumberValue(sh, sumRowIdx, 31));
+        pjSum.setEnrollMonthly((int) cp.getNumberValue(sh, sumRowIdx, 32));
+        pjSum.setEnrollAllPrepay((int) cp.getNumberValue(sh, sumRowIdx, 33));
+
+        List<Pj> pjs = new ArrayList<>(31);
+        pjSum.setPjSet(pjs);
+
+        for (int j = 6; j < sumRowIdx; j++) {
+            Date pjDate;
+            try {
+                pjDate = sh.getRow(j).getCell(0).getDateCellValue();
+                Calendar c1 = Calendar.getInstance();
+                c1.setTime(pjDate);
+                if (c1.get(Calendar.YEAR) != cp.year && c1.get(Calendar.MONTH) != cp.month) {
+                    continue;
+                }
+            } catch (Exception e) {
+                continue;
+            }
+
+            Pj pj = new Pj();
+            pj.setLastModified(new Date());
+            pjs.add(pj);
+
+            pj.setPjDate(pjDate);
+
+            setupPj2015(sh, j, pj);
+        }
+    }
+
+    private void setupPjSum2012(Sheet sh, int sumRowIdx, PjSum pjSum) {
+        pjSum.setEnrolled((int)cp.getNumberValue(sh, 1, 3));
+        pjSum.setLeaves((int)cp.getNumberValue(sh, 1, 4));
+        pjSum.setValids((int)cp.getNumberValue(sh, 1, 5));
+        pjSum.setExits((int)cp.getNumberValue(sh, 1, 6));
+        pjSum.setWorkingDays((float)cp.getNumberValue(sh, sumRowIdx, 3));
+        pjSum.setMaxWorkOuts((int)cp.getNumberValue(sh, sumRowIdx, 4));
+        pjSum.setNewSalesRevenue((int)cp.getNumberValue(sh, sumRowIdx, 5));
+        pjSum.setDuesDraftsRevenue((int)cp.getNumberValue(sh, sumRowIdx, 6));
+        pjSum.setProductsRevenue((int)cp.getNumberValue(sh, sumRowIdx, 7));
+        pjSum.setRevenue((int)cp.getNumberValue(sh, sumRowIdx, 8));
+        pjSum.setExitRatio((float)cp.getNumberValue(sh, sumRowIdx, 9));
+        pjSum.setLeaveRatio((float)cp.getNumberValue(sh, sumRowIdx, 10));
+        pjSum.setNewSales((int)cp.getNumberValue(sh, sumRowIdx, 11));
+        pjSum.setSalesRatio((float)cp.getNumberValue(sh, sumRowIdx, 12));
+        pjSum.setBrOwnRef((int)cp.getNumberValue(sh, sumRowIdx, 13));
+        pjSum.setBrOthersRef((int)cp.getNumberValue(sh, sumRowIdx, 14));
+        pjSum.setBrandedTv((int)cp.getNumberValue(sh, sumRowIdx, 15));
+        pjSum.setBrandedInternet((int)cp.getNumberValue(sh, sumRowIdx, 16));
+        pjSum.setBrandedSign((int)cp.getNumberValue(sh, sumRowIdx, 17));
+        pjSum.setBrandedMate((int)cp.getNumberValue(sh, sumRowIdx, 18));
+        pjSum.setBrandedOthers((int)cp.getNumberValue(sh, sumRowIdx, 19));
+        pjSum.setAgpInDirectMail((int)cp.getNumberValue(sh, sumRowIdx, 20));
+        pjSum.setAgpInMailFlyer((int)cp.getNumberValue(sh, sumRowIdx, 21));
+        pjSum.setAgpInHandFlyer((int)cp.getNumberValue(sh, sumRowIdx, 22));
+        pjSum.setAgpInCp((int)cp.getNumberValue(sh, sumRowIdx, 23));
+        pjSum.setAgpOutApoOut((int)cp.getNumberValue(sh, sumRowIdx, 24));
+        pjSum.setAgpOutApoIn((int)cp.getNumberValue(sh, sumRowIdx, 25));
+        pjSum.setAgpOutApoBlog((int)cp.getNumberValue(sh, sumRowIdx, 26));
+        pjSum.setAgpOutApoBag((int)cp.getNumberValue(sh, sumRowIdx, 27));
+        pjSum.setFaSum((int)cp.getNumberValue(sh, sumRowIdx, 28));
+        pjSum.setEnrollAch((int)cp.getNumberValue(sh, sumRowIdx, 29));
+        pjSum.setEnrollMonthly((int)cp.getNumberValue(sh, sumRowIdx, 30));
+        pjSum.setEnrollAllPrepay((int)cp.getNumberValue(sh, sumRowIdx, 31));
+        pjSum.setIncomingCalls((int)cp.getNumberValue(sh, sumRowIdx, 32));
+        pjSum.setIncomingApo((int)cp.getNumberValue(sh, sumRowIdx, 33));
+        pjSum.setOutgoingCalls((int)cp.getNumberValue(sh, sumRowIdx, 34));
+        pjSum.setOutgoingApo((int)cp.getNumberValue(sh, sumRowIdx, 35));
 
         List<Pj> pjs = new ArrayList<>(31);
         pjSum.setPjSet(pjs);
@@ -74,85 +225,73 @@ class PjDataHandler {
 
             pj.setPjDate(pjDate);
 
-            setupPj(sh, j, pj);
+            setupPj2012(sh, j, pj);
         }
-
-        PjSum pjSumX = cp.pjSumRepo.findByClubIdAndYearAndMonth(pjSum.getClubId(), pjSum.getYear(), pjSum.getMonth());
-        if (pjSumX != null) {
-            pjSum.setId(pjSumX.getId());
-        }
-        cp.pjSumRepo.save(pjSum);
-
-        logger.info("### PJ Saved ### clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
-
-        return true;
     }
 
-    private void setupPjSum(Sheet sh, int sumRowIdx, PjSum pjSum) {
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(3));pjSum.setWorkingDays((float) cellValue.getNumberValue());} catch (Exception ignored) {}
-        try {pjSum.setMaxWorkOuts(cp.getCellIntValue(sh, sumRowIdx, 4));} catch (Exception ignored) {}
-        try {pjSum.setNewSalesRevenue(cp.getCellIntValue(sh, sumRowIdx, 5));} catch (Exception ignored) {}
-        try {pjSum.setDuesDraftsRevenue(cp.getCellIntValue(sh, sumRowIdx, 6));} catch (Exception ignored) {}
-        try {pjSum.setProductsRevenue(cp.getCellIntValue(sh, sumRowIdx, 7));} catch (Exception ignored) {}
-        try {pjSum.setRevenue(cp.getCellIntValue(sh, sumRowIdx, 8));} catch (Exception ignored) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(9));pjSum.setExitRatio((float) cellValue.getNumberValue());} catch (Exception ignored) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(10));pjSum.setLeaveRatio((float) cellValue.getNumberValue());} catch (Exception ignored) {}
-        try {pjSum.setNewSales(cp.getCellIntValue(sh, sumRowIdx, 11));} catch (Exception ignored) {}
-        try {CellValue cellValue = evaluator.evaluate(sh.getRow(sumRowIdx).getCell(12));pjSum.setSalesRatio((float) cellValue.getNumberValue());} catch (Exception ignored) {}
-        try {pjSum.setBrOwnRef(cp.getCellIntValue(sh, sumRowIdx, 13));} catch (Exception ignored) {}
-        try {pjSum.setBrOthersRef(cp.getCellIntValue(sh, sumRowIdx, 14));} catch (Exception ignored) {}
-        try {pjSum.setBrandedTv(cp.getCellIntValue(sh, sumRowIdx, 15));} catch (Exception ignored) {}
-        try {pjSum.setBrandedInternet(cp.getCellIntValue(sh, sumRowIdx, 16));} catch (Exception ignored) {}
-        try {pjSum.setBrandedSign(cp.getCellIntValue(sh, sumRowIdx, 17));} catch (Exception ignored) {}
-        try {pjSum.setBrandedMate(cp.getCellIntValue(sh, sumRowIdx, 18));} catch (Exception ignored) {}
-        try {pjSum.setBrandedOthers(cp.getCellIntValue(sh, sumRowIdx, 19));} catch (Exception ignored) {}
-        try {pjSum.setAgpInDirectMail(cp.getCellIntValue(sh, sumRowIdx, 20));} catch (Exception ignored) {}
-        try {pjSum.setAgpInMailFlyer(cp.getCellIntValue(sh, sumRowIdx, 21));} catch (Exception ignored) {}
-        try {pjSum.setAgpInHandFlyer(cp.getCellIntValue(sh, sumRowIdx, 22));} catch (Exception ignored) {}
-        try {pjSum.setAgpInCp(cp.getCellIntValue(sh, sumRowIdx, 23));} catch (Exception ignored) {}
-        try {pjSum.setAgpOutApoOut(cp.getCellIntValue(sh, sumRowIdx, 24));} catch (Exception ignored) {}
-        try {pjSum.setAgpOutApoIn(cp.getCellIntValue(sh, sumRowIdx, 25));} catch (Exception ignored) {}
-        try {pjSum.setAgpOutApoBlog(cp.getCellIntValue(sh, sumRowIdx, 26));} catch (Exception ignored) {}
-        try {pjSum.setAgpOutApoBag(cp.getCellIntValue(sh, sumRowIdx, 27));} catch (Exception ignored) {}
-        try {pjSum.setFaSum(cp.getCellIntValue(sh, sumRowIdx, 28));} catch (Exception ignored) {}
-        try {pjSum.setEnrollAch(cp.getCellIntValue(sh, sumRowIdx, 29));} catch (Exception ignored) {}
-        try {pjSum.setEnrollMonthly(cp.getCellIntValue(sh, sumRowIdx, 30));} catch (Exception ignored) {}
-        try {pjSum.setEnrollAllPrepay(cp.getCellIntValue(sh, sumRowIdx, 31));} catch (Exception ignored) {}
-        try {pjSum.setIncomingCalls(cp.getCellIntValue(sh, sumRowIdx, 32));} catch (Exception ignored) {}
-        try {pjSum.setIncomingApo(cp.getCellIntValue(sh, sumRowIdx, 33));} catch (Exception ignored) {}
-        try {pjSum.setOutgoingCalls(cp.getCellIntValue(sh, sumRowIdx, 34));} catch (Exception ignored) {}
-        try {pjSum.setOutgoingApo(cp.getCellIntValue(sh, sumRowIdx, 35));} catch (Exception ignored) {}
+    private void setupPj2012(Sheet sh, int j, Pj pj) {
+        pj.setWorkingDays((float)cp.getNumberValue(sh, j, 3));
+        pj.setWorkOuts((int)cp.getNumberValue(sh, j, 4));
+        pj.setNewSalesRevenue((int)cp.getNumberValue(sh, j, 5));
+        pj.setBrOwnRef((int)cp.getNumberValue(sh, j, 13));
+        pj.setBrandedNewspaper((int)cp.getNumberValue(sh, j, 14));
+        pj.setBrandedTv((int)cp.getNumberValue(sh, j, 15));
+        pj.setBrandedInternet((int)cp.getNumberValue(sh, j, 16));
+        pj.setBrandedSign((int)cp.getNumberValue(sh, j, 17));
+        pj.setBrandedMate((int)cp.getNumberValue(sh, j, 18));
+        pj.setBrandedOthers((int)cp.getNumberValue(sh, j, 19));
+        pj.setAgpInDirectMail((int)cp.getNumberValue(sh, j, 20));
+        pj.setAgpInMailFlyer((int)cp.getNumberValue(sh, j, 21));
+        pj.setAgpInHandFlyer((int)cp.getNumberValue(sh, j, 22));
+        pj.setAgpInCp((int)cp.getNumberValue(sh, j, 23));
+        pj.setAgpOutApoOut((int)cp.getNumberValue(sh, j, 24));
+        pj.setAgpOutApoIn((int)cp.getNumberValue(sh, j, 25));
+        pj.setAgpOutApoBlog((int)cp.getNumberValue(sh, j, 26));
+        pj.setAgpOutApoBag((int)cp.getNumberValue(sh, j, 27));
+        pj.setFa((int)cp.getNumberValue(sh, j, 28));
+        pj.setEnrollAch((int)cp.getNumberValue(sh, j, 29));
+        pj.setEnrollMonthly((int)cp.getNumberValue(sh, j, 30));
+        pj.setEnrollAllPrepay((int)cp.getNumberValue(sh, j, 31));
+        pj.setExits((int)cp.getNumberValue(sh, j, 32));
+        pj.setIncomingCalls((int)cp.getNumberValue(sh, j, 33));
+        pj.setIncomingApo((int)cp.getNumberValue(sh, j, 34));
+        pj.setOutgoingCalls((int)cp.getNumberValue(sh, j, 35));
+        pj.setOutgoingApo((int)cp.getNumberValue(sh, j, 36));
+        pj.setProductsRevenue((int)cp.getNumberValue(sh, j, 37));
+        pj.setDuesDraftsRevenue((int)cp.getNumberValue(sh, j, 38));
     }
 
-    private void setupPj(Sheet sh, int j, Pj pj) {
-        try {pj.setWorkingDays((float)sh.getRow(j).getCell(3).getNumericCellValue());} catch (Exception ignored) {}
-        try {pj.setWorkOuts(cp.getCellIntValue(sh, j, 4));} catch (Exception ignored) {}
-        try {pj.setNewSalesRevenue(cp.getCellIntValue(sh, j, 5));} catch (Exception ignored) {}
-        try {pj.setBrOwnRef(cp.getCellIntValue(sh, j, 13));} catch (Exception ignored) {}
-        try {pj.setBrandedNewspaper(cp.getCellIntValue(sh, j, 14));} catch (Exception ignored) {}
-        try {pj.setBrandedTv(cp.getCellIntValue(sh, j, 15));} catch (Exception ignored) {}
-        try {pj.setBrandedInternet(cp.getCellIntValue(sh, j, 16));} catch (Exception ignored) {}
-        try {pj.setBrandedSign(cp.getCellIntValue(sh, j, 17));} catch (Exception ignored) {}
-        try {pj.setBrandedMate(cp.getCellIntValue(sh, j, 18));} catch (Exception ignored) {}
-        try {pj.setBrandedOthers(cp.getCellIntValue(sh, j, 19));} catch (Exception ignored) {}
-        try {pj.setAgpInDirectMail(cp.getCellIntValue(sh, j, 20));} catch (Exception ignored) {}
-        try {pj.setAgpInMailFlyer(cp.getCellIntValue(sh, j, 21));} catch (Exception ignored) {}
-        try {pj.setAgpInHandFlyer(cp.getCellIntValue(sh, j, 22));} catch (Exception ignored) {}
-        try {pj.setAgpInCp(cp.getCellIntValue(sh, j, 23));} catch (Exception ignored) {}
-        try {pj.setAgpOutApoOut(cp.getCellIntValue(sh, j, 24));} catch (Exception ignored) {}
-        try {pj.setAgpOutApoIn(cp.getCellIntValue(sh, j, 25));} catch (Exception ignored) {}
-        try {pj.setAgpOutApoBlog(cp.getCellIntValue(sh, j, 26));} catch (Exception ignored) {}
-        try {pj.setAgpOutApoBag(cp.getCellIntValue(sh, j, 27));} catch (Exception ignored) {}
-        try {pj.setFa(cp.getCellIntValue(sh, j, 28));} catch (Exception ignored) {}
-        try {pj.setEnrollAch(cp.getCellIntValue(sh, j, 29));} catch (Exception ignored) {}
-        try {pj.setEnrollMonthly(cp.getCellIntValue(sh, j, 30));} catch (Exception ignored) {}
-        try {pj.setEnrollAllPrepay(cp.getCellIntValue(sh, j, 31));} catch (Exception ignored) {}
-        try {pj.setExits(cp.getCellIntValue(sh, j, 32));} catch (Exception ignored) {}
-        try {pj.setIncomingCalls(cp.getCellIntValue(sh, j, 33));} catch (Exception ignored) {}
-        try {pj.setIncomingApo(cp.getCellIntValue(sh, j, 34));} catch (Exception ignored) {}
-        try {pj.setOutgoingCalls(cp.getCellIntValue(sh, j, 35));} catch (Exception ignored) {}
-        try {pj.setOutgoingApo(cp.getCellIntValue(sh, j, 36));} catch (Exception ignored) {}
-        try {pj.setProductsRevenue(cp.getCellIntValue(sh, j, 37));} catch (Exception ignored) {}
-        try {pj.setDuesDraftsRevenue(cp.getCellIntValue(sh, j, 38));} catch (Exception ignored) {}
+    private void setupPj2015(Sheet sh, int j, Pj pj) {
+        pj.setWorkingDays((int) cp.getNumberValue(sh, j, 3));
+        pj.setWorkOuts((int) cp.getNumberValue(sh, j, 4));
+        pj.setNewSalesRevenue((int) cp.getNumberValue(sh, j, 5));
+        pj.setDuesDraftsRevenue((int) cp.getNumberValue(sh, j, 6));
+        pj.setProductsRevenue((int) cp.getNumberValue(sh, j, 7));
+        pj.setWheyProteinRevenue((int) cp.getNumberValue(sh, j, 8));
+        pj.setOtherRevenue((int) cp.getNumberValue(sh, j, 9));
+        pj.setIncomingCalls((int) cp.getNumberValue(sh, j, 10));
+        pj.setIncomingApo((int) cp.getNumberValue(sh, j, 11));
+        pj.setOutgoingCalls((int) cp.getNumberValue(sh, j, 12));
+        pj.setOutgoingApo((int) cp.getNumberValue(sh, j, 13));
+        pj.setBrOwnRef((int) cp.getNumberValue(sh, j, 14));
+        pj.setBrOthersRef((int) cp.getNumberValue(sh, j, 15));
+        pj.setBrandedNewspaper((int) cp.getNumberValue(sh, j, 16));
+        pj.setBrandedTv((int) cp.getNumberValue(sh, j, 17));
+        pj.setBrandedInternet((int) cp.getNumberValue(sh, j, 18));
+        pj.setBrandedSign((int) cp.getNumberValue(sh, j, 19));
+        pj.setBrandedMate((int) cp.getNumberValue(sh, j, 20));
+        pj.setBrandedOthers((int) cp.getNumberValue(sh, j, 21));
+        pj.setAgpInDirectMail((int) cp.getNumberValue(sh, j, 22));
+        pj.setAgpInMailFlyer((int) cp.getNumberValue(sh, j, 23));
+        pj.setAgpInHandFlyer((int) cp.getNumberValue(sh, j, 24));
+        pj.setAgpInCp((int) cp.getNumberValue(sh, j, 25));
+        pj.setAgpOutApoOut((int) cp.getNumberValue(sh, j, 26));
+        pj.setAgpOutApoIn((int) cp.getNumberValue(sh, j, 27));
+        pj.setAgpOutApoBlog((int) cp.getNumberValue(sh, j, 28));
+        pj.setAgpOutApoBag((int) cp.getNumberValue(sh, j, 29));
+        pj.setFa((int) cp.getNumberValue(sh, j, 30));
+        pj.setEnrollAch((int) cp.getNumberValue(sh, j, 31));
+        pj.setEnrollMonthly((int) cp.getNumberValue(sh, j, 32));
+        pj.setEnrollAllPrepay((int) cp.getNumberValue(sh, j, 33));
     }
 }
