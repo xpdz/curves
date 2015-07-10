@@ -178,6 +178,9 @@ public class CurvesParser {
             sh = wb.getSheet(year + "-0" + (month+1));
         }
         if (sh == null) {
+            sh = wb.getSheet("2015xx");
+        }
+        if (sh == null) {
             sh = wb.getSheet("CA");
         }
 

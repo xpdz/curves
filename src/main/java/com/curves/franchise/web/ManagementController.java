@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -129,71 +131,88 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/benchmarking")
     @ResponseBody
-    public Map<String, Float> findRank(@RequestParam("item") String item, @RequestParam("year") int year, @RequestParam("month") int month) {
-        logger.info("---findBenchmarking---item: "+item+", year: "+year+", month: "+month);
+    public Map<String, Map<String, Float>> findBenchmarking(@RequestParam int year, @RequestParam int month,
+                                                            @RequestParam(required = false, defaultValue = "1") Integer page,
+                                                            @RequestParam(required = false, defaultValue = "revenue") String sortBy,
+                                                            @RequestParam(required = false, defaultValue = "false") Boolean isAsc) {
+        logger.info("---findBenchmarking---year: "+year+", month: "+month+", page: "+page+", sortBy: "+sortBy+", isAsc: "+isAsc);
+
+        Map<String, Map<String, Float>> clubItems = new LinkedHashMap<>(10);
+
         Iterable<Club> clubs = clubRepo.findAll();
         Map<Integer, String> clubIdNameMap = new HashMap<>();
         for (Club club : clubs) {
             clubIdNameMap.put(club.getClubId(), club.getName());
         }
         logger.info("---findBenchmarking---clubIdNameMap.size: "+clubIdNameMap.size());
-        Map<String, Float> values = new LinkedHashMap<>();
-        if ("newSalesRevenue".equals(item) || "duesDraftsRevenue".equals(item) ||
-             "productsRevenue".equals(item) || "revenue".equals(item)) {
-            List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.DESC, item));
-            for (PjSum pjSum : pjSums) {
-                String clubName = clubIdNameMap.get(pjSum.getClubId());
-                if (clubName == null) {
-                    continue;
+
+        Pageable pageable = new PageRequest(page - 1, 10, isAsc ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
+        switch (sortBy) {
+            case "revenue":
+            case "newSalesRevenue":
+            case "duesDraftsRevenue":
+            case "productsRevenue":
+                List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, pageable);
+                for (PjSum pjSum : pjSums) {
+                    String clubName = clubIdNameMap.get(pjSum.getClubId());
+                    if (clubName == null) {
+                        continue;
+                    }
+                    fillPjBenchmarking(clubItems, clubName, pjSum);
+                    Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(pjSum.getClubId(), year, month);
+                    fillCaBenchmarking(clubItems, clubName, ca);
                 }
-                if ("newSalesRevenue".equals(item)) {
-                    values.put(clubName, (float)pjSum.getNewSalesRevenue());
-                } else if ("duesDraftsRevenue".equals(item)) {
-                    values.put(clubName, (float)pjSum.getDuesDraftsRevenue());
-                } else if ("productsRevenue".equals(item)) {
-                    values.put(clubName, (float)pjSum.getProductsRevenue());
-                } else if ("revenue".equals(item)) {
-                    values.put(clubName, (float)pjSum.getRevenue());
+
+                break;
+            default:
+                List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, pageable);
+
+                for (Ca ca : cas) {
+                    String clubName = clubIdNameMap.get(ca.getClubId());
+                    if (clubName == null) {
+                        continue;
+                    }
+                    fillCaBenchmarking(clubItems, clubName, ca);
+                    PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(ca.getClubId(), year, month);
+                    fillPjBenchmarking(clubItems, clubName, pjSum);
                 }
-            }
-        } else {
-            List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month, new Sort(Sort.Direction.DESC, item));
-            for (Ca ca : cas) {
-                String clubName = clubIdNameMap.get(ca.getClubId());
-                if (clubName == null) {
-                    continue;
-                }
-                if ("cmPostFlyer6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmPostFlyer6());
-                } else if ("cmHandFlyer6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmHandFlyer6());
-                } else if ("cmHandFlyerHours6".equals(item)) {
-                    values.put(clubName, ca.getCmHandFlyerHours6());
-                } else if ("cmOutGp6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmOutGp6());
-                } else if ("cmOutGpHours6".equals(item)) {
-                    values.put(clubName, ca.getCmOutGpHours6());
-                } else if ("cmCpBox6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmCpBox6());
-                } else if ("cmApoTotal6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmApoTotal6());
-                } else if ("cmFaSum6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmFaSum6());
-                } else if ("salesAch6".equals(item)) {
-                    values.put(clubName, (float)ca.getSalesAch6());
-                } else if ("salesRatio6".equals(item)) {
-                    values.put(clubName, ca.getSalesRatio6());
-                } else if ("cmOwnRefs6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmOwnRefs6());
-                } else if ("cmOutAgpOut6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmOutAgpOut6());
-                } else if ("cmInAgpOut6".equals(item)) {
-                    values.put(clubName, (float)ca.getCmInAgpOut6());
-                }
-            }
         }
-        logger.info("---findBenchmarking---values.size: "+values.size());
-        return values;
+
+        logger.info("---findBenchmarking---values.size: "+clubItems.size());
+        return clubItems;
+    }
+
+    private void fillCaBenchmarking(Map<String, Map<String, Float>> clubItems, String clubName, Ca ca) {
+        Map<String, Float> itemValues = clubItems.get(clubName);
+        if (itemValues == null) {
+            itemValues = new HashMap<>();
+            clubItems.put(clubName, itemValues);
+        }
+        itemValues.put("cmPostFlyer6", (float)ca.getCmPostFlyer6());
+        itemValues.put("cmHandFlyer6", (float)ca.getCmHandFlyer6());
+        itemValues.put("cmHandFlyerHours6", ca.getCmHandFlyerHours6());
+        itemValues.put("cmOutGp6", (float)ca.getCmOutGp6());
+        itemValues.put("cmOutGpHours6", ca.getCmOutGpHours6());
+        itemValues.put("cmCpBox6", (float)ca.getCmCpBox6());
+        itemValues.put("cmApoTotal6", (float)ca.getCmApoTotal6());
+        itemValues.put("cmFaSum6", (float)ca.getCmFaSum6());
+        itemValues.put("salesAch6", (float)ca.getSalesAch6());
+        itemValues.put("salesRatio6", ca.getSalesRatio6());
+        itemValues.put("cmOwnRefs6", (float)ca.getCmOwnRefs6());
+        itemValues.put("cmOutAgpOut6", (float)ca.getCmOutAgpOut6());
+        itemValues.put("cmInAgpOut6", (float)ca.getCmInAgpOut6());
+    }
+
+    private void fillPjBenchmarking(Map<String, Map<String, Float>> clubItems, String clubName, PjSum pjSum) {
+        Map<String, Float> itemValues = clubItems.get(clubName);
+        if (itemValues == null) {
+            itemValues = new HashMap<>();
+            clubItems.put(clubName, itemValues);
+        }
+        itemValues.put("duesDraftsRevenue", (float)pjSum.getNewSalesRevenue());
+        itemValues.put("duesDraftsRevenue", (float)pjSum.getDuesDraftsRevenue());
+        itemValues.put("productsRevenue", (float)pjSum.getProductsRevenue());
+        itemValues.put("revenue", (float)pjSum.getRevenue());
     }
 
     @RequestMapping(value = "/rest/PJ_All/export", produces="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

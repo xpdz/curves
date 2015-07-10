@@ -18,7 +18,7 @@ class PjDataHandler {
     private final Logger logger = LoggerFactory.getLogger(PjDataHandler.class);
 
     private final CurvesParser cp;
-    private int version = 2015;
+    private int version = -1;
     private FormulaEvaluator evaluator = null;
 
     public PjDataHandler(CurvesParser cp){
@@ -40,13 +40,16 @@ class PjDataHandler {
         for (; sumRowIdx < 45; sumRowIdx++) {
             Row row = sh.getRow(sumRowIdx);
             if (row != null) {
-                Cell cTest = row.getCell(34);
+                Cell cTest = row.getCell(25);
                 if (cTest != null && Cell.CELL_TYPE_FORMULA == cTest.getCellType()) {
                     break;
                 }
             }
         }
-
+        if (sumRowIdx == 45) {
+            logger.error("summary line not found!!!");
+            return false;
+        }
 
         PjSum pjSum = new PjSum();
         pjSum.setLastModified(new Date());
@@ -68,7 +71,8 @@ class PjDataHandler {
         }
         cp.pjSumRepo.save(pjSum);
 
-        logger.info("<== PJ Saved. clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
+        logger.info("<== PJ Saved. clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()
+                +", version: "+version+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
         logger.info("");
 
         return true;
@@ -76,19 +80,13 @@ class PjDataHandler {
 
     private void setVersion(Sheet sh) {
         try {
-            if ("APO".equals(sh.getRow(3).getCell(23).getStringCellValue())) {
+            if ("CP".equals(sh.getRow(3).getCell(23).getStringCellValue())) {
                 version = 2012;
             }
         } catch (Exception e) {
         }
         try {
-            if ("APO".equals(sh.getRow(5).getCell(11).getStringCellValue())) {
-                version = 2015;
-            }
-        } catch (Exception e) {
-        }
-        try {
-            if ("Monthly".equals(sh.getRow(110).getCell(0).getStringCellValue())) {
+            if ("CP".equals(sh.getRow(5).getCell(25).getStringCellValue())) {
                 version = 2015;
             }
         } catch (Exception e) {
