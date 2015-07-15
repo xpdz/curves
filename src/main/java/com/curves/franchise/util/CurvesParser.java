@@ -20,8 +20,6 @@ public class CurvesParser {
 
     private final Pattern chinesePattern = Pattern.compile("([\\u4e00-\\u9fa5]+)");
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    private final Map<String, String> invalidSheets = new HashMap<>();
-    private final List<File> allOthers = new ArrayList<>();
     private final Map<String, Integer> nameId = new HashMap<>();
     int year, month;
     private String dir = null;
@@ -86,14 +84,6 @@ public class CurvesParser {
             logger.info("---"+ym[ym.length - 1]+" enter folder---"+fdl);
             processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
         }
-
-        logger.info("=======others================================");
-        for (File f : allOthers) {
-            logger.info(">>>Invalid files<<<"+f);
-        }
-        for (String s : invalidSheets.keySet()) {
-            logger.info("***Invalid sheets***"+s+" --- "+invalidSheets.get(s));
-        }
     }
 
     private void processWorkbooks(Collection<File> allFiles) {
@@ -121,7 +111,7 @@ public class CurvesParser {
                 continue;
             }
 
-            Sheet sh = getSheet(wb);
+            Sheet sh = getSheet(wb, f.getName());
             if (sh == null) {
                 ymErr.add(f.getName());
                 continue;
@@ -160,7 +150,7 @@ public class CurvesParser {
         logger.error("==============");
     }
 
-    Sheet getSheet(Workbook wb) {
+    Sheet getSheet(Workbook wb, String fname) {
         Sheet sh = wb.getSheet(year + "0" + (month+1));
         if (sh == null) {
             sh = wb.getSheet(year + "" + (month+1));
@@ -177,19 +167,17 @@ public class CurvesParser {
         if (sh == null) {
             sh = wb.getSheet(year + "-0" + (month+1));
         }
-        if (sh == null) {
-            sh = wb.getSheet("2015xx");
-        }
-        if (sh == null) {
-            sh = wb.getSheet("CA");
-        }
 
         if (sh == null) {
             for (int i = 0; i < wb.getNumberOfSheets(); i++) {
                 sh = wb.getSheetAt(i);
                 Calendar c = Calendar.getInstance();
                 try {
-                    c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                    if (fname.indexOf("CA") != -1) {
+                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
+                    } else {
+                        c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                    }
                 } catch (Exception e) {
                 }
                 if (c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month) {
