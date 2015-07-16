@@ -83,8 +83,8 @@ $(document).ready(function() {
           $('<td>' + clubs.content[i].name + '</td>'),
           $('<td>' + clubs.content[i].owner + '</td>'),
           $('<td>' + od + '</td>'),
-          $('<td><a class="btn btn-info" href="pj.htm?clubId='+clubs.content[i].clubId+'">PJ</a><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
-          $('<td><a class="btn btn-info" href="ca.htm?clubId='+clubs.content[i].clubId+'">CA</a><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
+          $('<td><a class="btn btn-info" href="PJ.htm?clubId='+clubs.content[i].clubId+'">PJ</a><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
+          $('<td><a class="btn btn-info" href="CA.htm?clubId='+clubs.content[i].clubId+'">CA</a><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
           $('<td><a class="btn btn-primary" href="trends.htm?clubId='+clubs.content[i].clubId+'"> <i class="fa fa-line-chart fa-lg"></i> </a></td>'),
           $('<td><a class="btn btn-primary" href="#" data-btn="btnEditClub" data-clubId="'+clubs.content[i].clubId+'" data-name="'+clubs.content[i].name+'" data-owner="'+clubs.content[i].owner+'" data-openDate="'+od+'"><i class="fa fa-pencil-square-o fa-lg"></i></a></td>'),
           $('<td><a class="btn btn-danger" href="#" data-btn="btnResetPassword" data-clubId="'+clubs.content[i].clubId+'"><i class="fa fa-key fa-lg"></i></a></td>')
