@@ -82,6 +82,8 @@ $(document).ready(function() {
           $('<td>' + clubs.content[i].clubId + '</td>'),
           $('<td>' + clubs.content[i].name + '</td>'),
           $('<td>' + clubs.content[i].owner + '</td>'),
+          $('<td>' + clubs.content[i].mentor + '</td>'),
+          $('<td>' + clubs.content[i].cooperation + '</td>'),
           $('<td>' + od + '</td>'),
           $('<td><a class="btn btn-info" href="PJ.htm?clubId='+clubs.content[i].clubId+'">PJ</a><a class="btn btn-info" href="pj_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
           $('<td><a class="btn btn-info" href="CA.htm?clubId='+clubs.content[i].clubId+'">CA</a><a class="btn btn-info" href="ca_summary.htm?clubId='+clubs.content[i].clubId+'&amp;clubName='+clubs.content[i].name+'&amp;clubOwner='+clubs.content[i].owner+'">Summary</a></td>'),
@@ -94,17 +96,20 @@ $(document).ready(function() {
 
     $('#btnSave1').click(function() {
         var clubId = $('#newClubId').val(), name = $('#newClubName').val(),
-         openDate = $('#newClubOpenDate').val(), owner = $('#newClubOwner').val();
+         openDate = $('#newClubOpenDate').val(), owner = $('#newClubOwner').val(),
+         mentor = $('#newClubMentor').val(), cooperation = $('#newClubCo').val();
         var hasError = false;
         if ( !clubId || !name || !owner) {
             showAlert("#alertAcct", "alert-danger", "All fields must be filled.");
             return;
         }
+        if (!mentor) mentor = '';
+        if (!cooperation) cooperation = '';
 
         $(this).prop("disabled", true);
 
         $.post('/rest/clubs', {
-          clubId: clubId, name: name, openDate: $('.input-group.date').datepicker('getUTCDate'), owner: owner
+          clubId: clubId, name: name, openDate: $('.input-group.date').datepicker('getUTCDate'), owner: owner, mentor: mentor, cooperation, cooperation
         }).done(function() {
           showAlert("#alertClub", "alert-success", "Save successfully.");
         }).fail(function(jqXHR, textStatus, errorThrown) {

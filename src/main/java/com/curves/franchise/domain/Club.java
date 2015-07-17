@@ -13,9 +13,9 @@ public class Club implements Serializable {
     private int clubId;
     private Date openDate;
     private String name;
-    private String nameEn;
+    private String cooperation;
     private String owner;
-    private String ownerEn;
+    private String mentor;
     private String manager;
 
     public void setClubId(int clubId) {
@@ -30,16 +30,16 @@ public class Club implements Serializable {
         this.name = name;
     }
 
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
+    public void setCooperation(String cooperation) {
+        this.cooperation = cooperation;
     }
 
     public void setOwner(String owner) {
         this.owner = owner;
     }
 
-    public void setOwnerEn(String ownerEn) {
-        this.ownerEn = ownerEn;
+    public void setMentor(String mentor) {
+        this.mentor = mentor;
     }
 
     public void setManager(String manager) {
@@ -58,16 +58,16 @@ public class Club implements Serializable {
         return name;
     }
 
-    public String getNameEn() {
-        return nameEn;
+    public String getCooperation() {
+        return cooperation;
     }
 
     public String getOwner() {
         return owner;
     }
 
-    public String getOwnerEn() {
-        return ownerEn;
+    public String getMentor() {
+        return mentor;
     }
 
     public String getManager() {

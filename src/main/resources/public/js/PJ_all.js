@@ -47,6 +47,7 @@ $(document).ready(function() {
           $.each(pjSums, function(i, e) {
             $tbd.append($('<tr/>').append(
               '<td>'+e.clubId+'</td>' +
+              '<td>'+e.clubId+'</td>' +
               '<td>'+e.year+'</td>' +
               '<td>'+(e.month+1)+'</td>' +
               '<td>'+e.enrolled+'</td>' +

@@ -42,14 +42,17 @@ public class ClubController {
 
     @RequestMapping(value = "/rest/clubs", method = RequestMethod.POST)
     @ResponseBody
-    public String saveUser(@RequestParam Integer clubId, @RequestParam String name, @RequestParam Date openDate, @RequestParam String owner) {
-        logger.info("---saveUser---clubId: "+clubId+", name: "+name
-                +", openDate: "+openDate+", owner: "+owner);
+    public String saveUser(@RequestParam Integer clubId, @RequestParam String name, @RequestParam Date openDate,
+                           @RequestParam String owner, @RequestParam String mentor, @RequestParam String cooperation) {
+        logger.info("---saveUser---clubId: "+clubId+", name: "+name+", openDate: "+openDate
+                +", owner: "+owner+", mentor: "+mentor+", cooperation: "+cooperation);
         Club club = new Club();
         club.setClubId(clubId);
         club.setName(name);
         club.setOpenDate(openDate);
         club.setOwner(owner);
+        club.setMentor(mentor);
+        club.setCooperation(cooperation);
 
         User user = new User();
         user.setUsername(clubId.toString());
@@ -60,10 +63,21 @@ public class ClubController {
         authorities.setUsername(clubId.toString());
         authorities.setAuthority("ROLE_USER");
 
+        User coach = new User();
+        coach.setUsername("0"+clubId.toString().substring(1));
+        coach.setPassword(new BCryptPasswordEncoder(8).encode(clubId.toString()));
+        coach.setEnabled(true);
+
+        Authorities coachAuthorities = new Authorities();
+        coachAuthorities.setUsername("0"+clubId.toString().substring(1));
+        coachAuthorities.setAuthority("ROLE_COACH");
+
         try {
             clubRepo.save(club);
             userRepo.save(user);
+            userRepo.save(coach);
             authoritiesRepo.save(authorities);
+            authoritiesRepo.save(coachAuthorities);
         } catch (Exception e) {
             return null;
         }
@@ -141,7 +155,7 @@ public class ClubController {
                         logger.info("===update club xzy=== owner not equal");
                     }
                     club.setOpenDate(openDate);
-                    club.setOwnerEn(owner);
+                    club.setMentor(owner);
                     clubRepo.save(club);
                 } catch (Exception e) {
                     int clubId = (int)row.getCell(4).getNumericCellValue();
