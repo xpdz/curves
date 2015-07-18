@@ -10,7 +10,7 @@ $(document).ready(function() {
           $('ul[data-curves="mgmt"]').show();
         }
 
-        var weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
         var $tbd = $("#tbd");
 
         var today = new Date();
@@ -31,6 +31,7 @@ $(document).ready(function() {
         $('.input-group.date').datepicker().on('changeDate', function(ev) {
             currentYear = ev.date.getFullYear();
             currentMonth = ev.date.getMonth();
+            lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
             getPJ();
         });
 
@@ -112,11 +113,10 @@ $(document).ready(function() {
                   pj = {};
               }
               var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
-              var d = new Date(pjDay);
               var row =
                '<tr>' +
                   '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
-                  '<td>' + weekdays[d.getDay()] + '</td>' +
+                  '<td>' + weekdays[new Date(currentYear, currentMonth+1, idx).getDay()] + '</td>' +
                   '<td>' + idx + '</td>' +
                   '<td style="background-color: #FFFF99"><div id="workingDays-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workingDays ||'')+ '</div></td>' +
                   '<td style="background-color: #CCFFFF"><div id="workOuts-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workOuts ||'')+ '</div></td>' +
@@ -154,19 +154,24 @@ $(document).ready(function() {
               $tbd.append($(row));
           }
 
-            if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
-                $('#btnSave').prop("disabled", false);
-                $('[contenteditable]').css('border', '1px dashed !important');
-                $('[contenteditable="false"]').prop('contenteditable', true);
-            } else {
-                $('#btnSave').prop("disabled", true);
-                $('[contenteditable]').css('border', '1px solid #ddd !important');
-                $('[contenteditable="true"]').prop('contenteditable', false);
-            }
-            clearZero();
-            clearNaN();
+          // disable edit if in prior month
+//          if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
+//              $('#btnSave').prop("disabled", false);
+//              $('[contenteditable]').css('border', '1px dashed !important');
+//              $('[contenteditable="false"]').prop('contenteditable', true);
+//          } else {
+//              $('#btnSave').prop("disabled", true);
+//              $('[contenteditable]').css('border', '1px solid #ddd !important');
+//              $('[contenteditable="true"]').prop('contenteditable', false);
+//          }
 
-            fillSummary(pjSum);
+          // set background color - Sat: blue, Sun: red
+          $('td:contains("Sat.")').css('background-color', 'blue');
+          $('td:contains("Sun.")').css('background-color', 'red');
+          clearZero();
+          clearNaN();
+
+          fillSummary(pjSum);
         }
 
         function fillSummary(pjSum) {
