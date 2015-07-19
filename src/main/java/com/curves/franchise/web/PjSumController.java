@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -30,10 +28,9 @@ public class PjSumController {
     private PjSumRepository pjSumRepo;
 
     @RequestMapping(value = "/rest/PJ", method = RequestMethod.GET)
-    public PjSum findPJByUserAndYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month,
-                                           @AuthenticationPrincipal UserDetails user) {
-        logger.info("---findPJ---user: " + user.getUsername() + ", year: " + year + ", month: " + month);
-        PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(Integer.parseInt(user.getUsername()), year, month);
+    public PjSum findPJByUserAndYearAndMonth(@RequestParam int clubId, @RequestParam int year, @RequestParam int month) {
+        logger.info("---findPJ---club: " + clubId + ", year: " + year + ", month: " + month);
+        PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(clubId, year, month);
         if (pjSum == null) {
             logger.info("---findPJ---PJ not found!");
             pjSum = new PjSum();
@@ -42,12 +39,10 @@ public class PjSumController {
     }
 
     @RequestMapping(value = "/rest/PJ/export", produces="application/vnd.ms-excel")
-    public FileSystemResource exportPJ(@RequestParam("yStart") int yStart, @RequestParam("yEnd") int yEnd,
-                                       @RequestParam("mStart") int mStart, @RequestParam("mEnd") int mEnd,
-                                       @AuthenticationPrincipal UserDetails user) {
-        logger.info("---exportPJ---user: " + user.getUsername() + ", yStart: " + yStart + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
-        List<PjSum> pjSums = pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(Integer.parseInt(user.getUsername()),
-                yStart, yEnd, mStart, mEnd);
+    public FileSystemResource exportPJ(@RequestParam int clubId, @RequestParam int yStart, @RequestParam int yEnd,
+                                       @RequestParam int mStart, @RequestParam int mEnd) {
+        logger.info("---exportPJ---clubId: " + clubId + ", yStart: " + yStart + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
+        List<PjSum> pjSums = pjSumRepo.findByClubIdAndYearBetweenAndMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
         Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "PJ-template.xls");

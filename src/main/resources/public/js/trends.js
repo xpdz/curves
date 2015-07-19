@@ -7,12 +7,14 @@ $(document).ready(function() {
         if (userId.charAt(0) === '0') {
           // user is coach, not club, hide PJ
           clubId = '1' + userId.substring(1);
-          $('a[href="PJ.htm"]:parent').hide();
+          $('ul[data-curves="coach"]').show();
+        } else if (userId === 'management' || userId === '999999') {
+          $('ul[data-curves="mgmt"]').show();
+        } else {
+          $('ul[data-curves="club"]').show();
         }
       if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
         clubId = $.QueryString.clubId;
-        $('ul[data-curves="club"]').hide();
-        $('ul[data-curves="mgmt"]').show();
       }
 
       var today = new Date();

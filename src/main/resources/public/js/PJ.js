@@ -4,11 +4,17 @@ $(document).ready(function() {
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
         var clubId = userId;
-        if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
-          clubId = $.QueryString.clubId;
-          $('ul[data-curves="club"]').hide();
+        if (userId === 'management' || userId === '999999') {
           $('ul[data-curves="mgmt"]').show();
+        } else {
+          $('ul[data-curves="club"]').show();
         }
+        console.log("q: "+$.QueryString.clubId+", c: "+clubId);
+        if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
+        console.log("q: "+$.QueryString.clubId);
+          clubId = $.QueryString.clubId;
+        }
+        console.log(", c: "+clubId);
 
         var weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
         var $tbd = $("#tbd");
@@ -71,14 +77,14 @@ $(document).ready(function() {
         });
 
         $('#btnExportThis').click(function() {
-          window.location = "/rest/PJ/export?yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
+          window.location = "/rest/PJ/export?clubId="+clubId+"&yStart=" + currentYear + "&yEnd=" + currentYear + "&mStart=" + currentMonth + "&mEnd=" + currentMonth;
         });
         $('#btnExportMulti').click(function() {
           $('#dlgExport').modal({});
         });
         $('#btnExportMonths').click(function() {
           $('#dlgExport').modal('hide');
-          window.location = "/rest/PJ/export?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
+          window.location = "/rest/PJ/exportclubId="+clubId+"&?yStart=" + yStart + "&yEnd=" + yEnd + "&mStart=" + mStart + "&mEnd=" + mEnd;
         });
 
         getPJ();
@@ -87,7 +93,7 @@ $(document).ready(function() {
 
             $('#year').text(currentYear);
             $('#month').text(currentMonth + 1);
-            $.getJSON("/rest/PJ", {year: currentYear, month: currentMonth}, function(pjSum) {
+            $.getJSON("/rest/PJ", {clubId: clubId, year: currentYear, month: currentMonth}, function(pjSum) {
                 fillSheet(pjSum);
             }).fail(function() {
                 showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");

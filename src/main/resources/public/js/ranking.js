@@ -8,11 +8,16 @@ $(document).ready(function() {
       if (isCoach) {
         // user is coach, not club, hide PJ page, revenue info on ranking page
         clubId = '1' + userId.substring(1);
-        $('a[href="PJ.htm"]:parent').hide();
         $('table').css('width', '1420px');
         $('[colspan="17"]').attr('colspan', '13');
         $('th[id*="Revenue"]').remove();
         $('td:has(div[id*="Revenue"])').remove();
+
+        $('ul[data-curves="coach"]').show();
+      } else if (userId === 'management' || userId === '999999') {
+        $('ul[data-curves="mgmt"]').show();
+      } else {
+        $('ul[data-curves="club"]').show();
       }
 
       var today = new Date();

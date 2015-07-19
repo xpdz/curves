@@ -13,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -34,12 +32,11 @@ public class CaController {
     private ClubRepository clubRepo;
 
     @RequestMapping(value = "/rest/CA/lastMonth", method = RequestMethod.GET)
-    public Map<String, String> findGoalByYearAndMonth(@RequestParam int clubId, @RequestParam int caYear,
-                                                      @RequestParam int caMonth, @AuthenticationPrincipal UserDetails user) {
-        logger.info("==find last month goal== user: " + user.getUsername() + ", clubId: " + clubId
-                + ", year-month: " + caYear + "." + (caMonth+1));
+    public Map<String, String> findGoalByYearAndMonth(@RequestParam int clubId,
+                                                      @RequestParam int caYear, @RequestParam int caMonth) {
+        logger.info("==find last month goal== clubId: " + clubId + ", year-month: " + caYear + "." + (caMonth+1));
         Map<String, String> mapGoalValue = new HashMap<>(4);
-        Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(Integer.parseInt(user.getUsername()), caYear, caMonth);
+        Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(clubId, caYear, caMonth);
         if (ca != null) {
             mapGoalValue.put("svcTm6", ""+ca.getSvcTm6());
             mapGoalValue.put("svcActive6", ""+ca.getSvcActive6());
@@ -51,10 +48,8 @@ public class CaController {
     }
 
     @RequestMapping(value = "/rest/CA", method = RequestMethod.GET)
-    public Ca findCaByUserAndCaYearAndCaMonth(@RequestParam int clubId, @RequestParam int caYear,
-                                              @RequestParam int caMonth, @AuthenticationPrincipal UserDetails user) {
-        logger.info("---findCA---user: " + user.getUsername() + ", clubId: " + clubId
-                + ", caYear: " + caYear + ", caMonth: " + caMonth);
+    public Ca findCaByUserAndCaYearAndCaMonth(@RequestParam int clubId, @RequestParam int caYear, @RequestParam int caMonth) {
+        logger.info("---findCA---clubId: " + clubId + ", caYear: " + caYear + ", caMonth: " + caMonth);
         Ca ca = caRepo.findByClubIdAndCaYearAndCaMonth(clubId, caYear, caMonth);
         if (ca == null) {
             logger.info("---findCA---CA not found!");
@@ -65,13 +60,11 @@ public class CaController {
 
     @RequestMapping(value = "/rest/CA/export", produces="application/vnd.ms-excel")
     public FileSystemResource exportCa(@RequestParam int clubId, @RequestParam int yStart, @RequestParam int yEnd,
-                                       @RequestParam int mStart, @RequestParam int mEnd,
-                                      @AuthenticationPrincipal UserDetails user) {
-        logger.info("---exportCA---user: " + user.getUsername() + ", clubId; " + clubId + ", yStart: " + yStart
+                                       @RequestParam int mStart, @RequestParam int mEnd) {
+        logger.info("---exportCA---clubId; " + clubId + ", yStart: " + yStart
                 + ", yEnd: " + yEnd+", mStart: " + mStart + ", mEnd: "+mEnd);
-        Club club = clubRepo.findOne(Integer.parseInt(user.getUsername()));
-        List<Ca> cas = caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(Integer.parseInt(user.getUsername()),
-                yStart, yEnd, mStart, mEnd);
+        Club club = clubRepo.findOne(clubId);
+        List<Ca> cas = caRepo.findByClubIdAndCaYearBetweenAndCaMonthBetween(clubId, yStart, yEnd, mStart, mEnd);
         Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "CA-template.xls");
