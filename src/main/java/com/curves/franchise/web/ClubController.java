@@ -42,11 +42,40 @@ public class ClubController {
 
     @RequestMapping(value = "/rest/clubs", method = RequestMethod.POST)
     @ResponseBody
-    public String saveUser(@RequestParam Integer clubId, @RequestParam String name, @RequestParam Date openDate,
+    public String saveUser(@RequestParam int clubId, @RequestParam String name, @RequestParam Date openDate,
                            @RequestParam String owner, @RequestParam String mentor, @RequestParam String cooperation) {
         logger.info("---saveUser---clubId: "+clubId+", name: "+name+", openDate: "+openDate
                 +", owner: "+owner+", mentor: "+mentor+", cooperation: "+cooperation);
-        Club club = new Club();
+        Club club = clubRepo.findOne(clubId);
+        if (club == null) {
+            club = new Club();
+
+            String username = ""+clubId;
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(new BCryptPasswordEncoder(8).encode(username));
+            user.setEnabled(true);
+
+            Authorities authorities = new Authorities();
+            authorities.setUsername(username);
+            authorities.setAuthority("ROLE_USER");
+
+            String coachId = "0" + username.substring(1);
+            User coach = new User();
+            coach.setUsername(coachId);
+            coach.setPassword(new BCryptPasswordEncoder(8).encode(coachId));
+            coach.setEnabled(true);
+
+            Authorities coachAuthorities = new Authorities();
+            coachAuthorities.setUsername(coachId);
+            coachAuthorities.setAuthority("ROLE_COACH");
+
+            userRepo.save(user);
+            userRepo.save(coach);
+            authoritiesRepo.save(authorities);
+            authoritiesRepo.save(coachAuthorities);
+        }
+
         club.setClubId(clubId);
         club.setName(name);
         club.setOpenDate(openDate);
@@ -54,30 +83,8 @@ public class ClubController {
         club.setMentor(mentor);
         club.setCooperation(cooperation);
 
-        User user = new User();
-        user.setUsername(clubId.toString());
-        user.setPassword(new BCryptPasswordEncoder(8).encode(clubId.toString()));
-        user.setEnabled(true);
-
-        Authorities authorities = new Authorities();
-        authorities.setUsername(clubId.toString());
-        authorities.setAuthority("ROLE_USER");
-
-        User coach = new User();
-        coach.setUsername("0"+clubId.toString().substring(1));
-        coach.setPassword(new BCryptPasswordEncoder(8).encode(clubId.toString()));
-        coach.setEnabled(true);
-
-        Authorities coachAuthorities = new Authorities();
-        coachAuthorities.setUsername("0"+clubId.toString().substring(1));
-        coachAuthorities.setAuthority("ROLE_COACH");
-
         try {
             clubRepo.save(club);
-            userRepo.save(user);
-            userRepo.save(coach);
-            authoritiesRepo.save(authorities);
-            authoritiesRepo.save(coachAuthorities);
         } catch (Exception e) {
             return null;
         }
