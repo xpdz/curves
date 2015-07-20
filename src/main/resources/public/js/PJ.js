@@ -11,10 +11,8 @@ $(document).ready(function() {
         }
         console.log("q: "+$.QueryString.clubId+", c: "+clubId);
         if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
-        console.log("q: "+$.QueryString.clubId);
           clubId = $.QueryString.clubId;
         }
-        console.log(", c: "+clubId);
 
         var weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
         var $tbd = $("#tbd");
@@ -119,10 +117,12 @@ $(document).ready(function() {
                   pj = {};
               }
               var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
+              console.log(new Date(currentYear, currentMonth+1, idx));
+              console.log(new Date(currentYear, currentMonth+1, idx).getDay());
               var row =
                '<tr>' +
                   '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
-                  '<td>' + weekdays[new Date(currentYear, currentMonth+1, idx).getDay()] + '</td>' +
+                  '<td>' + weekdays[new Date(currentYear, currentMonth, idx).getDay()] + '</td>' +
                   '<td>' + idx + '</td>' +
                   '<td style="background-color: #FFFF99"><div id="workingDays-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workingDays ||'')+ '</div></td>' +
                   '<td style="background-color: #CCFFFF"><div id="workOuts-' + idx + '" contenteditable="true" data-container="body" data-toggle="popover" data-placement="auto top" data-trigger="focus" title="'+pjDay+'">' + (pj.workOuts ||'')+ '</div></td>' +
