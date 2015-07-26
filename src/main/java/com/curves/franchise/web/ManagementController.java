@@ -200,7 +200,6 @@ public class ManagementController {
     @ResponseBody
     public FileSystemResource exportPjAll(@RequestParam("year") int year, @RequestParam("month") int month) {
         logger.info("---exportPjAll---year: " + year + ", month: " + month);
-        List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
         Workbook wb;
         String fdl = System.getProperty("user.home") + File.separator + "curves_data";
         File template = new File(fdl + File.separator + "PJ_Summary_Sheet_ALL_Clubs.xlsx");
@@ -216,116 +215,122 @@ public class ManagementController {
 
         Sheet sh = wb.getSheetAt(0);
 
+        List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
+        List<Club> clubs = getClubsByPjSums(pjSums);
+
         int rowIdx = 3;
-        for (PjSum pjSum : pjSums) {
+        for (int i = 0; i < pjSums.size(); i++) {
+            PjSum pjSum = pjSums.get(i);
             Row row = sh.createRow(rowIdx);
             rowIdx++;
             Cell cell = row.createCell(0, Cell.CELL_TYPE_NUMERIC);
             cell.setCellValue(pjSum.getClubId());
-            cell = row.createCell(1, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getYear());
+            cell = row.createCell(1, Cell.CELL_TYPE_STRING);
+            cell.setCellValue(clubs.get(i).getName());
             cell = row.createCell(2, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getMonth()+1);
+            cell.setCellValue(pjSum.getYear());
             cell = row.createCell(3, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getEnrolled());
+            cell.setCellValue(pjSum.getMonth() + 1);
             cell = row.createCell(4, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getLeaves());
+            cell.setCellValue(pjSum.getEnrolled());
             cell = row.createCell(5, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getValids());
+            cell.setCellValue(pjSum.getLeaves());
             cell = row.createCell(6, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getNewSales());
+            cell.setCellValue(pjSum.getValids());
             cell = row.createCell(7, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getExits());
+            cell.setCellValue(pjSum.getNewSales());
             cell = row.createCell(8, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getShiftIn());
+            cell.setCellValue(pjSum.getExits());
             cell = row.createCell(9, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getShiftOut());
+            cell.setCellValue(pjSum.getShiftIn());
             cell = row.createCell(10, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getIncrement());
+            cell.setCellValue(pjSum.getShiftOut());
             cell = row.createCell(11, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getRevenue());
+            cell.setCellValue(pjSum.getIncrement());
             cell = row.createCell(12, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getNewSalesRevenue());
+            cell.setCellValue(pjSum.getRevenue());
             cell = row.createCell(13, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getDuesDraftsRevenue());
+            cell.setCellValue(pjSum.getNewSalesRevenue());
             cell = row.createCell(14, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getProductsRevenue());
+            cell.setCellValue(pjSum.getDuesDraftsRevenue());
             cell = row.createCell(15, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getWheyProteinRevenue());
+            cell.setCellValue(pjSum.getProductsRevenue());
             cell = row.createCell(16, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getOtherRevenue());
+            cell.setCellValue(pjSum.getWheyProteinRevenue());
             cell = row.createCell(17, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getIncomingCalls());
+            cell.setCellValue(pjSum.getOtherRevenue());
             cell = row.createCell(18, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getIncomingApo());
+            cell.setCellValue(pjSum.getIncomingCalls());
             cell = row.createCell(19, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getOutgoingCalls());
+            cell.setCellValue(pjSum.getIncomingApo());
             cell = row.createCell(20, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getOutgoingApo());
+            cell.setCellValue(pjSum.getOutgoingCalls());
             cell = row.createCell(21, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrOwnRef());
+            cell.setCellValue(pjSum.getOutgoingApo());
             cell = row.createCell(22, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrOthersRef());
+            cell.setCellValue(pjSum.getBrOwnRef());
             cell = row.createCell(23, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedNewspaper());
+            cell.setCellValue(pjSum.getBrOthersRef());
             cell = row.createCell(24, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedTv());
+            cell.setCellValue(pjSum.getBrandedNewspaper());
             cell = row.createCell(25, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedInternet());
+            cell.setCellValue(pjSum.getBrandedTv());
             cell = row.createCell(26, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedSign());
+            cell.setCellValue(pjSum.getBrandedInternet());
             cell = row.createCell(27, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedMate());
+            cell.setCellValue(pjSum.getBrandedSign());
             cell = row.createCell(28, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getBrandedOthers());
+            cell.setCellValue(pjSum.getBrandedMate());
             cell = row.createCell(29, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpInDirectMail());
+            cell.setCellValue(pjSum.getBrandedOthers());
             cell = row.createCell(30, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpInMailFlyer());
+            cell.setCellValue(pjSum.getAgpInDirectMail());
             cell = row.createCell(31, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpInHandFlyer());
+            cell.setCellValue(pjSum.getAgpInMailFlyer());
             cell = row.createCell(32, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpInCp());
+            cell.setCellValue(pjSum.getAgpInHandFlyer());
             cell = row.createCell(33, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpOutApoOut());
+            cell.setCellValue(pjSum.getAgpInCp());
             cell = row.createCell(34, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpOutApoIn());
+            cell.setCellValue(pjSum.getAgpOutApoOut());
             cell = row.createCell(35, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpOutApoBlog());
+            cell.setCellValue(pjSum.getAgpOutApoIn());
             cell = row.createCell(36, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getAgpOutApoBag());
+            cell.setCellValue(pjSum.getAgpOutApoBlog());
             cell = row.createCell(37, Cell.CELL_TYPE_NUMERIC);
-            cell.setCellValue(pjSum.getFaSum());
+            cell.setCellValue(pjSum.getAgpOutApoBag());
             cell = row.createCell(38, Cell.CELL_TYPE_NUMERIC);
+            cell.setCellValue(pjSum.getFaSum());
+            cell = row.createCell(39, Cell.CELL_TYPE_NUMERIC);
             CellStyle cellStyle = wb.createCellStyle();
-            cellStyle.setDataFormat((short)9);
+            cellStyle.setDataFormat((short) 9);
             cell.setCellStyle(cellStyle);
             cell.setCellValue((pjSum.getEnrollAch() + pjSum.getEnrollAllPrepay()) / pjSum.getNewSales());
-            cell = row.createCell(39, Cell.CELL_TYPE_NUMERIC);
-            cellStyle = wb.createCellStyle();
-            cellStyle.setDataFormat((short)9);
-            cell.setCellStyle(cellStyle);
-            cell.setCellValue(pjSum.getEnrollMonthly()/pjSum.getNewSales());
             cell = row.createCell(40, Cell.CELL_TYPE_NUMERIC);
             cellStyle = wb.createCellStyle();
-            cellStyle.setDataFormat((short)9);
+            cellStyle.setDataFormat((short) 9);
             cell.setCellStyle(cellStyle);
-            cell.setCellValue(pjSum.getSalesRatio());
+            cell.setCellValue(pjSum.getEnrollMonthly() / pjSum.getNewSales());
             cell = row.createCell(41, Cell.CELL_TYPE_NUMERIC);
             cellStyle = wb.createCellStyle();
-            cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+            cellStyle.setDataFormat((short) 9);
             cell.setCellStyle(cellStyle);
-            cell.setCellValue(pjSum.getExitRatio());
+            cell.setCellValue(pjSum.getSalesRatio());
             cell = row.createCell(42, Cell.CELL_TYPE_NUMERIC);
             cellStyle = wb.createCellStyle();
             cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
             cell.setCellStyle(cellStyle);
-            cell.setCellValue(pjSum.getLeaveRatio());
+            cell.setCellValue(pjSum.getExitRatio());
             cell = row.createCell(43, Cell.CELL_TYPE_NUMERIC);
             cellStyle = wb.createCellStyle();
             cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
             cell.setCellStyle(cellStyle);
-            cell.setCellValue((pjSum.getLeaveRatio()+pjSum.getExitRatio()));
+            cell.setCellValue(pjSum.getLeaveRatio());
+            cell = row.createCell(44, Cell.CELL_TYPE_NUMERIC);
+            cellStyle = wb.createCellStyle();
+            cellStyle.setDataFormat(wb.createDataFormat().getFormat("0.0%"));
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue((pjSum.getLeaveRatio() + pjSum.getExitRatio()));
         }
 
         try {
@@ -340,9 +345,23 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/PJ_All")
     @ResponseBody
-    public List<PjSum> findPjAll(@RequestParam("year") int year, @RequestParam("month") int month) {
+    public Map<String, PjSum> findPjAll(@RequestParam("year") int year, @RequestParam("month") int month) {
         logger.info("---findPjAll---year: " + year + ", month: " + month);
-        return pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
+        List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
+        List<Club> clubs = getClubsByPjSums(pjSums);
+        Map<String, PjSum> pjAlls = new LinkedHashMap<>(clubs.size());
+        for (int i = 0; i < clubs.size(); i++) {
+            pjAlls.put(clubs.get(i).getName(), pjSums.get(i));
+        }
+        return pjAlls;
+    }
+
+    private List<Club> getClubsByPjSums(List<PjSum> pjSums) {
+        List<Integer> ids = new ArrayList<>(pjSums.size());
+        for (PjSum pjSum : pjSums) {
+            ids.add(pjSum.getClubId());
+        }
+        return clubRepo.findAll(ids);
     }
 
     @RequestMapping(value = "/rest/CaAll")

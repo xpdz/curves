@@ -44,55 +44,56 @@ $(document).ready(function() {
         }
 
         function fillSheet(pjSums) {
-          $.each(pjSums, function(i, e) {
-            $tbd.append($('<tr/>').append(
-              '<td>'+e.clubId+'</td>' +
-              '<td>'+e.clubId+'</td>' +
-              '<td>'+e.year+'</td>' +
-              '<td>'+(e.month+1)+'</td>' +
-              '<td>'+e.enrolled+'</td>' +
-              '<td>'+e.leaves+'</td>' +
-              '<td>'+e.valids+'</td>' +
-              '<td>'+e.newSales+'</td>' +
-              '<td>'+e.exits+'</td>' +
-              '<td>'+e.shiftIn+'</td>' +
-              '<td>'+e.shiftOut+'</td>' +
-              '<td>'+e.increment+'</td>' +
-              '<td>'+e.revenue+'</td>' +
-              '<td>'+e.newSalesRevenue+'</td>' +
-              '<td>'+e.duesDraftsRevenue+'</td>' +
-              '<td>'+e.productsRevenue+'</td>' +
-              '<td>'+e.wheyProteinRevenue+'</td>' +
-              '<td>'+e.otherRevenue+'</td>' +
-              '<td>'+e.incomingCalls+'</td>' +
-              '<td>'+e.incomingApo+'</td>' +
-              '<td>'+e.outgoingCalls+'</td>' +
-              '<td>'+e.outgoingApo+'</td>' +
-              '<td>'+e.brOwnRef+'</td>' +
-              '<td>'+e.brOthersRef+'</td>' +
-              '<td>'+e.brandedNewspaper+'</td>' +
-              '<td>'+e.brandedTv+'</td>' +
-              '<td>'+e.brandedInternet+'</td>' +
-              '<td>'+e.brandedSign+'</td>' +
-              '<td>'+e.brandedMate+'</td>' +
-              '<td>'+e.brandedOthers+'</td>' +
-              '<td>'+e.agpInDirectMail+'</td>' +
-              '<td>'+e.agpInMailFlyer+'</td>' +
-              '<td>'+e.agpInHandFlyer+'</td>' +
-              '<td>'+e.agpInCp+'</td>' +
-              '<td>'+e.agpOutApoOut+'</td>' +
-              '<td>'+e.agpOutApoIn+'</td>' +
-              '<td>'+e.agpOutApoBlog+'</td>' +
-              '<td>'+e.agpOutApoBag+'</td>' +
-              '<td>'+e.faSum+'</td>' +
-              '<td>'+((e.enrollAch+e.enrollAllPrepay)*100/e.newSales).toFixed(0)+'%</td>' +
-              '<td>'+(e.enrollMonthly*100/e.newSales).toFixed(0)+'%</td>' +
-              '<td>'+(e.salesRatio*100).toFixed(0)+'%</td>' +
-              '<td>'+(e.exitRatio*100).toFixed(1)+'%</td>' +
-              '<td>'+(e.leaveRatio*100).toFixed(1)+'%</td>' +
-              '<td>'+((e.leaveRatio+e.exitRatio)*100).toFixed(1)+'%</td>'
-            ));
-          });
+          for (var clubName in pjSums) {
+            if (pjSums.hasOwnProperty(clubName)) {
+              var pjSum = pjSums[clubName];
+              $tbd.append($('<tr/>').append(
+                '<td>'+pjSum.clubId+'</td>' +
+                '<td>'+clubName+'</td>' +
+                '<td>'+pjSum.enrolled+'</td>' +
+                '<td>'+pjSum.leaves+'</td>' +
+                '<td>'+pjSum.valids+'</td>' +
+                '<td>'+pjSum.newSales+'</td>' +
+                '<td>'+pjSum.exits+'</td>' +
+                '<td>'+pjSum.shiftIn+'</td>' +
+                '<td>'+pjSum.shiftOut+'</td>' +
+                '<td>'+pjSum.increment+'</td>' +
+                '<td>'+pjSum.revenue+'</td>' +
+                '<td>'+pjSum.newSalesRevenue+'</td>' +
+                '<td>'+pjSum.duesDraftsRevenue+'</td>' +
+                '<td>'+pjSum.productsRevenue+'</td>' +
+                '<td>'+pjSum.wheyProteinRevenue+'</td>' +
+                '<td>'+pjSum.otherRevenue+'</td>' +
+                '<td>'+pjSum.incomingCalls+'</td>' +
+                '<td>'+pjSum.incomingApo+'</td>' +
+                '<td>'+pjSum.outgoingCalls+'</td>' +
+                '<td>'+pjSum.outgoingApo+'</td>' +
+                '<td>'+pjSum.brOwnRef+'</td>' +
+                '<td>'+pjSum.brOthersRef+'</td>' +
+                '<td>'+pjSum.brandedNewspaper+'</td>' +
+                '<td>'+pjSum.brandedTv+'</td>' +
+                '<td>'+pjSum.brandedInternet+'</td>' +
+                '<td>'+pjSum.brandedSign+'</td>' +
+                '<td>'+pjSum.brandedMate+'</td>' +
+                '<td>'+pjSum.brandedOthers+'</td>' +
+                '<td>'+pjSum.agpInDirectMail+'</td>' +
+                '<td>'+pjSum.agpInMailFlyer+'</td>' +
+                '<td>'+pjSum.agpInHandFlyer+'</td>' +
+                '<td>'+pjSum.agpInCp+'</td>' +
+                '<td>'+pjSum.agpOutApoOut+'</td>' +
+                '<td>'+pjSum.agpOutApoIn+'</td>' +
+                '<td>'+pjSum.agpOutApoBlog+'</td>' +
+                '<td>'+pjSum.agpOutApoBag+'</td>' +
+                '<td>'+pjSum.faSum+'</td>' +
+                '<td>'+((pjSum.enrollAch+pjSum.enrollAllPrepay)*100/pjSum.newSales).toFixed(0)+'%</td>' +
+                '<td>'+(pjSum.enrollMonthly*100/pjSum.newSales).toFixed(0)+'%</td>' +
+                '<td>'+(pjSum.salesRatio*100).toFixed(0)+'%</td>' +
+                '<td>'+(pjSum.exitRatio*100).toFixed(1)+'%</td>' +
+                '<td>'+(pjSum.leaveRatio*100).toFixed(1)+'%</td>' +
+                '<td>'+((pjSum.leaveRatio+pjSum.exitRatio)*100).toFixed(1)+'%</td>'
+              ));
+            }
+          }
           clearNaN();
         }
     }).fail(function(jqXHR, textStatus, errorThrown) {
