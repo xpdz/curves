@@ -13,8 +13,10 @@ $(document).ready(function() {
 
     var findClubs, sortIcon, page = 1, sortBy = 'clubId', isAsc = true;
     (findClubs = function () {
-      // construct request uri by page and sort
-      var uri = "/rest/clubs?page="+page+"&sort_by="+sortBy+"&sort_asc="+isAsc;
+      // construct request uri by filter, page and sort
+      var clubNameFilter = $("#clubNameFilter").val();
+      var uri = "/rest/clubs?clubName="+clubNameFilter+"&page="+page+"&sort_by="+sortBy+"&sort_asc="+isAsc;
+
       // add sort icon to table header
       if (sortIcon) {
         sortIcon.remove();
@@ -64,14 +66,6 @@ $(document).ready(function() {
       });
     })();
 
-    // add sort icon to table header according to sort_by & sort_asc
-    $('th').click(function() {
-      isAsc = sortBy != $(this).attr('data-sort-by');
-      sortBy = $(this).attr('data-sort-by');
-      page = 1;
-      findClubs();
-    });
-
     var fillTable = function(clubs) {
       var $tbd = $('#tbd');
       $tbd.empty();
@@ -93,6 +87,18 @@ $(document).ready(function() {
         ));
       }
     }
+
+    // add sort icon to table header according to sort_by & sort_asc
+    $('th').click(function() {
+      isAsc = sortBy != $(this).attr('data-sort-by');
+      sortBy = $(this).attr('data-sort-by');
+      page = 1;
+      findClubs();
+    });
+
+    $('#btnSearch').click(function() {
+      findClubs();
+    });
 
     $('#btnSave1').click(function() {
         var clubId = $('#newClubId').val(), name = $('#newClubName').val(),

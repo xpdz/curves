@@ -99,12 +99,17 @@ public class ClubController {
     }
 
     @RequestMapping(value = "/rest/clubs", method = RequestMethod.GET)
-    public Page<Club> findClubs(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+    public Page<Club> findClubs(@RequestParam(value = "clubName", required = false, defaultValue = "") String clubName,
+                                @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                 @RequestParam(value = "sort_by", required = false, defaultValue = "clubId") String sortBy,
                                 @RequestParam(value = "sort_asc", required = false, defaultValue = "true") Boolean isAsc) {
-        logger.info("---findClubs---page: "+page+", sort_by: "+sortBy+", sort_asc: "+isAsc);
+        logger.info("---findClubs---clubName: "+clubName+", page: "+page+", sort_by: "+sortBy+", sort_asc: "+isAsc);
         Pageable pageable = new PageRequest(page - 1, 10, isAsc ? Sort.Direction.ASC : Sort.Direction.DESC, sortBy);
-        return clubRepo.findAll(pageable);
+        if (clubName.length() > 0) {
+            return clubRepo.findByNameContaining(clubName, pageable);
+        } else {
+            return clubRepo.findAll(pageable);
+        }
     }
 
     @RequestMapping(value = "/rest/users/init_coaches")
