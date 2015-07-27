@@ -117,6 +117,8 @@ $(document).ready(function() {
                   pj = {};
               }
               var pjDay = currentYear + '-' + (currentMonth + 1) + '-' + idx;
+              console.log(new Date(currentYear, currentMonth+1, idx));
+              console.log(new Date(currentYear, currentMonth+1, idx).getDay());
               var row =
                '<tr>' +
                   '<td id="date-' + idx + '" style="background-color: #FFFF99">' + pjDay + '</td>' +
