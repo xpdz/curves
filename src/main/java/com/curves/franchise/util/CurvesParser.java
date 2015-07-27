@@ -73,6 +73,23 @@ public class CurvesParser {
             this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
             logger.info("---TEST-"+ym[ym.length - 1]+" enter folder---"+fdl);
             processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
+        } else if (dir.equals("DATE-RANGE")) {
+            fdl += File.separator + "test";
+            // ?dir=TEST-RANGE
+            String[] ym = dir.split("-");
+            List<String> idErr = new ArrayList<>();
+            List<String> ymErr = new ArrayList<>();
+            List<String> nonCaPjErr = new ArrayList<>();
+            Collection<File> allFiles = FileUtils.listFiles(new File(fdl), null, true);
+            for (File f : allFiles) {
+                this.year = Integer.parseInt(f.getName().substring(0, 4));
+                this.month = Integer.parseInt(f.getName().substring(4, 6)) - 1;
+                logger.info("---processing---year:"+year+", month:"+month+",file:"+f.getName());
+                processOneFile(idErr, ymErr, nonCaPjErr, f);
+            }
+            printContent("club id", idErr);
+            printContent("year-month: "+year+"-"+month+" not found", ymErr);
+            printContent("non-CA/PJ", nonCaPjErr);
         } else {
             // ?dir=201408
             String[] ym = dir.split("-");
@@ -91,51 +108,55 @@ public class CurvesParser {
         List<String> ymErr = new ArrayList<>();
         List<String> nonCaPjErr = new ArrayList<>();
         for (File f : allFiles) {
-            logger.info("=== processing file: " + f.getName());
-            int clubId = -1;
-            Workbook wb;
-            try {
-                wb = WorkbookFactory.create(f);
-                String s = parseChinese(f.getName());
-                clubId = getIdByName(s);
-                if (clubId == -1) {
-                    clubId = getIdByName(s + "\u5e97");
-                }
-            } catch (Exception e) {
-                idErr.add(f.getName());
-                continue;
-            }
-
-            if (clubId == -1) {
-                idErr.add(f.getName());
-                continue;
-            }
-
-            Sheet sh = getSheet(wb, f.getName());
-            if (sh == null) {
-                ymErr.add(f.getName());
-                continue;
-            }
-
-            evaluator = wb.getCreationHelper().createFormulaEvaluator();
-            if (f.getName().indexOf("CA") != -1) {
-                logger.info("--> Found CA, file: " + f.getName()+", sheet: "+sh.getSheetName());
-                new CaDataHandler(this).processCA(sh, evaluator, clubId);
-            } else if (f.getName().indexOf("PJ") != -1) {
-                logger.info("==> Found PJ, file: " + f.getName()+", sheet: "+sh.getSheetName());
-                new PjDataHandler(this).processPJ(sh, evaluator, clubId);
-            } else {
-                nonCaPjErr.add(f.getName()+" - "+sh.getSheetName());
-            }
-
-            try {
-                wb.close();
-            } catch (Exception ignored) {
-            }
+            processOneFile(idErr, ymErr, nonCaPjErr, f);
         }
         printContent("club id", idErr);
         printContent("year-month: "+year+"-"+month+" not found", ymErr);
         printContent("non-CA/PJ", nonCaPjErr);
+    }
+
+    private void processOneFile(List<String> idErr, List<String> ymErr, List<String> nonCaPjErr, File f) {
+        logger.info("=== processing file: " + f.getName());
+        int clubId = -1;
+        Workbook wb;
+        try {
+            wb = WorkbookFactory.create(f);
+            String s = parseChinese(f.getName());
+            clubId = getIdByName(s);
+            if (clubId == -1) {
+                clubId = getIdByName(s + "\u5e97");
+            }
+        } catch (Exception e) {
+            idErr.add(f.getName());
+            return;
+        }
+
+        if (clubId == -1) {
+            idErr.add(f.getName());
+            return;
+        }
+
+        Sheet sh = getSheet(wb, f.getName());
+        if (sh == null) {
+            ymErr.add(f.getName());
+            return;
+        }
+
+        evaluator = wb.getCreationHelper().createFormulaEvaluator();
+        if (f.getName().indexOf("CA") != -1) {
+            logger.info("--> Found CA, file: " + f.getName()+", sheet: "+sh.getSheetName());
+            new CaDataHandler(this).processCA(sh, evaluator, clubId);
+        } else if (f.getName().indexOf("PJ") != -1) {
+            logger.info("==> Found PJ, file: " + f.getName()+", sheet: "+sh.getSheetName());
+            new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+        } else {
+            nonCaPjErr.add(f.getName()+" - "+sh.getSheetName());
+        }
+
+        try {
+            wb.close();
+        } catch (Exception ignored) {
+        }
     }
 
     private void printContent(String msg, List<String> list) {
