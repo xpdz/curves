@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -345,13 +348,22 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/PJ_All")
     @ResponseBody
-    public Map<String, PjSum> findPjAll(@RequestParam("year") int year, @RequestParam("month") int month) {
-        logger.info("---findPjAll---year: " + year + ", month: " + month);
-        List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
-        List<Club> clubs = getClubsByPjSums(pjSums);
-        Map<String, PjSum> pjAlls = new LinkedHashMap<>(clubs.size());
-        for (int i = 0; i < clubs.size(); i++) {
-            pjAlls.put(clubs.get(i).getName(), pjSums.get(i));
+    public Map<String, PjSum> findPjAll(@RequestParam String clubName, @RequestParam int year, @RequestParam int month) {
+        logger.info("---findPjAll---clubName: " + clubName+", year: " + year + ", month: " + month);
+        Map<String, PjSum> pjAlls = new LinkedHashMap<>();
+        if (clubName.length() > 0) {
+            Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "clubId");
+            Page<Club> clubs = clubRepo.findByNameContaining(clubName, pageable);
+            for (Club club : clubs) {
+                PjSum pjSum = pjSumRepo.findByClubIdAndYearAndMonth(club.getClubId(), year, month);
+                pjAlls.put(club.getName(), pjSum);
+            }
+        } else {
+            List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
+            List<Club> clubs = getClubsByPjSums(pjSums);
+            for (int i = 0; i < clubs.size(); i++) {
+                pjAlls.put(clubs.get(i).getName(), pjSums.get(i));
+            }
         }
         return pjAlls;
     }

@@ -32,16 +32,21 @@ $(document).ready(function() {
           window.location = "/rest/PJ_All/export?year=" + currentYear + "&month=" + currentMonth;
         });
 
-        getPJ_all();
-        function getPJ_all() {
-            $tbd.empty();
+        var getPJ_all;
+        (getPJ_all = function () {
+          $tbd.empty();
 
-            $.getJSON("/rest/PJ_All", {year: currentYear, month: currentMonth}, function(pjSums) {
-                fillSheet(pjSums);
-            }).fail(function() {
-                showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
-            });
-        }
+          var clubNameFilter = $("#clubNameFilter").val();
+          $.getJSON("/rest/PJ_All", {clubName: clubNameFilter, year: currentYear, month: currentMonth}, function(pjSums) {
+              fillSheet(pjSums);
+          }).fail(function() {
+              showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
+          });
+        })();
+
+        $('#btnSearch').click(function() {
+          getPJ_all();
+        });
 
         function fillSheet(pjSums) {
           for (var clubName in pjSums) {
