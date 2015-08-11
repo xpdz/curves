@@ -23,6 +23,9 @@ public class CurvesParser {
     private final Map<String, Integer> nameId = new HashMap<>();
     int year, month;
     private String dir = null;
+    private List<String> idErr = new ArrayList<>();
+    private List<String> ymErr = new ArrayList<>();
+    private List<String> nonCaPjErr = new ArrayList<>();
 
     final CaRepository caRepo;
     final PjSumRepository pjSumRepo;
@@ -41,81 +44,58 @@ public class CurvesParser {
         buildClubNameIdMap();
 
         String home = System.getProperty("user.home");
-        String fdl = home + File.separator + "curves_data";
-        logger.info("user.home + curves data folder: " + fdl);
-        if ("ALL".equals(dir)) {
-            // ?dir=ALL
-            for (int y = 2011; y < 2015; y++) {
-                this.year = y;
-                for (int m = 0; m < 12; m++) {
-                    this.month = m;
-                    String folder = fdl + File.separator + y + File.separator + y + (m < 9 ? "0" + (m+1) : (m+1));
-                    logger.info("---ALL "+y+"-"+(m+1)+" enter folder---"+folder);
-                    processWorkbooks(FileUtils.listFiles(new File(folder), null, true));
+        String curvesData = home + File.separator + "curves_data";
+        logger.info("user.home + curves data folder: " + curvesData);
+        if (dir.startsWith("YEAR")) {
+            // ?dir=YEAR-2014
+            this.year = Integer.parseInt(dir.substring(5));
+            for (int m = 0; m < 12; m++) {
+                this.month = m;
+                File folder = new File(curvesData + File.separator + this.year + File.separator
+                        + this.year + (m < 9 ? "0" + (m+1) : (m+1)));
+                logger.info("---YEAR---"+folder.getName());
+                if (folder.exists()) {
+                    processWorkbooks(FileUtils.listFiles(folder, null, true));
                 }
             }
-        } else if (dir.equals("TEST")) {
-            fdl += File.separator + "test";
-            // ?dir=TEST
-            for (int y = 2011; y < 2015; y++) {
-                this.year = y;
-                for (int m = 0; m < 12; m++) {
-                    this.month = m;
-                    logger.info("---TEST "+y+"-"+(m+1)+" enter folder---"+fdl+"");
-                    processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
-                }
+        } else if (dir.startsWith("MONTH")) {
+            // ?dir=MONTH-201408
+            this.year = Integer.parseInt(dir.substring(6, 10));
+            this.month = Integer.parseInt(dir.substring(10)) - 1;
+            File folder = new File(curvesData + File.separator + this.year + File.separator + this.year + this.month);
+            logger.info("---MONTH---" + folder.getName());
+            if (folder.exists()) {
+                processWorkbooks(FileUtils.listFiles(folder, null, true));
             }
         } else if (dir.startsWith("TEST")) {
-            fdl += File.separator + "test";
-            // ?dir=TEST-201310
-            String[] ym = dir.split("-");
-            this.year = Integer.parseInt(ym[ym.length - 1].substring(0, 4));
-            this.month = Integer.parseInt(ym[ym.length - 1].substring(4, 6)) - 1;
-            logger.info("---TEST-"+ym[ym.length - 1]+" enter folder---"+fdl);
-            processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
-        } else if (dir.equals("DATE-RANGE")) {
-            fdl += File.separator + "test";
-            // ?dir=TEST-RANGE
-            String[] ym = dir.split("-");
-            List<String> idErr = new ArrayList<>();
-            List<String> ymErr = new ArrayList<>();
-            List<String> nonCaPjErr = new ArrayList<>();
-            Collection<File> allFiles = FileUtils.listFiles(new File(fdl), null, true);
-            for (File f : allFiles) {
-                this.year = Integer.parseInt(f.getName().substring(0, 4));
-                this.month = Integer.parseInt(f.getName().substring(4, 6)) - 1;
-                logger.info("---processing---year:"+year+", month:"+month+",file:"+f.getName());
-                processOneFile(idErr, ymErr, nonCaPjErr, f);
+            // ?dir=TEST
+            File folder = new File(curvesData + File.separator + "test");
+            if (folder.exists()) {
+                Collection<File> allFiles = FileUtils.listFiles(folder, null, true);
+                for (File f : allFiles) {
+                    this.year = Integer.parseInt(f.getName().substring(0, 4));
+                    this.month = Integer.parseInt(f.getName().substring(4, 6)) - 1;
+                    logger.info("---processing---year:"+year+", month:"+month+",file:"+f.getName());
+                    processOneFile(f);
+                }
+                printContent("club id", idErr);
+                printContent("year-month: " + year + "-" + month + " not found", ymErr);
+                printContent("non-CA/PJ", nonCaPjErr);
             }
-            printContent("club id", idErr);
-            printContent("year-month: "+year+"-"+month+" not found", ymErr);
-            printContent("non-CA/PJ", nonCaPjErr);
         } else {
-            // ?dir=201408
-            String[] ym = dir.split("-");
-            String y = ym[ym.length - 1].substring(0, 4);
-            String m = ym[ym.length - 1].substring(4, 6);
-            this.year = Integer.parseInt(y);
-            this.month = Integer.parseInt(m) - 1;
-            fdl += File.separator + y + File.separator + y + m;
-            logger.info("---"+ym[ym.length - 1]+" enter folder---"+fdl);
-            processWorkbooks(FileUtils.listFiles(new File(fdl), null, true));
         }
     }
 
     private void processWorkbooks(Collection<File> allFiles) {
-        List<String> idErr = new ArrayList<>();
-        List<String> ymErr = new ArrayList<>();
-        List<String> nonCaPjErr = new ArrayList<>();
         for (File f : allFiles) {
-            processOneFile(idErr, ymErr, nonCaPjErr, f);
+            processOneFile(f);
         }
         printContent("club id", idErr);
         printContent("year-month: "+year+"-"+month+" not found", ymErr);
         printContent("non-CA/PJ", nonCaPjErr);
     }
 
-    private void processOneFile(List<String> idErr, List<String> ymErr, List<String> nonCaPjErr, File f) {
+    private void processOneFile(File f) {
         logger.info("=== processing file: " + f.getName());
         int clubId = -1;
         Workbook wb;
@@ -163,12 +143,10 @@ public class CurvesParser {
         if (list.size() == 0) {
             return;
         }
-        logger.error("==============");
-        logger.error(msg);
+        logger.error("========" + msg + "=======");
         for (String s : list) {
             logger.error(s);
         }
-        logger.error("==============");
     }
 
     Sheet getSheet(Workbook wb, String fname) {
@@ -194,10 +172,10 @@ public class CurvesParser {
                 sh = wb.getSheetAt(i);
                 Calendar c = Calendar.getInstance();
                 try {
-                    if (fname.indexOf("CA") != -1) {
-                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
-                    } else {
+                    if (fname.indexOf("PJ") != -1) {
                         c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
+                    } else {
+//                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());
                     }
                 } catch (Exception e) {
                 }
