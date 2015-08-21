@@ -11,18 +11,17 @@ $(document).ready(function() {
         todayHighlight: true
     });
 
-    var findClubs, sortIcon, page = 1, sortBy = 'clubId', isAsc = true;
+    var findClubs, page = 1, sortBy = 'clubId', isAsc = true,
+      iconAsc = $('<i class="fa fa-sort-asc fa-lg"></i>'), iconDesc = $('<i class="fa fa-sort-desc fa-lg"></i>');
+
     (findClubs = function () {
       // construct request uri by filter, page and sort
       var clubNameFilter = $("#clubNameFilter").val();
       var uri = "/rest/clubs?clubName="+clubNameFilter+"&page="+page+"&sort_by="+sortBy+"&sort_asc="+isAsc;
 
       // add sort icon to table header
-      if (sortIcon) {
-        sortIcon.remove();
-      }
-      sortIcon = isAsc ? $('<i class="fa fa-sort-asc fa-lg"></i>') : $('<i class="fa fa-sort-desc fa-lg"></i>');
-      $('th[data-sort-by="'+sortBy+'"]').append(sortIcon);
+      isAsc ? iconDesc.remove() : iconAsc.remove();
+      $('th[data-sort-by="'+sortBy+'"]').append(isAsc ? iconAsc : iconDesc);
 
       // fetch table content from server side
       $.getJSON(uri, function(clubs) {
@@ -89,8 +88,8 @@ $(document).ready(function() {
     }
 
     // add sort icon to table header according to sort_by & sort_asc
-    $('th').click(function() {
-      isAsc = sortBy != $(this).attr('data-sort-by');
+    $('th[data-sort-by]').click(function() {
+      isAsc = !isAsc;
       sortBy = $(this).attr('data-sort-by');
       page = 1;
       findClubs();
