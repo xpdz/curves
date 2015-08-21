@@ -7,7 +7,7 @@
 <html><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>PJ (All)</title>
+  <title>Ranking (All)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -38,9 +38,9 @@
         <ul class="nav navbar-nav">
           <li><a href="management.htm">Clubs</a></li>
           <li><a href="us_report.htm">US Report</a></li>
-          <li class="active"><a href="PJ_all.htm">PJ (All)</a></li>
+          <li><a href="PJ_all.htm">PJ (All)</a></li>
           <li><a href="CA_all.htm">CA (All)</a></li>
-          <li><a href="ranking_all.htm">Ranking (All)</a></li>
+          <li class="active"><a href="#">Ranking (All)</a></li>
           <li><a href="benchmarking.htm">Benchmarking</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -64,12 +64,9 @@
         <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
-    <div class="col-md-1">
-      <button type="button" class="btn btn-primary" id="btnExport">Export</button>
-    </div>
-    <div class="col-md-2 col-md-offset-1">
+    <div class="col-md-4 col-md-offset-1">
       <div class="input-group">
-        <input type="text" class="form-control" id="clubNameFilter" placeholder="Enter Club Name" />
+        <input type="text" class="form-control" id="searchText" placeholder="Enter Club, Mentor, or Cooperation" />
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" id="btnSearch"><i class="fa fa-search"></i></button>
         </span>
@@ -78,65 +75,42 @@
   </div>
   <div class="row top-buffer">
     <div class="col-md-12">
-      <table class="table table-bordered table-condensed" style="overflow:scroll; width: 3380px; max-width: 3360px;">
+      <table class="table table-bordered table-condensed" style="overflow:scroll; width: 2300px; max-width: 2300px;">
         <thead>
           <tr>
-            <th rowspan="3" class="width-100px">加盟店編號</th>
-            <th rowspan="3" class="width-100px">店鋪名稱</th>
-            <th rowspan="3" class="width-80px">在籍會員</th>
-            <th rowspan="3" class="width-80px">請假人數</th>
-            <th rowspan="3" class="width-80px">有效會員</th>
-            <th rowspan="3" class="width-80px">新銷售</th>
-            <th rowspan="3" class="width-60px">退會</th>
-            <th rowspan="3" class="width-60px">移入</th>
-            <th rowspan="3" class="width-60px">移出</th>
-            <th rowspan="3" class="width-60px">純增</th>
-            <th colspan="6" rowspan="2">營收</th>
-            <th colspan="4" rowspan="2">詢問/APO</th>
-            <th colspan="16">有來FA的人的來源</th>
-            <th rowspan="2">FA總數</th>
-            <th rowspan="2" colspan="2">入會方案</th>
-            <th class="width-60px" rowspan="3">銷售率</th>
-            <th class="width-60px" rowspan="3">退會率</th>
-            <th class="width-60px" rowspan="3">請假率</th>
-            <th class="width-100px" rowspan="3">請退率加總</th>
+            <th rowspan="2" class="width-100px">&nbsp;</th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="MaxWorkOuts">最高運動數 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="NewSalesRevenue">新銷售營收 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="DuesDraftsRevenue">月費營收 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="ProductsRevenue">產品營收 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollAch">扣款入會數 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollMonthly">月繳入會數 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollAllPrepay">年繳入會數 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="IncomingCalls">來電/來店 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="IncomingApo">預約 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="OutgoingCalls">去電 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="OutgoingApo">預約 </th>
+            <th colspan="5">FA來源</th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="Enrolled">在籍會員數 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Valids">有效會員數 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="ExitRatio">退會率 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="LeaveRatio">請假率 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="NewSales">新銷售 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Exits">退會數 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Increment">純增 </th>
+            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="FaSum">總FA數 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="CmInApptRatio6">預約率 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="CmShowRatio6">來店率 </th>
+            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="SalesRatio6">結案率 </th>
+            <th rowspan="2" class="width-100px cursor-pointer" data-sort-by="SalesAchAppRatio6">扣款與年繳% </th>
+            <th rowspan="2" class="width-100px cursor-pointer" data-sort-by="CmBrAgpRatio6">介紹佔FA比率 </th>
           </tr>
           <tr>
-            <th>BRs</th>
-            <th colspan="7">Branded</th>
-            <th colspan="4">AGP：Incoming Calls</th>
-            <th colspan="4">AGP：Outgoing Calls</th>
-          </tr>
-          <tr>
-            <th class="width-80px">總營收</th>
-            <th class="width-80px" id="newSalesRevenueTitle">新銷售<br>New Sales</th>
-            <th class="width-80px" id="duesDraftsRevenueTitle">月費<br>Dues & Drafts</th>
-            <th class="width-80px" id="productsRevenueTitle">商品<br>Product</th>
-            <th class="width-80px" id="wheyProteinRevenueTitle">乳清蛋白</th>
-            <th class="width-60px" id="otherRevenueTitle">租櫃</th>
-            <th class="width-100px" id="incomingCallsTitle">來電與來店<br>Incoming Calls</th>
-            <th class="width-60px" id="incomingApoTitle">APO</th>
-            <th class="width-100px" id="outgoingCallsTitle">打出去的電話<br>outgoing calls</th>
-            <th class="width-60px" id="outgoingApoTitle">APO</th>
-            <th class="width-80px" id="brOwnRefTitle">會員介紹<br>（本店）</th>
-            <th class="width-80px" id="brOthersRefTitle">會員介紹<br>（他店）</th>
-            <th class="width-80px" id="brandedNewspaperTitle">平面媒體</th>
-            <th class="width-60px" id="brandedTvTitle">電視</th>
-            <th class="width-100px" id="brandedInternetTitle">網路<br>（官網留言）</th>
-            <th class="width-60px" id="brandedSignTitle">招牌</th>
-            <th class="width-80px" id="brandedMateTitle">策略夥伴</th>
-            <th class="width-60px" id="brandedOthersTitle">其他</th>
-            <th class="width-80px" id="agpInDirectMailTitle">直效信函<br>（買名單）</th>
-            <th class="width-80px" id="agpInMailFlyerTitle">信箱傳單</th>
-            <th class="width-80px" id="agpInHandFlyerTitle">手發傳單</th>
-            <th class="width-60px" id="agpInCpTitle">CP</th>
-            <th class="width-100px" id="agpOutApoOutTitle">發招待券<br>（店外要電話）</th>
-            <th class="width-100px" id="agpOutApoInTitle">發招待券<br>（店內要電話）</th>
-            <th class="width-100px" id="agpOutApoBlogTitle">部落格問劵<br>(含自店臉書)</th>
-            <th class="width-80px" id="agpOutApoBagTitle">詢問箱</th>
-            <th class="width-100px" >Total Orig-Guests</th>
-            <th class="width-100px" id="enrollAchTitle">扣款+年繳比率</th>
-            <th class="width-60px" id="enrollMonthlyTitle">月繳</th>
+            <th class="width-60px cursor-pointer" data-sort-by="BrOwnRef">介紹 </th>
+            <th class="width-60px cursor-pointer" data-sort-by="BrandedInternet">網路 </th>
+            <th class="width-60px cursor-pointer" data-sort-by="BrandedSign">招牌 </th>
+            <th class="width-60px cursor-pointer" data-sort-by="agpInHandFlyer">傳單 </th>
+            <th class="width-100px cursor-pointer" data-sort-by="agpInCp">CP+Blog+詢問箱 </th>
           </tr>
         </thead>
         <tbody id="tbd">
@@ -180,6 +154,6 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js" charset="UTF-8"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/locales/bootstrap-datepicker.zh-TW.min.js" charset="UTF-8"></script>
-<script src="js/PJ_all.js"></script>
+<script src="js/ranking_all.js"></script>
 </body>
 </html>

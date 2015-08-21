@@ -132,7 +132,7 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/benchmarking")
     @ResponseBody
-    public Map<String, Float> findRank(@RequestParam("item") String item, @RequestParam("year") int year, @RequestParam("month") int month) {
+    public Map<String, Float> findBenchmarking(@RequestParam("item") String item, @RequestParam("year") int year, @RequestParam("month") int month) {
         logger.info("---findBenchmarking---item: "+item+", year: "+year+", month: "+month);
         Iterable<Club> clubs = clubRepo.findAll();
         Map<Integer, String> clubIdNameMap = new HashMap<>();
@@ -219,17 +219,16 @@ public class ManagementController {
         Sheet sh = wb.getSheetAt(0);
 
         List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
-        List<Club> clubs = getClubsByPjSums(pjSums);
+        Map<Integer, String> clubIdNameMap = getClubIdNameMap();
 
         int rowIdx = 3;
-        for (int i = 0; i < pjSums.size(); i++) {
-            PjSum pjSum = pjSums.get(i);
+        for (PjSum pjSum : pjSums) {
             Row row = sh.createRow(rowIdx);
             rowIdx++;
             Cell cell = row.createCell(0, Cell.CELL_TYPE_NUMERIC);
             cell.setCellValue(pjSum.getClubId());
             cell = row.createCell(1, Cell.CELL_TYPE_STRING);
-            cell.setCellValue(clubs.get(i).getName());
+            cell.setCellValue(clubIdNameMap.get(pjSum.getClubId()));
             cell = row.createCell(2, Cell.CELL_TYPE_NUMERIC);
             cell.setCellValue(pjSum.getYear());
             cell = row.createCell(3, Cell.CELL_TYPE_NUMERIC);
@@ -360,20 +359,21 @@ public class ManagementController {
             }
         } else {
             List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month, new Sort(Sort.Direction.ASC, "clubId"));
-            List<Club> clubs = getClubsByPjSums(pjSums);
-            for (int i = 0; i < clubs.size(); i++) {
-                pjAlls.put(clubs.get(i).getName(), pjSums.get(i));
+            Map<Integer, String> clubIdNameMap = getClubIdNameMap();
+            for (PjSum pjSum : pjSums) {
+                pjAlls.put(clubIdNameMap.get(pjSum.getClubId()), pjSum);
             }
         }
         return pjAlls;
     }
 
-    private List<Club> getClubsByPjSums(List<PjSum> pjSums) {
-        List<Integer> ids = new ArrayList<>(pjSums.size());
-        for (PjSum pjSum : pjSums) {
-            ids.add(pjSum.getClubId());
+    private Map<Integer, String> getClubIdNameMap() {
+        List<Club> clubs = clubRepo.findAll();
+        Map<Integer, String> clubIdNameMap = new HashMap<>();
+        for (Club club : clubs) {
+            clubIdNameMap.put(club.getClubId(), club.getName());
         }
-        return clubRepo.findAll(ids);
+        return clubIdNameMap;
     }
 
     @RequestMapping(value = "/rest/CaAll")
@@ -523,31 +523,9 @@ public class ManagementController {
         return valueV;
     }
 
-    private int compareFloat(float f1, float f2) {
-        float f = f1 - f2;
-        if (f > 0) {
-            return 1;
-        } else if (f < 0) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-
     private void fillCaItem(int clubId, List<Ca> cas, String item, Map<String, Map<String, Number>> valueV) {
         try {
-            final Method xMethod = Ca.class.getDeclaredMethod("get" + item);
-            Collections.sort(cas, new Comparator<Ca>() {
-                @Override
-                public int compare(Ca ca1, Ca ca2) {
-                    try {
-                        return compareFloat(((Number) xMethod.invoke(ca2)).floatValue(), ((Number) xMethod.invoke(ca1)).floatValue());
-                    } catch (Exception e) {
-                        logger.error("", e);
-                    }
-                    return 0;
-                }
-            });
+            final Method xMethod = sortCaBy(cas, item);
             Map<String, Number> valueX = new HashMap<>(5);
             valueV.put(item, valueX);
             valueX.put("max", (Number)xMethod.invoke(cas.get(0)));
@@ -578,20 +556,25 @@ public class ManagementController {
         }
     }
 
+    private Method sortCaBy(List<Ca> cas, String item) throws NoSuchMethodException {
+        final Method xMethod = Ca.class.getDeclaredMethod("get" + item);
+        Collections.sort(cas, new Comparator<Ca>() {
+            @Override
+            public int compare(Ca ca1, Ca ca2) {
+                try {
+                    return (int)(((Number) xMethod.invoke(ca2)).floatValue()*1000 - ((Number) xMethod.invoke(ca1)).floatValue()*1000);
+                } catch (Exception e) {
+                    logger.error("", e);
+                }
+                return 0;
+            }
+        });
+        return xMethod;
+    }
+
     private void fillPjItem(int clubId, List<PjSum> pjSums, String item, Map<String, Map<String, Number>> valueV) {
         try {
-            final Method xMethod = PjSum.class.getDeclaredMethod("get" + item);
-            Collections.sort(pjSums, new Comparator<PjSum>() {
-                @Override
-                public int compare(PjSum pjSum1, PjSum pjSum2) {
-                    try {
-                        return ((Number) xMethod.invoke(pjSum2)).intValue() - ((Number) xMethod.invoke(pjSum1)).intValue();
-                    } catch (Exception e) {
-                        logger.error("", e);
-                    }
-                    return 0;
-                }
-            });
+            final Method xMethod = sortPjBy(pjSums, item);
             Map<String, Number> valueX = new HashMap<>(5);
             valueV.put(item, valueX);
             valueX.put("max", (Number)xMethod.invoke(pjSums.get(0)));
@@ -617,6 +600,226 @@ public class ManagementController {
                 }
             }
             valueX.put("halfHigh", halfHigh / pjSums.size() / 2);
+        } catch (Exception e) {
+            logger.error("", e);
+        }
+    }
+
+    private Method sortPjBy(List<PjSum> pjSums, final String item) throws NoSuchMethodException {
+        final Method xMethod = PjSum.class.getDeclaredMethod("get" + item);
+        Collections.sort(pjSums, new Comparator<PjSum>() {
+            @Override
+            public int compare(PjSum pjSum1, PjSum pjSum2) {
+                try {
+                    return (int) (((Number) xMethod.invoke(pjSum2)).floatValue()*1000 - ((Number) xMethod.invoke(pjSum1)).floatValue()*1000);
+                } catch (Exception e) {
+                    logger.error("", e);
+                }
+                return 0;
+            }
+        });
+        return xMethod;
+    }
+
+    @RequestMapping(value = "/rest/ranking_all")
+    @ResponseBody
+    public Map<String, List<Number>> findRankingAll(@RequestParam String searchText, @RequestParam int year, @RequestParam int month,
+                                              @RequestParam(value = "sort_by", required = false, defaultValue = "maxWorkOuts") String sortBy,
+                                              @RequestParam(value = "sort_asc", required = false, defaultValue = "false") Boolean isAsc) {
+        logger.info("---findRankingAll---searchText: "+searchText+", year: "+year+", month: "+month+", sortBy: "+sortBy+", isAsc: "+isAsc);
+
+        List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month);
+        List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month);
+
+        if (pjSums.size() == 0 || cas.size() == 0) {
+            return new LinkedHashMap();
+        }
+
+        Map<String, List<Number>> rankingAll = new LinkedHashMap<>();
+        rankingAll.put("Max.", new ArrayList<Number>()); // max
+        rankingAll.put("Avg.", new ArrayList<Number>()); // avg
+        rankingAll.put(">50% Avg.", new ArrayList<Number>()); // >50% avg
+
+        if ("agpInHandFlyer".equals(sortBy) || "agpInCp".equals(sortBy)) {
+            sortByPj2(sortBy, pjSums);
+        } else if ("CmInApptRatio6".equals(sortBy) || "CmShowRatio6".equals(sortBy) || "SalesRatio6".equals(sortBy)
+                || "SalesAchAppRatio6".equals(sortBy) || "CmBrAgpRatio6".equals(sortBy)) {
+            try {sortCaBy(cas, sortBy);} catch (NoSuchMethodException e) {}
+        } else {
+            try {sortPjBy(pjSums, sortBy);} catch (NoSuchMethodException e) {}
+        }
+
+        Map<Integer, String> clubIdNameMap = getClubIdNameMap();
+        for (PjSum pjSum : pjSums) {
+            rankingAll.put(clubIdNameMap.get(pjSum.getClubId()), new ArrayList<Number>());
+        }
+
+        rankPj("MaxWorkOuts", rankingAll, pjSums, clubIdNameMap);
+        rankPj("NewSalesRevenue", rankingAll, pjSums, clubIdNameMap);
+        rankPj("DuesDraftsRevenue", rankingAll, pjSums, clubIdNameMap);
+        rankPj("ProductsRevenue", rankingAll, pjSums, clubIdNameMap);
+        rankPj("EnrollAch", rankingAll, pjSums, clubIdNameMap);
+        rankPj("EnrollMonthly", rankingAll, pjSums, clubIdNameMap);
+        rankPj("EnrollAllPrepay", rankingAll, pjSums, clubIdNameMap);
+        rankPj("IncomingCalls", rankingAll, pjSums, clubIdNameMap);
+        rankPj("IncomingApo", rankingAll, pjSums, clubIdNameMap);
+        rankPj("OutgoingCalls", rankingAll, pjSums, clubIdNameMap);
+        rankPj("OutgoingApo", rankingAll, pjSums, clubIdNameMap);
+        rankPj("BrOwnRef", rankingAll, pjSums, clubIdNameMap);
+        rankPj("BrandedInternet", rankingAll, pjSums, clubIdNameMap);
+        rankPj("BrandedSign", rankingAll, pjSums, clubIdNameMap);
+        rankPj2("agpInFlyer", rankingAll, pjSums, clubIdNameMap);
+        rankPj2("agp", rankingAll, pjSums, clubIdNameMap);
+        rankPj("Enrolled", rankingAll, pjSums, clubIdNameMap);
+        rankPj("Valids", rankingAll, pjSums, clubIdNameMap);
+        rankPj("ExitRatio", rankingAll, pjSums, clubIdNameMap);
+        rankPj("LeaveRatio", rankingAll, pjSums, clubIdNameMap);
+        rankPj("NewSales", rankingAll, pjSums, clubIdNameMap);
+        rankPj("Exits", rankingAll, pjSums, clubIdNameMap);
+        rankPj("Increment", rankingAll, pjSums, clubIdNameMap);
+        rankPj("FaSum", rankingAll, pjSums, clubIdNameMap);
+        rankCa("CmInApptRatio6", rankingAll, cas, clubIdNameMap);
+        rankCa("CmShowRatio6", rankingAll, cas, clubIdNameMap);
+        rankCa("SalesRatio6", rankingAll, cas, clubIdNameMap);
+        rankCa("SalesAchAppRatio6", rankingAll, cas, clubIdNameMap);
+        rankCa("CmBrAgpRatio6", rankingAll, cas, clubIdNameMap);
+
+        if (searchText.length() > 0) {
+            List<Club> clubs = clubRepo.findBySearchText(searchText);
+            Map<String, List<Number>> tmp = new LinkedHashMap<>();
+            tmp.put("Max.", rankingAll.get("Max."));
+            tmp.put("Avg.", rankingAll.get("Avg."));
+            tmp.put(">50% Avg.", rankingAll.get(">50% Avg."));
+            for (String key : rankingAll.keySet()) {
+                for (Club club : clubs) {
+                    if (key.equals(club.getName())) {
+                        tmp.put(key, rankingAll.get(key));
+                        break;
+                    }
+                }
+            }
+            return tmp;
+        }
+        return rankingAll;
+    }
+
+    private void rankPj(String item, Map<String, List<Number>> rankingAll, List<PjSum> pjSums, Map<Integer, String> clubIdNameMap) {
+        try {
+            final Method xMethod = sortPjBy(pjSums, item);
+            Number nMax = (Number) xMethod.invoke(pjSums.get(0));
+            List<Number> rowMax = rankingAll.get("Max.");
+            rowMax.add(nMax);
+            Number nMin = (Number) xMethod.invoke(pjSums.get(pjSums.size() - 1));
+            float step = (nMax.floatValue() - nMin.floatValue()) / 10;
+            float sumAll = 0, sumHalf = 0;
+            for (int i = 0; i < pjSums.size(); i++) {
+                PjSum pjSum = pjSums.get(i);
+                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(pjSum.getClubId()));
+                float v = ((Number) xMethod.invoke(pjSum)).floatValue();
+                int level = (int)Math.ceil((nMax.floatValue() - v)/step);
+                rowClub.add(level == 0 ? 1 : level);
+                sumAll += v;
+                if (i < pjSums.size() / 2.0) {
+                    sumHalf += v;
+                }
+            }
+
+            List<Number> rowAvg = rankingAll.get("Avg.");
+            rowAvg.add(sumAll / pjSums.size());
+            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
+            rowMidAvg.add(sumHalf / Math.round(pjSums.size() / 2.0));
+        } catch (Exception e) {
+            logger.error("", e);
+        }
+    }
+
+    // process combined fields
+    private void rankPj2(final String item, Map<String, List<Number>> rankingAll, List<PjSum> pjSums, Map<Integer, String> clubIdNameMap) {
+        try {
+            sortByPj2(item, pjSums);
+            int nMax = -0xFFFF, nMin = 0xFFFF;
+            PjSum pMax = pjSums.get(0);
+            PjSum pMin = pjSums.get(pjSums.size() - 1);
+            if ("agpInFlyer".equals(item)) {
+                nMax = pMax.getAgpInHandFlyer() + pMax.getAgpInMailFlyer();
+                nMin = pMin.getAgpInHandFlyer() + pMin.getAgpInMailFlyer();
+            } else if ("agp".equals(item)) {
+                nMax = pMax.getAgpInCp() + pMax.getAgpOutApoBlog() + pMax.getAgpOutApoBag();
+                nMin = pMin.getAgpInCp() + pMin.getAgpOutApoBlog() + pMin.getAgpOutApoBag();
+            }
+            List<Number> rowMax = rankingAll.get("Max.");
+            rowMax.add(nMax);
+            double step = (nMax - nMin) / 10.0;
+            float sumAll = 0, sumHalf = 0;
+            for (int i = 0; i < pjSums.size(); i++) {
+                PjSum pjSum = pjSums.get(i);
+                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(pjSum.getClubId()));
+                float v = 0;
+                if ("agpInFlyer".equals(item)) {
+                    v = pjSum.getAgpInHandFlyer() + pjSum.getAgpInMailFlyer();
+                } else if ("agp".equals(item)) {
+                    v = pjSum.getAgpInCp() + pjSum.getAgpOutApoBlog() + pjSum.getAgpOutApoBag();
+                }
+                int level = (int)Math.ceil((nMax - v)/step);
+                rowClub.add(level == 0 ? 1 : level);
+                sumAll += v;
+                if (i < pjSums.size() / 2.0) {
+                    sumHalf += v;
+                }
+            }
+
+            List<Number> rowAvg = rankingAll.get("Avg.");
+            rowAvg.add(sumAll / pjSums.size());
+            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
+            rowMidAvg.add(sumHalf / Math.round(pjSums.size() / 2.0));
+        } catch (Exception e) {
+            logger.error("", e);
+        }
+    }
+
+    private void sortByPj2(final String item, List<PjSum> pjSums) {
+        Collections.sort(pjSums, new Comparator<PjSum>() {
+            @Override
+            public int compare(PjSum pjSum1, PjSum pjSum2) {
+                try {
+                    if ("agpInFlyer".equals(item)) {
+                        return pjSum2.getAgpInHandFlyer() + pjSum2.getAgpInMailFlyer() - pjSum1.getAgpInHandFlyer() - pjSum1.getAgpInMailFlyer();
+                    } else if ("agp".equals(item)) {
+                        return pjSum2.getAgpInCp() + pjSum2.getAgpOutApoBlog() + pjSum2.getAgpOutApoBag() - pjSum1.getAgpInCp() - pjSum1.getAgpOutApoBlog() - pjSum1.getAgpOutApoBag();
+                    }
+                } catch (Exception e) {
+                    logger.error("", e);
+                }
+                return 0;
+            }
+        });
+    }
+
+    private void rankCa(String item, Map<String, List<Number>> rankingAll, List<Ca> cas, Map<Integer, String> clubIdNameMap) {
+        try {
+            final Method xMethod = sortCaBy(cas, item);
+            Number nMax = (Number) xMethod.invoke(cas.get(0));
+            List<Number> rowMax = rankingAll.get("Max.");
+            rowMax.add(nMax);
+            Number nMin = (Number) xMethod.invoke(cas.get(cas.size() - 1));
+            float step = (nMax.floatValue() - nMin.floatValue()) / 10;
+            float sumAll = 0, sumHalf = 0;
+            for (int i = 0; i < cas.size(); i++) {
+                Ca ca = cas.get(i);
+                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(ca.getClubId()));
+                float v = ((Number) xMethod.invoke(ca)).floatValue();
+                int level = (int)Math.ceil((nMax.floatValue() - v)/step);
+                rowClub.add(level == 0 ? 1 : level);
+                sumAll += v;
+                if (i < cas.size() / 2.0) {
+                    sumHalf += v;
+                }
+            }
+
+            List<Number> rowAvg = rankingAll.get("Avg.");
+            rowAvg.add(sumAll / cas.size());
+            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
+            rowMidAvg.add(sumHalf / Math.round(cas.size() / 2.0));
         } catch (Exception e) {
             logger.error("", e);
         }
