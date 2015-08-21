@@ -632,7 +632,7 @@ public class ManagementController {
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month);
 
         if (pjSums.size() == 0 || cas.size() == 0) {
-            return new LinkedHashMap();
+            return new LinkedHashMap<>();
         }
 
         Map<String, List<Number>> rankingAll = new LinkedHashMap<>();

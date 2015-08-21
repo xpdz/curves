@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
 
-public class ExportUtil {
+class ExportUtil {
     public static void fillCaSheet(Club club, List<Ca> cas, Workbook wb) {
         for (Ca ca : cas) {
             Sheet sh = wb.cloneSheet(2);

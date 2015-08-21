@@ -52,7 +52,7 @@ public class RedirectController {
     }
 
     @RequestMapping("/showTrends")
-    public String showTrends(@RequestParam("clubId") int clubId) {
+    public String showTrends(@RequestParam int clubId) {
         return "redirect:trends.htm?clubId=" + clubId;
     }
 
@@ -71,7 +71,7 @@ public class RedirectController {
     }
 
     @RequestMapping(value = "/rest/data")
-    public void processData(@RequestParam("dir") String dir) {
+    public void processData(@RequestParam String dir) {
         new CurvesParser(pjSumRepo, caRepo, clubRepo, dir).process();
     }
 

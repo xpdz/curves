@@ -3,7 +3,6 @@ package com.curves.franchise.util;
 import com.curves.franchise.domain.Pj;
 import com.curves.franchise.domain.PjSum;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
@@ -19,18 +18,15 @@ class PjDataHandler {
 
     private final CurvesParser cp;
     private int version = -1;
-    private FormulaEvaluator evaluator = null;
 
     public PjDataHandler(CurvesParser cp){
         this.cp = cp;
     }
 
-    public boolean processPJ(Sheet sh, FormulaEvaluator evaluator, int clubId) {
-        this.evaluator = evaluator;
+    public void processPJ(Sheet sh, int clubId) {
         setVersion(sh);
         if (version == -1) {
             logger.error("Cannot determine PJ version !!!");
-            return false;
         }
 
         Calendar c = Calendar.getInstance();
@@ -48,7 +44,6 @@ class PjDataHandler {
         }
         if (sumRowIdx == 45) {
             logger.error("summary line not found!!!");
-            return false;
         }
 
         PjSum pjSum = new PjSum();
@@ -74,8 +69,6 @@ class PjDataHandler {
         logger.info("<== PJ Saved. clubId: "+pjSum.getClubId()+", year: "+pjSum.getYear()+", month: "+pjSum.getMonth()
                 +", version: "+version+", sum row idx: "+sumRowIdx+", lastDayOfMonth: "+lastDayOfMonth);
         logger.info("");
-
-        return true;
     }
 
     private void setVersion(Sheet sh) {

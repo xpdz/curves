@@ -23,9 +23,9 @@ public class CurvesParser {
     private final Map<String, Integer> nameId = new HashMap<>();
     int year, month;
     private String dir = null;
-    private List<String> idErr = new ArrayList<>();
-    private List<String> ymErr = new ArrayList<>();
-    private List<String> nonCaPjErr = new ArrayList<>();
+    private final List<String> idErr = new ArrayList<>();
+    private final List<String> ymErr = new ArrayList<>();
+    private final List<String> nonCaPjErr = new ArrayList<>();
 
     final CaRepository caRepo;
     final PjSumRepository pjSumRepo;
@@ -82,6 +82,7 @@ public class CurvesParser {
                 printContent("year-month: " + year + "-" + month + " not found", ymErr);
                 printContent("non-CA/PJ", nonCaPjErr);
             }
+        } else if (dir.startsWith("VALIDATE")) {
         } else {
         }
     }
@@ -123,12 +124,12 @@ public class CurvesParser {
         }
 
         evaluator = wb.getCreationHelper().createFormulaEvaluator();
-        if (f.getName().indexOf("CA") != -1) {
+        if (f.getName().contains("CA")) {
             logger.info("--> Found CA, file: " + f.getName()+", sheet: "+sh.getSheetName());
             new CaDataHandler(this).processCA(sh, evaluator, clubId);
-        } else if (f.getName().indexOf("PJ") != -1) {
+        } else if (f.getName().contains("PJ")) {
             logger.info("==> Found PJ, file: " + f.getName()+", sheet: "+sh.getSheetName());
-            new PjDataHandler(this).processPJ(sh, evaluator, clubId);
+            new PjDataHandler(this).processPJ(sh, clubId);
         } else {
             nonCaPjErr.add(f.getName()+" - "+sh.getSheetName());
         }
@@ -149,7 +150,7 @@ public class CurvesParser {
         }
     }
 
-    Sheet getSheet(Workbook wb, String fname) {
+    private Sheet getSheet(Workbook wb, String fname) {
         Sheet sh = wb.getSheet(year + "0" + (month+1));
         if (sh == null) {
             sh = wb.getSheet(year + "" + (month+1));
@@ -172,7 +173,7 @@ public class CurvesParser {
                 sh = wb.getSheetAt(i);
                 Calendar c = Calendar.getInstance();
                 try {
-                    if (fname.indexOf("PJ") != -1) {
+                    if (fname.contains("PJ")) {
                         c.setTime(sh.getRow(15).getCell(0).getDateCellValue());
                     } else {
 //                        c.setTime(sh.getRow(0).getCell(7).getDateCellValue());

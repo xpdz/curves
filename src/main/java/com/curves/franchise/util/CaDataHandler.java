@@ -20,12 +20,11 @@ class CaDataHandler {
         this.cp = cp;
     }
 
-    public boolean processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
+    public void processCA(Sheet sh, FormulaEvaluator evaluator, int clubId) {
         this.evaluator = evaluator;
         setVersion(sh);
         if (version == -1) {
             logger.error("Cannot determine CA version !!!");
-            return false;
         }
 
         Ca ca = new Ca();
@@ -44,8 +43,6 @@ class CaDataHandler {
 
         logger.info("<-- CA Saved. clubId: "+ca.getClubId()+", caYear: "+ca.getCaYear()+", caMonth: "+ca.getCaMonth());
         logger.info("");
-
-        return true;
     }
 
     private void setVersion(Sheet sh) {
