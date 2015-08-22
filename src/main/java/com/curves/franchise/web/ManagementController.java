@@ -624,7 +624,7 @@ public class ManagementController {
     @RequestMapping(value = "/rest/ranking_all")
     @ResponseBody
     public Map<String, List<Number>> findRankingAll(@RequestParam String searchText, @RequestParam int year, @RequestParam int month,
-                                              @RequestParam(value = "sort_by", required = false, defaultValue = "maxWorkOuts") String sortBy,
+                                              @RequestParam(value = "sort_by", required = false, defaultValue = "MaxWorkOuts") String sortBy,
                                               @RequestParam(value = "sort_asc", required = false, defaultValue = "false") Boolean isAsc) {
         logger.info("---findRankingAll---searchText: "+searchText+", year: "+year+", month: "+month+", sortBy: "+sortBy+", isAsc: "+isAsc);
 
@@ -640,18 +640,22 @@ public class ManagementController {
         rankingAll.put("Avg.", new ArrayList<Number>()); // avg
         rankingAll.put(">50% Avg.", new ArrayList<Number>()); // >50% avg
 
-        if ("agpInHandFlyer".equals(sortBy) || "agpInCp".equals(sortBy)) {
-            sortByPj2(sortBy, pjSums);
-        } else if ("CmInApptRatio6".equals(sortBy) || "CmShowRatio6".equals(sortBy) || "SalesRatio6".equals(sortBy)
-                || "SalesAchAppRatio6".equals(sortBy) || "CmBrAgpRatio6".equals(sortBy)) {
-            try {sortCaBy(cas, sortBy);} catch (NoSuchMethodException e) {}
-        } else {
-            try {sortPjBy(pjSums, sortBy);} catch (NoSuchMethodException e) {}
-        }
-
         Map<Integer, String> clubIdNameMap = getClubIdNameMap();
-        for (PjSum pjSum : pjSums) {
-            rankingAll.put(clubIdNameMap.get(pjSum.getClubId()), new ArrayList<Number>());
+        if ("CmInApptRatio6".equals(sortBy) || "CmShowRatio6".equals(sortBy) || "SalesRatio6".equals(sortBy)
+                || "SalesAchAppRatio6".equals(sortBy) || "CmBrAgpRatio6".equals(sortBy)) {
+            try {sortCaBy(cas, sortBy);} catch (NoSuchMethodException e) {logger.error("", e);}
+            for (Ca ca : cas) {
+                rankingAll.put(clubIdNameMap.get(ca.getClubId()), new ArrayList<Number>());
+            }
+        } else {
+            if ("agpInHandFlyer".equals(sortBy) || "agpInCp".equals(sortBy)) {
+                sortByPj2(sortBy, pjSums);
+            } else {
+                try {sortPjBy(pjSums, sortBy);} catch (NoSuchMethodException e) {logger.error("", e);}
+            }
+            for (PjSum pjSum : pjSums) {
+                rankingAll.put(clubIdNameMap.get(pjSum.getClubId()), new ArrayList<Number>());
+            }
         }
 
         rankPj("MaxWorkOuts", rankingAll, pjSums, clubIdNameMap);

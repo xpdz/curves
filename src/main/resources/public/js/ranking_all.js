@@ -28,7 +28,7 @@ $(document).ready(function() {
             getRankingAll();
         });
 
-        var getRankingAll, sortIcon, sortBy = 'maxWorkOuts', iconDesc = $('<i class="fa fa-sort-desc fa-lg"></i>');//, isAsc = false;
+        var getRankingAll, sortIcon, sortBy = 'MaxWorkOuts', iconDesc = $('<i class="fa fa-sort-desc fa-lg"></i>');//, isAsc = false;
         (getRankingAll = function () {
           $tbd.empty();
 
