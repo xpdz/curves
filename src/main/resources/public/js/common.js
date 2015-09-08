@@ -16,8 +16,7 @@
     // init user ID / club ID
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
-        $('#clubId').text($.QueryString.clubId ? $.QueryString.clubId : userId); // for PJ page
-        $('body').attr('clubId', $.QueryString.clubId ? $.QueryString.clubId : userId); // for CA page
+        $('body').attr('userId', userId); // for change password
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log("ERROR STATUS: "+textStatus);
         showAlert("alert-danger", "Cannot find club info. Please refresh and retry.");

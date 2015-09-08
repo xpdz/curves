@@ -13,6 +13,7 @@ $(document).ready(function() {
         if ($.QueryString.clubId && $.QueryString.clubId != clubId) {
           clubId = $.QueryString.clubId;
         }
+        $('#clubId').text(clubId);
 
         var weekdays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'];
         var $tbd = $("#tbd");
