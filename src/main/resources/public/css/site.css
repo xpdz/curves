@@ -71,13 +71,13 @@ th { text-align:center; font-size: 75%; }
 .cursor-pointer {cursor: pointer;}
 
 .width-60px {
-	width: 60px;
+	min-width: 60px;
 }
 .width-80px {
-	width: 80px;
+	min-width: 80px;
 }
 .width-100px {
-	width: 100px;
+	min-width: 100px;
 }
 
 .text-rotate {

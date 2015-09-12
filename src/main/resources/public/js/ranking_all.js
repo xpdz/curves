@@ -4,15 +4,11 @@ $(document).ready(function() {
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
         var clubId = userId;
-
-        var $tbd = $("#tbd");
-
+        var sortBy = "MaxWorkOuts", isAsc = false;
         var today = new Date();
-        var thisYear = today.getFullYear(), thisMonth = today.getMonth(),
-            currentYear = thisYear, currentMonth = thisMonth;
+        var thisYear = today.getFullYear(), thisMonth = today.getMonth(), currentYear = thisYear, currentMonth = thisMonth;
         var lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        // init date picker
         $('#monthPicker').val(thisYear+"-"+(thisMonth+1));
         $('.input-group.date').datepicker({
             minViewMode: 1,
@@ -28,61 +24,31 @@ $(document).ready(function() {
             getRankingAll();
         });
 
-        var getRankingAll, sortIcon, sortBy = 'MaxWorkOuts', iconDesc = $('<i class="fa fa-sort-desc fa-lg"></i>');//, isAsc = false;
-        (getRankingAll = function () {
-          $tbd.empty();
-
-          var searchText = $("#searchText").val();
-          var uri = "/rest/ranking_all?searchText="+searchText+"&year="+currentYear+"&month="+currentMonth+"&sort_by="+sortBy;
-
-          // add sort icon to table header
-          iconDesc.remove();
-          $('th[data-sort-by="'+sortBy+'"]').append(iconDesc);
-
-          $.getJSON(uri, function(rankingAll) {
-              fillSheet(rankingAll);
-          }).fail(function() {
-              showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
-          });
-        })();
-
-        // add sort icon to table header according to sort_by & sort_asc
-        $('th[data-sort-by]').click(function() {
-          //isAsc = sortBy != $(this).attr('data-sort-by');
-          sortBy = $(this).attr('data-sort-by');
-          getRankingAll();
+        var colProp60 = {width: "60px", defaultContent: ""}, colProp80 = {width: "80px", defaultContent: ""}, colProp100 = {width: "100px", defaultContent: ""};
+        var tblRank = $('#tblRank').DataTable({
+          serverSide: true,
+          ajax: "/rest/ranking_all?year="+currentYear+"&month="+currentMonth,
+          info: false,
+          paging: false,
+          scrollY: "58vh",
+          scrollX: true,
+          scrollCollapse: true,
+          fixedColumns: true,
+          order: [[1, 'desc']],
+          columns: [
+            {width: "80px", orderable: false, defaultContent: "      "},
+            colProp80,colProp80,colProp60,colProp60,colProp80,colProp80,colProp80,colProp60,colProp60,colProp60,colProp60,
+            colProp60,colProp60,colProp60,colProp60,colProp100,colProp80,colProp80,colProp60,colProp60,colProp60,colProp60,
+            colProp60,colProp60,colProp60,colProp60,colProp60,colProp100,colProp100
+          ]
         });
 
-        $('#btnSearch').click(function() {
-          getRankingAll();
-        });
-
-        function fillSheet(rankingAll) {
-          for (var clubName in rankingAll) {
-            if ( !rankingAll.hasOwnProperty(clubName) ) {
-              continue;
-            }
-
-            var row = rankingAll[clubName], content = '';
-            if (clubName === 'Max.' || clubName === 'Avg.' || clubName === '>50% Avg.') {
-              for (var i = 0; i < row.length; i++) {
-                var v;
-                if (i === 18 || i === 19 || i === 24 || i === 25 || i === 26 || i === 27 || i === 28) {
-                  v = (row[i]*100).toFixed(1)+'%'
-                } else {
-                  v = row[i].toFixed(0);
-                }
-                content += '<td>'+v+'</td>';
-              }
-            } else {
-              for (var i = 0; i < row.length; i++) {
-                content += '<td>'+row[i]+'</td>';
-              }
-            }
-            $tbd.append($('<tr/>').append('<td>'+clubName+'</td>' + content));
-         }
-         //clearNaN();
+        var getRankingAll = function () {
+          var url = "/rest/ranking_all?year="+currentYear+"&month="+currentMonth;
+          tblRank.ajax.url(url).load();
+          tblRank.tables().columns.adjust().fixedColumns().relayout();
         }
+
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.log("ERROR STATUS: "+textStatus);
         showAlert("alert-danger", "Cannot find club info. Please refresh and retry.");

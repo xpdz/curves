@@ -42,7 +42,7 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/changePassword", method = RequestMethod.POST)
     @ResponseBody
-    public String changePassword(@RequestParam("clubId") String clubId, @RequestParam("password") String password) {
+    public String changePassword(@RequestParam String clubId, @RequestParam String password) {
         logger.info("---changePassword---clubId: "+clubId);
         User user = userRepo.findByUsername(clubId);
         if (user == null) {
@@ -525,7 +525,7 @@ public class ManagementController {
 
     private void fillCaItem(int clubId, List<Ca> cas, String item, Map<String, Map<String, Number>> valueV) {
         try {
-            final Method xMethod = sortCaBy(cas, item);
+            final Method xMethod = sortCaBy(cas, item, false);
             Map<String, Number> valueX = new HashMap<>(5);
             valueV.put(item, valueX);
             valueX.put("max", (Number)xMethod.invoke(cas.get(0)));
@@ -556,17 +556,18 @@ public class ManagementController {
         }
     }
 
-    private Method sortCaBy(List<Ca> cas, String item) throws NoSuchMethodException {
+    private Method sortCaBy(List<Ca> cas, String item, final boolean isAsc) throws NoSuchMethodException {
         final Method xMethod = Ca.class.getDeclaredMethod("get" + item);
         Collections.sort(cas, new Comparator<Ca>() {
             @Override
             public int compare(Ca ca1, Ca ca2) {
+                int x = 0;
                 try {
-                    return (int)(((Number) xMethod.invoke(ca2)).floatValue()*1000 - ((Number) xMethod.invoke(ca1)).floatValue()*1000);
+                    x = (int)(((Number) xMethod.invoke(ca1)).floatValue() - ((Number) xMethod.invoke(ca2)).floatValue())*1000;
                 } catch (Exception e) {
                     logger.error("", e);
                 }
-                return 0;
+                return isAsc ? -x : x;
             }
         });
         return xMethod;
@@ -574,7 +575,7 @@ public class ManagementController {
 
     private void fillPjItem(int clubId, List<PjSum> pjSums, String item, Map<String, Map<String, Number>> valueV) {
         try {
-            final Method xMethod = sortPjBy(pjSums, item);
+            final Method xMethod = sortPjBy(pjSums, item, false);
             Map<String, Number> valueX = new HashMap<>(5);
             valueV.put(item, valueX);
             valueX.put("max", (Number)xMethod.invoke(pjSums.get(0)));
@@ -605,17 +606,18 @@ public class ManagementController {
         }
     }
 
-    private Method sortPjBy(List<PjSum> pjSums, final String item) throws NoSuchMethodException {
+    private Method sortPjBy(List<PjSum> pjSums, final String item, final boolean isAsc) throws NoSuchMethodException {
         final Method xMethod = PjSum.class.getDeclaredMethod("get" + item);
         Collections.sort(pjSums, new Comparator<PjSum>() {
             @Override
             public int compare(PjSum pjSum1, PjSum pjSum2) {
+                int x = 0;
                 try {
-                    return (int) (((Number) xMethod.invoke(pjSum2)).floatValue()*1000 - ((Number) xMethod.invoke(pjSum1)).floatValue()*1000);
+                    x = (int) (((Number) xMethod.invoke(pjSum1)).floatValue() - ((Number) xMethod.invoke(pjSum2)).floatValue())*1000;
                 } catch (Exception e) {
                     logger.error("", e);
                 }
-                return 0;
+                return isAsc ? x : -x;
             }
         });
         return xMethod;
@@ -623,124 +625,109 @@ public class ManagementController {
 
     @RequestMapping(value = "/rest/ranking_all")
     @ResponseBody
-    public Map<String, List<Number>> findRankingAll(@RequestParam String searchText, @RequestParam int year, @RequestParam int month,
-                                              @RequestParam(value = "sort_by", required = false, defaultValue = "MaxWorkOuts") String sortBy,
-                                              @RequestParam(value = "sort_asc", required = false, defaultValue = "false") Boolean isAsc) {
-        logger.info("---findRankingAll---searchText: "+searchText+", year: "+year+", month: "+month+", sortBy: "+sortBy+", isAsc: "+isAsc);
+    public DtReturn findRankingAll(@RequestParam int year, @RequestParam int month, @RequestParam int draw,
+                                   @RequestParam("order[0][column]") int colIndex, @RequestParam("order[0][dir]") String dir) {
+        final String[] sortBys = {"", "MaxWorkOuts", "NewSalesRevenue", "DuesDraftsRevenue", "ProductsRevenue",
+                "EnrollAch", "EnrollMonthly", "EnrollAllPrepay", "IncomingCalls", "IncomingApo", "OutgoingCalls",
+                "OutgoingApo", "BrOwnRef", "BrandedInternet", "BrandedSign", "agpInFlyer", "agp", "Enrolled",
+                "Valids", "ExitRatio", "LeaveRatio", "NewSales", "Exits", "Increment", "FaSum", "CmInApptRatio6",
+                "CmShowRatio6", "SalesRatio6", "SalesAchAppRatio6", "CmBrAgpRatio6"};
+        boolean isAsc = !"asc".equals(dir); // reverse it for UI display
+        logger.info("---findRankingAll---year: "+year+", month: "+month+", sortBy: "+sortBys[colIndex]+", isAsc: "+isAsc);
 
         List<PjSum> pjSums = pjSumRepo.findByYearAndMonth(year, month);
         List<Ca> cas = caRepo.findByCaYearAndCaMonth(year, month);
 
+        Map<Integer, List<String>> rankingAll = new LinkedHashMap<>(pjSums.size()+3);
         if (pjSums.size() == 0 || cas.size() == 0) {
-            return new LinkedHashMap<>();
+            logger.error("PJ or CA is empty for this month, PJ-size: "+pjSums.size()+", CA-size: "+cas.size());
+            return new DtReturn(draw, rankingAll.size(), rankingAll.size(), rankingAll.values(), "");
         }
 
-        Map<String, List<Number>> rankingAll = new LinkedHashMap<>();
-        rankingAll.put("Max.", new ArrayList<Number>()); // max
-        rankingAll.put("Avg.", new ArrayList<Number>()); // avg
-        rankingAll.put(">50% Avg.", new ArrayList<Number>()); // >50% avg
+        List<String> rowMax = new ArrayList<>(30);
+        rowMax.add("Max.");
+        rankingAll.put(1, rowMax);
+        List<String> rowAvg = new ArrayList<>(30);
+        rowAvg.add("Avg.");
+        rankingAll.put(2, rowAvg);
+        List<String> row50Avg = new ArrayList<>(30);
+        row50Avg.add(">50% Avg.");
+        rankingAll.put(3, row50Avg);
 
         Map<Integer, String> clubIdNameMap = getClubIdNameMap();
-        if ("CmInApptRatio6".equals(sortBy) || "CmShowRatio6".equals(sortBy) || "SalesRatio6".equals(sortBy)
-                || "SalesAchAppRatio6".equals(sortBy) || "CmBrAgpRatio6".equals(sortBy)) {
-            try {sortCaBy(cas, sortBy);} catch (NoSuchMethodException e) {logger.error("", e);}
+        if (colIndex > 24) {
+            try {sortCaBy(cas, sortBys[colIndex], isAsc);} catch (NoSuchMethodException e) {logger.error("", e);}
             for (Ca ca : cas) {
-                rankingAll.put(clubIdNameMap.get(ca.getClubId()), new ArrayList<Number>());
+                List<String> rowClub = new ArrayList<>(30);
+                rowClub.add(clubIdNameMap.get(ca.getClubId()));
+                rankingAll.put(ca.getClubId(), rowClub);
             }
         } else {
-            if ("agpInHandFlyer".equals(sortBy) || "agpInCp".equals(sortBy)) {
-                sortByPj2(sortBy, pjSums);
+            if (colIndex == 15 || colIndex == 16) {
+                sortByPj2(pjSums, sortBys[colIndex], isAsc);
             } else {
-                try {sortPjBy(pjSums, sortBy);} catch (NoSuchMethodException e) {logger.error("", e);}
+                try {sortPjBy(pjSums, sortBys[colIndex], isAsc);} catch (NoSuchMethodException e) {logger.error("", e);}
             }
             for (PjSum pjSum : pjSums) {
-                rankingAll.put(clubIdNameMap.get(pjSum.getClubId()), new ArrayList<Number>());
+                List<String> rowClub = new ArrayList<>(30);
+                rowClub.add(clubIdNameMap.get(pjSum.getClubId()));
+                rankingAll.put(pjSum.getClubId(), rowClub);
             }
         }
 
-        rankPj("MaxWorkOuts", rankingAll, pjSums, clubIdNameMap);
-        rankPj("NewSalesRevenue", rankingAll, pjSums, clubIdNameMap);
-        rankPj("DuesDraftsRevenue", rankingAll, pjSums, clubIdNameMap);
-        rankPj("ProductsRevenue", rankingAll, pjSums, clubIdNameMap);
-        rankPj("EnrollAch", rankingAll, pjSums, clubIdNameMap);
-        rankPj("EnrollMonthly", rankingAll, pjSums, clubIdNameMap);
-        rankPj("EnrollAllPrepay", rankingAll, pjSums, clubIdNameMap);
-        rankPj("IncomingCalls", rankingAll, pjSums, clubIdNameMap);
-        rankPj("IncomingApo", rankingAll, pjSums, clubIdNameMap);
-        rankPj("OutgoingCalls", rankingAll, pjSums, clubIdNameMap);
-        rankPj("OutgoingApo", rankingAll, pjSums, clubIdNameMap);
-        rankPj("BrOwnRef", rankingAll, pjSums, clubIdNameMap);
-        rankPj("BrandedInternet", rankingAll, pjSums, clubIdNameMap);
-        rankPj("BrandedSign", rankingAll, pjSums, clubIdNameMap);
-        rankPj2("agpInFlyer", rankingAll, pjSums, clubIdNameMap);
-        rankPj2("agp", rankingAll, pjSums, clubIdNameMap);
-        rankPj("Enrolled", rankingAll, pjSums, clubIdNameMap);
-        rankPj("Valids", rankingAll, pjSums, clubIdNameMap);
-        rankPj("ExitRatio", rankingAll, pjSums, clubIdNameMap);
-        rankPj("LeaveRatio", rankingAll, pjSums, clubIdNameMap);
-        rankPj("NewSales", rankingAll, pjSums, clubIdNameMap);
-        rankPj("Exits", rankingAll, pjSums, clubIdNameMap);
-        rankPj("Increment", rankingAll, pjSums, clubIdNameMap);
-        rankPj("FaSum", rankingAll, pjSums, clubIdNameMap);
-        rankCa("CmInApptRatio6", rankingAll, cas, clubIdNameMap);
-        rankCa("CmShowRatio6", rankingAll, cas, clubIdNameMap);
-        rankCa("SalesRatio6", rankingAll, cas, clubIdNameMap);
-        rankCa("SalesAchAppRatio6", rankingAll, cas, clubIdNameMap);
-        rankCa("CmBrAgpRatio6", rankingAll, cas, clubIdNameMap);
-
-        if (searchText.length() > 0) {
-            List<Club> clubs = clubRepo.findBySearchText(searchText);
-            Map<String, List<Number>> tmp = new LinkedHashMap<>();
-            tmp.put("Max.", rankingAll.get("Max."));
-            tmp.put("Avg.", rankingAll.get("Avg."));
-            tmp.put(">50% Avg.", rankingAll.get(">50% Avg."));
-            for (String key : rankingAll.keySet()) {
-                for (Club club : clubs) {
-                    if (key.equals(club.getName())) {
-                        tmp.put(key, rankingAll.get(key));
-                        break;
-                    }
-                }
+        for (int i = 1; i < sortBys.length; i++) {
+            if (i == 15 || i == 16) {
+                rankPj2(sortBys[i], rankingAll, pjSums);
+            } else if (i > 24) {
+                rankCa(sortBys[i], rankingAll, cas);
+            } else {
+                rankPj(sortBys[i], rankingAll, pjSums);
             }
-            return tmp;
         }
-        return rankingAll;
+
+        return new DtReturn(draw, rankingAll.size(), rankingAll.size(), rankingAll.values(), "");
     }
 
-    private void rankPj(String item, Map<String, List<Number>> rankingAll, List<PjSum> pjSums, Map<Integer, String> clubIdNameMap) {
+    private void rankPj(String item, Map<Integer, List<String>> rankingAll, List<PjSum> pjSums) {
         try {
-            final Method xMethod = sortPjBy(pjSums, item);
+            final Method xMethod = sortPjBy(pjSums, item, false);
             Number nMax = (Number) xMethod.invoke(pjSums.get(0));
-            List<Number> rowMax = rankingAll.get("Max.");
-            rowMax.add(nMax);
             Number nMin = (Number) xMethod.invoke(pjSums.get(pjSums.size() - 1));
             float step = (nMax.floatValue() - nMin.floatValue()) / 10;
             float sumAll = 0, sumHalf = 0;
             for (int i = 0; i < pjSums.size(); i++) {
                 PjSum pjSum = pjSums.get(i);
-                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(pjSum.getClubId()));
+                List<String> rowClub = rankingAll.get(pjSum.getClubId());
                 float v = ((Number) xMethod.invoke(pjSum)).floatValue();
                 int level = (int)Math.ceil((nMax.floatValue() - v)/step);
-                rowClub.add(level == 0 ? 1 : level);
+                rowClub.add(level == 0 ? "1" : ""+level);
                 sumAll += v;
                 if (i < pjSums.size() / 2.0) {
                     sumHalf += v;
                 }
             }
 
-            List<Number> rowAvg = rankingAll.get("Avg.");
-            rowAvg.add(sumAll / pjSums.size());
-            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
-            rowMidAvg.add(sumHalf / Math.round(pjSums.size() / 2.0));
+            List<String> rowMax = rankingAll.get(1);
+            List<String> rowAvg = rankingAll.get(2);
+            List<String> row50Avg = rankingAll.get(3);
+            if ("ExitRatio".equals(item) || "LeaveRatio".equals(item)) {
+                rowMax.add(Math.round(nMax.floatValue()*100)+"%");
+                rowAvg.add(Math.round(nMax.floatValue()*100)+"%");
+                row50Avg.add(Math.round(nMax.floatValue() * 100) + "%");
+            } else {
+                rowMax.add(""+nMax.intValue());
+                rowAvg.add(""+Math.round(sumAll / pjSums.size()));
+                row50Avg.add("" + Math.round(sumHalf / pjSums.size() / 2.0));
+            }
         } catch (Exception e) {
             logger.error("", e);
         }
     }
 
     // process combined fields
-    private void rankPj2(final String item, Map<String, List<Number>> rankingAll, List<PjSum> pjSums, Map<Integer, String> clubIdNameMap) {
+    private void rankPj2(final String item, Map<Integer, List<String>> rankingAll, List<PjSum> pjSums) {
         try {
-            sortByPj2(item, pjSums);
+            sortByPj2(pjSums, item, false);
             int nMax = -0xFFFF, nMin = 0xFFFF;
             PjSum pMax = pjSums.get(0);
             PjSum pMin = pjSums.get(pjSums.size() - 1);
@@ -751,13 +738,11 @@ public class ManagementController {
                 nMax = pMax.getAgpInCp() + pMax.getAgpOutApoBlog() + pMax.getAgpOutApoBag();
                 nMin = pMin.getAgpInCp() + pMin.getAgpOutApoBlog() + pMin.getAgpOutApoBag();
             }
-            List<Number> rowMax = rankingAll.get("Max.");
-            rowMax.add(nMax);
             double step = (nMax - nMin) / 10.0;
             float sumAll = 0, sumHalf = 0;
             for (int i = 0; i < pjSums.size(); i++) {
                 PjSum pjSum = pjSums.get(i);
-                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(pjSum.getClubId()));
+                List<String> rowClub = rankingAll.get(pjSum.getClubId());
                 float v = 0;
                 if ("agpInFlyer".equals(item)) {
                     v = pjSum.getAgpInHandFlyer() + pjSum.getAgpInMailFlyer();
@@ -765,65 +750,68 @@ public class ManagementController {
                     v = pjSum.getAgpInCp() + pjSum.getAgpOutApoBlog() + pjSum.getAgpOutApoBag();
                 }
                 int level = (int)Math.ceil((nMax - v)/step);
-                rowClub.add(level == 0 ? 1 : level);
+                rowClub.add(level == 0 ? "1" : ""+level);
                 sumAll += v;
                 if (i < pjSums.size() / 2.0) {
                     sumHalf += v;
                 }
             }
 
-            List<Number> rowAvg = rankingAll.get("Avg.");
-            rowAvg.add(sumAll / pjSums.size());
-            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
-            rowMidAvg.add(sumHalf / Math.round(pjSums.size() / 2.0));
+            List<String> rowMax = rankingAll.get(1);
+            rowMax.add(""+nMax);
+            List<String> rowAvg = rankingAll.get(2);
+            rowAvg.add(""+Math.round(sumAll / pjSums.size()));
+            List<String> rowMidAvg = rankingAll.get(3);
+            rowMidAvg.add(""+Math.round(sumHalf / pjSums.size() / 2.0));
         } catch (Exception e) {
             logger.error("", e);
         }
     }
 
-    private void sortByPj2(final String item, List<PjSum> pjSums) {
+    private void sortByPj2(List<PjSum> pjSums, final String item, final boolean isAsc) {
         Collections.sort(pjSums, new Comparator<PjSum>() {
             @Override
             public int compare(PjSum pjSum1, PjSum pjSum2) {
+                int x = 0;
                 try {
                     if ("agpInFlyer".equals(item)) {
-                        return pjSum2.getAgpInHandFlyer() + pjSum2.getAgpInMailFlyer() - pjSum1.getAgpInHandFlyer() - pjSum1.getAgpInMailFlyer();
+                        x = pjSum1.getAgpInHandFlyer() + pjSum1.getAgpInMailFlyer() - pjSum2.getAgpInHandFlyer() - pjSum2.getAgpInMailFlyer();
                     } else if ("agp".equals(item)) {
-                        return pjSum2.getAgpInCp() + pjSum2.getAgpOutApoBlog() + pjSum2.getAgpOutApoBag() - pjSum1.getAgpInCp() - pjSum1.getAgpOutApoBlog() - pjSum1.getAgpOutApoBag();
+                        x = pjSum1.getAgpInCp() + pjSum1.getAgpOutApoBlog() + pjSum1.getAgpOutApoBag() - pjSum2.getAgpInCp() - pjSum2.getAgpOutApoBlog() - pjSum2.getAgpOutApoBag();
                     }
                 } catch (Exception e) {
                     logger.error("", e);
                 }
-                return 0;
+                return isAsc ? -x : x;
             }
         });
     }
 
-    private void rankCa(String item, Map<String, List<Number>> rankingAll, List<Ca> cas, Map<Integer, String> clubIdNameMap) {
+    private void rankCa(String item, Map<Integer, List<String>> rankingAll, List<Ca> cas) {
         try {
-            final Method xMethod = sortCaBy(cas, item);
+            final Method xMethod = sortCaBy(cas, item, false);
             Number nMax = (Number) xMethod.invoke(cas.get(0));
-            List<Number> rowMax = rankingAll.get("Max.");
-            rowMax.add(nMax);
             Number nMin = (Number) xMethod.invoke(cas.get(cas.size() - 1));
             float step = (nMax.floatValue() - nMin.floatValue()) / 10;
             float sumAll = 0, sumHalf = 0;
             for (int i = 0; i < cas.size(); i++) {
                 Ca ca = cas.get(i);
-                List<Number> rowClub = rankingAll.get(clubIdNameMap.get(ca.getClubId()));
+                List<String> rowClub = rankingAll.get(ca.getClubId());
                 float v = ((Number) xMethod.invoke(ca)).floatValue();
                 int level = (int)Math.ceil((nMax.floatValue() - v)/step);
-                rowClub.add(level == 0 ? 1 : level);
+                rowClub.add(level == 0 ? "1" : ""+level);
                 sumAll += v;
                 if (i < cas.size() / 2.0) {
                     sumHalf += v;
                 }
             }
 
-            List<Number> rowAvg = rankingAll.get("Avg.");
-            rowAvg.add(sumAll / cas.size());
-            List<Number> rowMidAvg = rankingAll.get(">50% Avg.");
-            rowMidAvg.add(sumHalf / Math.round(cas.size() / 2.0));
+            List<String> rowMax = rankingAll.get(1);
+            rowMax.add(Math.round(nMax.floatValue()*100)+"%");
+            List<String> rowAvg = rankingAll.get(2);
+            rowAvg.add(Math.round(sumAll*100 / cas.size())+"%");
+            List<String> rowMidAvg = rankingAll.get(3);
+            rowMidAvg.add(Math.round(sumHalf*100 / Math.round(cas.size() / 2.0))+"%");
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -1279,5 +1267,39 @@ public class ManagementController {
         cell.setCellValue("Wellness");
         cell = row.createCell(30);
         cell.setCellValue("TotalMembers");
+    }
+}
+class DtReturn {
+    public DtReturn(int draw, int recordsTotal, int recordsFiltered, Collection<List<String>> data, String error) {
+        this.draw = draw;
+        this.recordsTotal = recordsTotal;
+        this.recordsFiltered = recordsFiltered;
+        this.data = data;
+        this.error = error;
+    }
+    int draw;
+    int recordsTotal;
+    int recordsFiltered;
+    Collection<List<String>> data;
+    String error;
+
+    public int getDraw() {
+        return draw;
+    }
+
+    public int getRecordsTotal() {
+        return recordsTotal;
+    }
+
+    public int getRecordsFiltered() {
+        return recordsFiltered;
+    }
+
+    public Collection<List<String>> getData() {
+        return data;
+    }
+
+    public String getError() {
+        return error;
     }
 }

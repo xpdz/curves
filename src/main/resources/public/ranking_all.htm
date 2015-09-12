@@ -13,6 +13,8 @@
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="//cdn.datatables.net/fixedcolumns/3.1.0/css/fixedColumns.dataTables.min.css" rel="stylesheet"/>
   <link href="css/site.css" rel="stylesheet">
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -64,56 +66,48 @@
         <input type="text" class="form-control" data-date-format="yyyy-mm" id="monthPicker"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
       </div>
     </div>
-    <div class="col-md-4 col-md-offset-1">
-      <div class="input-group">
-        <input type="text" class="form-control" id="searchText" placeholder="Enter Club, Mentor, or Cooperation" />
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" id="btnSearch"><i class="fa fa-search"></i></button>
-        </span>
-      </div>
-    </div>
   </div>
-  <div class="row top-buffer">
+  <div class="row">
     <div class="col-md-12">
-      <table class="table table-bordered table-condensed" style="overflow:scroll; width: 2300px; max-width: 2300px;">
+      <table class="cell-border compact hover nowrap order-column" id="tblRank">
         <thead>
           <tr>
-            <th rowspan="2" class="width-100px">&nbsp;</th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="MaxWorkOuts">最高運動數 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="NewSalesRevenue">新銷售營收 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="DuesDraftsRevenue">月費營收 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="ProductsRevenue">產品營收 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollAch">扣款入會數 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollMonthly">月繳入會數 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="EnrollAllPrepay">年繳入會數 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="IncomingCalls">來電/來店 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="IncomingApo">預約 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="OutgoingCalls">去電 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="OutgoingApo">預約 </th>
+            <th rowspan="2">&nbsp;</th>
+            <th rowspan="2" data-sort-by="MaxWorkOuts">最高運動數 </th>
+            <th rowspan="2" data-sort-by="NewSalesRevenue">新銷售營收 </th>
+            <th rowspan="2" data-sort-by="DuesDraftsRevenue">月費營收 </th>
+            <th rowspan="2" data-sort-by="ProductsRevenue">產品營收 </th>
+            <th rowspan="2" data-sort-by="EnrollAch">扣款入會數 </th>
+            <th rowspan="2" data-sort-by="EnrollMonthly">月繳入會數 </th>
+            <th rowspan="2" data-sort-by="EnrollAllPrepay">年繳入會數 </th>
+            <th rowspan="2" data-sort-by="IncomingCalls">來電/來店 </th>
+            <th rowspan="2" data-sort-by="IncomingApo">預約 </th>
+            <th rowspan="2" data-sort-by="OutgoingCalls">去電 </th>
+            <th rowspan="2" data-sort-by="OutgoingApo">預約 </th>
             <th colspan="5">FA來源</th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="Enrolled">在籍會員數 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Valids">有效會員數 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="ExitRatio">退會率 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="LeaveRatio">請假率 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="NewSales">新銷售 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Exits">退會數 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="Increment">純增 </th>
-            <th rowspan="2" class="width-80px cursor-pointer" data-sort-by="FaSum">總FA數 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="CmInApptRatio6">預約率 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="CmShowRatio6">來店率 </th>
-            <th rowspan="2" class="width-60px cursor-pointer" data-sort-by="SalesRatio6">結案率 </th>
-            <th rowspan="2" class="width-100px cursor-pointer" data-sort-by="SalesAchAppRatio6">扣款與年繳% </th>
-            <th rowspan="2" class="width-100px cursor-pointer" data-sort-by="CmBrAgpRatio6">介紹佔FA比率 </th>
+            <th rowspan="2" data-sort-by="Enrolled">在籍會員數 </th>
+            <th rowspan="2" data-sort-by="Valids">有效會員數 </th>
+            <th rowspan="2" data-sort-by="ExitRatio">退會率 </th>
+            <th rowspan="2" data-sort-by="LeaveRatio">請假率 </th>
+            <th rowspan="2" data-sort-by="NewSales">新銷售 </th>
+            <th rowspan="2" data-sort-by="Exits">退會數 </th>
+            <th rowspan="2" data-sort-by="Increment">純增 </th>
+            <th rowspan="2" data-sort-by="FaSum">總FA數 </th>
+            <th rowspan="2" data-sort-by="CmInApptRatio6">預約率 </th>
+            <th rowspan="2" data-sort-by="CmShowRatio6">來店率 </th>
+            <th rowspan="2" data-sort-by="SalesRatio6">結案率 </th>
+            <th rowspan="2" data-sort-by="SalesAchAppRatio6">扣款與年繳% </th>
+            <th rowspan="2" data-sort-by="CmBrAgpRatio6">介紹佔FA比率 </th>
           </tr>
           <tr>
-            <th class="width-60px cursor-pointer" data-sort-by="BrOwnRef">介紹 </th>
-            <th class="width-60px cursor-pointer" data-sort-by="BrandedInternet">網路 </th>
-            <th class="width-60px cursor-pointer" data-sort-by="BrandedSign">招牌 </th>
-            <th class="width-60px cursor-pointer" data-sort-by="agpInHandFlyer">傳單 </th>
-            <th class="width-100px cursor-pointer" data-sort-by="agpInCp">CP+Blog+詢問箱 </th>
+            <th data-sort-by="BrOwnRef">介紹 </th>
+            <th data-sort-by="BrandedInternet">網路 </th>
+            <th data-sort-by="BrandedSign">招牌 </th>
+            <th data-sort-by="agpInHandFlyer">傳單 </th>
+            <th data-sort-by="agpInCp">CP+Blog+詢問箱 </th>
           </tr>
         </thead>
-        <tbody id="tbd">
+        <tbody>
         </tbody>
       </table>
     </div>
@@ -154,6 +148,8 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js" charset="UTF-8"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/locales/bootstrap-datepicker.zh-TW.min.js" charset="UTF-8"></script>
+<script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/fixedcolumns/3.1.0/js/dataTables.fixedColumns.min.js"></script>
 <script src="js/ranking_all.js"></script>
 </body>
 </html>
