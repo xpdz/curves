@@ -4,6 +4,16 @@ $(document).ready(function() {
     $.get("/rest/whoami", function(userId) {
         $('#userId').html('<i class="fa fa-user"></i> '+userId+' <span class="caret"></span>');
         var clubId = userId;
+        if (userId.charAt(0) === '0') {
+          // user is coach, not club, hide PJ
+          clubId = '1' + userId.substring(1);
+          $('ul[data-curves="coach"]').show();
+        } else if (userId === 'management' || userId === '999999') {
+          $('ul[data-curves="mgmt"]').show();
+        } else {
+          $('ul[data-curves="club"]').show();
+        }
+
         var sortBy = "MaxWorkOuts", isAsc = false;
         var today = new Date();
         var thisYear = today.getFullYear(), thisMonth = today.getMonth(), currentYear = thisYear, currentMonth = thisMonth;
