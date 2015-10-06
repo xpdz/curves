@@ -114,13 +114,14 @@ $(document).ready(function() {
                 showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
             });
 
-            if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
-                $('#btnSave').prop("disabled", false);
-                $('[contenteditable="false"]').prop('contenteditable', true);
-            } else {
-                $('#btnSave').prop("disabled", true);
-                $('[contenteditable="true"]').prop('contenteditable', false);
-            }
+            // disable edit if in prior month
+//            if (currentYear === thisYear && (currentMonth === thisMonth || (currentMonth === (thisMonth-1) && today.getDate() < 4))) {
+//                $('#btnSave').prop("disabled", false);
+//                $('[contenteditable="false"]').prop('contenteditable', true);
+//            } else {
+//                $('#btnSave').prop("disabled", true);
+//                $('[contenteditable="true"]').prop('contenteditable', false);
+//            }
         })();
 
         $('.toggleV').click(function() {
