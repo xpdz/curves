@@ -97,13 +97,11 @@ $(document).ready(function() {
         var getCA;
         (getCA = function() {
             $.getJSON("/rest/CA/lastMonth", {clubId: clubId, caYear: currentYear, caMonth: (currentMonth-1)}, function(data) {
-                if (data['svcTm6']) {
-                    $('#goalsLastTm').text(data['svcTm6']);
-                    $('#goalsLastActive').text(data['svcActive6']);
-                    $('#goalsLastShowRatio').text(data['cmShowRatio6']);
-                    $('#goalsLastSalesRatio').text(data['salesRatio6']);
-                    $('#thisPlan').val(data['nextPlan']);
-                }
+                $('#goalsLastTm').text(data['svcTm6'] || '');
+                $('#goalsLastActive').text(data['svcActive6'] || '');
+                $('#goalsLastShowRatio').text(data['cmShowRatio6'] || '');
+                $('#goalsLastSalesRatio').text(data['salesRatio6'] || '');
+                $('#thisPlan').val(data['nextPlan'] || '');
             }).fail(function() {
                 showAlert("#alertMain", "alert-danger", "Cannot load data. Please refresh and retry.");
             });
