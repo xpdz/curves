@@ -19,13 +19,13 @@ $(document).ready(function() {
         }
 
         var today = new Date();
-        var thisYear = today.getFullYear();
-        var thisMonth = today.getMonth();
-        var currentYear = thisYear;
-        var currentMonth = thisMonth;
+//        var thisYear = today.getFullYear();
+//        var thisMonth = today.getMonth();
+        var currentYear = today.getFullYear(); //thisYear;
+        var currentMonth = today.getMonth(); //thisMonth;
 
         // init date picker
-        $('#monthPicker').val(thisYear+"-"+(thisMonth+1));
+        $('#monthPicker').val(currentYear+"-"+(currentMonth+1));
         $('.input-group.date').datepicker({
             minViewMode: 1,
             autoclose: true,
@@ -123,9 +123,9 @@ $(document).ready(function() {
         })();
 
         $('.toggleV').click(function() {
-            if (currentYear != thisYear || currentMonth != thisMonth) {
-                return;
-            }
+//            if (currentYear != thisYear || currentMonth != thisMonth) {
+//                return;
+//            }
             $(this).text(($(this).text().length == 0) ? 'v' : '');
         });
 
@@ -976,8 +976,8 @@ $(document).ready(function() {
 
             var ca = {};
             ca.clubId = +clubId;
-            ca.caYear = thisYear;
-            ca.caMonth = thisMonth;
+            ca.caYear = currentYear;
+            ca.caMonth = currentMonth;
 
             ca.goalsTm = +$('#goalsTm').text();
             ca.goalsLastTm = +$('#goalsLastTm').text();

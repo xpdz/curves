@@ -19,12 +19,14 @@ $(document).ready(function() {
         var $tbd = $("#tbd");
 
         var today = new Date();
-        var thisYear = today.getFullYear(), thisMonth = today.getMonth(),
-            currentYear = thisYear, currentMonth = thisMonth;
+//        var thisYear = today.getFullYear();
+//        var thisMonth = today.getMonth();
+        var currentYear = today.getFullYear(); //thisYear;
+        var currentMonth = today.getMonth(); //thisMonth;
         var lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
         // init date picker
-        $('#monthPicker').val(thisYear+"-"+(thisMonth+1));
+        $('#monthPicker').val(currentYear+"-"+(currentMonth+1));
         $('.input-group.date').datepicker({
             minViewMode: 1,
             autoclose: true,
@@ -332,7 +334,7 @@ $(document).ready(function() {
             pjSum.pjSet = [];
             for (var idx = 1; idx <= lastDayOfMonth; idx++) {
                 var pj = {};
-                pj.pjDate = new Date(thisYear, thisMonth, idx);
+                pj.pjDate = new Date(currentYear, currentMonth, idx);
                 pj.workingDays = +$('#workingDays-' + idx).text();
                 pj.workOuts = +$('#workOuts-' + idx).text();
                 pj.newSalesRevenue = +$('#newSalesRevenue-' + idx).text();
