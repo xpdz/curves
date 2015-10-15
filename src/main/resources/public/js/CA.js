@@ -1041,6 +1041,7 @@ $(document).ready(function() {
             ca.svcMaxWo3 = +$('#svcMaxWo-3').text();
             ca.svcMaxWo4 = +$('#svcMaxWo-4').text();
             ca.svcMaxWo5 = +$('#svcMaxWo-5').text();
+            console.log(parseFloat($('#svcMaxWo-6').text())/100);
             ca.svcMaxWo6 = parseFloat($('#svcMaxWo-6').text());
             ca.svcExits1 = +$('#svcExits-1').text();
             ca.svcExits2 = +$('#svcExits-2').text();
